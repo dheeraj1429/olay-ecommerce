@@ -1,0 +1,26 @@
+{
+  "name": "olya-ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "npm run dev --prefix server",
+    "client": "npm start --prefix client",
+    "server-dep": "sudo npm install --prefix server",
+    "client-dep": "sudo npm install --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dheeraj1429/olay-ecommerce.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dheeraj1429/olay-ecommerce/issues"
+  },
+  "homepage": "https://github.com/dheeraj1429/olay-ecommerce#readme",
+  "dependencies": {
+    "require-in-the-middle": "^5.2.0"
+  }
+}

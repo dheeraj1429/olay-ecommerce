@@ -1,0 +1,4 @@
+export const ACTION_TYPE = {
+   ADMIN_SIGN_IN: "ADMIN_SIGN_IN",
+   SET_LOGIN_USER: "SET_LOGIN_USER",
+};

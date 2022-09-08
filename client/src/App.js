@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 // components
 import DashboardSingInComponent from "./DashboardComponents/DashboardSingInComponent/DashboardSingInComponent";
 import DashboardHomeComponent from "./DashboardComponents/DashboardHomeComponent/DashboardHomeComponent";
+import UploadProductComponent from "./DashboardComponents/UploadProductComponent/UploadProductComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -31,6 +32,7 @@ function App() {
             </Route>
             <Route path="dashboard" element={<DashboardPanel />}>
                <Route path="" element={<DashboardHomeComponent />} />
+               <Route path="upload-products" element={<UploadProductComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

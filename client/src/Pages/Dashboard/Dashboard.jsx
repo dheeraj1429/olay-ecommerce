@@ -8,8 +8,6 @@ function Dashboard() {
    const auth = useSelector((state) => state.auth.auth);
    const navigation = useNavigate();
 
-   console.log(auth);
-
    useLayoutEffect(() => {
       if (!!auth && auth.success && auth.userObject.isAdmin === "admin") {
          navigation("/dashboard");

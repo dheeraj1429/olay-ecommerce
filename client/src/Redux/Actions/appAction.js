@@ -13,3 +13,10 @@ export const removeUser = function (data) {
       payload: data,
    };
 };
+
+export const userLoginLoging = function (data) {
+   return {
+      type: ACTION_TYPE.USER_LOGIN_LODING,
+      payload: data,
+   };
+};

@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { adminSignIn } from "../../Redux/Actions/adminAction";
+import { userLoginLoging } from "../../Redux/Actions/appAction";
 
 function DashboardSingInComponent() {
    const [SignInDetails, setSignInDetails] = useState({
@@ -28,6 +29,7 @@ function DashboardSingInComponent() {
 
       if (email && password) {
          dispatch(adminSignIn({ email, password }));
+         dispatch(userLoginLoging(true));
       } else {
          setError("Please fill all fileds*");
       }
@@ -77,7 +79,9 @@ function DashboardSingInComponent() {
          </Box>
          {Error ? <h4>{Error}</h4> : null}
          {isLoading ? (
-            <img src="/images/spneer.svg" />
+            <div className="Loding">
+               <img src="/images/spneer.svg" />
+            </div>
          ) : (
             <CustombuttonComponent
                onClick={SendData}

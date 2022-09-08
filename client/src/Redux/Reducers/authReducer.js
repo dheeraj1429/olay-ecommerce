@@ -11,6 +11,7 @@ const authReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             auth: action.payload,
+            isLoading: false,
          };
 
       case ACTION_TYPE.SET_LOGIN_USER:
@@ -26,6 +27,12 @@ const authReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             auth: action.payload,
+         };
+
+      case ACTION_TYPE.USER_LOGIN_LODING:
+         return {
+            ...state,
+            isLoading: action.payload,
          };
 
       default:

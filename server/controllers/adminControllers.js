@@ -1,6 +1,8 @@
+const productModel = require("../model/schema/productSchema");
 const userModel = require("../model/schema/userSchema");
 const bcryptjs = require("bcryptjs");
 
+// admin login
 const adminSignIn = async function (req, res, next) {
    try {
       const { email, password } = req.body;
@@ -19,6 +21,7 @@ const adminSignIn = async function (req, res, next) {
          });
       }
 
+      // if the user email is valid then check the password is match or
       const varifyPassword = await bcryptjs.compare(password, userIsExists.password);
 
       if (varifyPassword) {
@@ -35,6 +38,7 @@ const adminSignIn = async function (req, res, next) {
             token: genrateToken,
          };
 
+         // set the user info into the cookie
          res.cookie("user", userObject);
 
          return res.status(200).json({
@@ -51,6 +55,8 @@ const adminSignIn = async function (req, res, next) {
       console.log(err);
    }
 };
+
+// product upload
 
 module.exports = {
    adminSignIn,

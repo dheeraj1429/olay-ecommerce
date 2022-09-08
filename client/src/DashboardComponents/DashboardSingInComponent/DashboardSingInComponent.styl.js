@@ -7,6 +7,17 @@ export const div = styled.div`
    border-radius: 10px;
    background-color: var(--main-cl);
 
+   .Loding {
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      img {
+         width: 100%;
+         height: 30px;
+      }
+   }
+
    h1 {
       font-size: 60px;
       font-weight: 400;

@@ -1,5 +1,12 @@
 import styled from "styled-components";
 
+export const main = styled.div`
+   a {
+      text-decoration: none;
+      color: var(--light-gray);
+   }
+`;
+
 export const div = styled.div`
    width: 100%;
    padding: 0.8rem;
@@ -24,6 +31,6 @@ export const iconDiv = styled.div`
 
 export const contentDiv = styled.div`
    h5 {
-      font-weight: 500;
+      font-weight: 400;
    }
 `;

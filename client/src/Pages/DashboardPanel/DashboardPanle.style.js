@@ -9,4 +9,7 @@ export const flexDiv = styled.div`
    display: flex;
 `;
 
-export const renderDiv = styled.div``;
+export const renderDiv = styled.div`
+   overflow-x: hidden;
+   width: 100%;
+`;

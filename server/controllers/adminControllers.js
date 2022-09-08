@@ -31,6 +31,7 @@ const adminSignIn = async function (req, res, next) {
             name: userIsExists.name,
             email: userIsExists.email,
             isAdmin: userIsExists.isAdmin,
+            userProfileImage: userIsExists.userProfileImage,
             token: genrateToken,
          };
 

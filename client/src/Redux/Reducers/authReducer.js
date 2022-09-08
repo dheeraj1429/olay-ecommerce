@@ -2,6 +2,7 @@ import { ACTION_TYPE } from "../ActionTypes/actionType";
 
 const INITAL_STATE = {
    auth: null,
+   isLoading: false,
 };
 
 const authReducer = function (state = INITAL_STATE, action) {
@@ -19,6 +20,12 @@ const authReducer = function (state = INITAL_STATE, action) {
                success: true,
                userObject: action.payload,
             },
+         };
+
+      case ACTION_TYPE.REMOVE_USER:
+         return {
+            ...state,
+            auth: action.payload,
          };
 
       default:

@@ -11,9 +11,9 @@ function Dashboard() {
    console.log(auth);
 
    useLayoutEffect(() => {
-      if (!!auth && auth.success && auth.userObject.isAdmin) {
+      if (!!auth && auth.success && auth.userObject.isAdmin === "admin") {
          navigation("/dashboard");
-      } else {
+      } else if (!!auth && auth.success && auth.userObject.isAdmin === "user") {
          navigation("/");
       }
    }, [auth]);

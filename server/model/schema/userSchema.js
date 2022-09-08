@@ -9,11 +9,15 @@ const userSchema = new mongoose.Schema({
    password: { type: String, reuqired: [true, "user password is required"] },
    isAdmin: { type: String, default: "user" },
    tokens: [{ token: { type: String, required: [true, "user token is required"] } }],
+   userProfileImage: { type: String, default: "defaultUser.jpeg" },
 });
 
 userSchema.methods.genrateUserToken = async function () {
    try {
-      const token = await jwt.sign({ _id: this.id.toString(), name: this.name, email: this.email, isAdmin: this.isAdmin }, JWT_TOKEN);
+      const token = await jwt.sign(
+         { _id: this.id.toString(), name: this.name, email: this.email, isAdmin: this.isAdmin },
+         JWT_TOKEN
+      );
       this.tokens = this.tokens.concat({ token });
       this.save();
       return token;

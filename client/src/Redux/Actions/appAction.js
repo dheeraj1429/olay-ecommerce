@@ -6,3 +6,10 @@ export const setLoginUser = function (data) {
       payload: data,
    };
 };
+
+export const removeUser = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_USER,
+      payload: data,
+   };
+};

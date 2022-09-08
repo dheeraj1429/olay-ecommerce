@@ -14,6 +14,7 @@ function DashboardSingInComponent() {
    const [Error, setError] = useState(null);
    const dispatch = useDispatch();
    const auth = useSelector((state) => state.auth.auth);
+   const isLoading = useSelector((state) => state.auth.isLoading);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -75,7 +76,15 @@ function DashboardSingInComponent() {
             />
          </Box>
          {Error ? <h4>{Error}</h4> : null}
-         <CustombuttonComponent onClick={SendData} innerText={"Sign In"} btnCl={"admin-signin"} />
+         {isLoading ? (
+            <img src="/images/spneer.svg" />
+         ) : (
+            <CustombuttonComponent
+               onClick={SendData}
+               innerText={"Sign In"}
+               btnCl={"admin-signin"}
+            />
+         )}
       </signIn.div>
    );
 }

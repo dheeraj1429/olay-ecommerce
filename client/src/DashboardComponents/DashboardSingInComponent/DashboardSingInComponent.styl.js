@@ -5,6 +5,7 @@ export const div = styled.div`
    margin: auto;
    padding: 1rem;
    border-radius: 10px;
+   background-color: var(--main-cl);
 
    h1 {
       font-size: 60px;

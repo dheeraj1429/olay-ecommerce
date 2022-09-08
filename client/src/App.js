@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 
 // components
 import DashboardSingInComponent from "./DashboardComponents/DashboardSingInComponent/DashboardSingInComponent";
+import DashboardHomeComponent from "./DashboardComponents/DashboardHomeComponent/DashboardHomeComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -20,7 +21,7 @@ function App() {
       if (cookie && cookie.user) {
          dispatch(setLoginUser(cookie.user));
       }
-   }, [cookie.user]);
+   }, []);
 
    return (
       <div className="App">
@@ -28,7 +29,9 @@ function App() {
             <Route path="/admin" element={<Dashboard />}>
                <Route path="sign-in" element={<DashboardSingInComponent />} />
             </Route>
-            <Route path="dashboard" element={<DashboardPanel />} />
+            <Route path="dashboard" element={<DashboardPanel />}>
+               <Route path="" element={<DashboardHomeComponent />} />
+            </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>
       </div>

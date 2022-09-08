@@ -16,6 +16,13 @@ export const flex = styled.div`
 export const renderDiv = styled.div`
    width: 50%;
    padding: 2rem;
+   background-image: url(/images/login-image.jpg);
+   background-position: center;
+   background-repeat: no-repeat;
+   background-size: cover;
+   height: 100%;
+   display: flex;
+   align-items: center;
 `;
 
 export const imageDiv = styled.div`

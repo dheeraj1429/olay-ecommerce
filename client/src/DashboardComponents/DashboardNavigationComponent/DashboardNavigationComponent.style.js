@@ -6,7 +6,7 @@ export const div = styled.div`
    border-radius: 10px;
    cursor: pointer;
    margin: 0.5rem 0;
-   box-shadow: ${(props) => (props.activeBar ? "0 0 10px 1px #efefef" : null)};
+   box-shadow: ${(props) => (props.activeBar ? "0 0 70px 3px #e1e1e1" : null)};
 `;
 
 export const flex = styled.div`

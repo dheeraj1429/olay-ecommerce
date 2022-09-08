@@ -1,10 +1,8 @@
 import React from "react";
 import * as Nav from "./DashboardNavigationComponent.style";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 
 function DashboardNavigationComponent({ icon, innerText, activeBar, isShow, onClick, Active }) {
-   const location = useLocation();
    return (
       <Nav.main>
          <Link

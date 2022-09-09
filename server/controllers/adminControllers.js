@@ -113,6 +113,10 @@ const uploadProductCategory = async function (req, res, next) {
 
 const getAllCategorys = async function (req, res, next) {
    try {
+      /**
+       * @getAllCategorys find all product categorys
+       * @return return all the category
+       */
       const getAllCategorys = await categoryModel.find({});
 
       if (!getAllCategorys) {
@@ -130,8 +134,17 @@ const getAllCategorys = async function (req, res, next) {
    }
 };
 
+const editproductCategory = async function (req, res, next) {
+   try {
+      console.log(req.body);
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    adminSignIn,
    uploadProductCategory,
    getAllCategorys,
+   editproductCategory,
 };

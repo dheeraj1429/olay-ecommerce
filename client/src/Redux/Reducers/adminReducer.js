@@ -4,6 +4,8 @@ const INITAL_STATE = {
    productCategory: null,
    productCategoryLoading: false,
    productAllCategory: [],
+   editCategory: false,
+   selectedCategory: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -40,6 +42,18 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.productAllCategory,
                allCategory: state.productAllCategory.allCategory.concat(action.payload),
             },
+         };
+
+      case ACTION_TYPE.EDIT_CATEGORY:
+         return {
+            ...state,
+            editCategory: action.payload,
+         };
+
+      case ACTION_TYPE.SELECTED_EDIT_CATEGORY:
+         return {
+            ...state,
+            selectedCategory: action.payload,
          };
 
       default:

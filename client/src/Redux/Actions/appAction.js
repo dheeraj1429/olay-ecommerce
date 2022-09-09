@@ -41,3 +41,17 @@ export const insertNewCategory = function (data) {
       payload: data,
    };
 };
+
+export const editProductCategory = function (data) {
+   return {
+      type: ACTION_TYPE.EDIT_CATEGORY,
+      payload: data,
+   };
+};
+
+export const selectedCategory = function (data) {
+   return {
+      type: ACTION_TYPE.SELECTED_EDIT_CATEGORY,
+      payload: data,
+   };
+};

@@ -52,3 +52,14 @@ export const fetchProductsCategorys = function () {
       }
    };
 };
+
+export const editproductCategory = function (data) {
+   return async function (dispatch) {
+      try {
+         const updateCategory = await axios.patch("/admin/edit-product-category", data, headers);
+         console.log(updateCategory);
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import * as inner from "./ProductCategoryInnerComponent.style";
 import { HiOutlineDotsHorizontal } from "@react-icons/all-files/hi/HiOutlineDotsHorizontal";
 import { Popconfirm } from "antd";
+import { useDispatch } from "react-redux";
+import { editProductCategory, selectedCategory } from "../../Redux/Actions/appAction";
 
 function ProductCategoryInnerComponent({ CategoryName, description, edit, folder, data }) {
    const [open, setOpen] = useState(false);
    const [confirmLoading, setConfirmLoading] = useState(false);
-
+   const dispatch = useDispatch();
    const showPopconfirm = () => {
       setOpen(true);
    };
@@ -15,7 +17,8 @@ function ProductCategoryInnerComponent({ CategoryName, description, edit, folder
       setConfirmLoading(true);
       setOpen(false);
       setConfirmLoading(false);
-      // eidt
+      dispatch(editProductCategory(true));
+      dispatch(selectedCategory(data));
    };
 
    const handleCancel = () => {

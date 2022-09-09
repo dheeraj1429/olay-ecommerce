@@ -14,6 +14,7 @@ import {
    insertNewCategory,
 } from "../../Redux/Actions/appAction";
 import ProductCategorysComponent from "../ProductCategorysComponent/ProductCategorysComponent";
+import EditProductCategoryComponent from "../EditProductCategoryComponent/EditProductCategoryComponent";
 
 const key = "updatable";
 
@@ -33,6 +34,7 @@ function UploadProductCategory() {
 
    const productCategory = useSelector((state) => state.admin.productCategory);
    const productCategoryLoading = useSelector((state) => state.admin.productCategoryLoading);
+   const editCategory = useSelector((state) => state.admin.editCategory);
 
    const info = (mes) => {
       message.info(mes);
@@ -71,6 +73,7 @@ function UploadProductCategory() {
 
    return (
       <category.div>
+         <EditProductCategoryComponent show={editCategory} />
          <DashboardNavbarComponent />
          <category.innerDiv>
             <HeadingComponent
@@ -86,7 +89,7 @@ function UploadProductCategory() {
                   <Box
                      component="form"
                      sx={{
-                        "& > :not(style)": { my: 1, width: "100%" },
+                        "& > :not(style)": { mb: 2, width: "100%" },
                      }}
                      noValidate
                      autoComplete="off"

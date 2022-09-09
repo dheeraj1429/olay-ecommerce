@@ -13,6 +13,18 @@ export const div = styled.div`
    .admin-signin:hover {
       background-color: var(--spec-base-background);
    }
+   .category_upload {
+      background-color: var(--spec-general-background-a);
+      padding: 0.6rem 3rem;
+      border-radius: 30px;
+      box-shadow: 0 0 50px 20px #e3e3e3;
+      color: var(--main-cl);
+      transition: all 0.3s ease;
+   }
+   .category_upload:hover {
+      color: var(--spec-general-background-a);
+      background-color: var(--main-cl);
+   }
 `;
 
 export const button = styled.button`

@@ -1,6 +1,7 @@
 const productModel = require("../model/schema/productSchema");
 const userModel = require("../model/schema/userSchema");
 const bcryptjs = require("bcryptjs");
+const categoryModel = require("../model/schema/productCategorySchema");
 
 // admin login
 const adminSignIn = async function (req, res, next) {
@@ -41,7 +42,7 @@ const adminSignIn = async function (req, res, next) {
          // set the user info into the cookie
          res.cookie("user", userObject);
 
-         return res.status(200).json({
+         return res.status(201).json({
             success: true,
             userObject,
          });
@@ -56,8 +57,81 @@ const adminSignIn = async function (req, res, next) {
    }
 };
 
-// product upload
+const insertCategoryInfo = async function (data, res) {
+   const newCategoryInsert = await categoryModel(data);
+   const saveCategory = await newCategoryInsert.save();
+
+   if (saveCategory) {
+      return res.status(201).json({
+         success: true,
+         message: "category saved",
+      });
+   }
+};
+
+const uploadProductCategory = async function (req, res, next) {
+   try {
+      const { categoryName, categoryDescription } = req.body;
+
+      if (!!categoryName) {
+         const isExists = await categoryModel.findOne({ name: categoryName });
+
+         /**
+          * @isExists first check the category is exists or not if the category is exists then we want the return the flag true and false. if there is not category is not exists then we want to create first then return the flag to the client.
+          */
+         if (isExists) {
+            return res.status(200).json({
+               success: false,
+               message: "category is already exists",
+            });
+         } else {
+            if (categoryName && categoryDescription) {
+               const data = {
+                  name: categoryName,
+                  description: categoryDescription,
+               };
+
+               await insertCategoryInfo(data, res);
+            } else if (categoryName) {
+               const data = {
+                  name: categoryName,
+               };
+
+               await insertCategoryInfo(data, res);
+            }
+         }
+      } else {
+         return res.status(200).json({
+            success: false,
+            message: "category name is required",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const getAllCategorys = async function (req, res, next) {
+   try {
+      const getAllCategorys = await categoryModel.find({});
+
+      if (!getAllCategorys) {
+         return res.status(400).json({
+            message: "someting worng",
+         });
+      } else {
+         return res.status(200).json({
+            success: true,
+            allCategory: getAllCategorys,
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
 
 module.exports = {
    adminSignIn,
+   uploadProductCategory,
+   getAllCategorys,
 };

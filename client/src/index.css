@@ -32,7 +32,7 @@ code {
   --spec-menu-background: #2f2f2f;
   --spec-elevated-background-inverse: #f1f1f1;
   --spec-filled-container: rgba(255, 255, 255, 0.1);
-  --spec-outlined-container: rgba(255, 255, 255, 0.2);
+  --spec-outlined-container: rgb(85, 84, 84);
   --spec-brand-background-solid: #212121;
   --spec-brand-background-primary: rgba(33, 33, 33, 0.98);
   --spec-brand-background-secondary: rgba(33, 33, 33, 0.95);
@@ -42,7 +42,7 @@ code {
   --spec-error-background: #f4f4f4;
   --spec-text-primary: #fff;
   --spec-text-secondary: #aaa;
-  --spec-text-disabled: #717171;
+  --spec-text-disabled: #b7b7b7;
   --spec-text-primary-inverse: #030303;
   --spec-call-to-action: #3ea6ff;
   --spec-call-to-action-inverse: #065fd4;
@@ -81,7 +81,7 @@ code {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 2px;
 }
 
 /* Track */

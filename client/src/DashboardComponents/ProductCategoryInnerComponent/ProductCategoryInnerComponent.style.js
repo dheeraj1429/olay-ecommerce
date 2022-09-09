@@ -34,6 +34,11 @@ export const div = styled.div`
    .margin_heading {
       padding-left: 1rem;
    }
+
+   .img_div {
+      display: flex;
+      align-items: center;
+   }
 `;
 
 export const flex = styled.div`

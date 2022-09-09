@@ -4,9 +4,15 @@ import { IoIosClose } from "@react-icons/all-files/io/IoIosClose";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { editProductCategory } from "../../Redux/Actions/appAction";
+import {
+   editProductCategory,
+   categoryUpdateLoading,
+   removeCategoryUpdateInfo,
+} from "../../Redux/Actions/appAction";
 import { useDispatch, useSelector } from "react-redux";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
+import { updateProductCategory } from "../../Redux/Actions/adminAction";
+import { message } from "antd";
 
 function EditProductCategoryInnerComponent() {
    const dispatch = useDispatch();
@@ -19,6 +25,8 @@ function EditProductCategoryInnerComponent() {
    };
 
    const selectedCategory = useSelector((state) => state.admin.selectedCategory);
+   const editCategoryLoading = useSelector((state) => state.admin.editCategoryLoading);
+   const updateCategory = useSelector((state) => state.admin.updateCategory);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -26,8 +34,8 @@ function EditProductCategoryInnerComponent() {
       setEditCategory({ ...EditCategory, [name]: value });
    };
 
-   const EditHandler = function (id) {
-      console.log(id);
+   const info = (mes) => {
+      message.info(mes);
    };
 
    useEffect(() => {
@@ -41,7 +49,29 @@ function EditProductCategoryInnerComponent() {
                "",
          });
       }
-   }, [selectedCategory]);
+
+      if (!!updateCategory) {
+         message.success(updateCategory.message);
+         dispatch(removeCategoryUpdateInfo());
+      }
+   }, [selectedCategory, updateCategory]);
+
+   const EditHandler = function (id) {
+      const { name, description } = EditCategory;
+      if (!!selectedCategory) {
+         if (
+            name !== selectedCategory.name ||
+            (description !== selectedCategory?.description && description !== "")
+         ) {
+            dispatch(updateProductCategory({ categoryId: id, name, description }));
+            dispatch(categoryUpdateLoading(true));
+         } else {
+            info("Older values and new values is the same. No changes!!");
+         }
+      } else {
+         info("No Selected category");
+      }
+   };
 
    return (
       <edit.div>
@@ -82,6 +112,7 @@ function EditProductCategoryInnerComponent() {
                   innerText={"Edit Category"}
                   btnCl={"category_upload"}
                   onClick={() => EditHandler(selectedCategory._id)}
+                  isLoading={editCategoryLoading}
                />
             </>
          ) : null}

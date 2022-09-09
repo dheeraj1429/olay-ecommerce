@@ -6,6 +6,8 @@ const INITAL_STATE = {
    productAllCategory: [],
    editCategory: false,
    selectedCategory: null,
+   editCategoryLoading: false,
+   updateCategory: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -54,6 +56,25 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             selectedCategory: action.payload,
+         };
+
+      case ACTION_TYPE.CATEGORY_UPDATE:
+         return {
+            ...state,
+            updateCategory: action.payload,
+            editCategoryLoading: false,
+         };
+
+      case ACTION_TYPE.CATEGORY_UPDATE_LOADING:
+         return {
+            ...state,
+            editCategoryLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_CATEGORY_INFO_UPDATE:
+         return {
+            ...state,
+            updateCategory: null,
          };
 
       default:

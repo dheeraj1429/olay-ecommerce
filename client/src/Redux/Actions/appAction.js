@@ -55,3 +55,17 @@ export const selectedCategory = function (data) {
       payload: data,
    };
 };
+
+export const categoryUpdateLoading = function (data) {
+   return {
+      type: ACTION_TYPE.CATEGORY_UPDATE_LOADING,
+      payload: data,
+   };
+};
+
+export const removeCategoryUpdateInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_CATEGORY_INFO_UPDATE,
+      payload: data,
+   };
+};

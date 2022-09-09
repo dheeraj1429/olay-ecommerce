@@ -134,9 +134,45 @@ const getAllCategorys = async function (req, res, next) {
    }
 };
 
+/**
+ * @editproductCategory find the category and update then catefory fileds
+ * @return flag true and false
+ */
 const editproductCategory = async function (req, res, next) {
    try {
-      console.log(req.body);
+      const { categoryId, name, description } = req.body;
+
+      if (!categoryId) {
+         return res.status(200).json({
+            success: false,
+            message: "no selected category",
+         });
+      }
+
+      /**
+       * @findCategoryAndUpdate find the category and update.
+       */
+      const findCategoryAndUpdate = await categoryModel.updateOne(
+         { _id: categoryId },
+         {
+            $set: {
+               name,
+               description,
+            },
+         }
+      );
+
+      if (!!findCategoryAndUpdate.modifiedCount) {
+         return res.status(200).json({
+            success: true,
+            message: "category information update",
+         });
+      } else {
+         return res.status(200).json({
+            success: false,
+            message: "something worng!!",
+         });
+      }
    } catch (err) {
       console.log(err);
    }

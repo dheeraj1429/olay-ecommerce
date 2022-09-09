@@ -4,6 +4,7 @@ import { HiOutlineDotsHorizontal } from "@react-icons/all-files/hi/HiOutlineDots
 import { Popconfirm } from "antd";
 import { useDispatch } from "react-redux";
 import { editProductCategory, selectedCategory } from "../../Redux/Actions/appAction";
+import { BiSitemap } from "@react-icons/all-files/bi/BiSitemap";
 
 function ProductCategoryInnerComponent({ CategoryName, description, edit, folder, data }) {
    const [open, setOpen] = useState(false);
@@ -33,7 +34,9 @@ function ProductCategoryInnerComponent({ CategoryName, description, edit, folder
                <inner.flex>
                   {folder ? (
                      <>
-                        <img src="/images/category.png" />
+                        <div className="img_div">
+                           <BiSitemap />
+                        </div>
                         <div>
                            <h4>{CategoryName}</h4>
                            {!!description ? <p className="margin_heading">{description}</p> : null}

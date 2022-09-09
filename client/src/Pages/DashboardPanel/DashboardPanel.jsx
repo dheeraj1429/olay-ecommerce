@@ -9,7 +9,9 @@ function DashboardPanel() {
          <dashboard.flexDiv>
             <DashboardPanelSidebarComponent />
             <dashboard.renderDiv>
-               <Outlet />
+               <dashboard.innerDiv>
+                  <Outlet />
+               </dashboard.innerDiv>
             </dashboard.renderDiv>
          </dashboard.flexDiv>
       </dashboard.div>

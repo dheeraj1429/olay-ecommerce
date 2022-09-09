@@ -41,7 +41,7 @@ code {
   --spec-general-background-c: #030303;
   --spec-error-background: #f4f4f4;
   --spec-text-primary: #fff;
-  --spec-text-secondary: #aaa;
+  --spec-text-secondary: rgb(192, 192, 192);
   --spec-text-disabled: #b7b7b7;
   --spec-text-primary-inverse: #030303;
   --spec-call-to-action: #3ea6ff;

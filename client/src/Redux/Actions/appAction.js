@@ -36,7 +36,6 @@ export const removeCategoryInfo = function (data) {
 };
 
 export const insertNewCategory = function (data) {
-   console.log(data);
    return {
       type: ACTION_TYPE.INSERT_NEW_CATEGORY,
       payload: data,

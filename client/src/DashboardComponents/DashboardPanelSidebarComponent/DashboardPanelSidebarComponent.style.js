@@ -8,6 +8,10 @@ export const div = styled.div`
    overflow-x: hidden;
    padding: 1rem;
 
+   .Margin_elm {
+      margin-bottom: 1rem;
+   }
+
    svg {
       cursor: pointer;
    }

@@ -5,14 +5,14 @@ export const main = styled.div`
       text-decoration: none;
       color: var(--light-gray);
    }
+   margin: 0.5rem 0;
 `;
 
 export const div = styled.div`
    width: 100%;
-   padding: 0.8rem;
+   padding: 0.3rem 0.8rem;
    border-radius: 10px;
    cursor: pointer;
-   margin: 0.5rem 0;
    box-shadow: ${(props) => (props.activeBar ? "0 0 70px 3px #e1e1e1" : null)};
 `;
 
@@ -32,5 +32,6 @@ export const iconDiv = styled.div`
 export const contentDiv = styled.div`
    h5 {
       font-weight: 400;
+      margin: 0;
    }
 `;

@@ -4,6 +4,11 @@ export const div = styled.div`
    padding: 0 1rem;
    margin: 1rem 0;
 
+   img {
+      width: auto;
+      height: 20px;
+   }
+
    svg {
       font-size: 18px;
       fill: var(--spec-outlined-container);
@@ -17,7 +22,7 @@ export const div = styled.div`
       font-weight: 400;
    }
    p {
-      font-size: 12px;
+      font-size: 10px;
       margin: 0;
       color: var(--spec-outlined-container);
    }

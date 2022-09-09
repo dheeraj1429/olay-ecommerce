@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as upload from "./UploadProductComponent.style";
 import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
@@ -6,15 +6,8 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
-
-const currencies = [
-   { value: "Makeup", label: "Makeup" },
-   { value: "Skin care", label: "Skin care" },
-   { value: "Hair care", label: "Hair care" },
-   { value: "Luxury beauty", label: "Luxury beauty" },
-   { value: "Men's grooming", label: "Men's grooming" },
-   { value: "Luxury stores", label: "Luxury stores" },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductsCategorys } from "../../Redux/Actions/adminAction";
 
 const sugAge = [
    { value: "18 - 25", label: "18 - 25" },
@@ -25,8 +18,9 @@ const sugAge = [
 ];
 
 function UploadProductComponent() {
+   const [ProductCategory, setProductCategory] = useState([]);
    const [currency, setCurrency] = useState("EUR");
-
+   const dispatch = useDispatch();
    const [Product, setProduct] = useState({
       name: "",
       price: "",
@@ -37,9 +31,21 @@ function UploadProductComponent() {
       suggestedSkinColor: "",
    });
 
+   const productAllCategory = useSelector((state) => state.admin.productAllCategory);
+
    const handleChange = (event) => {
       setCurrency(event.target.value);
    };
+
+   useEffect(() => {
+      dispatch(fetchProductsCategorys());
+   }, []);
+
+   useEffect(() => {
+      if (!!productAllCategory && productAllCategory.success) {
+         setProductCategory(productAllCategory.allCategory);
+      }
+   }, [productAllCategory]);
 
    return (
       <upload.div>
@@ -90,9 +96,9 @@ function UploadProductComponent() {
                         onChange={handleChange}
                         helperText="Please select your category"
                      >
-                        {currencies.map((option) => (
-                           <MenuItem key={option.value} value={option.value}>
-                              {option.label}
+                        {ProductCategory.map((option) => (
+                           <MenuItem key={option._id} value={option.name}>
+                              {option.name}
                            </MenuItem>
                         ))}
                      </TextField>

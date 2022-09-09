@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const div = styled.div`
-   background-color: var(--main-cl);
    padding: 1rem;
+   border-bottom: 1px solid var(--spec-error-background);
 
    svg {
       cursor: pointer;

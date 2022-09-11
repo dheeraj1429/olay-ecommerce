@@ -6,13 +6,23 @@ export const div = styled.div`
    border-radius: 8px;
    height: ${(props) => (props.ShowDrop ? "auto" : "auto")};
    transition: all 0.3s ease;
+   /* border: 1px solid var(--spec-10-percent-layer); */
+   position: relative;
+   margin: 0.2rem 0;
+   border: 1px solid transparent;
+
+   &:hover {
+      border: 1px solid var(--icon-cl);
+   }
 
    svg {
       font-size: 16px;
+      fill: var(--main-cl);
    }
 
    p {
       margin: 0;
+      color: var(--main-cl);
    }
 
    .icons_text_div {
@@ -22,7 +32,7 @@ export const div = styled.div`
    .showDropDown-menu {
       opacity: 1;
       visibility: visible;
-      display: block;
+      right: -220px;
    }
 `;
 
@@ -40,9 +50,14 @@ export const iconDiv = styled.div`
 `;
 
 export const dropDownItems = styled.div`
+   width: 200px;
+   /* background-color: var(--main-cl); */
+   border-radius: 8px;
+   right: -250px;
    margin-top: 0.5rem;
    opacity: 0;
    visibility: hidden;
-   transition: opacity 1s ease-out;
-   display: none;
+   position: absolute;
+   transition: all 0.3s ease;
+   top: -10px;
 `;

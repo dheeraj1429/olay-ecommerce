@@ -2,7 +2,15 @@ import React from "react";
 import * as Nav from "./DashboardNavigationComponent.style";
 import { Link } from "react-router-dom";
 
-function DashboardNavigationComponent({ icon, innerText, activeBar, isShow, onClick, Active }) {
+function DashboardNavigationComponent({
+   icon,
+   innerText,
+   activeBar,
+   isShow,
+   onClick,
+   Active,
+   HideHandler,
+}) {
    return (
       <Nav.main>
          <Link
@@ -10,7 +18,10 @@ function DashboardNavigationComponent({ icon, innerText, activeBar, isShow, onCl
          >
             <Nav.div
                activeBar={Active === innerText ? true : null}
-               onClick={onClick ? onClick : null}
+               onClick={(e) => {
+                  onClick(e);
+                  HideHandler(e);
+               }}
                id={innerText}
             >
                <Nav.flex className={activeBar ? "active-bar" : null}>

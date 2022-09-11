@@ -41,10 +41,13 @@ export const updateProductCategory = function (data) {
       try {
          const updateCategory = await axios.patch("/admin/edit-product-category", data, headers);
 
-         if (updateCategory && updateCategory?.data) {
+         if (updateCategory && updateCategory?.data && updateCategory?.data?.success) {
             dispatch({
                type: ACTION_TYPE.CATEGORY_UPDATE,
                payload: updateCategory && updateCategory?.data,
+               targetId: data.categoryId,
+               categoryName: data.name,
+               categoryDescription: data.description,
             });
          }
       } catch (err) {

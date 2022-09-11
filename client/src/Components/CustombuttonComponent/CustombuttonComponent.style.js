@@ -17,7 +17,6 @@ export const div = styled.div`
       background-color: var(--spec-general-background-a);
       padding: 0.3rem 3rem;
       border-radius: 5px;
-      box-shadow: 0 0 50px 20px #e3e3e3;
       color: var(--main-cl);
       transition: all 0.3s ease;
       margin-top: 1rem;

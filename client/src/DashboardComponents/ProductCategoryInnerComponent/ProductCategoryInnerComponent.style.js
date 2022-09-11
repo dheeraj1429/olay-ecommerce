@@ -11,20 +11,20 @@ export const div = styled.div`
 
    svg {
       font-size: 18px;
-      fill: var(--spec-outlined-container);
+      fill: var(--smooth-light-color);
    }
 
    h4 {
       font-size: 15px;
       margin: 0;
       margin-left: 1rem;
-      color: var(--spec-outlined-container);
+      color: var(--smooth-light-color);
       font-weight: 400;
    }
    p {
       font-size: 10px;
       margin: 0;
-      color: var(--spec-outlined-container);
+      color: var(--spec-white-color);
    }
 
    .Edit svg {

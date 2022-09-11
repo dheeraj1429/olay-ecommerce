@@ -3,10 +3,12 @@ import styled from "styled-components";
 export const div = styled.div`
    padding: 1rem;
    border-bottom: 1px solid var(--spec-error-background);
+   background-color: var(--spec-background-gry-cl);
+   border-radius: 7px 7px 0px 0;
 
    svg {
       cursor: pointer;
-      fill: var(--spec-elevated-background);
+      fill: var(--icon-cl);
       font-size: 15px;
    }
 `;
@@ -29,7 +31,7 @@ export const searchDiv = styled.div`
    height: 40px;
    border-radius: 30px;
    overflow: hidden;
-   background-color: var(--spec-error-background);
+   background-color: var(--dark-gray-spec-color);
    padding-right: 0.5rem;
    margin-left: 1rem;
 
@@ -47,6 +49,6 @@ export const searchDiv = styled.div`
       border: none;
       outline: none;
       background-color: transparent;
-      color: var(--spec-brand-background-solid);
+      color: var(--main-cl);
    }
 `;

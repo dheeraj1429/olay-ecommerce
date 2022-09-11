@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import * as card from "./DashboardSidebarCardComponent.style";
-import { GrFormDown } from "@react-icons/all-files/gr/GrFormDown";
+import { IoIosArrowForward } from "@react-icons/all-files/io/IoIosArrowForward";
 
-function DashboardSidebarCardComponent({ children, heading, icon, onClick, show }) {
+function DashboardSidebarCardComponent({ children, heading, icon, onClick, show, showSub }) {
    return (
       <card.div ShowDrop={show == heading ? true : false}>
-         <card.flex onClick={onClick} id={heading}>
+         <card.flex
+            onClick={(e) => {
+               onClick(e);
+            }}
+            id={heading}
+         >
             <div className="icons_text_div">
                <card.iconDiv>{icon}</card.iconDiv>
                <p>{heading}</p>
             </div>
-            <GrFormDown />
+            <IoIosArrowForward />
          </card.flex>
-         <card.dropDownItems className={show === heading ? "showDropDown-menu" : null}>
+         <card.dropDownItems className={show === heading && showSub ? "showDropDown-menu" : null}>
             {children}
          </card.dropDownItems>
       </card.div>

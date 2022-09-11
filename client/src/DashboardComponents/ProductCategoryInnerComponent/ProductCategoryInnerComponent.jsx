@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import * as inner from "./ProductCategoryInnerComponent.style";
-import { HiOutlineDotsHorizontal } from "@react-icons/all-files/hi/HiOutlineDotsHorizontal";
 import { Popconfirm } from "antd";
 import { useDispatch } from "react-redux";
 import { editProductCategory, selectedCategory } from "../../Redux/Actions/appAction";
-import { BiSitemap } from "@react-icons/all-files/bi/BiSitemap";
+import { FcSupport } from "@react-icons/all-files/fc/FcSupport";
+import { FcGenealogy } from "@react-icons/all-files/fc/FcGenealogy";
 
 function ProductCategoryInnerComponent({ CategoryName, description, edit, folder, data }) {
    const [open, setOpen] = useState(false);
@@ -35,7 +35,7 @@ function ProductCategoryInnerComponent({ CategoryName, description, edit, folder
                   {folder ? (
                      <>
                         <div className="img_div">
-                           <BiSitemap />
+                           <FcGenealogy />
                         </div>
                         <div>
                            <h4>{CategoryName}</h4>
@@ -62,10 +62,7 @@ function ProductCategoryInnerComponent({ CategoryName, description, edit, folder
                      }}
                      onCancel={handleCancel}
                   >
-                     <HiOutlineDotsHorizontal
-                        id={data ? data._id : null}
-                        onClick={showPopconfirm}
-                     />
+                     <FcSupport id={data ? data._id : null} onClick={showPopconfirm} />
                   </Popconfirm>
                )}
             </div>

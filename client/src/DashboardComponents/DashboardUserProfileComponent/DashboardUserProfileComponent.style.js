@@ -7,6 +7,7 @@ export const div = styled.div`
    p {
       font-size: 12px;
       margin: 0;
+      color: var(--spec-white-color);
    }
 `;
 

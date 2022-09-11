@@ -59,10 +59,20 @@ const adminReducer = function (state = INITAL_STATE, action) {
          };
 
       case ACTION_TYPE.CATEGORY_UPDATE:
+         const findUpdateCategory = state.productAllCategory.allCategory.map((el) =>
+            el._id === action.targetId
+               ? { ...el, name: action.categoryName, description: action.categoryDescription }
+               : el
+         );
+
          return {
             ...state,
             updateCategory: action.payload,
             editCategoryLoading: false,
+            productAllCategory: {
+               success: true,
+               allCategory: findUpdateCategory,
+            },
          };
 
       case ACTION_TYPE.CATEGORY_UPDATE_LOADING:

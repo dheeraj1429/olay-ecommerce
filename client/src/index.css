@@ -77,6 +77,13 @@ code {
   --spec-static-overlay-background-solid: #000;
   --spec-static-overlay-background-heavy: rgba(0, 0, 0, 0.8);
   --spec-background-overlay-color: rgba(0, 0, 0, 0.312);
+  --spec-background-gry-cl: #26292e;
+  --spec-dark-background-color: #1b1d21;
+  --icon-cl: #868b99;
+  --dark-gray-spec-color: #141618;
+  --smooth-light-color: #ced5db;
+  --smooth-light-heading-color: #e3e7eb;
+  --spec-white-color: #d0d1d3;
 }
 
 /* width */

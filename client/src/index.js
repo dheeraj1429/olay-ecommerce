@@ -8,18 +8,29 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
 import "antd/dist/antd.css";
+import { red } from "@mui/material/colors";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const darkTheme = createTheme({
+   palette: {
+      mode: "dark",
+   },
+});
+
 root.render(
-   <CookiesProvider>
-      <BrowserRouter>
-         <Provider store={store}>
-            {/* <React.StrictMode> */}
-            <App />
-            {/* </React.StrictMode> */}
-         </Provider>
-      </BrowserRouter>
-   </CookiesProvider>
+   <ThemeProvider theme={darkTheme}>
+      <CookiesProvider>
+         <BrowserRouter>
+            <Provider store={store}>
+               {/* <React.StrictMode> */}
+               <App />
+               {/* </React.StrictMode> */}
+            </Provider>
+         </BrowserRouter>
+      </CookiesProvider>
+   </ThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

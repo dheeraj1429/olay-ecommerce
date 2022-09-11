@@ -11,11 +11,11 @@ export const flexDiv = styled.div`
 export const renderDiv = styled.div`
    overflow-x: hidden;
    width: 100%;
-   background-color: var(--smooht-gray-cl);
+   background-color: var(--spec-dark-background-color);
    padding: 1rem;
 `;
 
 export const innerDiv = styled.div`
-   background-color: var(--main-cl);
+   background-color: var(--spec-background-gry-cl);
    border-radius: 10px;
 `;

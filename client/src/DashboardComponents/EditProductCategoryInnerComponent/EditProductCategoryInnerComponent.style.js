@@ -2,12 +2,13 @@ import styled from "styled-components";
 
 export const div = styled.div`
    padding: 1rem;
-   background-color: var(--main-cl);
+   background-color: var(--spec-background-gry-cl);
    border-radius: 10px;
    width: 500px;
    z-index: 100;
    transition: all 0.3s ease;
    position: relative;
+   border: 1px solid var(--spec-static-brand-black);
 
    .close_btn {
       position: absolute;
@@ -20,7 +21,6 @@ export const div = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 10px 1px #e1e1e1;
 
       svg {
          font-size: 20px;

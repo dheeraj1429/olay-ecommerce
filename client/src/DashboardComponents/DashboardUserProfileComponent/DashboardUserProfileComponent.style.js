@@ -6,12 +6,13 @@ export const div = styled.div`
 
    p {
       font-size: 12px;
+      margin: 0;
    }
 `;
 
 export const user = styled.div`
-   width: 40px;
-   height: 40px;
+   width: 30px;
+   height: 30px;
    border-radius: 50%;
    background-position: center;
    background-repeat: no-repeat;

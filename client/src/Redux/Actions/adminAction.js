@@ -60,7 +60,13 @@ export const deleteSelectedCategory = function (data) {
             `/admin/delete-selected-category/${data}`,
             headers
          );
-         console.log(deleteCategory);
+
+         if (deleteCategory && deleteCategory?.data) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_SELECTED_CATEGORY,
+               payload: data,
+            });
+         }
       } catch (err) {
          console.log(err);
       }

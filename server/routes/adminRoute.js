@@ -4,7 +4,6 @@ const route = express.Router();
 const adminController = require("../controllers/adminControllers");
 
 // Apis
-
 route.post("/upload-category", adminController.uploadProductCategory);
 route.get("/get-all-categorys", adminController.getAllCategorys);
 route.patch("/edit-product-category", adminController.editproductCategory);

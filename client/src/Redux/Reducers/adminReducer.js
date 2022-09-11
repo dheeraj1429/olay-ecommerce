@@ -77,6 +77,19 @@ const adminReducer = function (state = INITAL_STATE, action) {
             updateCategory: null,
          };
 
+      case ACTION_TYPE.DELETE_SELECTED_CATEGORY:
+         const filterCategory = state.productAllCategory.allCategory.filter(
+            (el) => el._id !== action.payload
+         );
+         return {
+            ...state,
+            productAllCategory: {
+               success: true,
+               allCategory: filterCategory,
+            },
+            editCategory: false,
+         };
+
       default:
          return {
             ...state,

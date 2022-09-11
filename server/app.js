@@ -13,6 +13,7 @@ const databaseConnectionFunction = require("./model/db/db");
 
 // routes files
 const adminRoute = require("./routes/adminRoute");
+const authRoute = require("./routes/authRoute");
 
 // middlewares
 app.use(
@@ -29,6 +30,7 @@ app.use(logger());
 
 // routes
 app.use("/admin", adminRoute);
+app.use("/auth", authRoute);
 
 // server
 databaseConnectionFunction(() => {

@@ -1,66 +1,11 @@
 const productModel = require("../model/schema/productSchema");
-const userModel = require("../model/schema/userSchema");
-const bcryptjs = require("bcryptjs");
 const categoryModel = require("../model/schema/productCategorySchema");
-
-// admin login
-const adminSignIn = async function (req, res, next) {
-   try {
-      const { email, password } = req.body;
-
-      /**
-       * @userIsExists find the user is exists in a database or not if the user is exists in the database then we want to send back the user token and user information.
-       * @return user information
-       */
-
-      const userIsExists = await userModel.findOne({ email });
-
-      if (!userIsExists) {
-         return res.status(200).json({
-            success: false,
-            message: "User is not exists",
-         });
-      }
-
-      // if the user email is valid then check the password is match or
-      const varifyPassword = await bcryptjs.compare(password, userIsExists.password);
-
-      if (varifyPassword) {
-         /**
-          * @genrateToken genrate new access token for the every admin login time is the admin is valid
-          */
-         const genrateToken = await userIsExists.genrateUserToken();
-
-         const userObject = {
-            name: userIsExists.name,
-            email: userIsExists.email,
-            isAdmin: userIsExists.isAdmin,
-            userProfileImage: userIsExists.userProfileImage,
-            token: genrateToken,
-         };
-
-         // set the user info into the cookie
-         res.cookie("user", userObject);
-
-         return res.status(201).json({
-            success: true,
-            userObject,
-         });
-      } else {
-         return res.status(200).json({
-            success: false,
-            message: "User account password is not match",
-         });
-      }
-   } catch (err) {
-      console.log(err);
-   }
-};
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
    const saveCategory = await newCategoryInsert.save();
 
+   // TODO: Send back the responsive to the client
    if (saveCategory) {
       return res.status(201).json({
          success: true,
@@ -162,6 +107,7 @@ const editproductCategory = async function (req, res, next) {
          }
       );
 
+      // TODO: check the update is done or not
       if (!!findCategoryAndUpdate.modifiedCount) {
          return res.status(200).json({
             success: true,
@@ -178,9 +124,45 @@ const editproductCategory = async function (req, res, next) {
    }
 };
 
+/**
+ * @deleteSelectedCategory find the category and remove.
+ * @return category delete succesful or not
+ */
+const deleteSelectedCategory = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+
+      if (!id) {
+         return res.status(200).json({
+            success: false,
+            message: "selected category is is required!!",
+         });
+      }
+
+      /**
+       * @findCategoryAndDelete find the category from the database using id and delete the category.
+       */
+      const findCategoryAndDelete = await categoryModel.deleteOne({ _id: id });
+
+      if (!!findCategoryAndDelete.deletedCount) {
+         return res.status(202).json({
+            success: true,
+            message: "category delete successful",
+         });
+      } else {
+         return res.status(200).json({
+            success: false,
+            message: "somthing worng!!",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
-   adminSignIn,
    uploadProductCategory,
    getAllCategorys,
    editproductCategory,
+   deleteSelectedCategory,
 };

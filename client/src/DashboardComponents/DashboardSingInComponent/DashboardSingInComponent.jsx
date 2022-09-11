@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { adminSignIn } from "../../Redux/Actions/adminAction";
+import { adminSignIn } from "../../Redux/Actions/authAction";
 import { userLoginLoging } from "../../Redux/Actions/appAction";
 
 function DashboardSingInComponent() {

@@ -11,7 +11,7 @@ import {
 } from "../../Redux/Actions/appAction";
 import { useDispatch, useSelector } from "react-redux";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { updateProductCategory } from "../../Redux/Actions/adminAction";
+import { updateProductCategory, deleteSelectedCategory } from "../../Redux/Actions/adminAction";
 import { message } from "antd";
 
 function EditProductCategoryInnerComponent() {
@@ -73,6 +73,12 @@ function EditProductCategoryInnerComponent() {
       }
    };
 
+   const CategoryDeleteHandler = function () {
+      if (selectedCategory) {
+         dispatch(deleteSelectedCategory(selectedCategory._id));
+      }
+   };
+
    return (
       <edit.div>
          {!!selectedCategory ? (
@@ -108,12 +114,20 @@ function EditProductCategoryInnerComponent() {
                      name="description"
                   />
                </Box>
-               <CustombuttonComponent
-                  innerText={"Edit Category"}
-                  btnCl={"category_upload"}
-                  onClick={() => EditHandler(selectedCategory._id)}
-                  isLoading={editCategoryLoading}
-               />
+               <edit.flex>
+                  <CustombuttonComponent
+                     innerText={"Edit Category"}
+                     btnCl={"category_upload"}
+                     onClick={() => EditHandler(selectedCategory._id)}
+                     isLoading={editCategoryLoading}
+                  />
+
+                  <CustombuttonComponent
+                     innerText={"Delete"}
+                     btnCl={"Delete_btn"}
+                     onClick={CategoryDeleteHandler}
+                  />
+               </edit.flex>
             </>
          ) : null}
       </edit.div>

@@ -23,8 +23,19 @@ export const div = styled.div`
       margin-top: 1rem;
    }
    .category_upload:hover {
-      color: var(--spec-general-background-a);
-      background-color: var(--main-cl);
+      background-color: var(--spec-call-to-action-inverse);
+   }
+   .Delete_btn {
+      padding: 0.3rem 3rem;
+      margin-top: 1rem;
+      margin-left: 1rem;
+      background-color: var(--button-cl);
+      color: var(--main-cl);
+      border-radius: 5px;
+      transition: all 0.3s ease;
+   }
+   .Delete_btn:hover {
+      background-color: var(--spec-static-brand-red);
    }
 `;
 

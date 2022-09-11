@@ -1,0 +1,9 @@
+Sun Sep 11 2022 10:44:55 GMT+0530 (India Standard Time);
+
+TODO: dashboard edit category section
+[done]: admin can selected the category and the update the category.
+[-]: admin can delete the category also.
+        TODO:
+        logic: get the id from the user selected category.
+        then find the category using the id selected.
+        remove category from the dashboard. and also remove from the client dashboard.

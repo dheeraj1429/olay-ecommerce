@@ -31,3 +31,8 @@ export const div = styled.div`
       cursor: pointer;
    }
 `;
+
+export const flex = styled.div`
+   display: flex;
+   align-items: center;
+`;

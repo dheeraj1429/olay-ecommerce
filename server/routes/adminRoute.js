@@ -27,5 +27,5 @@ route.get("/get-all-categorys", adminController.getAllCategorys);
 route.patch("/edit-product-category", adminController.editproductCategory);
 route.delete("/delete-selected-category/:id", adminController.deleteSelectedCategory);
 route.post("/insert-new-product-brand", upload, adminController.insertNewProductBrand);
-
+route.get("/get-all-product-brand", adminController.getAllProductBrand);
 module.exports = route;

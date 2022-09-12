@@ -175,6 +175,7 @@ const sendBrandResponseFunction = function (res) {
 
 /**
  * @insertNewProductBrand inert new brand information
+ * @return produict barnd is successful inserted or not
  */
 const insertNewProductBrand = async function (req, res, next) {
    try {
@@ -188,13 +189,15 @@ const insertNewProductBrand = async function (req, res, next) {
          SEODescription,
       } = req.body;
       const file = req.files[0];
+
+      // TODO: function scope variables
       let insertBrandInfo, saveBrand;
 
       /**
        * @fileIsBrandIsExits first find the brand is already exists or not if the brand is already exists then return the flag || store the information into the database
        * @file { object } if there is new file then we want to store othre information into the database
        */
-
+      // TODO: check the brand is exists or not
       const fileIsBrandIsExits = await productBrandModel.findOne({ name });
 
       if (fileIsBrandIsExits) {
@@ -223,6 +226,9 @@ const insertNewProductBrand = async function (req, res, next) {
                sendBrandResponseFunction(res);
             }
          } else {
+            /**
+             * @req.body = {} contains all information about product brand.
+             */
             insertBrandInfo = await productBrandModel(req.body);
             saveBrand = insertBrandInfo.save();
 
@@ -236,10 +242,35 @@ const insertNewProductBrand = async function (req, res, next) {
    }
 };
 
+/**
+ * @getAllProductBrand get all brand
+ * @return send brand array of object to the client
+ */
+const getAllProductBrand = async function (req, res, next) {
+   try {
+      const getAllBrands = await productBrandModel.find({});
+
+      if (!getAllBrands) {
+         return res.status(200).json({
+            success: false,
+            message: "something worng",
+         });
+      } else {
+         return res.status(200).json({
+            success: true,
+            brands: getAllBrands,
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
    editproductCategory,
    deleteSelectedCategory,
    insertNewProductBrand,
+   getAllProductBrand,
 };

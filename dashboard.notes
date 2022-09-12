@@ -26,7 +26,12 @@ FIXME: -> admin logout is not working
         logic: first selecte all the brand information and store into the database.
         if the brand category is already exists then return the flag to the client, || insert new brand into the database.
 
-
-[panding]: dashboard product upload section.
+[panding]: product all brands section.
+        TODO: 
+        [panding] admin dashboard design.
                 TODO:
-                logic: get the all information about the product. send the information to the backend. and store all the information into the database.
+                        Edit product brand feature.
+                        delete selected brand feature.
+                        delete all product brand feature.
+                        filter brand feature.
+                        sort feature.

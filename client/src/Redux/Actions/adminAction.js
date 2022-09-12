@@ -104,3 +104,20 @@ export const insertNewProductBrand = function (data) {
       }
    };
 };
+
+export const fetchAllProductBrand = function () {
+   return async function (dispatch) {
+      try {
+         const fetchBrands = await axios.get("/admin/get-all-product-brand", headers);
+
+         if (fetchBrands && fetchBrands?.data) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_ALL_PRODUCT_BRAND,
+               payload: fetchBrands && fetchBrands?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

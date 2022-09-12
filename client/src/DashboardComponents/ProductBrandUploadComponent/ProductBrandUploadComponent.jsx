@@ -94,7 +94,7 @@ function ProductBrandUploadComponent() {
          dispatch(brandLoading(true));
          dispatch(insertNewProductBrand(fromData));
       } else {
-         info("Please name is required");
+         info("Product brand name is required");
       }
    };
 
@@ -237,7 +237,6 @@ function ProductBrandUploadComponent() {
                         onClick={ClearInfoHandler}
                         innerText={"Clear"}
                         btnCl={"Delete_btn"}
-                        isLoading={brandInsertLoading}
                      />
                   </brand.half>
                </brand.halfWidth>

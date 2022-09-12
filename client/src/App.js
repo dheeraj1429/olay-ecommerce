@@ -10,6 +10,7 @@ import DashboardHomeComponent from "./DashboardComponents/DashboardHomeComponent
 import UploadProductComponent from "./DashboardComponents/UploadProductComponent/UploadProductComponent";
 import UploadProductCategory from "./DashboardComponents/UploadProductCategory/UploadProductCategory";
 import ProductBrandUploadComponent from "./DashboardComponents/ProductBrandUploadComponent/ProductBrandUploadComponent";
+import ProductBrandsComponent from "./DashboardComponents/ProductBrandsComponent/ProductBrandsComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -36,7 +37,11 @@ function App() {
                <Route path="" element={<DashboardHomeComponent />} />
                <Route path="upload-products" element={<UploadProductComponent />} />
                <Route path="product-category" element={<UploadProductCategory />} />
-               <Route path="product-brand" element={<ProductBrandUploadComponent />} />
+               <Route
+                  path="upload-product-brand"
+                  element={<ProductBrandUploadComponent />}
+               />
+               <Route path="product-brands" element={<ProductBrandsComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

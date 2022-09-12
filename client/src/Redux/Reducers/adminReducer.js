@@ -10,6 +10,7 @@ const INITAL_STATE = {
    updateCategory: null,
    brandInsert: null,
    brandInsertLoading: false,
+   productBrands: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -123,6 +124,12 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             brandInsert: action.payload,
+         };
+
+      case ACTION_TYPE.FETCH_ALL_PRODUCT_BRAND:
+         return {
+            ...state,
+            productBrands: action.payload,
          };
 
       default:

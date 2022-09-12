@@ -36,6 +36,14 @@ export const div = styled.div`
    .Delete_btn:hover {
       background-color: var(--spec-static-brand-red);
    }
+   .table_btn {
+      background-color: transparent;
+      margin-right: 1rem;
+
+      svg {
+         font-size: 17px;
+      }
+   }
 `;
 
 export const button = styled.button`

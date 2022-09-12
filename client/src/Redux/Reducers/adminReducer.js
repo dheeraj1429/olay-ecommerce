@@ -8,6 +8,8 @@ const INITAL_STATE = {
    selectedCategory: null,
    editCategoryLoading: false,
    updateCategory: null,
+   brandInsert: null,
+   brandInsertLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -61,7 +63,11 @@ const adminReducer = function (state = INITAL_STATE, action) {
       case ACTION_TYPE.CATEGORY_UPDATE:
          const findUpdateCategory = state.productAllCategory.allCategory.map((el) =>
             el._id === action.targetId
-               ? { ...el, name: action.categoryName, description: action.categoryDescription }
+               ? {
+                    ...el,
+                    name: action.categoryName,
+                    description: action.categoryDescription,
+                 }
                : el
          );
 
@@ -98,6 +104,25 @@ const adminReducer = function (state = INITAL_STATE, action) {
                allCategory: filterCategory,
             },
             editCategory: false,
+         };
+
+      case ACTION_TYPE.INSERT_NEW_PRODUCT_BRAND_LOADING:
+         return {
+            ...state,
+            brandInsertLoading: action.payload,
+         };
+
+      case ACTION_TYPE.INSERT_NEW_PRODUCT_BRAND:
+         return {
+            ...state,
+            brandInsert: action.payload,
+            brandInsertLoading: false,
+         };
+
+      case ACTION_TYPE.REMOVE_NEW_PRODUCT_BRAND_INFO:
+         return {
+            ...state,
+            brandInsert: action.payload,
          };
 
       default:

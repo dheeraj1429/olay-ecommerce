@@ -1,5 +1,6 @@
 const productModel = require("../model/schema/productSchema");
 const categoryModel = require("../model/schema/productCategorySchema");
+const productBrandModel = require("../model/schema/productBrandSchema");
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -160,9 +161,85 @@ const deleteSelectedCategory = async function (req, res, next) {
    }
 };
 
+/**
+ *
+ * @param {*} req
+ * @returns response
+ */
+const sendBrandResponseFunction = function (res) {
+   return res.status(200).json({
+      success: true,
+      message: "Product brand saved",
+   });
+};
+
+/**
+ * @insertNewProductBrand inert new brand information
+ */
+const insertNewProductBrand = async function (req, res, next) {
+   try {
+      const {
+         name,
+         description,
+         website,
+         order,
+         brandStatusInfo,
+         SEOTitle,
+         SEODescription,
+      } = req.body;
+      const file = req.files[0];
+      let insertBrandInfo, saveBrand;
+
+      /**
+       * @fileIsBrandIsExits first find the brand is already exists or not if the brand is already exists then return the flag || store the information into the database
+       * @file { object } if there is new file then we want to store othre information into the database
+       */
+
+      const fileIsBrandIsExits = await productBrandModel.findOne({ name });
+
+      if (fileIsBrandIsExits) {
+         return res.status(200).json({
+            success: false,
+            message: "brand is already exists",
+         });
+      } else {
+         if (file) {
+            const originalname = file.originalname;
+
+            insertBrandInfo = await productBrandModel({
+               name,
+               description,
+               website,
+               order,
+               brandStatusInfo,
+               SEOTitle,
+               SEODescription,
+               brandIcon: originalname,
+            });
+
+            saveBrand = await insertBrandInfo.save();
+
+            if (saveBrand) {
+               sendBrandResponseFunction(res);
+            }
+         } else {
+            insertBrandInfo = await productBrandModel(req.body);
+            saveBrand = insertBrandInfo.save();
+
+            if (saveBrand) {
+               sendBrandResponseFunction(res);
+            }
+         }
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
    editproductCategory,
    deleteSelectedCategory,
+   insertNewProductBrand,
 };

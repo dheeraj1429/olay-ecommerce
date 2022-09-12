@@ -11,6 +11,14 @@ export const main = styled.div`
    input {
       display: none;
    }
+
+   h4 {
+      color: var(--smooth-light-heading-color);
+      margin-left: 0.2rem;
+      margin-bottom: 1rem;
+      font-size: 18px;
+      font-weight: 400;
+   }
 `;
 
 export const div = styled.div`

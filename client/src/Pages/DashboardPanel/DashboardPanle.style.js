@@ -13,6 +13,8 @@ export const renderDiv = styled.div`
    width: 100%;
    background-color: var(--spec-dark-background-color);
    padding: 1rem;
+   height: 100vh;
+   overflow-x: hidden;
 `;
 
 export const innerDiv = styled.div`

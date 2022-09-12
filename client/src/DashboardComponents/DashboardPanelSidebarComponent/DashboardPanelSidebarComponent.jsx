@@ -1,7 +1,6 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from "react";
 import * as sidebar from "./DashboardPanelSidebarComponent.style";
 import DashboardNavigationComponent from "../DashboardNavigationComponent/DashboardNavigationComponent";
-import { RiHome5Line } from "@react-icons/all-files/ri/RiHome5Line";
 import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
@@ -12,6 +11,7 @@ import { VscHome } from "@react-icons/all-files/vsc/VscHome";
 import { FcGenealogy } from "@react-icons/all-files/fc/FcGenealogy";
 import { FcUpload } from "@react-icons/all-files/fc/FcUpload";
 import { FcHome } from "@react-icons/all-files/fc/FcHome";
+import { FcMultipleDevices } from "@react-icons/all-files/fc/FcMultipleDevices";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -103,6 +103,14 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<FcGenealogy />}
                   innerText={"Product category"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<FcMultipleDevices />}
+                  innerText={"Product brand"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

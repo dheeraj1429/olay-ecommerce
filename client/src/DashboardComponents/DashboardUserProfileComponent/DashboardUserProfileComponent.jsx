@@ -24,7 +24,9 @@ function DashboardUserProfileComponent() {
       setAnchorEl(null);
    };
    const LogOutHandler = function () {
-      removeCookie("user");
+      if (cookies.user) {
+         removeCookie("user");
+      }
       navigation("/admin/sign-in");
       dispatch(removeUser(null));
    };

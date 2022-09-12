@@ -17,7 +17,9 @@ function DashboardSidebarCardComponent({ children, heading, icon, onClick, show,
             </div>
             <IoIosArrowForward />
          </card.flex>
-         <card.dropDownItems className={show === heading && showSub ? "showDropDown-menu" : null}>
+         <card.dropDownItems
+            className={show === heading && showSub ? "showDropDown-menu" : "drop-down-items"}
+         >
             {children}
          </card.dropDownItems>
       </card.div>

@@ -17,25 +17,31 @@ const sugAge = [
    { value: "40 - 50", label: "40 - 50" },
 ];
 
+const inStock = [
+   { value: "Out of stock", label: "Out of stock" },
+   { value: "On backorder", label: "On backorder" },
+];
+
 function UploadProductComponent() {
    const [ProductCategory, setProductCategory] = useState([]);
-   const [currency, setCurrency] = useState("EUR");
-   const dispatch = useDispatch();
    const [Product, setProduct] = useState({
       name: "",
       price: "",
+      salePrice: "",
       discription: "",
       category: "",
       image: "",
       suggestedAge: "",
       suggestedSkinColor: "",
+      stockStatus: "",
+      weight: "",
+      length: "",
+      wide: "",
+      height: "",
    });
 
+   const dispatch = useDispatch();
    const productAllCategory = useSelector((state) => state.admin.productAllCategory);
-
-   const handleChange = (event) => {
-      setCurrency(event.target.value);
-   };
 
    useEffect(() => {
       dispatch(fetchProductsCategorys());
@@ -75,13 +81,26 @@ function UploadProductComponent() {
                         label="Product Name"
                         variant="outlined"
                      />
-                     <TextField
-                        id="outlined-basic"
-                        name="price"
-                        type={"number"}
-                        label="Product Price"
-                        variant="outlined"
-                     />
+                     <upload.flexDiv>
+                        <div className="space-right">
+                           <TextField
+                              id="outlined-basic"
+                              name="price"
+                              type={"number"}
+                              label="Product Price"
+                              variant="outlined"
+                           />
+                        </div>
+                        <div>
+                           <TextField
+                              id="outlined-basic"
+                              name="salePrice"
+                              type={"number"}
+                              label="Product Sale Price"
+                              variant="outlined"
+                           />
+                        </div>
+                     </upload.flexDiv>
                      <TextField
                         id="outlined-multiline-static"
                         label="Product discription"
@@ -92,8 +111,6 @@ function UploadProductComponent() {
                         id="outlined-select-currency"
                         select
                         label="Select"
-                        value={currency}
-                        onChange={handleChange}
                         helperText="Please select your category"
                      >
                         {ProductCategory.map((option) => (
@@ -102,6 +119,60 @@ function UploadProductComponent() {
                            </MenuItem>
                         ))}
                      </TextField>
+
+                     <TextField
+                        id="outlined-select-currency"
+                        select
+                        label="Select"
+                        helperText="Please select the product in stock or not"
+                     >
+                        {inStock.map((option) => (
+                           <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                           </MenuItem>
+                        ))}
+                     </TextField>
+
+                     <upload.flexDiv>
+                        <div className="space-right">
+                           <TextField
+                              id="outlined-basic"
+                              name="weight"
+                              type={"number"}
+                              label="Product Weight"
+                              variant="outlined"
+                           />
+                        </div>
+                        <div>
+                           <TextField
+                              id="outlined-basic"
+                              name="length"
+                              type={"number"}
+                              label="Product Length"
+                              variant="outlined"
+                           />
+                        </div>
+                     </upload.flexDiv>
+                     <upload.flexDiv>
+                        <div className="space-right">
+                           <TextField
+                              id="outlined-basic"
+                              name="wide"
+                              type={"number"}
+                              label="Product Wide"
+                              variant="outlined"
+                           />
+                        </div>
+                        <div>
+                           <TextField
+                              id="outlined-basic"
+                              name="height"
+                              type={"number"}
+                              label="Product Height"
+                              variant="outlined"
+                           />
+                        </div>
+                     </upload.flexDiv>
                   </Box>
                </upload.upload>
                <div className="padding_div">
@@ -120,7 +191,6 @@ function UploadProductComponent() {
                            id="outlined-select-currency"
                            select
                            label="Select"
-                           onChange={handleChange}
                            helperText="Please selecte the product suggested age"
                         >
                            {sugAge.map((option) => (

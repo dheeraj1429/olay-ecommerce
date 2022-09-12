@@ -27,3 +27,14 @@ export const upload = styled.div`
    width: 50%;
    padding: 1rem 0;
 `;
+
+export const flexDiv = styled.div`
+   display: flex;
+   padding-bottom: 0.5rem;
+   div {
+      width: 100%;
+   }
+   .space-right {
+      padding-right: 1rem;
+   }
+`;

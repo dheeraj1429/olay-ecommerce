@@ -69,3 +69,17 @@ export const removeCategoryUpdateInfo = function (data) {
       payload: data,
    };
 };
+
+export const brandLoading = function (data) {
+   return {
+      type: ACTION_TYPE.INSERT_NEW_PRODUCT_BRAND_LOADING,
+      payload: data,
+   };
+};
+
+export const removeBrandInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_NEW_PRODUCT_BRAND_INFO,
+      payload: data,
+   };
+};

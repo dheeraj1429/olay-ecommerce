@@ -15,6 +15,12 @@ export const div = styled.div`
       border: 1px solid var(--icon-cl);
    }
 
+   &:hover .drop-down-items {
+      visibility: visible;
+      opacity: 1;
+      right: -210px;
+   }
+
    svg {
       font-size: 16px;
       fill: var(--main-cl);
@@ -32,7 +38,7 @@ export const div = styled.div`
    .showDropDown-menu {
       opacity: 1;
       visibility: visible;
-      right: -220px;
+      right: -210px;
    }
 `;
 

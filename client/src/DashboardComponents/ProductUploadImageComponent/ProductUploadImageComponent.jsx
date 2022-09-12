@@ -1,22 +1,48 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import * as prImage from "./ProductUploadImageComponent.style";
 import { AiOutlineFileImage } from "@react-icons/all-files/ai/AiOutlineFileImage";
 
-function ProductUploadImageComponent() {
+function ProductUploadImageComponent({ Heading, name, value, onChange, Clear }) {
    const image = useRef(null);
+   const [Src, setSrc] = useState("");
    const ClickHandler = function (e) {
       image.current.click();
    };
 
+   const updatePreview = function (input) {
+      let file = input.target.files[0];
+      let reader = new FileReader();
+
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+         setSrc(reader.result);
+      };
+   };
+
+   useEffect(() => {
+      if (Clear) {
+         setSrc("");
+      }
+   }, [Clear]);
+
    return (
       <prImage.main>
+         <h4>{Heading}</h4>
          <prImage.flex>
             <prImage.div onClick={ClickHandler}>
                <div className="image_div">
-                  {/* <p>Lorem</p> */}
                   <AiOutlineFileImage />
-                  <input type="file" ref={(el) => (image.current = el)} />
-                  {/* <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" /> */}
+                  <input
+                     type="file"
+                     name={name}
+                     value={value}
+                     onChange={(e) => {
+                        onChange(e);
+                        updatePreview(e);
+                     }}
+                     ref={(el) => (image.current = el)}
+                  />
+                  {!!Src ? <img src={Src} /> : null}
                </div>
             </prImage.div>
          </prImage.flex>

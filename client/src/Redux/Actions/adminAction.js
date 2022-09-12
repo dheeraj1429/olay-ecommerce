@@ -5,7 +5,11 @@ import { headers } from "./headers";
 export const uploadProductCategory = function (data) {
    return async function (dispatch) {
       try {
-         const productCategory = await axios.post("/admin/upload-category", data, headers);
+         const productCategory = await axios.post(
+            "/admin/upload-category",
+            data,
+            headers
+         );
 
          if (productCategory && productCategory?.data) {
             dispatch({
@@ -39,7 +43,11 @@ export const fetchProductsCategorys = function () {
 export const updateProductCategory = function (data) {
    return async function (dispatch) {
       try {
-         const updateCategory = await axios.patch("/admin/edit-product-category", data, headers);
+         const updateCategory = await axios.patch(
+            "/admin/edit-product-category",
+            data,
+            headers
+         );
 
          if (updateCategory && updateCategory?.data && updateCategory?.data?.success) {
             dispatch({
@@ -68,6 +76,27 @@ export const deleteSelectedCategory = function (data) {
             dispatch({
                type: ACTION_TYPE.DELETE_SELECTED_CATEGORY,
                payload: data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const insertNewProductBrand = function (data) {
+   return async function (dispatch) {
+      try {
+         const brandProduct = await axios.post(
+            "/admin/insert-new-product-brand",
+            data,
+            headers
+         );
+
+         if (brandProduct && brandProduct?.data) {
+            dispatch({
+               type: ACTION_TYPE.INSERT_NEW_PRODUCT_BRAND,
+               payload: brandProduct && brandProduct?.data,
             });
          }
       } catch (err) {

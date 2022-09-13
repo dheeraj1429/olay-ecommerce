@@ -11,6 +11,11 @@ const INITAL_STATE = {
    brandInsert: null,
    brandInsertLoading: false,
    productBrands: null,
+   loadingPagination: false,
+   deleteOneBrandProduct: null,
+   deleteSelectedBrand: null,
+   selectedBrand: null,
+   selectedBrandLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -101,7 +106,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             productAllCategory: {
-               success: true,
+               ...state.productAllCategory,
                allCategory: filterCategory,
             },
             editCategory: false,
@@ -130,6 +135,58 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             productBrands: action.payload,
+            loadingPagination: false,
+         };
+
+      case ACTION_TYPE.LOADING_BRAND_PAGINATION:
+         return {
+            ...state,
+            loadingPagination: action.payload,
+         };
+
+      case ACTION_TYPE.DELETE_ONE_PRODUCT_BRAND:
+         const checkIsSuccess = function (status) {
+            if (status.success) {
+               return {
+                  ...state.productBrands,
+                  totalDocuments: state.productBrands.totalDocuments - 1,
+                  brands: state.productBrands.brands.filter(
+                     (el) => el._id !== action.selectedBrandId
+                  ),
+               };
+            } else return state.productBrands;
+         };
+
+         return {
+            ...state,
+            deleteOneBrandProduct: action.payload,
+            productBrands: checkIsSuccess(action.payload),
+         };
+
+      case ACTION_TYPE.DELETE_SELECTED_BRAND_PRODUCT:
+         const setPayload = new Set(action.payload);
+
+         if (action.payload) {
+            return {
+               ...state,
+               productBrands: {
+                  ...state.productBrands,
+                  brands: state.productBrands.brands.filter(
+                     (el) => (el._id = !setPayload.has(el._id))
+                  ),
+               },
+            };
+         } else {
+            return {
+               ...state,
+               deleteSelectedBrand: action.message,
+            };
+         }
+
+      case ACTION_TYPE.FETCH_SELECTED_BRAND_PRODUCT:
+         return {
+            ...state,
+            selectedBrand: action.payload,
          };
 
       default:

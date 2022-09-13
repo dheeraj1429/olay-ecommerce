@@ -7,32 +7,39 @@ import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent
 import { MenuItem } from "@mui/material";
 import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { insertNewProductBrand } from "../../Redux/Actions/adminAction";
+import {
+   insertNewProductBrand,
+   fetchSelectedBrand,
+   editSelectedBrand,
+} from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import { brandLoading, removeBrandInfo } from "../../Redux/Actions/appAction";
+
 const key = "updatable";
+
 const brandStatus = [
    { value: "Published", label: "Published" },
    { value: "Draft", label: "Draft" },
    { value: "Panding", label: "Panding" },
 ];
 
-function ProductBrandUploadComponent() {
+function ProductBrandUploadComponent({ param, selectedBrand }) {
    const [Brand, setBrand] = useState({
       name: "",
       description: " ",
       website: "",
       order: "",
-      brandStatusInfo: "",
+      brandStatusInfo: "Draft",
       brandIcon: "",
       SEOTitle: "",
       SEODescription: "",
    });
-   const [Clear, setClear] = useState(false);
 
+   const [Clear, setClear] = useState(false);
    const dispatch = useDispatch();
    const brandInsertLoading = useSelector((state) => state.admin.brandInsertLoading);
+   const selectedBrandLoading = useSelector((state) => state.admin.selectedBrandLoading);
    const brandInsert = useSelector((state) => state.admin.brandInsert);
 
    const ChangeHandler = function (e) {
@@ -68,7 +75,7 @@ function ProductBrandUploadComponent() {
       }
    }, [brandInsert]);
 
-   const SendHandler = function () {
+   const createFormData = function (param) {
       const {
          name,
          description,
@@ -80,21 +87,50 @@ function ProductBrandUploadComponent() {
          SEODescription,
       } = Brand;
 
+      const fromData = new FormData();
+      fromData.append("name", name);
+      fromData.append("description", description);
+      fromData.append("website", website);
+      fromData.append("order", order);
+      fromData.append("brandStatusInfo", brandStatusInfo);
+      fromData.append("brandIcon", brandIcon);
+      fromData.append("SEOTitle", SEOTitle);
+      fromData.append("SEODescription", SEODescription);
+
+      if (param) {
+         fromData.append("id", param);
+      }
+
+      return fromData;
+   };
+
+   const SendHandler = function () {
+      const { name } = Brand;
+
       if (name) {
-         const fromData = new FormData();
-         fromData.append("name", name);
-         fromData.append("description", description);
-         fromData.append("website", website);
-         fromData.append("order", order);
-         fromData.append("brandStatusInfo", brandStatusInfo);
-         fromData.append("brandIcon", brandIcon);
-         fromData.append("SEOTitle", SEOTitle);
-         fromData.append("SEODescription", SEODescription);
+         const fromData = createFormData();
 
          dispatch(brandLoading(true));
          dispatch(insertNewProductBrand(fromData));
       } else {
          info("Product brand name is required");
+      }
+   };
+
+   const UpdateHandler = function () {
+      if (
+         Brand.name !== selectedBrand.selectedBrand.name ||
+         Brand.description !== selectedBrand.selectedBrand.description ||
+         Brand.website !== selectedBrand.selectedBrand.website ||
+         Brand.brandStatusInfo !== selectedBrand.selectedBrand.brandStatusInfo ||
+         Brand.SEOTitle !== selectedBrand.selectedBrand.SEOTitle ||
+         Brand.SEODescription !== selectedBrand.selectedBrand.SEODescription ||
+         Brand.order !== selectedBrand.selectedBrand.order
+      ) {
+         const fromData = createFormData(param);
+         dispatch(editSelectedBrand(fromData));
+      } else {
+         info("No fildes data change!!");
       }
    };
 
@@ -113,13 +149,34 @@ function ProductBrandUploadComponent() {
       setClear(true);
    };
 
+   useEffect(() => {
+      if (param) {
+         dispatch(fetchSelectedBrand(param));
+      }
+   }, [param]);
+
+   useEffect(() => {
+      if (selectedBrand && selectedBrand.success) {
+         setBrand({
+            name: selectedBrand.selectedBrand.name,
+            description: selectedBrand.selectedBrand.description,
+            website: selectedBrand.selectedBrand.website,
+            order: selectedBrand.selectedBrand.order,
+            brandStatusInfo: selectedBrand.selectedBrand.brandStatusInfo,
+            brandIcon: selectedBrand.selectedBrand.brandIcon,
+            SEOTitle: selectedBrand.selectedBrand.SEOTitle,
+            SEODescription: selectedBrand.selectedBrand.SEODescription,
+         });
+      }
+   }, [selectedBrand]);
+
    return (
       <brand.div>
          <DashboardNavbarComponent />
 
          <brand.spaceDiv>
             <HeadingComponent
-               Heading={"Create product brand"}
+               Heading={param ? "Edit product brand" : "Create product brand"}
                subHeading={
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
                }
@@ -221,23 +278,35 @@ function ProductBrandUploadComponent() {
                      </div>
                      <ProductUploadImageComponent
                         name="brandIcon"
+                        selectedPrevImage={Brand.brandIcon}
                         onChange={ImageGrabHandler}
                         Heading={"Product barnd image"}
                         Clear={Clear}
                      />
                   </Box>
                   <brand.half>
-                     <CustombuttonComponent
-                        onClick={SendHandler}
-                        innerText={"Save"}
-                        btnCl={"category_upload"}
-                        isLoading={brandInsertLoading}
-                     />
-                     <CustombuttonComponent
-                        onClick={ClearInfoHandler}
-                        innerText={"Clear"}
-                        btnCl={"Delete_btn"}
-                     />
+                     {param ? (
+                        <CustombuttonComponent
+                           innerText={"Update"}
+                           btnCl={"category_upload"}
+                           isLoading={selectedBrandLoading}
+                           onClick={UpdateHandler}
+                        />
+                     ) : (
+                        <>
+                           <CustombuttonComponent
+                              onClick={SendHandler}
+                              innerText={"Save"}
+                              btnCl={"category_upload"}
+                              isLoading={brandInsertLoading}
+                           />
+                           <CustombuttonComponent
+                              onClick={ClearInfoHandler}
+                              innerText={"Clear"}
+                              btnCl={"Delete_btn"}
+                           />
+                        </>
+                     )}
                   </brand.half>
                </brand.halfWidth>
             </brand.half>

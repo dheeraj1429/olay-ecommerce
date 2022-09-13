@@ -44,6 +44,27 @@ export const div = styled.div`
          font-size: 17px;
       }
    }
+   .pagination_btn {
+      padding: 0.1rem 0.7rem;
+      border-radius: 5px;
+      margin: 0 0.5rem;
+      transition: all 0.3s ease;
+
+      svg {
+         margin: 0;
+      }
+   }
+   .PrevDisable_btn {
+      padding: 0.1rem 0.7rem;
+      border-radius: 5px;
+      margin: 0 0.5rem;
+      background-color: var(--spec-10-percent-layer);
+      transition: all 0.3s ease;
+
+      svg {
+         fill: var(--main-cl);
+      }
+   }
 `;
 
 export const button = styled.button`

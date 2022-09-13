@@ -2,7 +2,15 @@ import React from "react";
 import * as card from "./DashboardSidebarCardComponent.style";
 import { IoIosArrowForward } from "@react-icons/all-files/io/IoIosArrowForward";
 
-function DashboardSidebarCardComponent({ children, heading, icon, onClick, show, showSub }) {
+function DashboardSidebarCardComponent({
+   children,
+   heading,
+   icon,
+   onClick,
+   show,
+   showSub,
+   isShow,
+}) {
    return (
       <card.div ShowDrop={show == heading ? true : false}>
          <card.flex
@@ -13,12 +21,14 @@ function DashboardSidebarCardComponent({ children, heading, icon, onClick, show,
          >
             <div className="icons_text_div">
                <card.iconDiv>{icon}</card.iconDiv>
-               <p>{heading}</p>
+               {isShow ? null : <p>{heading}</p>}
             </div>
             <IoIosArrowForward />
          </card.flex>
          <card.dropDownItems
-            className={show === heading && showSub ? "showDropDown-menu" : "drop-down-items"}
+            className={
+               show === heading && showSub ? "showDropDown-menu" : "drop-down-items"
+            }
          >
             {children}
          </card.dropDownItems>

@@ -83,3 +83,17 @@ export const removeBrandInfo = function (data) {
       payload: data,
    };
 };
+
+export const fetchBrandProductLoading = function (data) {
+   return {
+      type: ACTION_TYPE.LOADING_BRAND_PAGINATION,
+      payload: data,
+   };
+};
+
+export const selectedBrandProduct = function (data) {
+   return {
+      type: ACTION_TYPE.SELECTED_PRODUCT_BRAND,
+      payload: data,
+   };
+};

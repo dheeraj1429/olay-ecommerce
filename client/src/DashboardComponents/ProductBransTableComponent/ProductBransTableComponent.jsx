@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import * as table from "./ProductBransTableComponent.style";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProductBrand } from "../../Redux/Actions/adminAction";
-import backendConfigData from "../../backendConfig";
-import { Checkbox } from "antd";
+import {
+   fetchAllProductBrand,
+   deleteMultiSelectedProductBrand,
+} from "../../Redux/Actions/adminAction";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
-import { VscClose } from "@react-icons/all-files/vsc/VscClose";
+import { GrFormNextLink } from "@react-icons/all-files/gr/GrFormNextLink";
+import { GrFormPreviousLink } from "@react-icons/all-files/gr/GrFormPreviousLink";
+import ProductBrandsTableInnerComponent from "../ProductBrandsTableInnerComponent/ProductBrandsTableInnerComponent";
+import { fetchBrandProductLoading } from "../../Redux/Actions/appAction";
+import { FcDoNotInsert } from "@react-icons/all-files/fc/FcDoNotInsert";
 import { Popconfirm } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 const row = [
    { elm: "all", value: "All" },
@@ -22,79 +27,134 @@ const row = [
 
 function ProductBransTableComponent() {
    const [AllBrands, setAllBrands] = useState([]);
+   const [Limit, setLimit] = useState(0);
+   const [SelectedBrand, setSelectedBrand] = useState([]);
 
    const dispatch = useDispatch();
    const productBrands = useSelector((state) => state.admin.productBrands);
+   const loadingPagination = useSelector((state) => state.admin.loadingPagination);
+
+   const ChnageNext = function () {
+      if (Limit >= 0 && Limit < productBrands.totalPages) {
+         setLimit((prev) => prev + 1);
+         dispatch(fetchBrandProductLoading(true));
+      }
+   };
+
+   const onChange = useCallback(
+      (e, elm) => {
+         let id = elm._id;
+         if (e.target.checked) {
+            setSelectedBrand((current) => (!!current?.id ? id : [...current, id]));
+         } else {
+            setSelectedBrand(SelectedBrand.filter((el) => el !== id));
+         }
+      },
+      [SelectedBrand]
+   );
+
+   const ChangePrev = function () {
+      if (Limit > 0) {
+         setLimit((prev) => prev - 1);
+         dispatch(fetchBrandProductLoading(true));
+      }
+   };
+
+   const confirm = function () {
+      dispatch(deleteMultiSelectedProductBrand(SelectedBrand));
+      setSelectedBrand([]);
+   };
 
    useEffect(() => {
-      dispatch(fetchAllProductBrand());
+      dispatch(fetchAllProductBrand(Limit));
+
+      if (!!SelectedBrand.length) {
+         setSelectedBrand([]);
+      }
+   }, [Limit]);
+
+   useEffect(() => {
+      dispatch(fetchAllProductBrand(0));
    }, []);
 
    useEffect(() => {
       if (!!productBrands && productBrands.success) {
          setAllBrands(productBrands.brands);
       }
-   }, [productBrands]);
 
-   const confirm = () => {
-      console.log("delete");
-   };
+      if (!!!AllBrands.length) {
+         setLimit(0);
+         dispatch(fetchAllProductBrand(0));
+      }
+   }, [productBrands, AllBrands]);
 
    return (
       <table.div>
          {!!AllBrands.length > 0 ? (
-            <table>
-               <tr>
-                  {row.map((el) => (
-                     <th key={el.elm}>{el.value}</th>
-                  ))}
-               </tr>
-               {AllBrands.map((el) => (
+            <div>
+               <table>
                   <tr>
-                     <td>
-                        <Checkbox />
-                     </td>
-                     <td>
-                        <table.btnDiv>
-                           <CustombuttonComponent btnCl={"table_btn"}>
-                              <FiEdit2 />
-                           </CustombuttonComponent>
-                           <Popconfirm
-                              title="Warning! Please only delete your product brand if you no longer want to use it."
-                              onConfirm={confirm}
-                           >
-                              <CustombuttonComponent btnCl={"table_btn"}>
-                                 <VscClose />
-                              </CustombuttonComponent>
-                           </Popconfirm>
-                        </table.btnDiv>
-                     </td>
-                     <td>
-                        <div className="icon">
-                           {!!el.brandIcon ? (
-                              <img
-                                 crossorigin="anonymous"
-                                 src={
-                                    !!el.brandIcon
-                                       ? `${backendConfigData.URL}brandImages/${el.brandIcon}`
-                                       : null
-                                 }
-                              />
-                           ) : (
-                              <div className="brand"></div>
-                           )}
-                        </div>
-                     </td>
-                     <td>{el.name}</td>
-                     <td>{el.description.slice(0, 100)}</td>
-                     <td>
-                        <a href={el.website}>{el.website}</a>
-                     </td>
-                     <td>{el.order}</td>
-                     <td>{el.brandStatusInfo}</td>
+                     {row.map((el) => (
+                        <th key={el.elm}>{el.value}</th>
+                     ))}
                   </tr>
-               ))}
-            </table>
+
+                  <ProductBrandsTableInnerComponent
+                     AllBrands={AllBrands}
+                     isLoading={loadingPagination}
+                     change={onChange}
+                  />
+               </table>
+
+               <table.paginationDiv>
+                  <div>
+                     <p>
+                        Showing {productBrands.brands.length} of{" "}
+                        {productBrands.totalDocuments} Results
+                     </p>
+                  </div>
+                  <div>
+                     {!!SelectedBrand.length ? (
+                        <Popconfirm
+                           title="Delete selected product brands! Are your sure ?"
+                           onConfirm={confirm}
+                           icon={
+                              <QuestionCircleOutlined
+                                 style={{
+                                    color: "red",
+                                 }}
+                              />
+                           }
+                        >
+                           <CustombuttonComponent btnCl={"pagination_btn"}>
+                              <FcDoNotInsert />
+                           </CustombuttonComponent>
+                        </Popconfirm>
+                     ) : null}
+                  </div>
+                  <div>
+                     <table.flexDiv>
+                        <CustombuttonComponent
+                           btnCl={Limit <= 0 ? "PrevDisable_btn" : "pagination_btn"}
+                           onClick={ChangePrev}
+                        >
+                           <GrFormPreviousLink />
+                        </CustombuttonComponent>
+
+                        <CustombuttonComponent
+                           btnCl={
+                              Limit >= productBrands.totalPages
+                                 ? "PrevDisable_btn"
+                                 : "pagination_btn"
+                           }
+                           onClick={ChnageNext}
+                        >
+                           <GrFormNextLink />
+                        </CustombuttonComponent>
+                     </table.flexDiv>
+                  </div>
+               </table.paginationDiv>
+            </div>
          ) : null}
       </table.div>
    );

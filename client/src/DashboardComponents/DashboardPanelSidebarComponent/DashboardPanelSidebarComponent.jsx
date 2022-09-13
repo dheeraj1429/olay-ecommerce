@@ -74,6 +74,7 @@ function DashboardPanelSidebarComponent() {
                onClick={dashboardActiveHandler}
                show={DashboardCard}
                showSub={ShowSubItems}
+               isShow={SmSidebar}
             >
                <DashboardNavigationComponent
                   icon={<FcHome />}
@@ -92,6 +93,7 @@ function DashboardPanelSidebarComponent() {
                onClick={dashboardActiveHandler}
                show={DashboardCard}
                showSub={ShowSubItems}
+               isShow={SmSidebar}
             >
                <DashboardNavigationComponent
                   icon={<FcUpload />}

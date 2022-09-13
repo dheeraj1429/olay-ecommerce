@@ -11,6 +11,7 @@ import UploadProductComponent from "./DashboardComponents/UploadProductComponent
 import UploadProductCategory from "./DashboardComponents/UploadProductCategory/UploadProductCategory";
 import ProductBrandUploadComponent from "./DashboardComponents/ProductBrandUploadComponent/ProductBrandUploadComponent";
 import ProductBrandsComponent from "./DashboardComponents/ProductBrandsComponent/ProductBrandsComponent";
+import ProductBrandEditComponent from "./DashboardComponents/ProductBrandEditComponent/ProductBrandEditComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -42,6 +43,10 @@ function App() {
                   element={<ProductBrandUploadComponent />}
                />
                <Route path="product-brands" element={<ProductBrandsComponent />} />
+               <Route
+                  path="product-brands/edit/:id"
+                  element={<ProductBrandEditComponent />}
+               />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

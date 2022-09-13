@@ -1,6 +1,7 @@
 const productModel = require("../model/schema/productSchema");
 const categoryModel = require("../model/schema/productCategorySchema");
 const productBrandModel = require("../model/schema/productBrandSchema");
+const { erroResponse } = require("./errorResponse");
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -66,9 +67,7 @@ const getAllCategorys = async function (req, res, next) {
       const getAllCategorys = await categoryModel.find({});
 
       if (!getAllCategorys) {
-         return res.status(400).json({
-            message: "someting worng",
-         });
+         erroResponse(res);
       } else {
          return res.status(200).json({
             success: true,
@@ -115,10 +114,7 @@ const editproductCategory = async function (req, res, next) {
             message: "category information update",
          });
       } else {
-         return res.status(200).json({
-            success: false,
-            message: "something worng!!",
-         });
+         erroResponse(res);
       }
    } catch (err) {
       console.log(err);
@@ -151,10 +147,7 @@ const deleteSelectedCategory = async function (req, res, next) {
             message: "category delete successful",
          });
       } else {
-         return res.status(200).json({
-            success: false,
-            message: "somthing worng!!",
-         });
+         erroResponse(res);
       }
    } catch (err) {
       console.log(err);
@@ -248,18 +241,181 @@ const insertNewProductBrand = async function (req, res, next) {
  */
 const getAllProductBrand = async function (req, res, next) {
    try {
-      const getAllBrands = await productBrandModel.find({});
+      /**
+       * @BRAND_LIMIT how many documents we want to return to the client
+       * @page which page is client right now ?page=1 ......
+       * @totalProductBrandSize how many document we have in a database.
+       */
+      const BRAND_LIMIT = 3;
+      const page = req.query.page || 0;
+      const totalProductBrandSize = await productBrandModel.countDocuments({});
+
+      /**
+       * @getAllBrands find all the document from the database and return some limited document to the client. it's usefull to mane a pagination. if there is some problem then send the some error the the client
+       */
+      const getAllBrands = await productBrandModel
+         .find({})
+         .limit(BRAND_LIMIT)
+         .skip(BRAND_LIMIT * page);
 
       if (!getAllBrands) {
-         return res.status(200).json({
-            success: false,
-            message: "something worng",
-         });
+         // TODO: send back error
+         erroResponse(res);
       } else {
          return res.status(200).json({
             success: true,
+            totalPages: Math.ceil(totalProductBrandSize / BRAND_LIMIT - 1),
+            totalDocuments: totalProductBrandSize,
             brands: getAllBrands,
          });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const deleteOneProductBrand = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+
+      if (!id) {
+         return res.status(200).json({
+            success: false,
+            message: "selected brand product id is required",
+         });
+      }
+
+      /**
+       * @deleteBrand delete selected brand from the database
+       */
+      const deleteBrand = await productBrandModel.deleteOne({ _id: id });
+
+      if (!!deleteBrand.deletedCount) {
+         return res.status(200).json({
+            success: true,
+            message: "Product brand delete successful",
+         });
+      } else {
+         erroResponse(res);
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+/**
+ * @deleteSelectedProductBrand delete selected products brands
+ */
+const deleteSelectedProductBrand = async function (req, res, next) {
+   try {
+      let deleteSelected;
+      for (let i = 0; i < req.body.length; i++) {
+         deleteSelected = await productBrandModel.deleteOne({ _id: req.body[i] });
+      }
+
+      if (!!deleteSelected.deletedCount) {
+         return res.status(200).json({
+            success: true,
+            message: "Delete successful",
+         });
+      } else {
+         erroResponse(res);
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const getSelectedBrandProduct = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+      console.log(id);
+
+      if (!id) {
+         return res.status(200).json({
+            success: false,
+            message: "selected brand id is required",
+         });
+      }
+
+      const findSelectedBrandProduct = await productBrandModel.findOne({ _id: id });
+
+      if (findSelectedBrandProduct) {
+         return res.status(200).json({
+            success: true,
+            selectedBrand: findSelectedBrandProduct,
+         });
+      } else {
+         erroResponse(res);
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+/**
+ * @sendUpdateResponse send the successful responsce to the client
+ */
+const sendUpdateResponse = function (res) {
+   return res.status(200).json({
+      success: false,
+      message: "Product brand information updated",
+   });
+};
+
+const editSelectedBrand = async function (req, res, next) {
+   try {
+      const {
+         name,
+         description,
+         website,
+         order,
+         brandStatusInfo,
+         SEOTitle,
+         SEODescription,
+         id,
+      } = req.body;
+
+      const updateObject = {
+         name,
+         description,
+         website,
+         order,
+         brandStatusInfo,
+         SEOTitle,
+         SEODescription,
+      };
+
+      const file = req.files[0];
+      let updateSelectedProductBrand;
+
+      /**
+       * @file if the file is exists into the req.body then we want the update the files path alos into the database, othervise we only want to update the others fildes
+       */
+      if (file) {
+         const originalname = file.originalname;
+         updateObject.brandIcon = originalname;
+         updateSelectedProductBrand = await productBrandModel.updateOne(
+            { _id: id },
+            {
+               $set: updateObject,
+            }
+         );
+
+         if (!!updateSelectedProductBrand.modifiedCount) {
+            sendUpdateResponse(res);
+         }
+      } else {
+         updateSelectedProductBrand = await productBrandModel.updateOne(
+            { _id: id },
+            {
+               $set: updateObject,
+            }
+         );
+
+         if (!!updateSelectedProductBrand.modifiedCount) {
+            sendUpdateResponse(res);
+         }
       }
    } catch (err) {
       console.log(err);
@@ -273,4 +429,8 @@ module.exports = {
    deleteSelectedCategory,
    insertNewProductBrand,
    getAllProductBrand,
+   deleteOneProductBrand,
+   deleteSelectedProductBrand,
+   getSelectedBrandProduct,
+   editSelectedBrand,
 };

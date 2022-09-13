@@ -15,6 +15,7 @@ export const renderDiv = styled.div`
    padding: 1rem;
    height: 100vh;
    overflow-x: hidden;
+   transition: all 0.3s ease;
 `;
 
 export const innerDiv = styled.div`

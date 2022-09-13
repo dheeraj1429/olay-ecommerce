@@ -14,7 +14,11 @@ function DashboardNavigationComponent({
    return (
       <Nav.main>
          <Link
-            to={innerText === "Home" ? `/dashboard` : innerText.toLowerCase().split(" ").join("-")}
+            to={
+               innerText === "Home"
+                  ? `/dashboard`
+                  : innerText.toLowerCase().split(" ").join("-")
+            }
          >
             <Nav.div
                activeBar={Active === innerText ? true : null}
@@ -26,11 +30,9 @@ function DashboardNavigationComponent({
             >
                <Nav.flex className={activeBar ? "active-bar" : null}>
                   <Nav.iconDiv isShow={isShow ? isShow : null}>{icon}</Nav.iconDiv>
-                  {!isShow ? (
-                     <Nav.contentDiv>
-                        <h5>{innerText}</h5>
-                     </Nav.contentDiv>
-                  ) : null}
+                  <Nav.contentDiv>
+                     <h5>{innerText}</h5>
+                  </Nav.contentDiv>
                </Nav.flex>
             </Nav.div>
          </Link>

@@ -39,8 +39,44 @@ export const div = styled.div`
          color: var(--smooth-light-color);
       }
    }
+
+   .Draft {
+      padding: 0.2rem 2rem;
+      width: max-content;
+      border-radius: 5px;
+      background-color: var(--spec-suggested-action);
+      color: var(--main-cl);
+   }
+
+   .Published {
+      padding: 0.2rem 2rem;
+      width: max-content;
+      border-radius: 5px;
+      background-color: var(--google-button-cl);
+      color: var(--main-cl);
+   }
+
+   .Panding {
+      padding: 0.2rem 2rem;
+      width: max-content;
+      border-radius: 5px;
+      background-color: var(--spec-brand-link-text);
+      color: var(--main-cl);
+   }
 `;
 
-export const btnDiv = styled.div`
+export const paginationDiv = styled.div`
    display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-top: 1rem;
+
+   p {
+      color: var(--smooth-light-color);
+   }
+`;
+
+export const flexDiv = styled.div`
+   display: flex;
+   align-items: center;
 `;

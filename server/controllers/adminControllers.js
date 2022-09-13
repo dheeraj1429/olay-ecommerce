@@ -358,11 +358,15 @@ const getSelectedBrandProduct = async function (req, res, next) {
  */
 const sendUpdateResponse = function (res) {
    return res.status(200).json({
-      success: false,
+      success: true,
       message: "Product brand information updated",
    });
 };
 
+/**
+ * @editSelectedBrand update the selected product brand information
+ * @return flag true || false
+ */
 const editSelectedBrand = async function (req, res, next) {
    try {
       const {
@@ -395,6 +399,7 @@ const editSelectedBrand = async function (req, res, next) {
       if (file) {
          const originalname = file.originalname;
          updateObject.brandIcon = originalname;
+
          updateSelectedProductBrand = await productBrandModel.updateOne(
             { _id: id },
             {
@@ -404,6 +409,8 @@ const editSelectedBrand = async function (req, res, next) {
 
          if (!!updateSelectedProductBrand.modifiedCount) {
             sendUpdateResponse(res);
+         } else {
+            erroResponse(res);
          }
       } else {
          updateSelectedProductBrand = await productBrandModel.updateOne(
@@ -415,6 +422,8 @@ const editSelectedBrand = async function (req, res, next) {
 
          if (!!updateSelectedProductBrand.modifiedCount) {
             sendUpdateResponse(res);
+         } else {
+            erroResponse(res);
          }
       }
    } catch (err) {

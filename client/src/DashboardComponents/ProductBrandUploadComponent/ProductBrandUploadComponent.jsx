@@ -15,6 +15,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import { brandLoading, removeBrandInfo } from "../../Redux/Actions/appAction";
+import {
+   editSelectedBrandLoading,
+   removeEditBrandInfo,
+} from "../../Redux/Actions/appAction";
 
 const key = "updatable";
 
@@ -41,6 +45,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
    const brandInsertLoading = useSelector((state) => state.admin.brandInsertLoading);
    const selectedBrandLoading = useSelector((state) => state.admin.selectedBrandLoading);
    const brandInsert = useSelector((state) => state.admin.brandInsert);
+   const selectedBrandEdit = useSelector((state) => state.admin.selectedBrandEdit);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -129,6 +134,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
       ) {
          const fromData = createFormData(param);
          dispatch(editSelectedBrand(fromData));
+         dispatch(editSelectedBrandLoading(true));
       } else {
          info("No fildes data change!!");
       }
@@ -154,6 +160,17 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
          dispatch(fetchSelectedBrand(param));
       }
    }, [param]);
+
+   useEffect(() => {
+      if (!!selectedBrandEdit) {
+         message.success({
+            content: selectedBrandEdit.message,
+            key,
+            duration: 2,
+         });
+         dispatch(removeEditBrandInfo(null));
+      }
+   }, [selectedBrandEdit]);
 
    useEffect(() => {
       if (selectedBrand && selectedBrand.success) {

@@ -205,7 +205,12 @@ export const editSelectedBrand = function (data) {
             headers
          );
 
-         console.log(updateSelectedBrand);
+         if (updateSelectedBrand && updateSelectedBrand?.data) {
+            dispatch({
+               type: ACTION_TYPE.EDIT_SELECTED_PRODUCT_BRAND,
+               payload: updateSelectedBrand && updateSelectedBrand?.data,
+            });
+         }
       } catch (err) {
          console.log(err);
       }

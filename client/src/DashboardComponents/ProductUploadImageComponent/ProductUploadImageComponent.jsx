@@ -50,13 +50,20 @@ function ProductUploadImageComponent({
                      }}
                      ref={(el) => (image.current = el)}
                   />
-                  {!!Src ? <img src={Src} /> : null}
-                  {!!selectedPrevImage ? (
+                  {!!Src ? (
+                     <img src={Src} />
+                  ) : !!selectedPrevImage ? (
                      <img
                         crossorigin="anonymous"
                         src={`${backendConfigData.URL}brandImages/${selectedPrevImage}`}
                      />
                   ) : null}
+                  {/* {!!selectedPrevImage ? (
+                     <img
+                        crossorigin="anonymous"
+                        src={`${backendConfigData.URL}brandImages/${selectedPrevImage}`}
+                     />
+                  ) : null} */}
                </div>
             </prImage.div>
          </prImage.flex>

@@ -16,6 +16,7 @@ const INITAL_STATE = {
    deleteSelectedBrand: null,
    selectedBrand: null,
    selectedBrandLoading: false,
+   selectedBrandEdit: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -187,6 +188,25 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             selectedBrand: action.payload,
+         };
+
+      case ACTION_TYPE.EDIT_SELECTED_PRODUCT_BRAND:
+         return {
+            ...state,
+            selectedBrandEdit: action.payload,
+            selectedBrandLoading: false,
+         };
+
+      case ACTION_TYPE.UPDATE_EDIT_PRODUCT_BRAND_LOADING:
+         return {
+            ...state,
+            selectedBrandLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_EDIT_PRODUCT_BRAND_INFO:
+         return {
+            ...state,
+            selectedBrandEdit: action.payload,
          };
 
       default:

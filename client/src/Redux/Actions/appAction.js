@@ -97,3 +97,17 @@ export const selectedBrandProduct = function (data) {
       payload: data,
    };
 };
+
+export const editSelectedBrandLoading = function (data) {
+   return {
+      type: ACTION_TYPE.UPDATE_EDIT_PRODUCT_BRAND_LOADING,
+      payload: data,
+   };
+};
+
+export const removeEditBrandInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_EDIT_PRODUCT_BRAND_INFO,
+      payload: data,
+   };
+};

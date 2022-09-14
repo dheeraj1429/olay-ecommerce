@@ -6,7 +6,11 @@ export const div = styled.div`
 
    .padding_div {
       padding: 1rem;
-      width: 50%;
+      width: 100%;
+   }
+
+   .margin-left {
+      margin-left: 1rem;
    }
 `;
 
@@ -24,7 +28,7 @@ export const flex = styled.div`
 `;
 
 export const upload = styled.div`
-   width: 50%;
+   width: 100%;
    padding: 1rem 0;
 `;
 

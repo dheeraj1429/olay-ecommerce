@@ -10,6 +10,7 @@ function ProductUploadImageComponent({
    onChange,
    Clear,
    selectedPrevImage,
+   size,
 }) {
    const image = useRef(null);
    const [Src, setSrc] = useState("");
@@ -37,7 +38,7 @@ function ProductUploadImageComponent({
       <prImage.main>
          <h4>{Heading}</h4>
          <prImage.flex>
-            <prImage.div onClick={ClickHandler}>
+            <prImage.div onClick={ClickHandler} className={size ? "big-image" : null}>
                <div className="image_div">
                   <AiOutlineFileImage />
                   <input
@@ -58,12 +59,6 @@ function ProductUploadImageComponent({
                         src={`${backendConfigData.URL}brandImages/${selectedPrevImage}`}
                      />
                   ) : null}
-                  {/* {!!selectedPrevImage ? (
-                     <img
-                        crossorigin="anonymous"
-                        src={`${backendConfigData.URL}brandImages/${selectedPrevImage}`}
-                     />
-                  ) : null} */}
                </div>
             </prImage.div>
          </prImage.flex>

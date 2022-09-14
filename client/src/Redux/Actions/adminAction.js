@@ -216,3 +216,71 @@ export const editSelectedBrand = function (data) {
       }
    };
 };
+
+export const deleteAllBrand = function () {
+   return async function (dispatch) {
+      try {
+         const deleteAllBrands = await axios.delete(
+            "/admin/delete-all-products-brand",
+            headers
+         );
+
+         if (deleteAllBrands && deleteAllBrands?.data && deleteAllBrands?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.DELTE_ALL_BRAND,
+               payload: deleteAllBrands && deleteAllBrands?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+// export const fetchProductBrandItems = function (items) {
+//    return async function (dispatch) {
+//       try {
+//          const fetchProductsItems = await axios.post(
+//             `/admin/fetch-product-brands-items/${items}`,
+//             headers
+//          );
+
+//          console.log(fetchProductsItems);
+//       } catch (err) {
+//          console.log(err);
+//       }
+//    };
+// };
+
+export const fetchProductBrandItemsInfo = function () {
+   return async function (dispatch) {
+      try {
+         const brandInfo = await axios.get("/admin/get-all-brands", headers);
+
+         if (brandInfo && brandInfo?.data && brandInfo?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_PRODUCTS_BRADN_INFO,
+               payload: brandInfo && brandInfo?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const uplodNewProduct = function (data) {
+   return async function (dispatch) {
+      try {
+         const uploadProduct = await axios.post(
+            "/admin/insert-new-product",
+            data,
+            headers
+         );
+
+         console.log(uploadProduct);
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

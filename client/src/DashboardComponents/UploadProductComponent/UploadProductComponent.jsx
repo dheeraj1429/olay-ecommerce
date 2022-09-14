@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as upload from "./UploadProductComponent.style";
 import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsCategorys } from "../../Redux/Actions/adminAction";
+import ProductUploadFirstComponent from "../ProductUploadFirstComponent/ProductUploadFirstComponent";
+import ProductUploadSecondComponent from "../ProductUploadSecondComponent/ProductUploadSecondComponent";
+import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
+import { uplodNewProduct } from "../../Redux/Actions/adminAction";
+import { useDispatch } from "react-redux";
 
 const sugAge = [
    { value: "18 - 25", label: "18 - 25" },
@@ -23,35 +22,75 @@ const inStock = [
 ];
 
 function UploadProductComponent() {
-   const [ProductCategory, setProductCategory] = useState([]);
    const [Product, setProduct] = useState({
       name: "",
       price: "",
       salePrice: "",
       discription: "",
       category: "",
-      image: "",
-      suggestedAge: "",
-      suggestedSkinColor: "",
       stockStatus: "",
       weight: "",
       length: "",
       wide: "",
       height: "",
+      productImage: "",
+      suggestedAge: "",
+      brand: "",
    });
 
    const dispatch = useDispatch();
-   const productAllCategory = useSelector((state) => state.admin.productAllCategory);
 
-   useEffect(() => {
-      dispatch(fetchProductsCategorys());
-   }, []);
+   const ChangeHandler = function (e) {
+      const name = e.target.name;
+      const value = e.target.value;
 
-   useEffect(() => {
-      if (!!productAllCategory && productAllCategory.success) {
-         setProductCategory(productAllCategory.allCategory);
-      }
-   }, [productAllCategory]);
+      setProduct({ ...Product, [name]: value });
+   };
+
+   const ImageGrabHandler = function (e) {
+      const data = e.target.files[0];
+      setProduct({ ...Product, productImage: data });
+   };
+
+   const createFormDateHandler = function () {
+      const {
+         name,
+         price,
+         salePrice,
+         discription,
+         category,
+         stockStatus,
+         weight,
+         length,
+         wide,
+         height,
+         productImage,
+         suggestedAge,
+         brand,
+      } = Product;
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("salePrice", salePrice);
+      formData.append("discription", discription);
+      formData.append("category", category);
+      formData.append("stockStatus", stockStatus);
+      formData.append("weight", weight);
+      formData.append("length", length);
+      formData.append("wide", wide);
+      formData.append("height", height);
+      formData.append("productImage", productImage);
+      formData.append("suggestedAge", suggestedAge);
+      formData.append("brand", brand);
+
+      return formData;
+   };
+
+   const SendDataHandler = function () {
+      const formData = createFormDateHandler();
+      dispatch(uplodNewProduct(formData));
+   };
 
    return (
       <upload.div>
@@ -64,145 +103,28 @@ function UploadProductComponent() {
                }
             />
 
-            <upload.flex>
-               <upload.upload>
-                  <Box
-                     component="form"
-                     sx={{
-                        "& > :not(style)": { my: 1, width: "100%" },
-                     }}
-                     noValidate
-                     autoComplete="off"
-                  >
-                     <TextField
-                        id="outlined-basic"
-                        name="name"
-                        type={"text"}
-                        label="Product Name"
-                        variant="outlined"
-                     />
-                     <upload.flexDiv>
-                        <div className="space-right">
-                           <TextField
-                              id="outlined-basic"
-                              name="price"
-                              type={"number"}
-                              label="Product Price"
-                              variant="outlined"
-                           />
-                        </div>
-                        <div>
-                           <TextField
-                              id="outlined-basic"
-                              name="salePrice"
-                              type={"number"}
-                              label="Product Sale Price"
-                              variant="outlined"
-                           />
-                        </div>
-                     </upload.flexDiv>
-                     <TextField
-                        id="outlined-multiline-static"
-                        label="Product discription"
-                        multiline
-                        rows={5}
-                     />
-                     <TextField
-                        id="outlined-select-currency"
-                        select
-                        label="Select"
-                        helperText="Please select your category"
-                     >
-                        {ProductCategory.map((option) => (
-                           <MenuItem key={option._id} value={option.name}>
-                              {option.name}
-                           </MenuItem>
-                        ))}
-                     </TextField>
+            <ProductUploadFirstComponent
+               inStock={inStock}
+               ChangeHandler={ChangeHandler}
+               state={Product}
+            />
+            <ProductUploadSecondComponent
+               sugAge={sugAge}
+               ChangeHandler={ChangeHandler}
+               state={Product}
+               ImageGrabHandler={ImageGrabHandler}
+            />
 
-                     <TextField
-                        id="outlined-select-currency"
-                        select
-                        label="Select"
-                        helperText="Please select the product in stock or not"
-                     >
-                        {inStock.map((option) => (
-                           <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                           </MenuItem>
-                        ))}
-                     </TextField>
-
-                     <upload.flexDiv>
-                        <div className="space-right">
-                           <TextField
-                              id="outlined-basic"
-                              name="weight"
-                              type={"number"}
-                              label="Product Weight"
-                              variant="outlined"
-                           />
-                        </div>
-                        <div>
-                           <TextField
-                              id="outlined-basic"
-                              name="length"
-                              type={"number"}
-                              label="Product Length"
-                              variant="outlined"
-                           />
-                        </div>
-                     </upload.flexDiv>
-                     <upload.flexDiv>
-                        <div className="space-right">
-                           <TextField
-                              id="outlined-basic"
-                              name="wide"
-                              type={"number"}
-                              label="Product Wide"
-                              variant="outlined"
-                           />
-                        </div>
-                        <div>
-                           <TextField
-                              id="outlined-basic"
-                              name="height"
-                              type={"number"}
-                              label="Product Height"
-                              variant="outlined"
-                           />
-                        </div>
-                     </upload.flexDiv>
-                  </Box>
-               </upload.upload>
-               <div className="padding_div">
-                  <HeadingComponent cl="sm_heading" Heading={"Product Image"} />
-                  <ProductUploadImageComponent />
-                  <upload.marginDiv>
-                     <Box
-                        component="form"
-                        sx={{
-                           "& > :not(style)": { my: 1, width: "100%" },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                     >
-                        <TextField
-                           id="outlined-select-currency"
-                           select
-                           label="Select"
-                           helperText="Please selecte the product suggested age"
-                        >
-                           {sugAge.map((option) => (
-                              <MenuItem key={option.value} value={option.value}>
-                                 {option.label}
-                              </MenuItem>
-                           ))}
-                        </TextField>
-                     </Box>
-                  </upload.marginDiv>
-               </div>
-            </upload.flex>
+            <div className="margin-left">
+               <upload.flex>
+                  <CustombuttonComponent
+                     innerText={"Save"}
+                     btnCl={"category_upload"}
+                     onClick={SendDataHandler}
+                  />
+                  <CustombuttonComponent innerText={"Clear"} btnCl={"Delete_btn"} />
+               </upload.flex>
+            </div>
          </upload.paddingDiv>
       </upload.div>
    );

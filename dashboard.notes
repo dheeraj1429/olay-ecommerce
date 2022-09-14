@@ -1,7 +1,8 @@
 https://themesbrand.com/velzon/html/default/dashboard-analytics.html
 
-Sun Sep 11 2022 10:44:55 GMT+0530 (India Standard Time);
 
+-----------------------------------------------------------------------------------
+Sun Sep 11 2022 10:44:55 GMT+0530 (India Standard Time);
 FIXME: -> fix dashboard sidebar component [fixed]
 [done]: sidebar component styled. 
 
@@ -12,8 +13,9 @@ TODO: dashboard edit category section
         logic: get the id from the user selected category.
                 [done]: then find the category using the id selected.
                 [done]: remove category from the dashboard. and also remove from the client dashboard.
+-----------------------------------------------------------------------------------
 
-
+-----------------------------------------------------------------------------------
 Mon Sep 12 2022 10:01:55 GMT+0530 (India Standard Time);
 
 FIXME: -> admin logout is not working
@@ -26,18 +28,33 @@ FIXME: -> admin logout is not working
         [done]: admin can clear all fildes.
         logic: first selecte all the brand information and store into the database.
         if the brand category is already exists then return the flag to the client, || insert new brand into the database.
+-----------------------------------------------------------------------------------
 
+
+-----------------------------------------------------------------------------------
 Tue Sep 13 2022 09:51:34 GMT+0530 (India Standard Time);
 
 [panding]: product all brands section.
         TODO: 
-        [panding] admin dashboard design.
+        [done] admin dashboard design.
                 TODO:
                         product brand pagination feature [done]
                         product brand pagination loding spenner [done]
                         delete product brand clicking on close btn [done]
                         delete selected brand feature. [done] 
                         Edit product brand feature. [done] 
-                        delete all product brand feature. [panding] |FOCUS|
-                        filter brand feature. [panding]
-                        sort feature. [panding]
+-----------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------
+Wed Sep 14 2022 09:41:42 GMT+0530 (India Standard Time);
+
+                        delete all product brand feature. [done]
+                        filter brand feature. [done]
+                        sort feature. [done]
+                        product bulk actions feature: [done]
+
+[panding]: Product upload section.
+                        product upload feature [panding]
+
+-----------------------------------------------------------------------------------

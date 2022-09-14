@@ -111,3 +111,10 @@ export const removeEditBrandInfo = function (data) {
       payload: data,
    };
 };
+
+export const bulkAction = function (data) {
+   return {
+      type: ACTION_TYPE.BULK_ACTIONS,
+      payload: data,
+   };
+};

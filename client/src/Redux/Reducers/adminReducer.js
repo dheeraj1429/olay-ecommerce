@@ -1,4 +1,5 @@
 import { ACTION_TYPE } from "../ActionTypes/actionType";
+import { CampareFunction } from "../../Filters/Filters";
 
 const INITAL_STATE = {
    productCategory: null,
@@ -17,6 +18,8 @@ const INITAL_STATE = {
    selectedBrand: null,
    selectedBrandLoading: false,
    selectedBrandEdit: null,
+   deleteAllBrands: null,
+   allProductBrands: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -207,6 +210,34 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             selectedBrandEdit: action.payload,
+         };
+
+      case ACTION_TYPE.BULK_ACTIONS:
+         return {
+            ...state,
+            productBrands: {
+               ...state.productBrands,
+               brands: CampareFunction(action.payload, state.productBrands),
+            },
+         };
+
+      case ACTION_TYPE.DELTE_ALL_BRAND:
+         if (action.payload.success) {
+            return {
+               ...state,
+               productBrands: null,
+            };
+         } else {
+            return {
+               ...state,
+               deleteAllBrands: action.payload,
+            };
+         }
+
+      case ACTION_TYPE.FETCH_PRODUCTS_BRADN_INFO:
+         return {
+            ...state,
+            allProductBrands: action.payload,
          };
 
       default:

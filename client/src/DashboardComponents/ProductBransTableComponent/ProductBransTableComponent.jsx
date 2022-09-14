@@ -82,7 +82,11 @@ function ProductBransTableComponent() {
          setAllBrands(productBrands.brands);
       }
 
-      if (!!!AllBrands.length) {
+      if (
+         !!!AllBrands.length &&
+         productBrands?.success &&
+         !!productBrands?.brands?.length
+      ) {
          setLimit(0);
          dispatch(fetchAllProductBrand(0));
       }
@@ -90,7 +94,7 @@ function ProductBransTableComponent() {
 
    return (
       <table.div>
-         {!!AllBrands.length > 0 ? (
+         {!!productBrands && !!AllBrands.length > 0 ? (
             <div>
                <table>
                   <tr>
@@ -115,21 +119,23 @@ function ProductBransTableComponent() {
                   </div>
                   <div>
                      {!!SelectedBrand.length ? (
-                        <Popconfirm
-                           title="Delete selected product brands! Are your sure ?"
-                           onConfirm={confirm}
-                           icon={
-                              <QuestionCircleOutlined
-                                 style={{
-                                    color: "red",
-                                 }}
-                              />
-                           }
-                        >
-                           <CustombuttonComponent btnCl={"pagination_btn"}>
-                              <FcDoNotInsert />
-                           </CustombuttonComponent>
-                        </Popconfirm>
+                        <>
+                           <Popconfirm
+                              title="Delete selected product brands! Are your sure ?"
+                              onConfirm={confirm}
+                              icon={
+                                 <QuestionCircleOutlined
+                                    style={{
+                                       color: "red",
+                                    }}
+                                 />
+                              }
+                           >
+                              <CustombuttonComponent btnCl={"pagination_btn"}>
+                                 <FcDoNotInsert />
+                              </CustombuttonComponent>
+                           </Popconfirm>
+                        </>
                      ) : null}
                   </div>
                   <div>

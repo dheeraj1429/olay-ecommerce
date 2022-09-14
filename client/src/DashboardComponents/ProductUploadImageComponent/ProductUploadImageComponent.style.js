@@ -19,6 +19,11 @@ export const main = styled.div`
       font-size: 18px;
       font-weight: 400;
    }
+
+   .big-image {
+      width: 300px;
+      height: 300px;
+   }
 `;
 
 export const div = styled.div`

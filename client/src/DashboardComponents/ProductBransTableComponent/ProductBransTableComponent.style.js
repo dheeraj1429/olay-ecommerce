@@ -56,7 +56,7 @@ export const div = styled.div`
       color: var(--main-cl);
    }
 
-   .Panding {
+   .Pending {
       padding: 0.2rem 2rem;
       width: max-content;
       border-radius: 5px;

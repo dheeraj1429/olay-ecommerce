@@ -25,7 +25,7 @@ const key = "updatable";
 const brandStatus = [
    { value: "Published", label: "Published" },
    { value: "Draft", label: "Draft" },
-   { value: "Panding", label: "Panding" },
+   { value: "Pending", label: "Pending" },
 ];
 
 function ProductBrandUploadComponent({ param, selectedBrand }) {
@@ -72,12 +72,12 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
                key,
                duration: 2,
             });
-
-            dispatch(removeBrandInfo(null));
          } else {
             info(brandInsert.message);
          }
       }
+
+      dispatch(removeBrandInfo(null));
    }, [brandInsert]);
 
    const createFormData = function (param) {

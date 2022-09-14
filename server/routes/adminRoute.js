@@ -11,7 +11,11 @@ const storage = multer.diskStorage({
          file.mimetype === "image/jpeg" ||
          file.mimetype === "image/jpg"
       ) {
-         cb(null, "./upload/brandImages");
+         if (file.fieldname === "productImage") {
+            cb(null, "./upload/productImages");
+         } else {
+            cb(null, "./upload/brandImages");
+         }
       }
    },
    filename: function (req, file, cb) {
@@ -32,5 +36,9 @@ route.delete("/delete-one-product-brand/:id", adminController.deleteOneProductBr
 route.post("/delete-multi-product-brand", adminController.deleteSelectedProductBrand);
 route.post("/get-selected-product-brand/:id", adminController.getSelectedBrandProduct);
 route.patch("/update-selected-product-brand", upload, adminController.editSelectedBrand);
+route.delete("/delete-all-products-brand", adminController.deleteAllProductBrand);
+// route.post("/fetch-product-brands-items/:id", adminController.fetchProductBrandItems);
+route.get("/get-all-brands", adminController.getProductBrands);
+route.post("/insert-new-product", upload, adminController.uploadNewProduct);
 
 module.exports = route;

@@ -18,7 +18,7 @@ export const div = styled.div`
       padding: 0.3rem 3rem;
       border-radius: 5px;
       color: var(--main-cl);
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
       margin-top: 1rem;
    }
    .category_upload:hover {
@@ -31,7 +31,7 @@ export const div = styled.div`
       background-color: var(--button-cl);
       color: var(--main-cl);
       border-radius: 5px;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
    }
    .Delete_btn:hover {
       background-color: var(--spec-static-brand-red);
@@ -64,6 +64,22 @@ export const div = styled.div`
       svg {
          fill: var(--main-cl);
       }
+   }
+
+   img {
+      width: auto;
+      height: 30px;
+   }
+
+   .margin-0 {
+      padding: 0.5rem 3rem;
+      margin: 0 !important;
+   }
+
+   .margin-rigth {
+      padding: 0.5rem 3rem;
+      margin: 0 !important;
+      margin-right: 0.5rem !important;
    }
 `;
 

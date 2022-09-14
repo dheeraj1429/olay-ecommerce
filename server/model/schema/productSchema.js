@@ -3,11 +3,17 @@ const mongoose = require("mongoose");
 const productSchema = new mongoose.Schema({
    name: { type: String, required: [true, "product name is required"] },
    price: { type: Number, required: [true, "product price is required"] },
+   salePrice: { type: Number },
    discription: { type: String, required: [true, "product discription is required"] },
-   image: { type: String, required: [true, "product image is required"] },
-   category: { type: String, default: "Uncategory" },
+   category: { type: mongoose.Types.ObjectId, ref: "category" },
+   stockStatus: { type: String },
+   weight: { type: Number },
+   length: { type: Number },
+   wide: { type: Number },
+   height: { type: Number },
+   productImage: { type: String },
    suggestedAge: { type: String, default: "Unsuggested" },
-   suggestedSkinColor: { type: String, default: "Unsuggested" },
+   brand: { type: mongoose.Types.ObjectId, ref: "productBrand" },
 });
 
 const productModel = mongoose.model("product", productSchema);

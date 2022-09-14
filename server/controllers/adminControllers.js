@@ -239,14 +239,14 @@ const insertNewProductBrand = async function (req, res, next) {
  * @getAllProductBrand get all brand
  * @return send brand array of object to the client
  */
-const getAllProductBrand = async function (req, res, next) {
+const getAllProductBrand = async function (req, res, next, perItems = undefined) {
    try {
       /**
        * @BRAND_LIMIT how many documents we want to return to the client
        * @page which page is client right now ?page=1 ......
        * @totalProductBrandSize how many document we have in a database.
        */
-      const BRAND_LIMIT = 3;
+      const BRAND_LIMIT = perItems ? perItems : 10;
       const page = req.query.page || 0;
       const totalProductBrandSize = await productBrandModel.countDocuments({});
 
@@ -431,6 +431,114 @@ const editSelectedBrand = async function (req, res, next) {
    }
 };
 
+const deleteAllProductBrand = async function (req, res, next) {
+   try {
+      /**
+       * @deleteAllBrands delete all brands from the databse
+       */
+      const deleteAllBrands = await productBrandModel.deleteMany({});
+
+      if (!!deleteAllBrands.deletedCount) {
+         return res.status(200).json({
+            success: true,
+            message: "product brands delete successful",
+         });
+      } else {
+         erroResponse(res);
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+// const fetchProductBrandItems = async function (req, res, next) {
+//    try {
+//       const items = req.params.id;
+
+//       if (!items) {
+//          return res.status(200).json({
+//             success: false,
+//             message: "number ob brand items is required",
+//          });
+//       }
+
+//       await getAllProductBrand(req, res, next, items);
+//    } catch (err) {
+//       console.log(err);
+//    }
+// };
+
+const getProductBrands = async function (req, res, next) {
+   try {
+      const fetchProductBrandItems = await productBrandModel.find({}, { name: 1 });
+
+      if (fetchProductBrandItems) {
+         return res.status(200).json({
+            success: true,
+            brands: fetchProductBrandItems,
+         });
+      } else {
+         erroResponse(res);
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+/**
+ * @saveProductInDb send back the reponse the the client
+ */
+const saveProductInDb = async function (object, res) {
+   let insertProduct, saveProduct;
+   insertProduct = await productModel(object);
+   saveProduct = await insertProduct.save();
+
+   if (saveProduct) {
+      return res.status(200).json({
+         success: true,
+         message: "Product saved",
+      });
+   } else {
+      erroResponse(res);
+   }
+};
+
+const uploadNewProduct = async function (req, res, next) {
+   try {
+      const { name } = req.body;
+
+      /**
+       * @productObject { copy all the client send data }
+       */
+      const productObject = { ...req.body };
+
+      /**
+       * @checkIsProductIsExists check the product is already is exists or not
+       */
+      const checkIsProductIsExists = await productModel.findOne({ name });
+
+      if (checkIsProductIsExists) {
+         return res.status(200).json({
+            success: true,
+            message: "Product is already exists",
+         });
+      } else {
+         /**
+          * @originalname if the admin want the upload the image then we want to store the image information into the database
+          */
+         if (req.files && !!req.files.length) {
+            const originalname = req.files[0].originalname;
+            productObject.productImage = originalname;
+            await saveProductInDb(productObject, res);
+         } else {
+            await saveProductInDb(productObject, res);
+         }
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -442,4 +550,8 @@ module.exports = {
    deleteSelectedProductBrand,
    getSelectedBrandProduct,
    editSelectedBrand,
+   deleteAllProductBrand,
+   // fetchProductBrandItems,
+   getProductBrands,
+   uploadNewProduct,
 };

@@ -246,7 +246,7 @@ const getAllProductBrand = async function (req, res, next, perItems = undefined)
        * @page which page is client right now ?page=1 ......
        * @totalProductBrandSize how many document we have in a database.
        */
-      const BRAND_LIMIT = perItems ? perItems : 10;
+      const BRAND_LIMIT = perItems ? perItems : 3;
       const page = req.query.page || 0;
       const totalProductBrandSize = await productBrandModel.countDocuments({});
 
@@ -494,7 +494,7 @@ const saveProductInDb = async function (object, res) {
    saveProduct = await insertProduct.save();
 
    if (saveProduct) {
-      return res.status(200).json({
+      return res.status(201).json({
          success: true,
          message: "Product saved",
       });
@@ -539,6 +539,45 @@ const uploadNewProduct = async function (req, res, next) {
    }
 };
 
+/**
+ * @fetchUploadProducts return products documents
+ */
+const fetchUploadProducts = async function (req, res, next) {
+   try {
+      const page = req.query.page;
+
+      if (!page) {
+         return res.status(200).json({
+            success: false,
+            message: "page id is required!",
+         });
+      }
+
+      /**
+       * @DOCUMENT_LIMIT how to document we want the send back to the client
+       */
+      const DOCUMENT_LIMIT = 10;
+      const totalDocuments = await productModel.countDocuments({});
+      const fetchDoc = await productModel
+         .find({})
+         .limit(DOCUMENT_LIMIT)
+         .skip(DOCUMENT_LIMIT * page);
+
+      if (fetchDoc) {
+         return res.status(200).json({
+            success: true,
+            totalPages: Math.ceil(totalDocuments / DOCUMENT_LIMIT - 1),
+            totalDocuments: totalDocuments,
+            products: fetchDoc,
+         });
+      } else {
+         erroResponse(res);
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -554,4 +593,5 @@ module.exports = {
    // fetchProductBrandItems,
    getProductBrands,
    uploadNewProduct,
+   fetchUploadProducts,
 };

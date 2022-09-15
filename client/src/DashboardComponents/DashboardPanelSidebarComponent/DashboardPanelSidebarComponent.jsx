@@ -13,6 +13,7 @@ import { FcUpload } from "@react-icons/all-files/fc/FcUpload";
 import { FcHome } from "@react-icons/all-files/fc/FcHome";
 import { FcMultipleDevices } from "@react-icons/all-files/fc/FcMultipleDevices";
 import { FcTabletAndroid } from "@react-icons/all-files/fc/FcTabletAndroid";
+import { FcTwoSmartphones } from "@react-icons/all-files/fc/FcTwoSmartphones";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -122,6 +123,14 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<FcTabletAndroid />}
                   innerText={"Product brands"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<FcTwoSmartphones />}
+                  innerText={"All products"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

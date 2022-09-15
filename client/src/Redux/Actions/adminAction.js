@@ -278,7 +278,32 @@ export const uplodNewProduct = function (data) {
             headers
          );
 
-         console.log(uploadProduct);
+         if (uploadProduct && uploadProduct?.data) {
+            dispatch({
+               type: ACTION_TYPE.UPLOAD_NEW_PRODUCT,
+               payload: uploadProduct && uploadProduct?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const fetchUploadProducts = function (page) {
+   return async function (dispatch) {
+      try {
+         const fetchProducts = await axios.get(
+            `/admin/get-upload-products?page=${page}`,
+            headers
+         );
+
+         if (fetchProducts && fetchProducts?.data) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_UPLODED_PRODUCTS,
+               payload: fetchProducts && fetchProducts?.data,
+            });
+         }
       } catch (err) {
          console.log(err);
       }

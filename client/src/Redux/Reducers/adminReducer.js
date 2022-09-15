@@ -20,6 +20,10 @@ const INITAL_STATE = {
    selectedBrandEdit: null,
    deleteAllBrands: null,
    allProductBrands: null,
+   uploadProduct: null,
+   uploadProductLoading: false,
+   allProducts: null,
+   selectedItems: [],
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -213,13 +217,22 @@ const adminReducer = function (state = INITAL_STATE, action) {
          };
 
       case ACTION_TYPE.BULK_ACTIONS:
-         return {
-            ...state,
-            productBrands: {
-               ...state.productBrands,
-               brands: CampareFunction(action.payload, state.productBrands),
-            },
-         };
+         if (action.payload.filde === "brands") {
+            return {
+               ...state,
+               productBrands: {
+                  ...state.productBrands,
+                  brands: CampareFunction(action.payload.filter, state.productBrands),
+               },
+            };
+         } else if (action.payload.filde === "products") {
+            console.log(action.payload);
+
+            // |FOCUS|
+            return {
+               ...state,
+            };
+         }
 
       case ACTION_TYPE.DELTE_ALL_BRAND:
          if (action.payload.success) {
@@ -238,6 +251,51 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             allProductBrands: action.payload,
+         };
+
+      case ACTION_TYPE.UPLOAD_NEW_PRODUCT:
+         return {
+            ...state,
+            uploadProduct: action.payload,
+            uploadProductLoading: false,
+         };
+
+      case ACTION_TYPE.UPLOAD_PRODUCT_LOADING:
+         return {
+            ...state,
+            uploadProductLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_PRODUCT_INFO:
+         return {
+            ...state,
+            uploadProduct: action.payload,
+         };
+
+      case ACTION_TYPE.FETCH_UPLODED_PRODUCTS:
+         return {
+            ...state,
+            allProducts: action.payload,
+         };
+
+      case ACTION_TYPE.SELECTED_ITEMS_LIMIT:
+         return {
+            ...state,
+            selectedItems: state.selectedItems.concat(action.payload),
+         };
+
+      case ACTION_TYPE.REMOVE_SELECTED_ITEMS:
+         const checkItems = state.selectedItems.filter((el) => el !== action.payload);
+
+         return {
+            ...state,
+            selectedItems: checkItems,
+         };
+
+      case ACTION_TYPE.REMOVE_ALL_SELECTED_ITEMS:
+         return {
+            ...state,
+            selectedItems: action.payload,
          };
 
       default:

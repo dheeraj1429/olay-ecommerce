@@ -40,5 +40,6 @@ route.delete("/delete-all-products-brand", adminController.deleteAllProductBrand
 // route.post("/fetch-product-brands-items/:id", adminController.fetchProductBrandItems);
 route.get("/get-all-brands", adminController.getProductBrands);
 route.post("/insert-new-product", upload, adminController.uploadNewProduct);
+route.get("/get-upload-products", adminController.fetchUploadProducts);
 
 module.exports = route;

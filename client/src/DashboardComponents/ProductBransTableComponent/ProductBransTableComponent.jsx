@@ -1,18 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import * as table from "./ProductBransTableComponent.style";
 import { useDispatch, useSelector } from "react-redux";
-import {
-   fetchAllProductBrand,
-   deleteMultiSelectedProductBrand,
-} from "../../Redux/Actions/adminAction";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { GrFormNextLink } from "@react-icons/all-files/gr/GrFormNextLink";
-import { GrFormPreviousLink } from "@react-icons/all-files/gr/GrFormPreviousLink";
+import { fetchAllProductBrand } from "../../Redux/Actions/adminAction";
 import ProductBrandsTableInnerComponent from "../ProductBrandsTableInnerComponent/ProductBrandsTableInnerComponent";
-import { fetchBrandProductLoading } from "../../Redux/Actions/appAction";
-import { FcDoNotInsert } from "@react-icons/all-files/fc/FcDoNotInsert";
-import { Popconfirm } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { selectedItemLimit, removeSelectedItems } from "../../Redux/Actions/appAction";
 
 const row = [
    { elm: "all", value: "All" },
@@ -26,75 +17,27 @@ const row = [
 ];
 
 function ProductBransTableComponent() {
-   const [AllBrands, setAllBrands] = useState([]);
-   const [Limit, setLimit] = useState(0);
-   const [SelectedBrand, setSelectedBrand] = useState([]);
-
    const dispatch = useDispatch();
    const productBrands = useSelector((state) => state.admin.productBrands);
    const loadingPagination = useSelector((state) => state.admin.loadingPagination);
-
-   const ChnageNext = function () {
-      if (Limit >= 0 && Limit < productBrands.totalPages) {
-         setLimit((prev) => prev + 1);
-         dispatch(fetchBrandProductLoading(true));
-      }
-   };
-
-   const onChange = useCallback(
-      (e, elm) => {
-         let id = elm._id;
-         if (e.target.checked) {
-            setSelectedBrand((current) => (!!current?.id ? id : [...current, id]));
-         } else {
-            setSelectedBrand(SelectedBrand.filter((el) => el !== id));
-         }
-      },
-      [SelectedBrand]
-   );
-
-   const ChangePrev = function () {
-      if (Limit > 0) {
-         setLimit((prev) => prev - 1);
-         dispatch(fetchBrandProductLoading(true));
-      }
-   };
-
-   const confirm = function () {
-      dispatch(deleteMultiSelectedProductBrand(SelectedBrand));
-      setSelectedBrand([]);
-   };
-
-   useEffect(() => {
-      dispatch(fetchAllProductBrand(Limit));
-
-      if (!!SelectedBrand.length) {
-         setSelectedBrand([]);
-      }
-   }, [Limit]);
 
    useEffect(() => {
       dispatch(fetchAllProductBrand(0));
    }, []);
 
-   useEffect(() => {
-      if (!!productBrands && productBrands.success) {
-         setAllBrands(productBrands.brands);
-      }
+   const onChange = (e, elm) => {
+      let id = elm._id;
 
-      if (
-         !!!AllBrands.length &&
-         productBrands?.success &&
-         !!productBrands?.brands?.length
-      ) {
-         setLimit(0);
-         dispatch(fetchAllProductBrand(0));
+      if (e.target.checked) {
+         dispatch(selectedItemLimit(id));
+      } else {
+         dispatch(removeSelectedItems(id));
       }
-   }, [productBrands, AllBrands]);
+   };
 
    return (
       <table.div>
-         {!!productBrands && !!AllBrands.length > 0 ? (
+         {!!productBrands && !!productBrands.brands.length > 0 ? (
             <div>
                <table>
                   <tr>
@@ -104,62 +47,11 @@ function ProductBransTableComponent() {
                   </tr>
 
                   <ProductBrandsTableInnerComponent
-                     AllBrands={AllBrands}
+                     AllBrands={productBrands.brands}
                      isLoading={loadingPagination}
                      change={onChange}
                   />
                </table>
-
-               <table.paginationDiv>
-                  <div>
-                     <p>
-                        Showing {productBrands.brands.length} of{" "}
-                        {productBrands.totalDocuments} Results
-                     </p>
-                  </div>
-                  <div>
-                     {!!SelectedBrand.length ? (
-                        <>
-                           <Popconfirm
-                              title="Delete selected product brands! Are your sure ?"
-                              onConfirm={confirm}
-                              icon={
-                                 <QuestionCircleOutlined
-                                    style={{
-                                       color: "red",
-                                    }}
-                                 />
-                              }
-                           >
-                              <CustombuttonComponent btnCl={"pagination_btn"}>
-                                 <FcDoNotInsert />
-                              </CustombuttonComponent>
-                           </Popconfirm>
-                        </>
-                     ) : null}
-                  </div>
-                  <div>
-                     <table.flexDiv>
-                        <CustombuttonComponent
-                           btnCl={Limit <= 0 ? "PrevDisable_btn" : "pagination_btn"}
-                           onClick={ChangePrev}
-                        >
-                           <GrFormPreviousLink />
-                        </CustombuttonComponent>
-
-                        <CustombuttonComponent
-                           btnCl={
-                              Limit >= productBrands.totalPages
-                                 ? "PrevDisable_btn"
-                                 : "pagination_btn"
-                           }
-                           onClick={ChnageNext}
-                        >
-                           <GrFormNextLink />
-                        </CustombuttonComponent>
-                     </table.flexDiv>
-                  </div>
-               </table.paginationDiv>
             </div>
          ) : null}
       </table.div>

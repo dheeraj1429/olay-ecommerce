@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as upload from "./UploadProductComponent.style";
 import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
@@ -6,7 +6,9 @@ import ProductUploadFirstComponent from "../ProductUploadFirstComponent/ProductU
 import ProductUploadSecondComponent from "../ProductUploadSecondComponent/ProductUploadSecondComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { uplodNewProduct } from "../../Redux/Actions/adminAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { message } from "antd";
+import { removeUploadProductInfo, uploadLoading } from "../../Redux/Actions/appAction";
 
 const sugAge = [
    { value: "18 - 25", label: "18 - 25" },
@@ -39,6 +41,8 @@ function UploadProductComponent() {
    });
 
    const dispatch = useDispatch();
+   const uploadProduct = useSelector((state) => state.admin.uploadProduct);
+   const uploadProductLoading = useSelector((state) => state.admin.uploadProductLoading);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -51,6 +55,25 @@ function UploadProductComponent() {
       const data = e.target.files[0];
       setProduct({ ...Product, productImage: data });
    };
+
+   const checkTrueValues = function (formData, string, filde) {
+      if (!!string) {
+         formData.append(filde, string);
+      }
+
+      return formData;
+   };
+
+   const info = (msg) => {
+      message.info(msg);
+   };
+
+   useEffect(() => {
+      if (!!uploadProduct) {
+         info(uploadProduct.message);
+         dispatch(removeUploadProductInfo(null));
+      }
+   }, [uploadProduct]);
 
    const createFormDateHandler = function () {
       const {
@@ -70,26 +93,49 @@ function UploadProductComponent() {
       } = Product;
 
       const formData = new FormData();
-      formData.append("name", name);
-      formData.append("price", price);
-      formData.append("salePrice", salePrice);
-      formData.append("discription", discription);
-      formData.append("category", category);
-      formData.append("stockStatus", stockStatus);
-      formData.append("weight", weight);
-      formData.append("length", length);
-      formData.append("wide", wide);
-      formData.append("height", height);
-      formData.append("productImage", productImage);
-      formData.append("suggestedAge", suggestedAge);
-      formData.append("brand", brand);
+      checkTrueValues(formData, name, "name");
+      checkTrueValues(formData, price, "price");
+      checkTrueValues(formData, salePrice, "salePrice");
+      checkTrueValues(formData, discription, "discription");
+      checkTrueValues(formData, category, "category");
+      checkTrueValues(formData, stockStatus, "stockStatus");
+      checkTrueValues(formData, weight, "weight");
+      checkTrueValues(formData, length, "length");
+      checkTrueValues(formData, wide, "wide");
+      checkTrueValues(formData, height, "height");
+      checkTrueValues(formData, productImage, "productImage");
+      checkTrueValues(formData, suggestedAge, "suggestedAge");
+      checkTrueValues(formData, brand, "brand");
 
       return formData;
    };
 
    const SendDataHandler = function () {
-      const formData = createFormDateHandler();
-      dispatch(uplodNewProduct(formData));
+      if (!!Product.name && !!Product.price) {
+         const formData = createFormDateHandler();
+         dispatch(uplodNewProduct(formData));
+         dispatch(uploadLoading(true));
+      } else {
+         info("Product name and product price is required!!");
+      }
+   };
+
+   const ClearHandler = function () {
+      setProduct({
+         name: "",
+         price: "",
+         salePrice: "",
+         discription: "",
+         category: "",
+         stockStatus: "",
+         weight: "",
+         length: "",
+         wide: "",
+         height: "",
+         productImage: "",
+         suggestedAge: "",
+         brand: "",
+      });
    };
 
    return (
@@ -121,8 +167,8 @@ function UploadProductComponent() {
                      innerText={"Save"}
                      btnCl={"category_upload"}
                      onClick={SendDataHandler}
+                     isLoading={uploadProductLoading}
                   />
-                  <CustombuttonComponent innerText={"Clear"} btnCl={"Delete_btn"} />
                </upload.flex>
             </div>
          </upload.paddingDiv>

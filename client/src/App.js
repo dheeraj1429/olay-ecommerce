@@ -12,6 +12,7 @@ import UploadProductCategory from "./DashboardComponents/UploadProductCategory/U
 import ProductBrandUploadComponent from "./DashboardComponents/ProductBrandUploadComponent/ProductBrandUploadComponent";
 import ProductBrandsComponent from "./DashboardComponents/ProductBrandsComponent/ProductBrandsComponent";
 import ProductBrandEditComponent from "./DashboardComponents/ProductBrandEditComponent/ProductBrandEditComponent";
+import AllProductComponent from "./DashboardComponents/AllProductComponent/AllProductComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -47,6 +48,7 @@ function App() {
                   path="product-brands/edit/:id"
                   element={<ProductBrandEditComponent />}
                />
+               <Route path="all-products" element={<AllProductComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

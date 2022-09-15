@@ -4,7 +4,7 @@ const productSchema = new mongoose.Schema({
    name: { type: String, required: [true, "product name is required"] },
    price: { type: Number, required: [true, "product price is required"] },
    salePrice: { type: Number },
-   discription: { type: String, required: [true, "product discription is required"] },
+   discription: { type: String },
    category: { type: mongoose.Types.ObjectId, ref: "category" },
    stockStatus: { type: String },
    weight: { type: Number },
@@ -14,6 +14,7 @@ const productSchema = new mongoose.Schema({
    productImage: { type: String },
    suggestedAge: { type: String, default: "Unsuggested" },
    brand: { type: mongoose.Types.ObjectId, ref: "productBrand" },
+   createdAt: { type: Date, default: Date.now },
 });
 
 const productModel = mongoose.model("product", productSchema);

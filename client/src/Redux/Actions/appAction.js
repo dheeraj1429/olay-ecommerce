@@ -118,3 +118,38 @@ export const bulkAction = function (data) {
       payload: data,
    };
 };
+
+export const uploadLoading = function (data) {
+   return {
+      type: ACTION_TYPE.UPLOAD_PRODUCT_LOADING,
+      payload: data,
+   };
+};
+
+export const removeUploadProductInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_PRODUCT_INFO,
+      payload: data,
+   };
+};
+
+export const selectedItemLimit = function (data) {
+   return {
+      type: ACTION_TYPE.SELECTED_ITEMS_LIMIT,
+      payload: data,
+   };
+};
+
+export const removeSelectedItems = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_SELECTED_ITEMS,
+      payload: data,
+   };
+};
+
+export const removeAllSelectedItems = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_ALL_SELECTED_ITEMS,
+      payload: data,
+   };
+};

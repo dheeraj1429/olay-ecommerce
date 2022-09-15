@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import * as table from "./ProductBransTableComponent.style";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProductBrand } from "../../Redux/Actions/adminAction";

@@ -9,25 +9,11 @@ import CustombuttonComponent from "../../Components/CustombuttonComponent/Custom
 import { message } from "antd";
 import { useDispatch } from "react-redux";
 import { bulkAction } from "../../Redux/Actions/appAction";
-import { FcAlphabeticalSortingAz } from "@react-icons/all-files/fc/FcAlphabeticalSortingAz";
-import { FcAlphabeticalSortingZa } from "@react-icons/all-files/fc/FcAlphabeticalSortingZa";
-import { FcPaid } from "@react-icons/all-files/fc/FcPaid";
-import { FcOk } from "@react-icons/all-files/fc/FcOk";
-import { FcIcons8Cup } from "@react-icons/all-files/fc/FcIcons8Cup";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Popconfirm } from "antd";
 import { Link } from "react-router-dom";
 
-const items = [
-   { value: "", Option: "None" },
-   { value: "Sort A - Z", Option: "Sort A - Z", icon: <FcAlphabeticalSortingAz /> },
-   { value: "Sort Z - A", Option: "Sort Z - A", icon: <FcAlphabeticalSortingZa /> },
-   { value: "Sort by order", Option: "Sort by order", icon: <FcPaid /> },
-   { value: "Published", Option: "Published", icon: <FcOk /> },
-   { value: "Delete all", Option: "Delete all", icon: <FcIcons8Cup /> },
-];
-
-function ProductSectionFeatureComponent({ state, pageLink, field, action }) {
+function ProductSectionFeatureComponent({ state, pageLink, field, action, items }) {
    const [Filter, setFilter] = useState("");
    const dispatch = useDispatch();
 

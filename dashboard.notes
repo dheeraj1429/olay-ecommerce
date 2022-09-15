@@ -60,6 +60,15 @@ Thu Sep 15 2022 09:38:25 GMT+0530 (India Standard Time);
 
 [panding]: table selection component dynmic.
 
+BUGS: [fixed]
+        footer pagination componente fix
+        table filter componente fix
+
 [panding]: Product upload section.
-                        product upload feature [panding]
+                        product upload feature [done]
+                        product filter feature [panding] |FOCUS|
+                        product edit feature [panding]
+                        single product delete [panding]
+                        selected product delete [panding]
+                        pagination feature [panding]
 -----------------------------------------------------------------------------------

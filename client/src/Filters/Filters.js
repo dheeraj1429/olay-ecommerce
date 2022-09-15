@@ -8,50 +8,57 @@
 //
 //======================================================
 
-export const CampareFunction = function (filter, state) {
+const filterFunction = function (
+   objectFilterFilde,
+   state,
+   filde,
+   returnValue = undefined
+) {
+   let filterFN = state[filde].sort(function (a, b) {
+      if (!!returnValue && a[objectFilterFilde] < b[objectFilterFilde]) {
+         return -1;
+      } else {
+         if (a[objectFilterFilde] > b[objectFilterFilde]) {
+            return -1;
+         } else {
+            return 0;
+         }
+      }
+   });
+
+   return filterFN;
+};
+
+const filterByName = function (name, state, objectFilterFilde, filde) {
+   let filter = state[filde].sort(function (a, b) {
+      if (a[objectFilterFilde] == name) {
+         return -1;
+      } else {
+         return 0;
+      }
+   });
+
+   return filter;
+};
+
+export const CampareFunction = function (filter, state, filde) {
    let filterState;
 
-   // |FILTER|: Sorting with a - z
    if (filter === "Sort A - Z") {
-      filterState = state.brands.sort(function (a, b) {
-         if (a.name > b.name) {
-            return -1;
-         } else {
-            return 0;
-         }
-      });
-
-      // |FILTER|: Sorting with z - a
+      filterState = filterFunction("name", state, filde);
    } else if (filter === "Sort Z - A") {
-      filterState = state.brands.sort(function (a, b) {
-         if (a.name < b.name) {
-            return -1;
-         } else {
-            return 0;
-         }
-      });
-
-      // |FILTER|: Sorting with order numbers
+      filterState = filterFunction("name", state, filde, 1);
    } else if (filter === "Sort by order") {
-      filterState = state.brands.sort((a, b) => {
-         if (a.order > b.order) {
-            return -1;
-         } else if (a.order < b.order) {
-            return 1;
-         } else {
-            return 0;
-         }
-      });
-
-      // |FILTER|: published
+      filterState = filterFunction("order", state, filde);
    } else if (filter === "Published") {
-      filterState = state.brands.sort((a, b) => {
-         if (a.brandStatusInfo === "Published") {
-            return -1;
-         } else {
-            return 0;
-         }
-      });
+      if (filde === "brands") {
+         filterState = filterByName(filter, state, "brandStatusInfo", filde);
+      } else {
+         // |FOCUS| add new filde in database to fildet the product using published
+         filterState = filterByName("Published", state, "brandStatusInfo", filde);
+      }
+   } else if (filter === "Out of stock") {
+      filterState = filterByName(filter, state, "stockStatus", filde);
    }
 
    return filterState;

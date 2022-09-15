@@ -560,6 +560,8 @@ const fetchUploadProducts = async function (req, res, next) {
       const totalDocuments = await productModel.countDocuments({});
       const fetchDoc = await productModel
          .find({})
+         .populate("category", { name: 1 })
+         .populate("brand", { name: 1 })
          .limit(DOCUMENT_LIMIT)
          .skip(DOCUMENT_LIMIT * page);
 

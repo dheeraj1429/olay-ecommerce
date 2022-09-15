@@ -23,6 +23,7 @@ const INITAL_STATE = {
    uploadProduct: null,
    uploadProductLoading: false,
    allProducts: null,
+   productFetchLoading: false,
    selectedItems: [],
 };
 
@@ -222,15 +223,24 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                productBrands: {
                   ...state.productBrands,
-                  brands: CampareFunction(action.payload.filter, state.productBrands),
+                  brands: CampareFunction(
+                     action.payload.filter,
+                     state.productBrands,
+                     "brands"
+                  ),
                },
             };
          } else if (action.payload.filde === "products") {
-            console.log(action.payload);
-
-            // |FOCUS|
             return {
                ...state,
+               allProducts: {
+                  ...state.allProducts,
+                  products: CampareFunction(
+                     action.payload.filter,
+                     state.allProducts,
+                     "products"
+                  ),
+               },
             };
          }
 

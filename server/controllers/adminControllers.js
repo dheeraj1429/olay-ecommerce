@@ -580,6 +580,23 @@ const fetchUploadProducts = async function (req, res, next) {
    }
 };
 
+const deleteAllProducts = async function (req, res, next) {
+   try {
+      const deleteProducts = await productModel.deleteMany({});
+
+      if (!!deleteProducts.deletedCount) {
+         return res.status(200).json({
+            success: true,
+            message: "All products delete",
+         });
+      } else {
+         erroResponse(res);
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -596,4 +613,5 @@ module.exports = {
    getProductBrands,
    uploadNewProduct,
    fetchUploadProducts,
+   deleteAllProducts,
 };

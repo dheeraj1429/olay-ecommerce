@@ -25,6 +25,7 @@ const INITAL_STATE = {
    allProducts: null,
    productFetchLoading: false,
    selectedItems: [],
+   deleteAllProductsStatus: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -307,6 +308,20 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             selectedItems: action.payload,
          };
+
+      case ACTION_TYPE.DELETE_ALL_PRODUCTS:
+         if (action.payload.success) {
+            return {
+               ...state,
+               allProducts: null,
+               deleteAllProductsStatus: action.payload,
+            };
+         } else {
+            return {
+               ...state,
+               deleteAllProductsStatus: action.payload,
+            };
+         }
 
       default:
          return {

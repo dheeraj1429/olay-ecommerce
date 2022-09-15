@@ -6,7 +6,12 @@ import MenuItem from "@mui/material/MenuItem";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsCategorys } from "../../Redux/Actions/adminAction";
 
-function ProductUploadFirstComponent({ inStock, ChangeHandler, state }) {
+function ProductUploadFirstComponent({
+   inStock,
+   ChangeHandler,
+   state,
+   productStatusInfo,
+}) {
    const productAllCategory = useSelector((state) => state.admin.productAllCategory);
    const dispatch = useDispatch();
 
@@ -45,7 +50,7 @@ function ProductUploadFirstComponent({ inStock, ChangeHandler, state }) {
                      onChange={ChangeHandler}
                   />
                </div>
-               <div>
+               <div className="space-right">
                   <TextField
                      id="outlined-basic"
                      name="salePrice"
@@ -55,6 +60,23 @@ function ProductUploadFirstComponent({ inStock, ChangeHandler, state }) {
                      value={state.salePrice}
                      onChange={ChangeHandler}
                   />
+               </div>
+               <div>
+                  <TextField
+                     id="outlined-select-currency"
+                     select
+                     label="Select"
+                     helperText="Please select your brand status"
+                     onChange={ChangeHandler}
+                     value={state.productStatusInfo}
+                     name="productStatusInfo"
+                  >
+                     {productStatusInfo.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                           {option.label}
+                        </MenuItem>
+                     ))}
+                  </TextField>
                </div>
             </upload.flexDiv>
             <TextField

@@ -309,3 +309,20 @@ export const fetchUploadProducts = function (page) {
       }
    };
 };
+
+export const deleteAllProducts = function () {
+   return async function (dispatch) {
+      try {
+         const deleteProducts = await axios.delete("/admin/delete-all-products", headers);
+
+         if (deleteAllProducts && deleteAllProducts?.data) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_ALL_PRODUCTS,
+               payload: deleteAllProducts && deleteAllProducts?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

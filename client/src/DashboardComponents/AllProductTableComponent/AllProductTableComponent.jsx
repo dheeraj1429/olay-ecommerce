@@ -11,6 +11,7 @@ import { FcOk } from "@react-icons/all-files/fc/FcOk";
 import { FcIcons8Cup } from "@react-icons/all-files/fc/FcIcons8Cup";
 import { FcHighPriority } from "@react-icons/all-files/fc/FcHighPriority";
 import { FcCurrencyExchange } from "@react-icons/all-files/fc/FcCurrencyExchange";
+import { deleteAllProducts } from "../../Redux/Actions/adminAction";
 
 const items = [
    { value: "", Option: "None" },
@@ -35,6 +36,7 @@ function AllProductTableComponent() {
             pageLink={link}
             field={"products"}
             items={items}
+            action={deleteAllProducts}
          />
          <AllProductsTableComponent />
          <TableFooterComponent state={allProducts} action={"products"} />

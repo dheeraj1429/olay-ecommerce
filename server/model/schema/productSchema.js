@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema({
    suggestedAge: { type: String, default: "Unsuggested" },
    brand: { type: mongoose.Types.ObjectId, ref: "productBrand" },
    createdAt: { type: Date, default: Date.now },
+   productStatusInfo: { type: String, default: "draft" },
 });
 
 const productModel = mongoose.model("product", productSchema);

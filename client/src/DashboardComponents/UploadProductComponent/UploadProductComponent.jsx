@@ -23,6 +23,12 @@ const inStock = [
    { value: "On backorder", label: "On backorder" },
 ];
 
+const brandStatus = [
+   { value: "Published", label: "Published" },
+   { value: "Draft", label: "Draft" },
+   { value: "Pending", label: "Pending" },
+];
+
 function UploadProductComponent() {
    const [Product, setProduct] = useState({
       name: "",
@@ -38,6 +44,7 @@ function UploadProductComponent() {
       productImage: "",
       suggestedAge: "",
       brand: "",
+      productStatusInfo: "Draft",
    });
 
    const dispatch = useDispatch();
@@ -90,6 +97,7 @@ function UploadProductComponent() {
          productImage,
          suggestedAge,
          brand,
+         productStatusInfo,
       } = Product;
 
       const formData = new FormData();
@@ -106,6 +114,7 @@ function UploadProductComponent() {
       checkTrueValues(formData, productImage, "productImage");
       checkTrueValues(formData, suggestedAge, "suggestedAge");
       checkTrueValues(formData, brand, "brand");
+      checkTrueValues(formData, productStatusInfo, "productStatusInfo");
 
       return formData;
    };
@@ -118,24 +127,6 @@ function UploadProductComponent() {
       } else {
          info("Product name and product price is required!!");
       }
-   };
-
-   const ClearHandler = function () {
-      setProduct({
-         name: "",
-         price: "",
-         salePrice: "",
-         discription: "",
-         category: "",
-         stockStatus: "",
-         weight: "",
-         length: "",
-         wide: "",
-         height: "",
-         productImage: "",
-         suggestedAge: "",
-         brand: "",
-      });
    };
 
    return (
@@ -153,6 +144,7 @@ function UploadProductComponent() {
                inStock={inStock}
                ChangeHandler={ChangeHandler}
                state={Product}
+               productStatusInfo={brandStatus}
             />
             <ProductUploadSecondComponent
                sugAge={sugAge}

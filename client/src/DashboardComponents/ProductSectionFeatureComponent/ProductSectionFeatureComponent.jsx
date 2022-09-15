@@ -39,7 +39,11 @@ function ProductSectionFeatureComponent({ state, pageLink, field, action, items 
       if (!!Filter && !!state && state.success && !!state[field].length) {
          dispatch(action());
       } else {
-         info("There is no product brands exists");
+         if (field === "brands") {
+            info("There is no product brands exists");
+         } else {
+            info("There is no product exists");
+         }
       }
    };
 

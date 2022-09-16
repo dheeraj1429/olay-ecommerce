@@ -1,13 +1,3 @@
-//======================================================
-//
-//  #####  ##  ##      ######  #####  #####     ####
-//  ##     ##  ##        ##    ##     ##  ##   ##
-//  #####  ##  ##        ##    #####  #####     ###
-//  ##     ##  ##        ##    ##     ##  ##      ##
-//  ##     ##  ######    ##    #####  ##   ##  ####
-//
-//======================================================
-
 const filterFunction = function (
    objectFilterFilde,
    state,
@@ -54,8 +44,7 @@ export const CampareFunction = function (filter, state, filde) {
       if (filde === "brands") {
          filterState = filterByName(filter, state, "brandStatusInfo", filde);
       } else {
-         // |FOCUS| add new filde in database to fildet the product using published
-         filterState = filterByName("Published", state, "brandStatusInfo", filde);
+         filterState = filterByName("Published", state, "productStatusInfo", filde);
       }
    } else if (filter === "Out of stock") {
       filterState = filterByName(filter, state, "stockStatus", filde);

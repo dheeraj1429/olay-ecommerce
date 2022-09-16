@@ -556,7 +556,7 @@ const fetchUploadProducts = async function (req, res, next) {
       /**
        * @DOCUMENT_LIMIT how to document we want the send back to the client
        */
-      const DOCUMENT_LIMIT = 10;
+      const DOCUMENT_LIMIT = 3;
       const totalDocuments = await productModel.countDocuments({});
       const fetchDoc = await productModel
          .find({})
@@ -597,6 +597,37 @@ const deleteAllProducts = async function (req, res, next) {
    }
 };
 
+/**
+ * @deleteSelectedProducts delete selected produsts from the database
+ */
+const deleteSelectedProducts = async function (req, res, next) {
+   try {
+      let deleteSelected;
+
+      if (!!req.body.length) {
+         for (let i = 0; i < req.body.length; i++) {
+            deleteSelected = await productModel.deleteOne({ _id: req.body[i] });
+         }
+
+         if (!!deleteSelected.deletedCount) {
+            return res.status(200).json({
+               success: true,
+               message: "Selected products remove from the database",
+            });
+         } else {
+            erroResponse(res);
+         }
+      } else {
+         return res.status(200).json({
+            success: false,
+            message: "Selected id is required!!",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -614,4 +645,5 @@ module.exports = {
    uploadNewProduct,
    fetchUploadProducts,
    deleteAllProducts,
+   deleteSelectedProducts,
 };

@@ -153,3 +153,17 @@ export const removeAllSelectedItems = function (data) {
       payload: data,
    };
 };
+
+export const removeAllSelctedIds = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_ALL_SELECTED_ID,
+      payload: data,
+   };
+};
+
+export const fetchLoadingProducts = function (data) {
+   return {
+      type: ACTION_TYPE.FETCH_LOADING_PRODUCTS,
+      payload: data,
+   };
+};

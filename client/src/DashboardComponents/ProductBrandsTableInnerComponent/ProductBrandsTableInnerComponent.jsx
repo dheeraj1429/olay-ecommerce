@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as table from "./ProductBrandsTableInnerComponent.style";
 import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
 import { VscClose } from "@react-icons/all-files/vsc/VscClose";
@@ -9,7 +9,7 @@ import CustombuttonComponent from "../../Components/CustombuttonComponent/Custom
 import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
 import { deleteOneProductBrand } from "../../Redux/Actions/adminAction";
 import { useDispatch } from "react-redux";
-import { selectedBrandProduct } from "../../Redux/Actions/appAction";
+import { removeAllSelctedIds, selectedBrandProduct } from "../../Redux/Actions/appAction";
 import { Link } from "react-router-dom";
 
 function ProductBrandsTableInnerComponent({ AllBrands, change }) {
@@ -22,6 +22,12 @@ function ProductBrandsTableInnerComponent({ AllBrands, change }) {
    const selectedBrand = function (el) {
       dispatch(selectedBrandProduct(el));
    };
+
+   useEffect(() => {
+      return () => {
+         dispatch(removeAllSelctedIds([]));
+      };
+   }, []);
 
    return (
       <>

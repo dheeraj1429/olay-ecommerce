@@ -26,6 +26,8 @@ const INITAL_STATE = {
    productFetchLoading: false,
    selectedItems: [],
    deleteAllProductsStatus: null,
+   deleteSelectedProductsInfo: [],
+   fetchProductsLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -287,6 +289,13 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             allProducts: action.payload,
+            fetchProductsLoading: false,
+         };
+
+      case ACTION_TYPE.FETCH_LOADING_PRODUCTS:
+         return {
+            ...state,
+            fetchProductsLoading: action.payload,
          };
 
       case ACTION_TYPE.SELECTED_ITEMS_LIMIT:
@@ -320,6 +329,32 @@ const adminReducer = function (state = INITAL_STATE, action) {
             return {
                ...state,
                deleteAllProductsStatus: action.payload,
+            };
+         }
+
+      case ACTION_TYPE.REMOVE_ALL_SELECTED_ID:
+         return {
+            ...state,
+            selectedItems: action.payload,
+         };
+
+      case ACTION_TYPE.DELETE_SELECTED_PRODUCTS:
+         if (action?.productsId) {
+            const setPayload = new Set(action.productsId);
+
+            return {
+               ...state,
+               allProducts: {
+                  ...state.allProducts,
+                  products: state.allProducts.products.filter(
+                     (el) => (el._id = !setPayload.has(el._id))
+                  ),
+               },
+            };
+         } else {
+            return {
+               ...state,
+               deleteSelectedProductsInfo: action.payload,
             };
          }
 

@@ -326,3 +326,30 @@ export const deleteAllProducts = function () {
       }
    };
 };
+
+export const deleteSelectedproducts = function (data) {
+   return async function (dispatch) {
+      try {
+         const deleteProducts = await axios.post(
+            "/admin/delete-selected-products",
+            data,
+            headers
+         );
+
+         if (deleteProducts && deleteProducts?.data && deleteProducts?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_SELECTED_PRODUCTS,
+               payload: deleteProducts && deleteProducts?.data,
+               productsId: data,
+            });
+         } else if (deleteProducts && deleteProducts?.data) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_SELECTED_PRODUCTS,
+               payload: deleteProducts && deleteProducts?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

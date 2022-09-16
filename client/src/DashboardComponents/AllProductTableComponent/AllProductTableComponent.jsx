@@ -18,7 +18,7 @@ const items = [
    { value: "Sort A - Z", Option: "Sort A - Z", icon: <FcAlphabeticalSortingAz /> },
    { value: "Sort Z - A", Option: "Sort Z - A", icon: <FcAlphabeticalSortingZa /> },
    // { value: "Sort by order", Option: "Sort by order", icon: <FcPaid /> },
-   // { value: "Published", Option: "Published", icon: <FcOk /> },
+   { value: "Published", Option: "Published", icon: <FcOk /> },
    { value: "Out of stock", Option: "Out of stock", icon: <FcHighPriority /> },
    // { value: "Sale", Option: "Sale", icon: <FcCurrencyExchange /> },
    { value: "Delete all", Option: "Delete all", icon: <FcIcons8Cup /> },

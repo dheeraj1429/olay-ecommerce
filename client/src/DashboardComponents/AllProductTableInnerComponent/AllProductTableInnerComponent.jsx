@@ -1,12 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as inner from "./AllProductTableInnerComponent.style";
 import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
 import { Checkbox } from "antd";
 import { FcSupport } from "@react-icons/all-files/fc/FcSupport";
 import { VscClose } from "@react-icons/all-files/vsc/VscClose";
 import backendConfigData from "../../backendConfig";
+import {
+   selectedItemLimit,
+   removeSelectedItems,
+   removeAllSelctedIds,
+} from "../../Redux/Actions/appAction";
+import { useDispatch } from "react-redux";
 
 function AllProductTableInnerComponent({ allProducts }) {
+   const dispatch = useDispatch();
+
+   const onChange = (e, elm) => {
+      let id = elm._id;
+
+      if (e.target.checked) {
+         dispatch(selectedItemLimit(id));
+      } else {
+         dispatch(removeSelectedItems(id));
+      }
+   };
+
+   useEffect(() => {
+      return () => {
+         dispatch(removeAllSelctedIds([]));
+      };
+   }, []);
+
    return (
       <>
          {!!allProducts && allProducts.success && allProducts.products.length
@@ -14,7 +38,7 @@ function AllProductTableInnerComponent({ allProducts }) {
                  <>
                     <inner.tr>
                        <inner.td className="checkbox">
-                          <Checkbox onChange={""} />
+                          <Checkbox onChange={(e) => onChange(e, el)} />
                        </inner.td>
                        <inner.td>
                           <FcSupport />
@@ -68,6 +92,13 @@ function AllProductTableInnerComponent({ allProducts }) {
                                   return <p>{`${date}`}</p>;
                                })()
                              : null}
+                       </inner.td>
+                       <inner.td>
+                          {el?.productStatusInfo ? (
+                             <div className={el.productStatusInfo}>
+                                {el.productStatusInfo}
+                             </div>
+                          ) : null}
                        </inner.td>
                     </inner.tr>
                  </>

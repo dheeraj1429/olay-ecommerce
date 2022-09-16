@@ -21,11 +21,12 @@ const row = [
    { elm: "Brand", value: "Brand" },
    { elm: "Category", value: "Category" },
    { elm: "CreatedAt", value: "CreatedAt" },
+   { elm: "Product status", value: "Product status" },
 ];
 
 function AllProductsTableComponent() {
    const allProducts = useSelector((state) => state.admin.allProducts);
-   const productFetchLoading = useSelector((state) => state.admin.productFetchLoading);
+   const fetchProductsLoading = useSelector((state) => state.admin.fetchProductsLoading);
 
    return (
       <tb.div>
@@ -40,7 +41,7 @@ function AllProductsTableComponent() {
 
                   <AllProductTableInnerComponent
                      allProducts={allProducts}
-                     isLoading={productFetchLoading}
+                     isLoading={fetchProductsLoading}
                   />
                </table>
             </tb.tableDiv>

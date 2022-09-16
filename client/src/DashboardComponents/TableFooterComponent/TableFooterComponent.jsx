@@ -9,10 +9,13 @@ import { useSelector, useDispatch } from "react-redux";
 import {
    fetchAllProductBrand,
    deleteMultiSelectedProductBrand,
+   deleteSelectedproducts,
+   fetchUploadProducts,
 } from "../../Redux/Actions/adminAction";
 import {
    fetchBrandProductLoading,
    removeAllSelectedItems,
+   fetchLoadingProducts,
 } from "../../Redux/Actions/appAction";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
@@ -23,30 +26,40 @@ function TableFooterComponent({ action, state }) {
 
    const ChnageNext = function () {
       if (Limit >= 0 && Limit < state.totalPages) {
+         setLimit((prev) => prev + 1);
          if (action === "brands") {
-            setLimit((prev) => prev + 1);
             dispatch(fetchBrandProductLoading(true));
+         } else if (action === "brands") {
+            dispatch(fetchLoadingProducts(true));
          }
       }
    };
 
    const ChangePrev = function () {
+      setLimit((prev) => prev - 1);
       if (Limit > 0) {
          if (action === "brands") {
-            setLimit((prev) => prev - 1);
             dispatch(fetchBrandProductLoading(true));
+         } else if (action === "products") {
+            dispatch(fetchLoadingProducts(true));
          }
       }
    };
 
    const confirm = function () {
-      dispatch(deleteMultiSelectedProductBrand(selectedItems));
+      if (action === "brands") {
+         dispatch(deleteMultiSelectedProductBrand(selectedItems));
+      } else if (action === "products") {
+         dispatch(deleteSelectedproducts(selectedItems));
+      }
       dispatch(removeAllSelectedItems([]));
    };
 
    useEffect(() => {
       if (action === "brands") {
          dispatch(fetchAllProductBrand(Limit));
+      } else if (action === "products") {
+         dispatch(fetchUploadProducts(Limit));
       }
    }, [Limit]);
 

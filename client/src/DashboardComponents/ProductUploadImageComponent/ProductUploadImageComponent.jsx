@@ -11,6 +11,7 @@ function ProductUploadImageComponent({
    Clear,
    selectedPrevImage,
    size,
+   filde,
 }) {
    const image = useRef(null);
    const [Src, setSrc] = useState("");
@@ -56,7 +57,7 @@ function ProductUploadImageComponent({
                   ) : !!selectedPrevImage ? (
                      <img
                         crossorigin="anonymous"
-                        src={`${backendConfigData.URL}brandImages/${selectedPrevImage}`}
+                        src={`${backendConfigData.URL}${filde}/${selectedPrevImage}`}
                      />
                   ) : null}
                </div>

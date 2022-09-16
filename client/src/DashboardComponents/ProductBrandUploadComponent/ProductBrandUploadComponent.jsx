@@ -175,14 +175,14 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
    useEffect(() => {
       if (selectedBrand && selectedBrand.success) {
          setBrand({
-            name: selectedBrand.selectedBrand.name,
-            description: selectedBrand.selectedBrand.description,
-            website: selectedBrand.selectedBrand.website,
-            order: selectedBrand.selectedBrand.order,
-            brandStatusInfo: selectedBrand.selectedBrand.brandStatusInfo,
-            brandIcon: selectedBrand.selectedBrand.brandIcon,
-            SEOTitle: selectedBrand.selectedBrand.SEOTitle,
-            SEODescription: selectedBrand.selectedBrand.SEODescription,
+            name: selectedBrand.selectedBrand.name || "",
+            description: selectedBrand.selectedBrand.description || "",
+            website: selectedBrand.selectedBrand.website || "",
+            order: selectedBrand.selectedBrand.order || "",
+            brandStatusInfo: selectedBrand.selectedBrand.brandStatusInfo || "",
+            brandIcon: selectedBrand.selectedBrand.brandIcon || "",
+            SEOTitle: selectedBrand.selectedBrand.SEOTitle || "",
+            SEODescription: selectedBrand.selectedBrand.SEODescription || "",
          });
       }
    }, [selectedBrand]);
@@ -299,6 +299,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
                         onChange={ImageGrabHandler}
                         Heading={"Product barnd image"}
                         Clear={Clear}
+                        filde={"brandImages"}
                      />
                   </Box>
                   <brand.half>

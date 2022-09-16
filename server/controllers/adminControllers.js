@@ -451,23 +451,6 @@ const deleteAllProductBrand = async function (req, res, next) {
    }
 };
 
-// const fetchProductBrandItems = async function (req, res, next) {
-//    try {
-//       const items = req.params.id;
-
-//       if (!items) {
-//          return res.status(200).json({
-//             success: false,
-//             message: "number ob brand items is required",
-//          });
-//       }
-
-//       await getAllProductBrand(req, res, next, items);
-//    } catch (err) {
-//       console.log(err);
-//    }
-// };
-
 const getProductBrands = async function (req, res, next) {
    try {
       const fetchProductBrandItems = await productBrandModel.find({}, { name: 1 });
@@ -628,6 +611,110 @@ const deleteSelectedProducts = async function (req, res, next) {
    }
 };
 
+/**
+ * @deleteOneProduct delete one selected products from the database
+ * @return if the products is successfully deleted ten send back the true response || send false response.
+ */
+const deleteOneProduct = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+
+      if (!id) {
+         return res.status(200).json({
+            success: false,
+            message: "product id is required!",
+         });
+      }
+
+      const deleteProduct = await productModel.deleteOne({ _id: id });
+
+      if (!!deleteProduct.deletedCount) {
+         return res.status(200).json({
+            success: true,
+            message: "Product removed from the database",
+         });
+      } else {
+         erroResponse(res);
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const fetchSingleProduct = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+
+      if (!id) {
+         return res.status(200).json({
+            success: false,
+            message: "product id is required!",
+         });
+      }
+
+      const findSingleProduct = await productModel
+         .findOne({ _id: id })
+         .populate("category", { name: 1 })
+         .populate("brand", { name: 1 });
+
+      if (findSingleProduct) {
+         return res.status(200).json({
+            success: true,
+            product: findSingleProduct,
+         });
+      } else {
+         erroResponse(res);
+      }
+
+      console.log(id);
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const editSingleProduct = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+      const file = req.files[0];
+
+      if (!id) {
+         return res.status(200).json({
+            success: false,
+            message: "Product id is required!",
+         });
+      }
+
+      const updateObjectInfo = { ...req.body };
+
+      // if there is the file uploded then upload new file name and store into the database, but if there is no image updated then update only the new information.
+      if (file?.originalname) {
+         updateObjectInfo.productImage = file.originalname;
+      }
+
+      const updateProductInfo = await productModel.updateOne(
+         { _id: id },
+         { $set: updateObjectInfo }
+      );
+
+      // if the database information is updated then return the status of the products
+      if (!!updateProductInfo.modifiedCount) {
+         return res.status(200).json({
+            success: true,
+            message: "Product update",
+         });
+      } else {
+         return res.status(200).json({
+            success: true,
+            message: "All fileds are the same. Already updated",
+         });
+      }
+
+      console.log(updateProductInfo);
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -640,10 +727,12 @@ module.exports = {
    getSelectedBrandProduct,
    editSelectedBrand,
    deleteAllProductBrand,
-   // fetchProductBrandItems,
    getProductBrands,
    uploadNewProduct,
    fetchUploadProducts,
    deleteAllProducts,
    deleteSelectedProducts,
+   deleteOneProduct,
+   fetchSingleProduct,
+   editSingleProduct,
 };

@@ -30,7 +30,7 @@ function AllProductsTableComponent() {
 
    return (
       <tb.div>
-         {!!allProducts && allProducts.success && allProducts.products ? (
+         {!!allProducts && allProducts.success && !!allProducts?.products.length ? (
             <tb.tableDiv>
                <table>
                   <tr>
@@ -46,7 +46,9 @@ function AllProductsTableComponent() {
                </table>
             </tb.tableDiv>
          ) : (
-            <p>No Products</p>
+            <div className="center_div">
+               <p>No Products</p>
+            </div>
          )}
       </tb.div>
    );

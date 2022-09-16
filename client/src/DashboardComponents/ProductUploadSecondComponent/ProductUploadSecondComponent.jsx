@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as upload from "../UploadProductComponent/UploadProductComponent.style";
 import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
 import Box from "@mui/material/Box";
@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductBrandItemsInfo } from "../../Redux/Actions/adminAction";
+import { useParams } from "react-router";
 
 function ProductUploadSecondComponent({
    sugAge,
@@ -15,16 +16,35 @@ function ProductUploadSecondComponent({
    ImageGrabHandler,
 }) {
    const allProductBrands = useSelector((state) => state.admin.allProductBrands);
+   const singleProductFetch = useSelector((state) => state.admin.singleProductFetch);
+
    const dispatch = useDispatch();
+   const param = useParams();
+   const [Image, setImage] = useState("");
 
    useEffect(() => {
       dispatch(fetchProductBrandItemsInfo());
    }, []);
 
+   useEffect(() => {
+      if (param?.id && !!singleProductFetch && singleProductFetch.success) {
+         setImage(singleProductFetch.product.productImage);
+      }
+
+      return () => {
+         setImage("");
+      };
+   }, [singleProductFetch]);
+
    return (
       <div className="padding_div">
          <HeadingComponent cl="sm_heading" Heading={"Product Image"} />
-         <ProductUploadImageComponent size={"big"} onChange={ImageGrabHandler} />
+         <ProductUploadImageComponent
+            size={"big"}
+            onChange={ImageGrabHandler}
+            selectedPrevImage={Image}
+            filde={"productImages"}
+         />
          <upload.marginDiv>
             <Box
                component="form"

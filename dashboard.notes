@@ -73,8 +73,8 @@ BUGS: -> [fixed]
 -----------------------------------------------------------------------------------
 Fri Sep 16 2022 09:55:08 GMT+0530 (India Standard Time)
 
+                        single product delete [done]
+                        selected product delete [done]
+                        pagination feature [done]
                         product edit feature [panding]
-                        single product delete [panding]
-                        selected product delete [panding]
-                        pagination feature [panding]
 -----------------------------------------------------------------------------------

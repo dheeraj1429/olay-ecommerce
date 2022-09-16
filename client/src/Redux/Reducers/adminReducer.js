@@ -28,6 +28,10 @@ const INITAL_STATE = {
    deleteAllProductsStatus: null,
    deleteSelectedProductsInfo: [],
    fetchProductsLoading: false,
+   productDeleteStatus: null,
+   productEditLoading: false,
+   singleProductFetch: null,
+   productEditInfo: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -357,6 +361,55 @@ const adminReducer = function (state = INITAL_STATE, action) {
                deleteSelectedProductsInfo: action.payload,
             };
          }
+
+      case ACTION_TYPE.DELETE_ONE_PRODUCTS:
+         let filterProduct;
+
+         const checkIsDeleteFromDb = function (state, id) {
+            filterProduct = state.allProducts.products.filter((el) => el._id !== id);
+
+            return filterProduct;
+         };
+
+         if (action?.productsId) {
+            return {
+               ...state,
+               allProducts: {
+                  ...state.allProducts,
+                  products: checkIsDeleteFromDb(state, action.productsId),
+               },
+            };
+         } else {
+            return {
+               ...state,
+               productDeleteStatus: action.payload,
+            };
+         }
+
+      case ACTION_TYPE.FETCH_SINGLE_PRODUCT:
+         return {
+            ...state,
+            singleProductFetch: action.payload,
+         };
+
+      case ACTION_TYPE.EDIT_SINGLE_PRODUCT:
+         return {
+            ...state,
+            productEditInfo: action.payload,
+            productEditLoading: false,
+         };
+
+      case ACTION_TYPE.REMOVE_PRODUCT_EDIT_INFO:
+         return {
+            ...state,
+            productEditInfo: action.payload,
+         };
+
+      case ACTION_TYPE.EDIT_SINGLE_PRODUCT_LOADING:
+         return {
+            ...state,
+            productEditLoading: action.payload,
+         };
 
       default:
          return {

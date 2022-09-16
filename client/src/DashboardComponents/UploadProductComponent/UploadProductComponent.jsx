@@ -5,10 +5,20 @@ import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent
 import ProductUploadFirstComponent from "../ProductUploadFirstComponent/ProductUploadFirstComponent";
 import ProductUploadSecondComponent from "../ProductUploadSecondComponent/ProductUploadSecondComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { uplodNewProduct } from "../../Redux/Actions/adminAction";
+import {
+   uplodNewProduct,
+   fetchSingleProduct,
+   editSingleProduct,
+} from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
-import { removeUploadProductInfo, uploadLoading } from "../../Redux/Actions/appAction";
+import {
+   removeUploadProductInfo,
+   uploadLoading,
+   editSingleProductLoading,
+   removeEditProductInfo,
+} from "../../Redux/Actions/appAction";
+import { useParams } from "react-router";
 
 const sugAge = [
    { value: "18 - 25", label: "18 - 25" },
@@ -47,9 +57,13 @@ function UploadProductComponent() {
       productStatusInfo: "Draft",
    });
 
+   const param = useParams();
    const dispatch = useDispatch();
    const uploadProduct = useSelector((state) => state.admin.uploadProduct);
    const uploadProductLoading = useSelector((state) => state.admin.uploadProductLoading);
+   const productEditLoading = useSelector((state) => state.admin.productEditLoading);
+   const singleProductFetch = useSelector((state) => state.admin.singleProductFetch);
+   const productEditInfo = useSelector((state) => state.admin.productEditInfo);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -63,14 +77,6 @@ function UploadProductComponent() {
       setProduct({ ...Product, productImage: data });
    };
 
-   const checkTrueValues = function (formData, string, filde) {
-      if (!!string) {
-         formData.append(filde, string);
-      }
-
-      return formData;
-   };
-
    const info = (msg) => {
       message.info(msg);
    };
@@ -80,41 +86,64 @@ function UploadProductComponent() {
          info(uploadProduct.message);
          dispatch(removeUploadProductInfo(null));
       }
-   }, [uploadProduct]);
 
-   const createFormDateHandler = function () {
-      const {
-         name,
-         price,
-         salePrice,
-         discription,
-         category,
-         stockStatus,
-         weight,
-         length,
-         wide,
-         height,
-         productImage,
-         suggestedAge,
-         brand,
-         productStatusInfo,
-      } = Product;
+      if (!!productEditInfo) {
+         info(productEditInfo.message);
+         dispatch(removeEditProductInfo(null));
+      }
+   }, [uploadProduct, productEditInfo]);
 
+   useEffect(() => {
+      if (param?.id) {
+         dispatch(fetchSingleProduct(param.id));
+      }
+   }, [param.id]);
+
+   useEffect(() => {
+      if (param && param?.id && !!singleProductFetch && singleProductFetch.success) {
+         setProduct({
+            ...Product,
+            name: singleProductFetch.product?.name || "",
+            price: singleProductFetch.product?.price || "",
+            salePrice: singleProductFetch.product?.salePrice || "",
+            discription: singleProductFetch.product?.discription || "",
+            category: singleProductFetch.product?.category?._id || "",
+            stockStatus: singleProductFetch.product?.stockStatus || "",
+            weight: singleProductFetch.product?.weight || "",
+            length: singleProductFetch.product?.length || "",
+            wide: singleProductFetch.product?.wide || "",
+            height: singleProductFetch.product?.height || "",
+            suggestedAge: singleProductFetch.product?.suggestedAge || "",
+            brand: singleProductFetch.product?.brand?._id || "",
+            productStatusInfo: singleProductFetch.product?.productStatusInfo || "Draft",
+         });
+      }
+   }, [singleProductFetch]);
+
+   const checkTrueValues = function (formData, string, filde) {
+      if (!!string) {
+         formData.append(filde, string);
+      }
+
+      return formData;
+   };
+
+   const createFormDateHandler = function (id) {
       const formData = new FormData();
-      checkTrueValues(formData, name, "name");
-      checkTrueValues(formData, price, "price");
-      checkTrueValues(formData, salePrice, "salePrice");
-      checkTrueValues(formData, discription, "discription");
-      checkTrueValues(formData, category, "category");
-      checkTrueValues(formData, stockStatus, "stockStatus");
-      checkTrueValues(formData, weight, "weight");
-      checkTrueValues(formData, length, "length");
-      checkTrueValues(formData, wide, "wide");
-      checkTrueValues(formData, height, "height");
-      checkTrueValues(formData, productImage, "productImage");
-      checkTrueValues(formData, suggestedAge, "suggestedAge");
-      checkTrueValues(formData, brand, "brand");
-      checkTrueValues(formData, productStatusInfo, "productStatusInfo");
+      checkTrueValues(formData, Product.name, "name");
+      checkTrueValues(formData, Product.price, "price");
+      checkTrueValues(formData, Product.salePrice, "salePrice");
+      checkTrueValues(formData, Product.discription, "discription");
+      checkTrueValues(formData, Product.category, "category");
+      checkTrueValues(formData, Product.stockStatus, "stockStatus");
+      checkTrueValues(formData, Product.weight, "weight");
+      checkTrueValues(formData, Product.length, "length");
+      checkTrueValues(formData, Product.wide, "wide");
+      checkTrueValues(formData, Product.height, "height");
+      checkTrueValues(formData, Product.productImage, "productImage");
+      checkTrueValues(formData, Product.suggestedAge, "suggestedAge");
+      checkTrueValues(formData, Product.brand, "brand");
+      checkTrueValues(formData, Product.productStatusInfo, "productStatusInfo");
 
       return formData;
    };
@@ -129,12 +158,22 @@ function UploadProductComponent() {
       }
    };
 
+   const updateHandler = function () {
+      if (param?.id) {
+         const formData = createFormDateHandler();
+         dispatch(editSingleProduct(formData, param.id));
+         dispatch(editSingleProductLoading(true));
+      } else {
+         throw Error("Id is reuqired!");
+      }
+   };
+
    return (
       <upload.div>
          <DashboardNavbarComponent />
          <upload.paddingDiv>
             <HeadingComponent
-               Heading={"Upload Product"}
+               Heading={param?.id ? "Edit product" : "Upload Product"}
                subHeading={
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
                }
@@ -156,10 +195,10 @@ function UploadProductComponent() {
             <div className="margin-left">
                <upload.flex>
                   <CustombuttonComponent
-                     innerText={"Save"}
+                     innerText={param?.id ? "Update" : "Save"}
                      btnCl={"category_upload"}
-                     onClick={SendDataHandler}
-                     isLoading={uploadProductLoading}
+                     onClick={param?.id ? updateHandler : SendDataHandler}
+                     isLoading={!param?.id ? uploadProductLoading : productEditLoading}
                   />
                </upload.flex>
             </div>

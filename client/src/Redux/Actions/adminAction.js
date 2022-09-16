@@ -315,10 +315,10 @@ export const deleteAllProducts = function () {
       try {
          const deleteProducts = await axios.delete("/admin/delete-all-products", headers);
 
-         if (deleteAllProducts && deleteAllProducts?.data) {
+         if (deleteProducts && deleteProducts?.data) {
             dispatch({
                type: ACTION_TYPE.DELETE_ALL_PRODUCTS,
-               payload: deleteAllProducts && deleteAllProducts?.data,
+               payload: deleteProducts && deleteProducts?.data,
             });
          }
       } catch (err) {
@@ -346,6 +346,77 @@ export const deleteSelectedproducts = function (data) {
             dispatch({
                type: ACTION_TYPE.DELETE_SELECTED_PRODUCTS,
                payload: deleteProducts && deleteProducts?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteOneProduct = function (id) {
+   return async function (dispatch) {
+      try {
+         const deleteOneProducts = await axios.delete(
+            `/admin/delete-one-product/${id}`,
+            Headers
+         );
+
+         if (
+            deleteOneProducts &&
+            deleteOneProducts?.data &&
+            deleteOneProducts?.data?.success
+         ) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_ONE_PRODUCTS,
+               payload: deleteOneProducts && deleteOneProducts?.data,
+               productsId: id,
+            });
+         } else {
+            dispatch({
+               type: ACTION_TYPE.DELETE_ONE_PRODUCTS,
+               payload: deleteOneProducts && deleteOneProducts?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const fetchSingleProduct = function (id) {
+   return async function (dispatch) {
+      try {
+         const singleProduct = await axios.get(
+            `/admin/get-single-product/${id}`,
+            headers
+         );
+
+         if (singleProduct && singleProduct?.data) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_SINGLE_PRODUCT,
+               payload: singleProduct && singleProduct?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const editSingleProduct = function (data, id) {
+   return async function (dispatch) {
+      try {
+         const editSingleProduct = await axios.patch(
+            `/admin/eidt-single-product/${id}`,
+            data,
+            headers
+         );
+
+         if (editSingleProduct && editSingleProduct?.data) {
+            dispatch({
+               type: ACTION_TYPE.EDIT_SINGLE_PRODUCT,
+               payload: editSingleProduct && editSingleProduct?.data,
             });
          }
       } catch (err) {

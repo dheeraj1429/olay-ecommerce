@@ -167,3 +167,17 @@ export const fetchLoadingProducts = function (data) {
       payload: data,
    };
 };
+
+export const editSingleProductLoading = function (data) {
+   return {
+      type: ACTION_TYPE.EDIT_SINGLE_PRODUCT_LOADING,
+      payload: data,
+   };
+};
+
+export const removeEditProductInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_PRODUCT_EDIT_INFO,
+      payload: data,
+   };
+};

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as inner from "./AllProductTableInnerComponent.style";
 import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
 import { Checkbox } from "antd";
-import { FcSupport } from "@react-icons/all-files/fc/FcSupport";
+import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
 import { VscClose } from "@react-icons/all-files/vsc/VscClose";
 import backendConfigData from "../../backendConfig";
 import {
@@ -11,6 +11,9 @@ import {
    removeAllSelctedIds,
 } from "../../Redux/Actions/appAction";
 import { useDispatch } from "react-redux";
+import { Popconfirm } from "antd";
+import { deleteOneProduct } from "../../Redux/Actions/adminAction";
+import { Link } from "react-router-dom";
 
 function AllProductTableInnerComponent({ allProducts }) {
    const dispatch = useDispatch();
@@ -23,6 +26,10 @@ function AllProductTableInnerComponent({ allProducts }) {
       } else {
          dispatch(removeSelectedItems(id));
       }
+   };
+
+   const confirm = (id) => {
+      dispatch(deleteOneProduct(id));
    };
 
    useEffect(() => {
@@ -41,10 +48,19 @@ function AllProductTableInnerComponent({ allProducts }) {
                           <Checkbox onChange={(e) => onChange(e, el)} />
                        </inner.td>
                        <inner.td>
-                          <FcSupport />
+                          <Link to={`/dashboard/product/edit/${el._id}`}>
+                             <FiEdit2 />
+                          </Link>
                        </inner.td>
                        <inner.td>
-                          <VscClose />
+                          <Popconfirm
+                             title="Are you sure to delete this product?"
+                             onConfirm={() => confirm(el._id)}
+                             okText="Yes"
+                             cancelText="No"
+                          >
+                             <VscClose />
+                          </Popconfirm>
                        </inner.td>
                        <inner.td>
                           <div className="product_image_prv">

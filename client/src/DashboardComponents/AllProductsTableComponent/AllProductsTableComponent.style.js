@@ -2,6 +2,16 @@ import styled from "styled-components";
 
 export const div = styled.div`
    padding: 1rem;
+
+   .center_div {
+      width: 100%;
+      text-align: center;
+
+      p {
+         font-size: 20px;
+         color: var(--smooth-light-color);
+      }
+   }
 `;
 
 export const tableDiv = styled.div`

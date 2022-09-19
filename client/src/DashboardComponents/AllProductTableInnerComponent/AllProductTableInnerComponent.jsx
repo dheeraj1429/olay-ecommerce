@@ -66,7 +66,7 @@ function AllProductTableInnerComponent({ allProducts }) {
                           <div className="product_image_prv">
                              <img
                                 crossOrigin="anonymous"
-                                src={`${backendConfigData.URL}productImages/${el.productImage}`}
+                                src={`${backendConfigData.URL}productImagesCompress/${el.productImage}`}
                                 alt=""
                              />
                           </div>

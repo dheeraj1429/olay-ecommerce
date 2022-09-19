@@ -63,7 +63,7 @@ function ProductBrandsTableInnerComponent({ AllBrands, change }) {
                            crossorigin="anonymous"
                            src={
                               !!el.brandIcon
-                                 ? `${backendConfigData.URL}brandImages/${el.brandIcon}`
+                                 ? `${backendConfigData.URL}brandImagesCompress/${el.brandIcon}`
                                  : null
                            }
                         />

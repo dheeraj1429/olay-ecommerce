@@ -11,11 +11,13 @@ import {
    deleteMultiSelectedProductBrand,
    deleteSelectedproducts,
    fetchUploadProducts,
+   getProductTags,
 } from "../../Redux/Actions/adminAction";
 import {
    fetchBrandProductLoading,
    removeAllSelectedItems,
    fetchLoadingProducts,
+   productTagsFetchLoading,
 } from "../../Redux/Actions/appAction";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
@@ -31,6 +33,8 @@ function TableFooterComponent({ action, state }) {
             dispatch(fetchBrandProductLoading(true));
          } else if (action === "brands") {
             dispatch(fetchLoadingProducts(true));
+         } else if (action === "tags") {
+            dispatch(productTagsFetchLoading(true));
          }
       }
    };
@@ -42,6 +46,8 @@ function TableFooterComponent({ action, state }) {
             dispatch(fetchBrandProductLoading(true));
          } else if (action === "products") {
             dispatch(fetchLoadingProducts(true));
+         } else if (action === "tags") {
+            dispatch(productTagsFetchLoading(true));
          }
       }
    };
@@ -60,6 +66,8 @@ function TableFooterComponent({ action, state }) {
          dispatch(fetchAllProductBrand(Limit));
       } else if (action === "products") {
          dispatch(fetchUploadProducts(Limit));
+      } else if (action === "tags") {
+         dispatch(getProductTags(Limit));
       }
    }, [Limit]);
 

@@ -46,5 +46,11 @@ route.post("/delete-selected-products", adminController.deleteSelectedProducts);
 route.delete("/delete-one-product/:id", adminController.deleteOneProduct);
 route.get("/get-single-product/:id", adminController.fetchSingleProduct);
 route.patch("/eidt-single-product/:id", upload, adminController.editSingleProduct);
+route.post("/save-new-product-tag", adminController.insertNewProductTag);
+route.get("/get-all-product-tags", adminController.getAllProductTags);
+route.delete("/delete-all-products-tags", adminController.deleteAllProductTags);
+route.delete("/delete-single-product-tags/:id", adminController.deleteSelectedTag);
+route.get("/get-selected-product-tag/:id", adminController.getSelectedProductTag);
+route.patch("/update-product-tag", adminController.udpateProductTag);
 
 module.exports = route;

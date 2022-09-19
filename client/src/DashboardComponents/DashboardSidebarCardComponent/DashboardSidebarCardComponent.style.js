@@ -4,14 +4,14 @@ export const div = styled.div`
    width: 100%;
    padding: 0.5rem 1rem;
    border-radius: 8px;
-   height: ${(props) => (props.ShowDrop ? "auto" : "auto")};
-   transition: all 0.3s ease;
-   /* border: 1px solid var(--spec-10-percent-layer); */
+   max-height: ${(props) => (!props.ShowDrop ? "38px" : "500px")};
    position: relative;
    margin: 0.2rem 0;
-   border: 1px solid transparent;
+   /* border: 1px solid transparent; */
+   transition: all 0.3s ease-out;
+   overflow: hidden;
 
-   &:hover {
+   /* &:hover {
       border: 1px solid var(--icon-cl);
    }
 
@@ -19,7 +19,7 @@ export const div = styled.div`
       visibility: visible;
       opacity: 1;
       right: -210px;
-   }
+   } */
 
    svg {
       font-size: 16px;
@@ -55,16 +55,16 @@ export const iconDiv = styled.div`
    align-items: center;
 `;
 
-export const dropDownItems = styled.div`
+export const dropDownItems = styled.ul`
    width: 200px;
    /* background-color: var(--main-cl); */
    border-radius: 8px;
-   right: -250px;
+   /* right: -250px; */
    margin-top: 0.5rem;
-   opacity: 0;
-   visibility: hidden;
-   position: absolute;
+   /* opacity: 0; */
+   /* visibility: hidden; */
+   /* position: absolute; */
    transition: all 0.3s ease;
-   top: -10px;
+   /* top: -10px; */
    z-index: 100;
 `;

@@ -11,7 +11,10 @@ import {
 } from "../../Redux/Actions/appAction";
 import { useDispatch, useSelector } from "react-redux";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { updateProductCategory, deleteSelectedCategory } from "../../Redux/Actions/adminAction";
+import {
+   updateProductCategory,
+   deleteSelectedCategory,
+} from "../../Redux/Actions/adminAction";
 import { message } from "antd";
 
 function EditProductCategoryInnerComponent() {
@@ -75,7 +78,12 @@ function EditProductCategoryInnerComponent() {
 
    const CategoryDeleteHandler = function () {
       if (selectedCategory) {
-         dispatch(deleteSelectedCategory(selectedCategory._id));
+         dispatch(
+            deleteSelectedCategory({
+               id: selectedCategory._id,
+               name: selectedCategory.name,
+            })
+         );
       }
    };
 

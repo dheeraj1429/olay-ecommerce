@@ -14,6 +14,9 @@ import ProductBrandsComponent from "./DashboardComponents/ProductBrandsComponent
 import ProductBrandEditComponent from "./DashboardComponents/ProductBrandEditComponent/ProductBrandEditComponent";
 import AllProductComponent from "./DashboardComponents/AllProductComponent/AllProductComponent";
 import ProductEditComponent from "./DashboardComponents/ProductEditComponent/ProductEditComponent";
+import ProductTagsComponent from "./DashboardComponents/ProductTagsComponent/ProductTagsComponent";
+import AllProductsTagsComponent from "./DashboardComponents/AllProductsTagsComponent/AllProductsTagsComponent";
+import AllProductTagEditComponent from "./DashboardComponents/AllProductTagEditComponent/AllProductTagEditComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -53,6 +56,12 @@ function App() {
                <Route
                   path="/dashboard/product/edit/:id"
                   element={<ProductEditComponent />}
+               />
+               <Route path="product-tags" element={<AllProductsTagsComponent />} />
+               <Route path="insert/new-product-tags" element={<ProductTagsComponent />} />
+               <Route
+                  path="product-tag/edit/:id"
+                  element={<AllProductTagEditComponent />}
                />
             </Route>
             <Route path="*" element={<PageNotFound />} />

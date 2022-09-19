@@ -32,6 +32,13 @@ const INITAL_STATE = {
    productEditLoading: false,
    singleProductFetch: null,
    productEditInfo: null,
+   insertNewProductTag: null,
+   productTagLoding: false,
+   allProductsTags: null,
+   fetchProductsTags: false,
+   selectedProductTag: null,
+   updateProductTagLoading: false,
+   editProductEdit: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -249,6 +256,18 @@ const adminReducer = function (state = INITAL_STATE, action) {
                   ),
                },
             };
+         } else if (action.payload.filde === "tags") {
+            return {
+               ...state,
+               allProductsTags: {
+                  ...state.allProductsTags,
+                  tags: CampareFunction(
+                     action.payload.filter,
+                     state.allProductsTags,
+                     "tags"
+                  ),
+               },
+            };
          }
 
       case ACTION_TYPE.DELTE_ALL_BRAND:
@@ -409,6 +428,78 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             productEditLoading: action.payload,
+         };
+
+      case ACTION_TYPE.INSERT_NEW_PRODUCT_TAG:
+         return {
+            ...state,
+            insertNewProductTag: action.payload,
+            productTagLoding: false,
+         };
+
+      case ACTION_TYPE.PRODUCT_TAG_INSERT_LOADING:
+         return {
+            ...state,
+            productTagLoding: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_PRODUCT_TAG_INFO:
+         return {
+            ...state,
+            insertNewProductTag: action.payload,
+         };
+
+      case ACTION_TYPE.GET_ALL_PRODUCTS_TAGS:
+         return {
+            ...state,
+            allProductsTags: action.payload,
+            fetchProductsTags: false,
+         };
+
+      case ACTION_TYPE.PRODUCT_TAGS_LOADING:
+         return {
+            ...state,
+            fetchProductsTags: action.payload,
+         };
+
+      case ACTION_TYPE.DELETE_ALL_TAGS:
+         return {
+            ...state,
+            allProductsTags: { ...state.allProductsTags, tags: [] },
+         };
+
+      case ACTION_TYPE.DELETE_SELECTED_PRODUCT_TAG:
+         return {
+            ...state,
+            allProductsTags: {
+               ...state.allProductsTags,
+               tags: state.allProductsTags.tags.filter((el) => el._id !== action.payload),
+            },
+         };
+
+      case ACTION_TYPE.FETCH_SELECTED_PRODUCT_TAG:
+         return {
+            ...state,
+            selectedProductTag: action.payload,
+         };
+
+      case ACTION_TYPE.EDIT_PRODUCT_TAG:
+         return {
+            ...state,
+            editProductEdit: action.payload,
+            updateProductTagLoading: false,
+         };
+
+      case ACTION_TYPE.EDIT_PRODUCT_TAG_LOADING:
+         return {
+            ...state,
+            updateProductTagLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_PRODUCT_TAG_EDTI_INFO:
+         return {
+            ...state,
+            editProductEdit: action.payload,
          };
 
       default:

@@ -1,15 +1,27 @@
 import styled from "styled-components";
 
-export const main = styled.div`
+export const main = styled.li`
    a {
       text-decoration: none;
       color: var(--light-gray);
    }
    margin: 0.5rem 0;
+   margin-top: 0.8rem;
 
    svg {
       font-size: 15px;
-      fill: var(--light-gray);
+      fill: var(--main-cl);
+   }
+   list-style: none;
+
+   .non-active-heading {
+      color: var(--main-cl);
+   }
+
+   .bar-active {
+      svg {
+         fill: var(--spec-dark-background-color);
+      }
    }
 `;
 
@@ -19,11 +31,11 @@ export const div = styled.div`
    border-radius: 10px;
    cursor: pointer;
    background-color: ${(props) => (props.activeBar ? "var(--main-cl) !important" : null)};
-   background-color: var(--spec-white-color);
+   /* background-color: var(--spec-white-color); */
    transition: all 0.3s ease;
 
    &:hover {
-      background-color: var(--main-cl);
+      background-color: var(--spec-dark-background-color);
       transform: translateY(-2px);
    }
 `;

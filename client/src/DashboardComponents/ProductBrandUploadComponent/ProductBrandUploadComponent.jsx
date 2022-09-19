@@ -81,26 +81,15 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
    }, [brandInsert]);
 
    const createFormData = function (param) {
-      const {
-         name,
-         description,
-         website,
-         order,
-         brandStatusInfo,
-         brandIcon,
-         SEOTitle,
-         SEODescription,
-      } = Brand;
-
       const fromData = new FormData();
-      fromData.append("name", name);
-      fromData.append("description", description);
-      fromData.append("website", website);
-      fromData.append("order", order);
-      fromData.append("brandStatusInfo", brandStatusInfo);
-      fromData.append("brandIcon", brandIcon);
-      fromData.append("SEOTitle", SEOTitle);
-      fromData.append("SEODescription", SEODescription);
+      fromData.append("name", Brand.name);
+      fromData.append("description", Brand.description);
+      fromData.append("website", Brand.website);
+      fromData.append("order", Brand.order);
+      fromData.append("brandStatusInfo", Brand.brandStatusInfo);
+      fromData.append("brandIcon", Brand.brandIcon);
+      fromData.append("SEOTitle", Brand.SEOTitle);
+      fromData.append("SEODescription", Brand.SEODescription);
 
       if (param) {
          fromData.append("id", param);
@@ -130,7 +119,8 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
          Brand.brandStatusInfo !== selectedBrand.selectedBrand.brandStatusInfo ||
          Brand.SEOTitle !== selectedBrand.selectedBrand.SEOTitle ||
          Brand.SEODescription !== selectedBrand.selectedBrand.SEODescription ||
-         Brand.order !== selectedBrand.selectedBrand.order
+         Brand.order !== selectedBrand.selectedBrand.order ||
+         Brand.brandIcon !== selectedBrand.selectedBrand.brandIcon
       ) {
          const fromData = createFormData(param);
          dispatch(editSelectedBrand(fromData));

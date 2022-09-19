@@ -181,3 +181,38 @@ export const removeEditProductInfo = function (data) {
       payload: data,
    };
 };
+
+export const removeProductTagInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_PRODUCT_TAG_INFO,
+      payload: data,
+   };
+};
+
+export const productTagLoading = function (data) {
+   return {
+      type: ACTION_TYPE.PRODUCT_TAG_INSERT_LOADING,
+      payload: data,
+   };
+};
+
+export const productTagsFetchLoading = function (data) {
+   return {
+      type: ACTION_TYPE.PRODUCT_TAGS_LOADING,
+      payload: data,
+   };
+};
+
+export const editProductTagLoading = function (data) {
+   return {
+      type: ACTION_TYPE.EDIT_PRODUCT_TAG_LOADING,
+      payload: data,
+   };
+};
+
+export const removeUpdateTagInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_PRODUCT_TAG_EDTI_INFO,
+      payload: data,
+   };
+};

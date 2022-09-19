@@ -4,15 +4,15 @@ https://themesbrand.com/velzon/html/default/dashboard-analytics.html
 -----------------------------------------------------------------------------------
 Sun Sep 11 2022 10:44:55 GMT+0530 (India Standard Time);
 FIXME: -> fix dashboard sidebar component [fixed]
-[done]: sidebar component styled. 
+[+]: sidebar component styled. 
 
 TODO: dashboard edit category section
-[done]: admin can selected the category and the update the category.
-[done]: admin can delete the category also.
-        TODO:
-        logic: get the id from the user selected category.
-                [done]: then find the category using the id selected.
-                [done]: remove category from the dashboard. and also remove from the client dashboard.
+[+]: admin can selected the category and the update the category.
+[+]: admin can delete the category also.
+        logic:
+get the id from the user selected category.
+[+]: then find the category using the id selected.
+[+]: remove category from the dashboard. and also remove from the client dashboard.
 -----------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------
@@ -20,39 +20,37 @@ Mon Sep 12 2022 10:01:55 GMT+0530 (India Standard Time);
 
 FIXME: -> admin logout is not working
 
-[done]: product brand.
-        TODO:
-        work: admin can create a product brand.
-        [done]: admin able to selecte the image, and show the selected image into the preview image box.
-        [panding]: image compress.
-        [done]: admin can clear all fildes.
-        logic: first selecte all the brand information and store into the database.
-        if the brand category is already exists then return the flag to the client, || insert new brand into the database.
+[+]: product brand.
+work: admin can create a product brand.
+[+]: admin able to selecte the image, and show the selected image into the preview image box.
+[+]: image compress.
+[+]: admin can clear all fildes.
+logic:
+first selecte all the brand information and store into the database.
+if the brand category is already exists then return the flag to the client, || insert new brand into the database.
 -----------------------------------------------------------------------------------
 
 
 -----------------------------------------------------------------------------------
 Tue Sep 13 2022 09:51:34 GMT+0530 (India Standard Time);
 
-[panding]: product all brands section.
-        TODO: 
-        [done] admin dashboard design.
-                TODO:
-                        product brand pagination feature [done]
-                        product brand pagination loding spenner [done]
-                        delete product brand clicking on close btn [done]
-                        delete selected brand feature. [done] 
-                        Edit product brand feature. [done] 
+[+]: product all brands section.
+[+] admin dashboard design.
+[+] product brand pagination feature 
+[+] product brand pagination loding spenner 
+[+] delete product brand clicking on close btn 
+[+] delete selected brand feature. 
+[+] Edit product brand feature. 
 -----------------------------------------------------------------------------------
 
 
 -----------------------------------------------------------------------------------
 Wed Sep 14 2022 09:41:42 GMT+0530 (India Standard Time);
 
-                        delete all product brand feature. [done]
-                        filter brand feature. [done]
-                        sort feature. [done]
-                        product bulk actions feature: [done]
+[+] delete all product brand feature. 
+[+] filter brand feature.
+[+] sort feature. 
+[+] product bulk actions feature:
 -----------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------
@@ -61,20 +59,39 @@ Thu Sep 15 2022 09:38:25 GMT+0530 (India Standard Time);
 [panding]: table selection component dynmic.
 
 BUGS: -> [fixed]
-        footer pagination componente fix
-        table filter componente fix
-
-[panding]: Product upload section.
-                        product upload feature [done]
-                        product filter feature [done] 
-                        delete all product feature [done]
+[+] footer pagination componente fix
+[+] table filter componente fix
+[+] Product upload section.
+[+] product upload feature 
+[+] product filter feature 
+[+] delete all product feature
 -----------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------
 Fri Sep 16 2022 09:55:08 GMT+0530 (India Standard Time)
 
-                        single product delete [done]
-                        selected product delete [done]
-                        pagination feature [done]
-                        product edit feature [panding]
+[+] single product delete 
+[+] selected product delete 
+[+] pagination feature 
+[+] product edit feature 
+[+] product upload image && brand image update compress 
+[+] sidebar design change 
+-----------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------
+Sat Sep 17 2022 10:18:27 GMT+0530 (India Standard Time)
+
+[+] Product tags section [panding] 
+[+] new product tags 
+[+] product category BUGS: [fixed] 
+[+] products tags delete 
+[+] products tags delete all 
+[+] products tags all filters 
+-----------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------
+Mon Sep 19 2022 09:33:25 GMT+0530 (India Standard Time)
+
+[+] products tags edit 
+
 -----------------------------------------------------------------------------------

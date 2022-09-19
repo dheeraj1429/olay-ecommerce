@@ -36,6 +36,15 @@ export const div = styled.div`
    .Delete_btn:hover {
       background-color: var(--spec-static-brand-red);
    }
+   .clear_btn {
+      padding: 0.3rem 3rem;
+      margin-top: 1rem;
+      margin-left: 1rem;
+      background-color: var(--google-button-cl);
+      color: var(--main-cl);
+      border-radius: 5px;
+      transition: all 0.4s ease;
+   }
    .table_btn {
       background-color: transparent;
       margin-right: 1rem;

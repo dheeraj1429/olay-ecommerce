@@ -22,6 +22,7 @@ function DashboardNavigationComponent({
          >
             <Nav.div
                activeBar={Active === innerText ? true : null}
+               className={Active === innerText ? "bar-active" : null}
                onClick={(e) => {
                   onClick(e);
                   HideHandler(e);
@@ -29,9 +30,16 @@ function DashboardNavigationComponent({
                id={innerText}
             >
                <Nav.flex className={activeBar ? "active-bar" : null}>
-                  <Nav.iconDiv isShow={isShow ? isShow : null}>{icon}</Nav.iconDiv>
+                  <Nav.iconDiv
+                     isShow={isShow ? isShow : null}
+                     activeBar={Active === innerText ? true : null}
+                  >
+                     {icon}
+                  </Nav.iconDiv>
                   <Nav.contentDiv>
-                     <h5>{innerText}</h5>
+                     <h5 className={Active !== innerText ? "non-active-heading" : null}>
+                        {innerText}
+                     </h5>
                   </Nav.contentDiv>
                </Nav.flex>
             </Nav.div>

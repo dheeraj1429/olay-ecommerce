@@ -8,12 +8,13 @@ import { useLocation } from "react-router";
 import DashboardSidebarCardComponent from "../DashboardSidebarCardComponent/DashboardSidebarCardComponent";
 import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppingCart";
 import { VscHome } from "@react-icons/all-files/vsc/VscHome";
-import { FcGenealogy } from "@react-icons/all-files/fc/FcGenealogy";
-import { FcUpload } from "@react-icons/all-files/fc/FcUpload";
+import { BsUpload } from "@react-icons/all-files/bs/BsUpload";
 import { FcHome } from "@react-icons/all-files/fc/FcHome";
-import { FcMultipleDevices } from "@react-icons/all-files/fc/FcMultipleDevices";
-import { FcTabletAndroid } from "@react-icons/all-files/fc/FcTabletAndroid";
-import { FcTwoSmartphones } from "@react-icons/all-files/fc/FcTwoSmartphones";
+import { AiFillTags } from "@react-icons/all-files/ai/AiFillTags";
+import { BsPhone } from "@react-icons/all-files/bs/BsPhone";
+import { GoGitBranch } from "@react-icons/all-files/go/GoGitBranch";
+import { AiOutlineLaptop } from "@react-icons/all-files/ai/AiOutlineLaptop";
+import { ImUpload } from "@react-icons/all-files/im/ImUpload";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -63,7 +64,7 @@ function DashboardPanelSidebarComponent() {
       } else {
          setActive(result);
       }
-   }, []);
+   }, [location.pathname]);
 
    return (
       <sidebar.div SmSidebar={SmSidebar ? SmSidebar : null}>
@@ -97,7 +98,7 @@ function DashboardPanelSidebarComponent() {
                isShow={SmSidebar}
             >
                <DashboardNavigationComponent
-                  icon={<FcUpload />}
+                  icon={<BsUpload />}
                   innerText={"Upload products"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
@@ -105,7 +106,15 @@ function DashboardPanelSidebarComponent() {
                   HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
-                  icon={<FcGenealogy />}
+                  icon={<BsPhone />}
+                  innerText={"All products"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<GoGitBranch />}
                   innerText={"Product category"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
@@ -113,7 +122,7 @@ function DashboardPanelSidebarComponent() {
                   HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
-                  icon={<FcMultipleDevices />}
+                  icon={<ImUpload />}
                   innerText={"Upload product brand"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
@@ -121,7 +130,7 @@ function DashboardPanelSidebarComponent() {
                   HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
-                  icon={<FcTabletAndroid />}
+                  icon={<AiOutlineLaptop />}
                   innerText={"Product brands"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
@@ -129,8 +138,8 @@ function DashboardPanelSidebarComponent() {
                   HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
-                  icon={<FcTwoSmartphones />}
-                  innerText={"All products"}
+                  icon={<AiFillTags />}
+                  innerText={"Product tags"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

@@ -68,14 +68,14 @@ export const deleteSelectedCategory = function (data) {
    return async function (dispatch) {
       try {
          const deleteCategory = await axios.delete(
-            `/admin/delete-selected-category/${data}`,
+            `/admin/delete-selected-category/${data.name}`,
             headers
          );
 
          if (deleteCategory && deleteCategory?.data) {
             dispatch({
                type: ACTION_TYPE.DELETE_SELECTED_CATEGORY,
-               payload: data,
+               payload: data.id,
             });
          }
       } catch (err) {
@@ -417,6 +417,117 @@ export const editSingleProduct = function (data, id) {
             dispatch({
                type: ACTION_TYPE.EDIT_SINGLE_PRODUCT,
                payload: editSingleProduct && editSingleProduct?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const saveNewTag = function (data) {
+   return async function (dispatch) {
+      try {
+         const insetTag = await axios.post("/admin/save-new-product-tag", data, headers);
+
+         if (insetTag && insetTag?.data) {
+            dispatch({
+               type: ACTION_TYPE.INSERT_NEW_PRODUCT_TAG,
+               payload: insetTag && insetTag?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getProductTags = function (page) {
+   return async function (dispatch) {
+      try {
+         const getTags = await axios.get(`/admin/get-all-product-tags?page=${page}`);
+
+         if (getTags && getTags?.data && getTags?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.GET_ALL_PRODUCTS_TAGS,
+               payload: getTags && getTags?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteAllTags = function (data) {
+   return async function (dispatch) {
+      try {
+         const deleteTags = await axios.delete(
+            "/admin/delete-all-products-tags",
+            headers
+         );
+
+         if (deleteTags && deleteTags?.data && !!deleteTags?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_ALL_TAGS,
+               payload: deleteTags && !!deleteAllTags?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteSelectedProductTag = function (id) {
+   return async function (dispatch) {
+      try {
+         const deleteTag = await axios.delete(
+            `/admin/delete-single-product-tags/${id}`,
+            headers
+         );
+
+         if (deleteTag && deleteTag?.data && deleteTag?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_SELECTED_PRODUCT_TAG,
+               payload: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const fetchSelectedProductTag = function (id) {
+   return async function (dispatch) {
+      try {
+         const selectedTag = await axios.get(
+            `/admin/get-selected-product-tag/${id}`,
+            headers
+         );
+
+         if (selectedTag && selectedTag?.data) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_SELECTED_PRODUCT_TAG,
+               payload: selectedTag && selectedTag?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const editProductTag = function (data) {
+   return async function (dispatch) {
+      try {
+         const edit = await axios.patch("/admin/update-product-tag", data, headers);
+
+         if (edit && edit?.data) {
+            dispatch({
+               type: ACTION_TYPE.EDIT_PRODUCT_TAG,
+               payload: edit && edit?.data,
             });
          }
       } catch (err) {

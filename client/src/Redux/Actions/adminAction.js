@@ -5,11 +5,7 @@ import { headers } from "./headers";
 export const uploadProductCategory = function (data) {
    return async function (dispatch) {
       try {
-         const productCategory = await axios.post(
-            "/admin/upload-category",
-            data,
-            headers
-         );
+         const productCategory = await axios.post("/admin/upload-category", data, headers);
 
          if (productCategory && productCategory?.data) {
             dispatch({
@@ -43,11 +39,7 @@ export const fetchProductsCategorys = function () {
 export const updateProductCategory = function (data) {
    return async function (dispatch) {
       try {
-         const updateCategory = await axios.patch(
-            "/admin/edit-product-category",
-            data,
-            headers
-         );
+         const updateCategory = await axios.patch("/admin/edit-product-category", data, headers);
 
          if (updateCategory && updateCategory?.data && updateCategory?.data?.success) {
             dispatch({
@@ -67,10 +59,7 @@ export const updateProductCategory = function (data) {
 export const deleteSelectedCategory = function (data) {
    return async function (dispatch) {
       try {
-         const deleteCategory = await axios.delete(
-            `/admin/delete-selected-category/${data.name}`,
-            headers
-         );
+         const deleteCategory = await axios.delete(`/admin/delete-selected-category/${data.name}`, headers);
 
          if (deleteCategory && deleteCategory?.data) {
             dispatch({
@@ -87,11 +76,7 @@ export const deleteSelectedCategory = function (data) {
 export const insertNewProductBrand = function (data) {
    return async function (dispatch) {
       try {
-         const brandProduct = await axios.post(
-            "/admin/insert-new-product-brand",
-            data,
-            headers
-         );
+         const brandProduct = await axios.post("/admin/insert-new-product-brand", data, headers);
 
          if (brandProduct && brandProduct?.data) {
             dispatch({
@@ -108,10 +93,7 @@ export const insertNewProductBrand = function (data) {
 export const fetchAllProductBrand = function (data) {
    return async function (dispatch) {
       try {
-         const fetchBrands = await axios.get(
-            `/admin/get-all-product-brand?page=${data}`,
-            headers
-         );
+         const fetchBrands = await axios.get(`/admin/get-all-product-brand?page=${data}`, headers);
 
          if (fetchBrands && fetchBrands?.data) {
             dispatch({
@@ -128,10 +110,7 @@ export const fetchAllProductBrand = function (data) {
 export const deleteOneProductBrand = function (id) {
    return async function (dispatch) {
       try {
-         const deleteOneBrand = await axios.delete(
-            `/admin/delete-one-product-brand/${id}`,
-            headers
-         );
+         const deleteOneBrand = await axios.delete(`/admin/delete-one-product-brand/${id}`, headers);
 
          if (deleteOneBrand && deleteOneBrand?.data && !!deleteOneBrand?.data?.success) {
             dispatch({
@@ -154,11 +133,7 @@ export const deleteOneProductBrand = function (id) {
 export const deleteMultiSelectedProductBrand = function (data) {
    return async function (dispatch) {
       try {
-         const deleteSelected = await axios.post(
-            "/admin/delete-multi-product-brand",
-            data,
-            headers
-         );
+         const deleteSelected = await axios.post("/admin/delete-multi-product-brand", data, headers);
 
          if (deleteSelected && deleteSelected?.data && deleteSelected?.data?.success) {
             dispatch({
@@ -180,9 +155,7 @@ export const deleteMultiSelectedProductBrand = function (data) {
 export const fetchSelectedBrand = function (id) {
    return async function (dispatch) {
       try {
-         const getSelectedBrandProduct = await axios.post(
-            `/admin/get-selected-product-brand/${id}`
-         );
+         const getSelectedBrandProduct = await axios.post(`/admin/get-selected-product-brand/${id}`);
 
          if (getSelectedBrandProduct && getSelectedBrandProduct?.data) {
             dispatch({
@@ -199,11 +172,7 @@ export const fetchSelectedBrand = function (id) {
 export const editSelectedBrand = function (data) {
    return async function (dispatch) {
       try {
-         const updateSelectedBrand = await axios.patch(
-            "/admin/update-selected-product-brand",
-            data,
-            headers
-         );
+         const updateSelectedBrand = await axios.patch("/admin/update-selected-product-brand", data, headers);
 
          if (updateSelectedBrand && updateSelectedBrand?.data) {
             dispatch({
@@ -220,10 +189,7 @@ export const editSelectedBrand = function (data) {
 export const deleteAllBrand = function () {
    return async function (dispatch) {
       try {
-         const deleteAllBrands = await axios.delete(
-            "/admin/delete-all-products-brand",
-            headers
-         );
+         const deleteAllBrands = await axios.delete("/admin/delete-all-products-brand", headers);
 
          if (deleteAllBrands && deleteAllBrands?.data && deleteAllBrands?.data?.success) {
             dispatch({
@@ -272,11 +238,7 @@ export const fetchProductBrandItemsInfo = function () {
 export const uplodNewProduct = function (data) {
    return async function (dispatch) {
       try {
-         const uploadProduct = await axios.post(
-            "/admin/insert-new-product",
-            data,
-            headers
-         );
+         const uploadProduct = await axios.post("/admin/insert-new-product", data, headers);
 
          if (uploadProduct && uploadProduct?.data) {
             dispatch({
@@ -293,10 +255,7 @@ export const uplodNewProduct = function (data) {
 export const fetchUploadProducts = function (page) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(
-            `/admin/get-upload-products?page=${page}`,
-            headers
-         );
+         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}`, headers);
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
@@ -330,11 +289,7 @@ export const deleteAllProducts = function () {
 export const deleteSelectedproducts = function (data) {
    return async function (dispatch) {
       try {
-         const deleteProducts = await axios.post(
-            "/admin/delete-selected-products",
-            data,
-            headers
-         );
+         const deleteProducts = await axios.post("/admin/delete-selected-products", data, headers);
 
          if (deleteProducts && deleteProducts?.data && deleteProducts?.data?.success) {
             dispatch({
@@ -357,16 +312,9 @@ export const deleteSelectedproducts = function (data) {
 export const deleteOneProduct = function (id) {
    return async function (dispatch) {
       try {
-         const deleteOneProducts = await axios.delete(
-            `/admin/delete-one-product/${id}`,
-            Headers
-         );
+         const deleteOneProducts = await axios.delete(`/admin/delete-one-product/${id}`, Headers);
 
-         if (
-            deleteOneProducts &&
-            deleteOneProducts?.data &&
-            deleteOneProducts?.data?.success
-         ) {
+         if (deleteOneProducts && deleteOneProducts?.data && deleteOneProducts?.data?.success) {
             dispatch({
                type: ACTION_TYPE.DELETE_ONE_PRODUCTS,
                payload: deleteOneProducts && deleteOneProducts?.data,
@@ -387,10 +335,7 @@ export const deleteOneProduct = function (id) {
 export const fetchSingleProduct = function (id) {
    return async function (dispatch) {
       try {
-         const singleProduct = await axios.get(
-            `/admin/get-single-product/${id}`,
-            headers
-         );
+         const singleProduct = await axios.get(`/admin/get-single-product/${id}`, headers);
 
          if (singleProduct && singleProduct?.data) {
             dispatch({
@@ -407,11 +352,7 @@ export const fetchSingleProduct = function (id) {
 export const editSingleProduct = function (data, id) {
    return async function (dispatch) {
       try {
-         const editSingleProduct = await axios.patch(
-            `/admin/eidt-single-product/${id}`,
-            data,
-            headers
-         );
+         const editSingleProduct = await axios.patch(`/admin/eidt-single-product/${id}`, data, headers);
 
          if (editSingleProduct && editSingleProduct?.data) {
             dispatch({
@@ -462,10 +403,7 @@ export const getProductTags = function (page) {
 export const deleteAllTags = function (data) {
    return async function (dispatch) {
       try {
-         const deleteTags = await axios.delete(
-            "/admin/delete-all-products-tags",
-            headers
-         );
+         const deleteTags = await axios.delete("/admin/delete-all-products-tags", headers);
 
          if (deleteTags && deleteTags?.data && !!deleteTags?.data?.success) {
             dispatch({
@@ -482,10 +420,7 @@ export const deleteAllTags = function (data) {
 export const deleteSelectedProductTag = function (id) {
    return async function (dispatch) {
       try {
-         const deleteTag = await axios.delete(
-            `/admin/delete-single-product-tags/${id}`,
-            headers
-         );
+         const deleteTag = await axios.delete(`/admin/delete-single-product-tags/${id}`, headers);
 
          if (deleteTag && deleteTag?.data && deleteTag?.data?.success) {
             dispatch({
@@ -502,10 +437,7 @@ export const deleteSelectedProductTag = function (id) {
 export const fetchSelectedProductTag = function (id) {
    return async function (dispatch) {
       try {
-         const selectedTag = await axios.get(
-            `/admin/get-selected-product-tag/${id}`,
-            headers
-         );
+         const selectedTag = await axios.get(`/admin/get-selected-product-tag/${id}`, headers);
 
          if (selectedTag && selectedTag?.data) {
             dispatch({
@@ -528,6 +460,108 @@ export const editProductTag = function (data) {
             dispatch({
                type: ACTION_TYPE.EDIT_PRODUCT_TAG,
                payload: edit && edit?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const fetchAllProductTags = function () {
+   return async function (dispatch) {
+      try {
+         const allTags = await axios.get("/admin/get-all-product-tags-documents", headers);
+
+         if (allTags && allTags?.data) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_ALL_PRODUCT_TAGS,
+               payload: allTags && allTags?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const storeProductSwatches = function (data) {
+   return async function (dispatch) {
+      try {
+         const storeInfo = await axios.post("/admin/insert-new-product-swatches", data, headers);
+
+         if (storeInfo && storeInfo?.data) {
+            dispatch({
+               type: ACTION_TYPE.STORE_PRODUCT_SWATCHES,
+               payload: storeInfo && storeInfo?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getproductSwatches = function () {
+   return async function (dispatch) {
+      try {
+         const productSwatches = await axios.get("/admin/get-products-all-swatchs", headers);
+
+         if (productSwatches && productSwatches?.data) {
+            dispatch({
+               type: ACTION_TYPE.GET_PRODUCT_SWATCHES,
+               payload: productSwatches && productSwatches?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const removeAllProductSwatches = function () {
+   return async function (dispatch) {
+      try {
+         const removeSwatches = await axios.delete("/admin/remove-all-color-swatches", headers);
+
+         if (removeSwatches && removeSwatches?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.REMOVER_ALL_PRODUCT_SWATCHES,
+               payload: removeSwatches && removeSwatches?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const fetchSingleProductColorSwatches = function (id) {
+   return async function (dispatch) {
+      try {
+         const singleSwatches = await axios.get(`/admin/get-single-product-swatches/${id}`, headers);
+
+         if (singleSwatches && singleSwatches?.data) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_SINGLE_PRODUCT_SWATCHES,
+               payload: singleSwatches && singleSwatches?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const editSingleProductSwatches = function (data) {
+   return async function (dispatch) {
+      try {
+         const editSwatches = await axios.patch("/admin/edit-single-product-swatches", data, headers);
+
+         if (editSwatches && editSwatches?.data) {
+            dispatch({
+               type: ACTION_TYPE.EDIT_SINGLE_PRODUCT_SWATCHES,
+               payload: editSwatches && editSwatches?.data,
             });
          }
       } catch (err) {

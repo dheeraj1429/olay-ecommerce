@@ -5,6 +5,7 @@ const productsTagsModel = require("../model/schema/productsTagsSchema");
 const { erroResponse } = require("./errorResponse");
 const { imageCompress } = require("../helpers/helpers");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
+const swatchesModel = require("../model/schema/productVariationSwatchesSchema");
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -175,15 +176,7 @@ const sendBrandResponseFunction = function (res) {
  */
 const insertNewProductBrand = async function (req, res, next) {
    try {
-      const {
-         name,
-         description,
-         website,
-         order,
-         brandStatusInfo,
-         SEOTitle,
-         SEODescription,
-      } = req.body;
+      const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription } = req.body;
       const file = req.files[0];
 
       // TODO: function scope variables
@@ -387,16 +380,7 @@ const updateFildes = async function (id, updateObject, res) {
  */
 const editSelectedBrand = async function (req, res, next) {
    try {
-      const {
-         name,
-         description,
-         website,
-         order,
-         brandStatusInfo,
-         SEOTitle,
-         SEODescription,
-         id,
-      } = req.body;
+      const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription, id } = req.body;
 
       const updateObject = {
          name,
@@ -409,7 +393,6 @@ const editSelectedBrand = async function (req, res, next) {
       };
 
       const file = req.files[0];
-      let updateSelectedProductBrand;
 
       /**
        * @file if the file is exists into the req.body then we want the update the files path alos into the database, othervise we only want to update the others fildes
@@ -489,10 +472,13 @@ const uploadNewProduct = async function (req, res, next) {
    try {
       const { name } = req.body;
 
+      console.log(req.body);
+
       /**
        * @productObject { copy all the client send data }
        */
       const productObject = { ...req.body };
+      // productObject.tags = JSON.parse(productObject.tags);
 
       /**
        * @checkIsProductIsExists check the product is already is exists or not
@@ -542,7 +528,7 @@ const fetchUploadProducts = async function (req, res, next) {
       /**
        * @DOCUMENT_LIMIT how to document we want the send back to the client
        */
-      const DOCUMENT_LIMIT = 3;
+      const DOCUMENT_LIMIT = 10;
       const totalDocuments = await productModel.countDocuments({});
       const fetchDoc = await productModel
          .find({})
@@ -655,10 +641,7 @@ const fetchSingleProduct = async function (req, res, next) {
          });
       }
 
-      const findSingleProduct = await productModel
-         .findOne({ _id: id })
-         .populate("category", { name: 1 })
-         .populate("brand", { name: 1 });
+      const findSingleProduct = await productModel.findOne({ _id: id }).populate("category", { name: 1 }).populate("brand", { name: 1 }).populate("tags._id", { name: 1 });
 
       if (findSingleProduct) {
          return res.status(httpStatusCodes.OK).json({
@@ -686,6 +669,7 @@ const editSingleProduct = async function (req, res, next) {
       }
 
       const updateObjectInfo = { ...req.body };
+      // updateObjectInfo.tag = JSON.parse(editSingleProduct.tags);
 
       // if there is the file uploded then upload new file name and store into the database, but if there is no image updated then update only the new information.
       if (file?.originalname) {
@@ -696,10 +680,7 @@ const editSingleProduct = async function (req, res, next) {
          await imageCompress(imagePath, 400, "productImagesCompress", originalname);
       }
 
-      const updateProductInfo = await productModel.updateOne(
-         { _id: id },
-         { $set: updateObjectInfo }
-      );
+      const updateProductInfo = await productModel.updateOne({ _id: id }, { $set: updateObjectInfo });
 
       // if the database information is updated then return the status of the products
       if (!!updateProductInfo.modifiedCount) {
@@ -772,7 +753,7 @@ const getAllProductTags = async function (req, res, next) {
       /*
       send back the limited document, for the pagiantion effect. when the client requrest for the next 6 documents then we want to skip the first 6 documents.
       */
-      const DOCUMENT_LIMIT = 6;
+      const DOCUMENT_LIMIT = 10;
       const totalDocuments = await productsTagsModel.countDocuments({});
       const allTags = await productsTagsModel
          .find({})
@@ -869,6 +850,9 @@ const udpateProductTag = async function (req, res, next) {
          throw new Error("Id is required!");
       }
 
+      /**
+       * @updateProductTag update product tags info
+       */
       const updateProductTag = await productsTagsModel.updateOne(
          { _id: id },
          {
@@ -889,6 +873,165 @@ const udpateProductTag = async function (req, res, next) {
          return res.status(httpStatusCodes.OK).json({
             success: true,
             message: "Product tag updated already",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const getAllProductTagsDocuments = async function (req, res, next) {
+   try {
+      const findAllProductTags = await productsTagsModel.find({}, { name: 1, status: 1 });
+
+      if (findAllProductTags) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            allTags: findAllProductTags,
+         });
+      } else {
+         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            message: "Server Error!",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const insertNewProductSwatches = async function (req, res, next) {
+   try {
+      const { name, slug, description, color } = req.body;
+
+      if (!name) {
+         throw new Error("name is reuqired!");
+      }
+
+      /**
+       * @isProductSwatchesExists check the product swatches is alrady exists or not if the product swatches is exists then return the flag || inert new product color swatches
+       */
+      const isProductSwatchesExists = await swatchesModel.findOne({ name });
+
+      if (isProductSwatchesExists) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "product variation is already exists",
+         });
+      } else {
+         const insertNewSwatches = await swatchesModel({
+            name,
+            slug,
+            description,
+            colorCode: color,
+         });
+
+         const saveIndb = await insertNewSwatches.save();
+
+         if (saveIndb) {
+            return res.status(httpStatusCodes.CREATED).json({
+               success: true,
+               message: "product variation saved",
+            });
+         } else {
+            throw new Error("Somting worng");
+         }
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const getAllProductSwatches = async function (req, res, next) {
+   try {
+      const getAllSwatches = await swatchesModel.find({});
+
+      if (getAllSwatches) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            allSwatches: getAllSwatches,
+         });
+      } else {
+         throw new Error("Someting worng");
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const removeAllProductsSwatches = async function (req, res, next) {
+   try {
+      const removeSwatches = await swatchesModel.deleteMany({});
+
+      if (!!removeSwatches.deletedCount) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "All products swatches deleted",
+         });
+      } else {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "no more products swatches!",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const fetchSingleSwatchs = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+
+      if (!id) {
+         throw new Error("product swatches id is required!");
+      }
+
+      const findSelectedProductSwatches = await swatchesModel.findOne({ _id: id });
+
+      if (findSelectedProductSwatches) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            selectedSwatches: findSelectedProductSwatches,
+         });
+      } else {
+         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            message: "server error",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const editSingleProductSwatches = async function (req, res, next) {
+   try {
+      const { id, name, slug, description, color } = req.body;
+
+      if (!id) {
+         throw new Error("product update swatches id is required!");
+      }
+
+      const updateProductSwatches = await swatchesModel.updateOne(
+         { _id: id },
+         {
+            $set: {
+               name,
+               slug,
+               description,
+               colorCode: color,
+            },
+         }
+      );
+
+      if (!!updateProductSwatches.modifiedCount) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "product swatches color updated",
+         });
+      } else {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "product swatches color already updated",
          });
       }
    } catch (err) {
@@ -922,4 +1065,10 @@ module.exports = {
    deleteSelectedTag,
    getSelectedProductTag,
    udpateProductTag,
+   getAllProductTagsDocuments,
+   insertNewProductSwatches,
+   getAllProductSwatches,
+   removeAllProductsSwatches,
+   fetchSingleSwatchs,
+   editSingleProductSwatches,
 };

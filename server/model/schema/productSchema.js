@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
    brand: { type: mongoose.Types.ObjectId, ref: "productBrand" },
    createdAt: { type: Date, default: Date.now },
    productStatusInfo: { type: String, default: "draft" },
-   tags: [{ type: String }],
+   tags: [{ _id: { type: mongoose.Types.ObjectId, ref: "tag" } }],
 });
 
 const productModel = mongoose.model("product", productSchema);

@@ -1,8 +1,5 @@
 https://themesbrand.com/velzon/html/default/dashboard-analytics.html
 
-
------------------------------------------------------------------------------------
-Sun Sep 11 2022 10:44:55 GMT+0530 (India Standard Time);
 FIXME: -> fix dashboard sidebar component [fixed]
 [+]: sidebar component styled. 
 
@@ -13,10 +10,6 @@ TODO: dashboard edit category section
 get the id from the user selected category.
 [+]: then find the category using the id selected.
 [+]: remove category from the dashboard. and also remove from the client dashboard.
------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------
-Mon Sep 12 2022 10:01:55 GMT+0530 (India Standard Time);
 
 FIXME: -> admin logout is not working
 
@@ -28,11 +21,6 @@ work: admin can create a product brand.
 logic:
 first selecte all the brand information and store into the database.
 if the brand category is already exists then return the flag to the client, || insert new brand into the database.
------------------------------------------------------------------------------------
-
-
------------------------------------------------------------------------------------
-Tue Sep 13 2022 09:51:34 GMT+0530 (India Standard Time);
 
 [+]: product all brands section.
 [+] admin dashboard design.
@@ -41,22 +29,13 @@ Tue Sep 13 2022 09:51:34 GMT+0530 (India Standard Time);
 [+] delete product brand clicking on close btn 
 [+] delete selected brand feature. 
 [+] Edit product brand feature. 
------------------------------------------------------------------------------------
-
-
------------------------------------------------------------------------------------
-Wed Sep 14 2022 09:41:42 GMT+0530 (India Standard Time);
 
 [+] delete all product brand feature. 
 [+] filter brand feature.
 [+] sort feature. 
 [+] product bulk actions feature:
------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------
-Thu Sep 15 2022 09:38:25 GMT+0530 (India Standard Time);
-
-[panding]: table selection component dynmic.
+[+]: table selection component dynmic.
 
 BUGS: -> [fixed]
 [+] footer pagination componente fix
@@ -65,10 +44,6 @@ BUGS: -> [fixed]
 [+] product upload feature 
 [+] product filter feature 
 [+] delete all product feature
------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------
-Fri Sep 16 2022 09:55:08 GMT+0530 (India Standard Time)
 
 [+] single product delete 
 [+] selected product delete 
@@ -76,22 +51,25 @@ Fri Sep 16 2022 09:55:08 GMT+0530 (India Standard Time)
 [+] product edit feature 
 [+] product upload image && brand image update compress 
 [+] sidebar design change 
------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------
-Sat Sep 17 2022 10:18:27 GMT+0530 (India Standard Time)
-
-[+] Product tags section [panding] 
+[+] Product tags section 
 [+] new product tags 
 [+] product category BUGS: [fixed] 
 [+] products tags delete 
 [+] products tags delete all 
 [+] products tags all filters 
------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------
-Mon Sep 19 2022 09:33:25 GMT+0530 (India Standard Time)
 
 [+] products tags edit 
+[+] product tags upload with product
+[-] product tags view default when single product is fetch BUGS: pending:
 
------------------------------------------------------------------------------------
+[+] admin dashboard product varations upload deisgn
+[+] admin can add new variations
+[-] admin can make the products varations
+[-] variations with name, color, image, size, price, sale price feature
+
+[+] admin can create color swatches
+[+] filter feature product swatches
+[+] delete all product swatches
+[-] delete product swatches by click on close btn
+[-] edit product swatches

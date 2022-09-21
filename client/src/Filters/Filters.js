@@ -1,9 +1,4 @@
-const filterFunction = function (
-   objectFilterFilde,
-   state,
-   filde,
-   returnValue = undefined
-) {
+const filterFunction = function (objectFilterFilde, state, filde, returnValue = undefined) {
    let filterFN = state[filde].sort(function (a, b) {
       if (!!returnValue && a[objectFilterFilde] < b[objectFilterFilde]) {
          return -1;

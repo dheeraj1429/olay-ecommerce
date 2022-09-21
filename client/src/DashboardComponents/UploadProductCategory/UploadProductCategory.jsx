@@ -33,7 +33,9 @@ function UploadProductCategory() {
    };
 
    const productCategory = useSelector((state) => state.admin.productCategory);
-   const productCategoryLoading = useSelector((state) => state.admin.productCategoryLoading);
+   const productCategoryLoading = useSelector(
+      (state) => state.admin.productCategoryLoading
+   );
    const editCategory = useSelector((state) => state.admin.editCategory);
 
    const info = (mes) => {
@@ -64,7 +66,9 @@ function UploadProductCategory() {
          });
          const { categoryName, categoryDescription } = CategoryInfo;
          dispatch(removeCategoryInfo(null));
-         dispatch(insertNewCategory({ name: categoryName, description: categoryDescription }));
+         dispatch(
+            insertNewCategory({ name: categoryName, description: categoryDescription })
+         );
       } else if (!!productCategory && !productCategory.success) {
          info(productCategory.message);
          dispatch(removeCategoryInfo(null));

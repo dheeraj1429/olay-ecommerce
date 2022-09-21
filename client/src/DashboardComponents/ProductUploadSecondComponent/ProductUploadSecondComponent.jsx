@@ -6,24 +6,32 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductBrandItemsInfo } from "../../Redux/Actions/adminAction";
+import {
+   fetchAllProductTags,
+   fetchProductBrandItemsInfo,
+} from "../../Redux/Actions/adminAction";
 import { useParams } from "react-router";
+import Autocomplete from "@mui/material/Autocomplete";
 
 function ProductUploadSecondComponent({
    sugAge,
    state,
    ChangeHandler,
    ImageGrabHandler,
+   TagHandler,
 }) {
-   const allProductBrands = useSelector((state) => state.admin.allProductBrands);
-   const singleProductFetch = useSelector((state) => state.admin.singleProductFetch);
-
-   const dispatch = useDispatch();
    const param = useParams();
    const [Image, setImage] = useState("");
 
+   const allProductBrands = useSelector((state) => state.admin.allProductBrands);
+   const singleProductFetch = useSelector((state) => state.admin.singleProductFetch);
+   const allTags = useSelector((state) => state.admin.allTags);
+
+   const dispatch = useDispatch();
+
    useEffect(() => {
       dispatch(fetchProductBrandItemsInfo());
+      dispatch(fetchAllProductTags());
    }, []);
 
    useEffect(() => {
@@ -38,13 +46,21 @@ function ProductUploadSecondComponent({
 
    return (
       <div className="padding_div">
-         <HeadingComponent cl="sm_heading" Heading={"Product Image"} />
-         <ProductUploadImageComponent
-            size={"big"}
-            onChange={ImageGrabHandler}
-            selectedPrevImage={Image}
-            filde={"productImages"}
-         />
+         <upload.flexDiv>
+            <div>
+               <HeadingComponent cl="sm_heading" Heading={"Product Image"} />
+               <ProductUploadImageComponent
+                  size={"big"}
+                  onChange={ImageGrabHandler}
+                  selectedPrevImage={Image}
+                  filde={"productImages"}
+               />
+            </div>
+            {/* <div>
+               <HeadingComponent cl="sm_heading" Heading={"Product Tags"} />
+               <ProductTagsContainerComponent />
+            </div> */}
+         </upload.flexDiv>
          <upload.marginDiv>
             <Box
                component="form"
@@ -69,7 +85,27 @@ function ProductUploadSecondComponent({
                      </MenuItem>
                   ))}
                </TextField>
-
+               {/* <Autocomplete
+                  multiple
+                  limitTags={5}
+                  id="multiple-limit-tags"
+                  options={
+                     !!allTags && allTags?.success && allTags?.allTags
+                        ? allTags.allTags
+                        : []
+                  }
+                  getOptionLabel={(option) => option.name}
+                  defaultValue={
+                     !!allTags && allTags?.success && allTags?.allTags
+                        ? allTags.allTags[0]
+                        : []
+                  }
+                  onChange={(event, value) => TagHandler(value)}
+                  renderInput={(params) => (
+                     <TextField {...params} label="Tags" placeholder="Favorites" />
+                  )}
+                  sx={{ width: "500px" }}
+               /> */}
                <TextField
                   id="outlined-select-currency"
                   select

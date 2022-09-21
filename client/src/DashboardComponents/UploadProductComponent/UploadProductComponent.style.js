@@ -42,3 +42,8 @@ export const flexDiv = styled.div`
       padding-right: 1rem;
    }
 `;
+
+export const flexEnd = styled.div`
+   display: flex;
+   justify-content: end;
+`;

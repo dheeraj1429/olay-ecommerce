@@ -216,3 +216,31 @@ export const removeUpdateTagInfo = function (data) {
       payload: data,
    };
 };
+
+export const productSwatchesLoadingFn = function (data) {
+   return {
+      type: ACTION_TYPE.STORE_PRODUCT_SWATCHES_LOADING,
+      payload: data,
+   };
+};
+
+export const removeproductSwatchesInfo = function (data) {
+   return {
+      type: ACTION_TYPE.PRODUCT_SWATCHES_REMOVE_INFO,
+      payload: data,
+   };
+};
+
+export const editProductSwatchesLoadingFn = function (data) {
+   return {
+      type: ACTION_TYPE.EDIT_SINGLE_PRODUCT_SWATCHES_LOADING,
+      payload: data,
+   };
+};
+
+export const removeUpdateProductSwatchesInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_PRODUCT_UPDATE_SWATCHES_INFO,
+      payload: data,
+   };
+};

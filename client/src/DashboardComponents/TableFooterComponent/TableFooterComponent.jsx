@@ -6,19 +6,8 @@ import { Popconfirm } from "antd";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import * as table from "./TableFooterComponent.style";
 import { useSelector, useDispatch } from "react-redux";
-import {
-   fetchAllProductBrand,
-   deleteMultiSelectedProductBrand,
-   deleteSelectedproducts,
-   fetchUploadProducts,
-   getProductTags,
-} from "../../Redux/Actions/adminAction";
-import {
-   fetchBrandProductLoading,
-   removeAllSelectedItems,
-   fetchLoadingProducts,
-   productTagsFetchLoading,
-} from "../../Redux/Actions/appAction";
+import { fetchAllProductBrand, deleteMultiSelectedProductBrand, deleteSelectedproducts, fetchUploadProducts, getProductTags } from "../../Redux/Actions/adminAction";
+import { fetchBrandProductLoading, removeAllSelectedItems, fetchLoadingProducts, productTagsFetchLoading } from "../../Redux/Actions/appAction";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 function TableFooterComponent({ action, state }) {
@@ -103,21 +92,11 @@ function TableFooterComponent({ action, state }) {
                </div>
                <div>
                   <table.flexDiv>
-                     <CustombuttonComponent
-                        btnCl={Limit <= 0 ? "PrevDisable_btn" : "pagination_btn"}
-                        onClick={ChangePrev}
-                     >
+                     <CustombuttonComponent btnCl={Limit <= 0 ? "PrevDisable_btn" : "pagination_btn"} onClick={ChangePrev}>
                         <GrFormPreviousLink />
                      </CustombuttonComponent>
 
-                     <CustombuttonComponent
-                        btnCl={
-                           Limit >= state.totalPages
-                              ? "PrevDisable_btn"
-                              : "pagination_btn"
-                        }
-                        onClick={ChnageNext}
-                     >
+                     <CustombuttonComponent btnCl={Limit >= state.totalPages ? "PrevDisable_btn" : "pagination_btn"} onClick={ChnageNext}>
                         <GrFormNextLink />
                      </CustombuttonComponent>
                   </table.flexDiv>

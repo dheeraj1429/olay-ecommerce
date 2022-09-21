@@ -10,11 +10,12 @@ import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppi
 import { VscHome } from "@react-icons/all-files/vsc/VscHome";
 import { BsUpload } from "@react-icons/all-files/bs/BsUpload";
 import { FcHome } from "@react-icons/all-files/fc/FcHome";
-import { AiFillTags } from "@react-icons/all-files/ai/AiFillTags";
+import { GoTag } from "@react-icons/all-files/go/GoTag";
 import { BsPhone } from "@react-icons/all-files/bs/BsPhone";
 import { GoGitBranch } from "@react-icons/all-files/go/GoGitBranch";
 import { AiOutlineLaptop } from "@react-icons/all-files/ai/AiOutlineLaptop";
 import { ImUpload } from "@react-icons/all-files/im/ImUpload";
+import { GoVersions } from "@react-icons/all-files/go/GoVersions";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -97,14 +98,14 @@ function DashboardPanelSidebarComponent() {
                showSub={ShowSubItems}
                isShow={SmSidebar}
             >
-               <DashboardNavigationComponent
+               {/* <DashboardNavigationComponent
                   icon={<BsUpload />}
                   innerText={"Upload products"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
                   HideHandler={HideSubControllerFunction}
-               />
+               /> */}
                <DashboardNavigationComponent
                   icon={<BsPhone />}
                   innerText={"All products"}
@@ -121,14 +122,14 @@ function DashboardPanelSidebarComponent() {
                   Active={Active}
                   HideHandler={HideSubControllerFunction}
                />
-               <DashboardNavigationComponent
+               {/* <DashboardNavigationComponent
                   icon={<ImUpload />}
                   innerText={"Upload product brand"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
                   HideHandler={HideSubControllerFunction}
-               />
+               /> */}
                <DashboardNavigationComponent
                   icon={<AiOutlineLaptop />}
                   innerText={"Product brands"}
@@ -137,9 +138,27 @@ function DashboardPanelSidebarComponent() {
                   Active={Active}
                   HideHandler={HideSubControllerFunction}
                />
-               <DashboardNavigationComponent
+
+               {/* <DashboardNavigationComponent
                   icon={<AiFillTags />}
                   innerText={"Product tags"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               /> */}
+            </DashboardSidebarCardComponent>
+            <DashboardSidebarCardComponent
+               heading={"Product Variations"}
+               icon={<GoTag />}
+               onClick={dashboardActiveHandler}
+               show={DashboardCard}
+               showSub={ShowSubItems}
+               isShow={SmSidebar}
+            >
+               <DashboardNavigationComponent
+                  icon={<GoVersions />}
+                  innerText={"Variation swatches"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

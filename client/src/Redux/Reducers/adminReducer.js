@@ -39,6 +39,13 @@ const INITAL_STATE = {
    selectedProductTag: null,
    updateProductTagLoading: false,
    editProductEdit: null,
+   allTags: null,
+   productSwatches: null,
+   productSwatchesLoading: false,
+   allProductSwatches: null,
+   singleProductSwatches: null,
+   editProductSwatchesLoading: false,
+   editProductSwatches: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -123,9 +130,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
          };
 
       case ACTION_TYPE.DELETE_SELECTED_CATEGORY:
-         const filterCategory = state.productAllCategory.allCategory.filter(
-            (el) => el._id !== action.payload
-         );
+         const filterCategory = state.productAllCategory.allCategory.filter((el) => el._id !== action.payload);
          return {
             ...state,
             productAllCategory: {
@@ -173,9 +178,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                return {
                   ...state.productBrands,
                   totalDocuments: state.productBrands.totalDocuments - 1,
-                  brands: state.productBrands.brands.filter(
-                     (el) => el._id !== action.selectedBrandId
-                  ),
+                  brands: state.productBrands.brands.filter((el) => el._id !== action.selectedBrandId),
                };
             } else return state.productBrands;
          };
@@ -194,9 +197,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                productBrands: {
                   ...state.productBrands,
-                  brands: state.productBrands.brands.filter(
-                     (el) => (el._id = !setPayload.has(el._id))
-                  ),
+                  brands: state.productBrands.brands.filter((el) => (el._id = !setPayload.has(el._id))),
                },
             };
          } else {
@@ -237,11 +238,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                productBrands: {
                   ...state.productBrands,
-                  brands: CampareFunction(
-                     action.payload.filter,
-                     state.productBrands,
-                     "brands"
-                  ),
+                  brands: CampareFunction(action.payload.filter, state.productBrands, "brands"),
                },
             };
          } else if (action.payload.filde === "products") {
@@ -249,11 +246,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allProducts: {
                   ...state.allProducts,
-                  products: CampareFunction(
-                     action.payload.filter,
-                     state.allProducts,
-                     "products"
-                  ),
+                  products: CampareFunction(action.payload.filter, state.allProducts, "products"),
                },
             };
          } else if (action.payload.filde === "tags") {
@@ -261,11 +254,15 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allProductsTags: {
                   ...state.allProductsTags,
-                  tags: CampareFunction(
-                     action.payload.filter,
-                     state.allProductsTags,
-                     "tags"
-                  ),
+                  tags: CampareFunction(action.payload.filter, state.allProductsTags, "tags"),
+               },
+            };
+         } else if (action.payload.filde === "allSwatches") {
+            return {
+               ...state,
+               allProductSwatches: {
+                  ...state.allProductSwatches,
+                  allSwatches: CampareFunction(action.payload.filter, state.allProductSwatches, "allSwatches"),
                },
             };
          }
@@ -369,9 +366,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allProducts: {
                   ...state.allProducts,
-                  products: state.allProducts.products.filter(
-                     (el) => (el._id = !setPayload.has(el._id))
-                  ),
+                  products: state.allProducts.products.filter((el) => (el._id = !setPayload.has(el._id))),
                },
             };
          } else {
@@ -500,6 +495,73 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             editProductEdit: action.payload,
+         };
+
+      case ACTION_TYPE.FETCH_ALL_PRODUCT_TAGS:
+         return {
+            ...state,
+            allTags: action.payload,
+         };
+
+      case ACTION_TYPE.STORE_PRODUCT_SWATCHES:
+         return {
+            ...state,
+            productSwatches: action.payload,
+            productSwatchesLoading: false,
+         };
+
+      case ACTION_TYPE.STORE_PRODUCT_SWATCHES_LOADING:
+         return {
+            ...state,
+            productSwatchesLoading: action.payload,
+         };
+
+      case ACTION_TYPE.PRODUCT_SWATCHES_REMOVE_INFO:
+         return {
+            ...state,
+            productSwatches: action.payload,
+         };
+
+      case ACTION_TYPE.GET_PRODUCT_SWATCHES:
+         return {
+            ...state,
+            allProductSwatches: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVER_ALL_PRODUCT_SWATCHES:
+         if (action.payload.success) {
+            return {
+               ...state,
+               allProductSwatches: {
+                  ...state.allProductSwatches,
+                  allSwatches: [],
+               },
+            };
+         }
+
+      case ACTION_TYPE.FETCH_SINGLE_PRODUCT_SWATCHES:
+         return {
+            ...state,
+            singleProductSwatches: action.payload,
+         };
+
+      case ACTION_TYPE.EDIT_SINGLE_PRODUCT_SWATCHES_LOADING:
+         return {
+            ...state,
+            editProductSwatchesLoading: action.payload,
+         };
+
+      case ACTION_TYPE.EDIT_SINGLE_PRODUCT_SWATCHES:
+         return {
+            ...state,
+            editProductSwatches: action.payload,
+            editProductSwatchesLoading: false,
+         };
+
+      case ACTION_TYPE.REMOVE_PRODUCT_UPDATE_SWATCHES_INFO:
+         return {
+            ...state,
+            editProductSwatches: action.payload,
          };
 
       default:

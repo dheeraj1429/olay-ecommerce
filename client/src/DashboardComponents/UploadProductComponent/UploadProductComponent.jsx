@@ -56,7 +56,7 @@ function UploadProductComponent() {
       brand: "",
       productStatusInfo: "Draft",
    });
-
+   const [Tags, setTags] = useState([]);
    const param = useParams();
    const dispatch = useDispatch();
    const uploadProduct = useSelector((state) => state.admin.uploadProduct);
@@ -75,6 +75,10 @@ function UploadProductComponent() {
    const ImageGrabHandler = function (e) {
       const data = e.target.files[0];
       setProduct({ ...Product, productImage: data });
+   };
+
+   const TagHandler = function (value) {
+      setTags(value);
    };
 
    const info = (msg) => {
@@ -128,7 +132,7 @@ function UploadProductComponent() {
       return formData;
    };
 
-   const createFormDateHandler = function (id) {
+   const createFormDateHandler = function () {
       const formData = new FormData();
       checkTrueValues(formData, Product.name, "name");
       checkTrueValues(formData, Product.price, "price");
@@ -144,6 +148,7 @@ function UploadProductComponent() {
       checkTrueValues(formData, Product.suggestedAge, "suggestedAge");
       checkTrueValues(formData, Product.brand, "brand");
       checkTrueValues(formData, Product.productStatusInfo, "productStatusInfo");
+      // formData.append("tags[]", JSON.stringify(Tags));
 
       return formData;
    };
@@ -190,17 +195,18 @@ function UploadProductComponent() {
                ChangeHandler={ChangeHandler}
                state={Product}
                ImageGrabHandler={ImageGrabHandler}
+               TagHandler={TagHandler}
             />
 
             <div className="margin-left">
-               <upload.flex>
+               <upload.flexEnd>
                   <CustombuttonComponent
                      innerText={param?.id ? "Update" : "Save"}
                      btnCl={"category_upload"}
                      onClick={param?.id ? updateHandler : SendDataHandler}
                      isLoading={!param?.id ? uploadProductLoading : productEditLoading}
                   />
-               </upload.flex>
+               </upload.flexEnd>
             </div>
          </upload.paddingDiv>
       </upload.div>

@@ -39,10 +39,7 @@ function AllProductsTableComponent() {
                      ))}
                   </tr>
 
-                  <AllProductTableInnerComponent
-                     allProducts={allProducts}
-                     isLoading={fetchProductsLoading}
-                  />
+                  <AllProductTableInnerComponent allProducts={allProducts} isLoading={fetchProductsLoading} />
                </table>
             </tb.tableDiv>
          ) : (

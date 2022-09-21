@@ -17,6 +17,9 @@ import ProductEditComponent from "./DashboardComponents/ProductEditComponent/Pro
 import ProductTagsComponent from "./DashboardComponents/ProductTagsComponent/ProductTagsComponent";
 import AllProductsTagsComponent from "./DashboardComponents/AllProductsTagsComponent/AllProductsTagsComponent";
 import AllProductTagEditComponent from "./DashboardComponents/AllProductTagEditComponent/AllProductTagEditComponent";
+import VariationSwatchesComponent from "./DashboardComponents/VariationSwatchesComponent/VariationSwatchesComponent";
+import ProductSwatchesTableComponent from "./DashboardComponents/ProductSwatchesTableComponent/ProductSwatchesTableComponent";
+import EditProductSwatchesComponent from "./DashboardComponents/EditProductSwatchesComponent/EditProductSwatchesComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -43,26 +46,17 @@ function App() {
                <Route path="" element={<DashboardHomeComponent />} />
                <Route path="upload-products" element={<UploadProductComponent />} />
                <Route path="product-category" element={<UploadProductCategory />} />
-               <Route
-                  path="upload-product-brand"
-                  element={<ProductBrandUploadComponent />}
-               />
+               <Route path="upload-product-brand" element={<ProductBrandUploadComponent />} />
                <Route path="product-brands" element={<ProductBrandsComponent />} />
-               <Route
-                  path="product-brands/edit/:id"
-                  element={<ProductBrandEditComponent />}
-               />
+               <Route path="product-brands/edit/:id" element={<ProductBrandEditComponent />} />
                <Route path="all-products" element={<AllProductComponent />} />
-               <Route
-                  path="/dashboard/product/edit/:id"
-                  element={<ProductEditComponent />}
-               />
+               <Route path="/dashboard/product/edit/:id" element={<ProductEditComponent />} />
                <Route path="product-tags" element={<AllProductsTagsComponent />} />
                <Route path="insert/new-product-tags" element={<ProductTagsComponent />} />
-               <Route
-                  path="product-tag/edit/:id"
-                  element={<AllProductTagEditComponent />}
-               />
+               <Route path="product-tag/edit/:id" element={<AllProductTagEditComponent />} />
+               <Route path="variation-swatches" element={<ProductSwatchesTableComponent />} />
+               <Route path="variation-swatches/create" element={<VariationSwatchesComponent />} />
+               <Route path="variation-swatches/:id" element={<EditProductSwatchesComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

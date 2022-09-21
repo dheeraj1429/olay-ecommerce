@@ -41,7 +41,7 @@ const INITAL_STATE = {
    editProductEdit: null,
    allTags: null,
    productSwatches: null,
-   productSwatchesLoading: false,
+   productSwatchesLoading: true,
    allProductSwatches: null,
    singleProductSwatches: null,
    editProductSwatchesLoading: false,
@@ -526,6 +526,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             allProductSwatches: action.payload,
+            productSwatchesLoading: false,
          };
 
       case ACTION_TYPE.REMOVER_ALL_PRODUCT_SWATCHES:
@@ -562,6 +563,15 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             editProductSwatches: action.payload,
+         };
+
+      case ACTION_TYPE.DELETE_SELECTED_PRODUCT_SWATCHES:
+         return {
+            ...state,
+            allProductSwatches: {
+               ...state.allProductSwatches,
+               allSwatches: state.allProductSwatches.allSwatches.filter((el) => el._id !== action.payload),
+            },
          };
 
       default:

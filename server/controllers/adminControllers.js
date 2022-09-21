@@ -1039,6 +1039,31 @@ const editSingleProductSwatches = async function (req, res, next) {
    }
 };
 
+const removeSelectedProductSwatches = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+
+      if (!id) {
+         throw new Error("product swatches id is required!");
+      }
+
+      const deleteSelectedSwatches = await swatchesModel.deleteOne({ _id: id });
+
+      if (!!deleteSelectedSwatches.deletedCount) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "product swatches delete",
+         });
+      } else {
+         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            message: "inertnal server error",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -1071,4 +1096,5 @@ module.exports = {
    removeAllProductsSwatches,
    fetchSingleSwatchs,
    editSingleProductSwatches,
+   removeSelectedProductSwatches,
 };

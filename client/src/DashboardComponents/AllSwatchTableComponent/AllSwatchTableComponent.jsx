@@ -5,6 +5,9 @@ import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerCom
 import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
 import { VscClose } from "@react-icons/all-files/vsc/VscClose";
 import { Link } from "react-router-dom";
+import { Popconfirm } from "antd";
+import { removeSelectedProductSwatches } from "../../Redux/Actions/adminAction";
+import { useDispatch } from "react-redux";
 
 const row = [
    { elm: "Edit", value: "Edit" },
@@ -17,6 +20,12 @@ const row = [
 
 function AllSwatchTableComponent() {
    const allProductSwatches = useSelector((state) => state.admin.allProductSwatches);
+
+   const dispatch = useDispatch();
+
+   const confirm = (id) => {
+      dispatch(removeSelectedProductSwatches(id));
+   };
 
    return (
       <tableCm.div>
@@ -36,7 +45,9 @@ function AllSwatchTableComponent() {
                            </Link>
                         </td>
                         <td>
-                           <VscClose />
+                           <Popconfirm title="Are you sure to delete this product swatches" onConfirm={() => confirm(el._id)} okText="Yes" cancelText="No">
+                              <VscClose />
+                           </Popconfirm>
                         </td>
                         <td>
                            <div

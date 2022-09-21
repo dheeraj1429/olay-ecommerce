@@ -569,3 +569,22 @@ export const editSingleProductSwatches = function (data) {
       }
    };
 };
+
+export const removeSelectedProductSwatches = function (id) {
+   return async function (dispatch) {
+      try {
+         const deleteSelectedSwatches = await axios.delete(`/admin/delete-selected-product-swatches/${id}`, headers);
+
+         console.log(deleteSelectedSwatches);
+
+         if (deleteSelectedSwatches && deleteSelectedSwatches?.data && deleteSelectedSwatches?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_SELECTED_PRODUCT_SWATCHES,
+               payload: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

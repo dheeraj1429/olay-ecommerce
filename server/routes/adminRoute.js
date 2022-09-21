@@ -53,5 +53,6 @@ route.get("/get-products-all-swatchs", adminController.getAllProductSwatches);
 route.delete("/remove-all-color-swatches", adminController.removeAllProductsSwatches);
 route.get("/get-single-product-swatches/:id", adminController.fetchSingleSwatchs);
 route.patch("/edit-single-product-swatches", adminController.editSingleProductSwatches);
+route.delete("/delete-selected-product-swatches/:id", adminController.removeSelectedProductSwatches);
 
 module.exports = route;

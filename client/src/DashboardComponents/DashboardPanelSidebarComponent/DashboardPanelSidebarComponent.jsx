@@ -8,14 +8,13 @@ import { useLocation } from "react-router";
 import DashboardSidebarCardComponent from "../DashboardSidebarCardComponent/DashboardSidebarCardComponent";
 import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppingCart";
 import { VscHome } from "@react-icons/all-files/vsc/VscHome";
-import { BsUpload } from "@react-icons/all-files/bs/BsUpload";
 import { FcHome } from "@react-icons/all-files/fc/FcHome";
 import { GoTag } from "@react-icons/all-files/go/GoTag";
 import { BsPhone } from "@react-icons/all-files/bs/BsPhone";
 import { GoGitBranch } from "@react-icons/all-files/go/GoGitBranch";
 import { AiOutlineLaptop } from "@react-icons/all-files/ai/AiOutlineLaptop";
-import { ImUpload } from "@react-icons/all-files/im/ImUpload";
 import { GoVersions } from "@react-icons/all-files/go/GoVersions";
+import { GoRepoClone } from "@react-icons/all-files/go/GoRepoClone";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -71,14 +70,7 @@ function DashboardPanelSidebarComponent() {
       <sidebar.div SmSidebar={SmSidebar ? SmSidebar : null}>
          <AiOutlineBars onClick={SmSidebarHandler} className="Margin_elm" />
          <div className="sidebar_fix_container">
-            <DashboardSidebarCardComponent
-               heading={"Home"}
-               icon={<VscHome />}
-               onClick={dashboardActiveHandler}
-               show={DashboardCard}
-               showSub={ShowSubItems}
-               isShow={SmSidebar}
-            >
+            <DashboardSidebarCardComponent heading={"Home"} icon={<VscHome />} onClick={dashboardActiveHandler} show={DashboardCard} showSub={ShowSubItems} isShow={SmSidebar}>
                <DashboardNavigationComponent
                   icon={<FcHome />}
                   innerText={"Home"}
@@ -98,14 +90,6 @@ function DashboardPanelSidebarComponent() {
                showSub={ShowSubItems}
                isShow={SmSidebar}
             >
-               {/* <DashboardNavigationComponent
-                  icon={<BsUpload />}
-                  innerText={"Upload products"}
-                  isShow={SmSidebar}
-                  onClick={ActiveHandler}
-                  Active={Active}
-                  HideHandler={HideSubControllerFunction}
-               /> */}
                <DashboardNavigationComponent
                   icon={<BsPhone />}
                   innerText={"All products"}
@@ -122,14 +106,7 @@ function DashboardPanelSidebarComponent() {
                   Active={Active}
                   HideHandler={HideSubControllerFunction}
                />
-               {/* <DashboardNavigationComponent
-                  icon={<ImUpload />}
-                  innerText={"Upload product brand"}
-                  isShow={SmSidebar}
-                  onClick={ActiveHandler}
-                  Active={Active}
-                  HideHandler={HideSubControllerFunction}
-               /> */}
+
                <DashboardNavigationComponent
                   icon={<AiOutlineLaptop />}
                   innerText={"Product brands"}
@@ -138,16 +115,8 @@ function DashboardPanelSidebarComponent() {
                   Active={Active}
                   HideHandler={HideSubControllerFunction}
                />
-
-               {/* <DashboardNavigationComponent
-                  icon={<AiFillTags />}
-                  innerText={"Product tags"}
-                  isShow={SmSidebar}
-                  onClick={ActiveHandler}
-                  Active={Active}
-                  HideHandler={HideSubControllerFunction}
-               /> */}
             </DashboardSidebarCardComponent>
+
             <DashboardSidebarCardComponent
                heading={"Product Variations"}
                icon={<GoTag />}
@@ -159,6 +128,14 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<GoVersions />}
                   innerText={"Variation swatches"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<GoRepoClone />}
+                  innerText={"Product variation"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

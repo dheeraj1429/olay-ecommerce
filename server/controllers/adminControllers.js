@@ -528,7 +528,7 @@ const fetchUploadProducts = async function (req, res, next) {
       /**
        * @DOCUMENT_LIMIT how to document we want the send back to the client
        */
-      const DOCUMENT_LIMIT = 10;
+      const DOCUMENT_LIMIT = 6;
       const totalDocuments = await productModel.countDocuments({});
       const fetchDoc = await productModel
          .find({})

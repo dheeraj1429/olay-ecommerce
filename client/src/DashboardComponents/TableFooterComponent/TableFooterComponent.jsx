@@ -20,7 +20,7 @@ function TableFooterComponent({ action, state }) {
          setLimit((prev) => prev + 1);
          if (action === "brands") {
             dispatch(fetchBrandProductLoading(true));
-         } else if (action === "brands") {
+         } else if (action === "products") {
             dispatch(fetchLoadingProducts(true));
          } else if (action === "tags") {
             dispatch(productTagsFetchLoading(true));

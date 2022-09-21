@@ -20,6 +20,8 @@ import AllProductTagEditComponent from "./DashboardComponents/AllProductTagEditC
 import VariationSwatchesComponent from "./DashboardComponents/VariationSwatchesComponent/VariationSwatchesComponent";
 import ProductSwatchesTableComponent from "./DashboardComponents/ProductSwatchesTableComponent/ProductSwatchesTableComponent";
 import EditProductSwatchesComponent from "./DashboardComponents/EditProductSwatchesComponent/EditProductSwatchesComponent";
+import ProductVariationCreatorComponent from "./DashboardComponents/ProductVariationCreatorComponent/ProductVariationCreatorComponent";
+import CreateSelectedProductVariationComponent from "./DashboardComponents/CreateSelectedProductVariationComponent/CreateSelectedProductVariationComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -57,6 +59,8 @@ function App() {
                <Route path="variation-swatches" element={<ProductSwatchesTableComponent />} />
                <Route path="variation-swatches/create" element={<VariationSwatchesComponent />} />
                <Route path="variation-swatches/:id" element={<EditProductSwatchesComponent />} />
+               <Route path="product-variation" element={<ProductVariationCreatorComponent />} />
+               <Route path="product/create-variations/:id" element={<CreateSelectedProductVariationComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

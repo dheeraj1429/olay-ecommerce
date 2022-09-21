@@ -3,6 +3,14 @@ import styled from "styled-components";
 export const div = styled.div``;
 
 export const tr = styled.tr`
+   transition: all 0.2s ease;
+   border-bottom: 1px solid transparent;
+
+   &:hover {
+      border-bottom: ${(props) => (props.variation ? "1px solid var(--icon-cl)" : null)};
+      background-color: var(--spec-static-grey);
+   }
+
    .checkbox {
       padding-right: 0.6rem !important;
    }
@@ -79,10 +87,25 @@ export const tr = styled.tr`
       background-color: var(--spec-brand-link-text);
       color: var(--main-cl);
    }
+
+   .produvt-variation-image-div {
+      width: 50px;
+      height: 50px;
+      overflow: hidden;
+      border-radius: 50%;
+
+      img {
+         width: 100%;
+         height: 100%;
+      }
+   }
+
+   .padding_table td {
+      padding: 0.9rem 1rem !important;
+   }
 `;
 
 export const td = styled.td`
-   padding: 0.8rem 0 !important;
-
+   padding: 0.9rem 0;
    font-size: 13px;
 `;

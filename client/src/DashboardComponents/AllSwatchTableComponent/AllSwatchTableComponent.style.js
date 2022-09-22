@@ -29,6 +29,7 @@ export const tableDiv = styled.div`
       text-align: left;
 
       th {
+         width: 1%;
          font-size: 14px;
          color: var(--smooth-light-color);
          font-weight: 400;
@@ -36,7 +37,7 @@ export const tableDiv = styled.div`
       }
 
       td {
-         padding: 0.8rem;
+         padding: 1rem 2rem 1rem 0;
          color: var(--smooth-light-color);
       }
    }

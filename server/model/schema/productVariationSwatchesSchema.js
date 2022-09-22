@@ -9,6 +9,7 @@ const swatches = new mongoose.Schema({
       hsv: { a: { type: Number }, h: { type: Number }, s: { type: Number }, v: { type: Number } },
       rgb: { a: { type: Number }, b: { type: Number }, g: { type: Number }, r: { type: Number } },
    },
+   createdAt: { type: Date, default: Date.now },
 });
 
 const swatchesModel = mongoose.model("swatches", swatches);

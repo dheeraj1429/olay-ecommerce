@@ -21,38 +21,55 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).any();
 
-// Apis
-route.post("/upload-category", adminController.uploadProductCategory);
+// Apis => GET
 route.get("/get-all-categorys", adminController.getAllCategorys);
-route.patch("/edit-product-category", adminController.editproductCategory);
-route.delete("/delete-selected-category/:id", adminController.deleteSelectedCategory);
-route.post("/insert-new-product-brand", upload, adminController.insertNewProductBrand);
 route.get("/get-all-product-brand", adminController.getAllProductBrand);
-route.delete("/delete-one-product-brand/:id", adminController.deleteOneProductBrand);
+route.get("/get-all-brands", adminController.getProductBrands);
+route.get("/get-upload-products", adminController.fetchUploadProducts);
+route.get("/get-single-product/:id", adminController.fetchSingleProduct);
+route.get("/get-all-product-tags", adminController.getAllProductTags);
+route.get("/get-selected-product-tag/:id", adminController.getSelectedProductTag);
+route.get("/get-products-all-swatchs", adminController.getAllProductSwatches);
+route.get("/get-all-product-tags-documents", adminController.getAllProductTagsDocuments);
+route.get("/get-single-product-swatches/:id", adminController.fetchSingleSwatchs);
+route.get("/get-all-size-variations", adminController.getAllProductSizeVariations);
+route.get("/get-single-size-variation/:id", adminController.getSingleProductSizeVations);
+// ---------------------------------------------------------------------------------------
+
+// Apis => POST
+route.post("/upload-category", adminController.uploadProductCategory);
+route.post("/insert-new-product-brand", upload, adminController.insertNewProductBrand);
 route.post("/delete-multi-product-brand", adminController.deleteSelectedProductBrand);
 route.post("/get-selected-product-brand/:id", adminController.getSelectedBrandProduct);
-route.patch("/update-selected-product-brand", upload, adminController.editSelectedBrand);
-route.delete("/delete-all-products-brand", adminController.deleteAllProductBrand);
-route.get("/get-all-brands", adminController.getProductBrands);
 route.post("/insert-new-product", upload, adminController.uploadNewProduct);
-route.get("/get-upload-products", adminController.fetchUploadProducts);
-route.delete("/delete-all-products", adminController.deleteAllProducts);
 route.post("/delete-selected-products", adminController.deleteSelectedProducts);
-route.delete("/delete-one-product/:id", adminController.deleteOneProduct);
-route.get("/get-single-product/:id", adminController.fetchSingleProduct);
-route.patch("/eidt-single-product/:id", upload, adminController.editSingleProduct);
 route.post("/save-new-product-tag", adminController.insertNewProductTag);
-route.get("/get-all-product-tags", adminController.getAllProductTags);
+route.post("/insert-new-product-swatches", adminController.insertNewProductSwatches);
+route.post("/insert-new-product-size-variation", adminController.insertNewProductSizeVairation);
+route.post("/insert-new-product-variation", adminController.insertSelectedProductVariation);
+// ---------------------------------------------------------------------------------------
+
+// Apis => PATCH
+route.patch("/edit-product-category", adminController.editproductCategory);
+route.patch("/update-selected-product-brand", upload, adminController.editSelectedBrand);
+route.patch("/eidt-single-product/:id", upload, adminController.editSingleProduct);
+route.patch("/update-product-tag", adminController.udpateProductTag);
+route.patch("/edit-single-product-swatches", adminController.editSingleProductSwatches);
+route.patch("/edit-size-variation", adminController.editSingleSizeVariation);
+// ---------------------------------------------------------------------------------------
+
+// Apis => DELETE
+route.delete("/delete-selected-category/:id", adminController.deleteSelectedCategory);
+route.delete("/delete-one-product-brand/:id", adminController.deleteOneProductBrand);
+route.delete("/delete-all-products-brand", adminController.deleteAllProductBrand);
+route.delete("/delete-all-products", adminController.deleteAllProducts);
+route.delete("/delete-one-product/:id", adminController.deleteOneProduct);
 route.delete("/delete-all-products-tags", adminController.deleteAllProductTags);
 route.delete("/delete-single-product-tags/:id", adminController.deleteSelectedTag);
-route.get("/get-selected-product-tag/:id", adminController.getSelectedProductTag);
-route.patch("/update-product-tag", adminController.udpateProductTag);
-route.get("/get-all-product-tags-documents", adminController.getAllProductTagsDocuments);
-route.post("/insert-new-product-swatches", adminController.insertNewProductSwatches);
-route.get("/get-products-all-swatchs", adminController.getAllProductSwatches);
 route.delete("/remove-all-color-swatches", adminController.removeAllProductsSwatches);
-route.get("/get-single-product-swatches/:id", adminController.fetchSingleSwatchs);
-route.patch("/edit-single-product-swatches", adminController.editSingleProductSwatches);
 route.delete("/delete-selected-product-swatches/:id", adminController.removeSelectedProductSwatches);
+route.delete("/remove-single-product-size-variation/:id", adminController.removeSingleProductSizeVariation);
+route.delete("/delete-all-size-varaiton", adminController.deleteAllProductSizeVations);
+// ---------------------------------------------------------------------------------------
 
 module.exports = route;

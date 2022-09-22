@@ -41,11 +41,17 @@ const INITAL_STATE = {
    editProductEdit: null,
    allTags: null,
    productSwatches: null,
-   productSwatchesLoading: true,
+   productSwatchesLoading: false,
    allProductSwatches: null,
    singleProductSwatches: null,
    editProductSwatchesLoading: false,
    editProductSwatches: null,
+   productSizeVariationInfo: null,
+   productSizeVariationLoading: false,
+   allSizeVariations: null,
+   editSizeVariationLoading: false,
+   editSizeVariationInfo: null,
+   singleSizeVariation: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -263,6 +269,14 @@ const adminReducer = function (state = INITAL_STATE, action) {
                allProductSwatches: {
                   ...state.allProductSwatches,
                   allSwatches: CampareFunction(action.payload.filter, state.allProductSwatches, "allSwatches"),
+               },
+            };
+         } else if (action.payload.filde === "sizeVariations") {
+            return {
+               ...state,
+               allSizeVariations: {
+                  ...state.allSizeVariations,
+                  sizeVariations: CampareFunction(action.payload.filter, state.allSizeVariations, "sizeVariations"),
                },
             };
          }
@@ -572,6 +586,74 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.allProductSwatches,
                allSwatches: state.allProductSwatches.allSwatches.filter((el) => el._id !== action.payload),
             },
+         };
+
+      case ACTION_TYPE.UPLOD_PRODUCT_SIZE_VARIATION:
+         return {
+            ...state,
+            productSizeVariationInfo: action.payload,
+            productSizeVariationLoading: false,
+         };
+
+      case ACTION_TYPE.UPLOD_PRODUCT_SIZE_VARIATION_LOADING:
+         return {
+            ...state,
+            productSizeVariationLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_UPLOD_PRODUCT_SIZE_VARIATION_INFO:
+         return {
+            ...state,
+            productSizeVariationInfo: action.payload,
+         };
+
+      case ACTION_TYPE.GET_ALL_PRODUCTS_SIZE_VARIATIONS:
+         return {
+            ...state,
+            allSizeVariations: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_SINGLE_SIZE_VARIATION:
+         return {
+            ...state,
+            allSizeVariations: {
+               ...state.allSizeVariations,
+               sizeVariations: state.allSizeVariations.sizeVariations.filter((el) => el._id !== action.payload),
+            },
+         };
+
+      case ACTION_TYPE.RMEOVE_ALL_PRODUCT_SIZE_VARIATION:
+         return {
+            ...state,
+            allSizeVariations: {
+               ...state.allSizeVariations,
+               sizeVariations: [],
+            },
+         };
+
+      case ACTION_TYPE.GET_SINGLE_PRODUCT_SIZE_VARIATION:
+         return {
+            ...state,
+            singleSizeVariation: action.payload,
+         };
+
+      case ACTION_TYPE.EDIT_PRODUCT_SIZE_VARIATION:
+         return {
+            ...state,
+            editSizeVariationInfo: action.payload,
+            editSizeVariationLoading: false,
+         };
+
+      case ACTION_TYPE.EDIT_PRODUCT_SIZE_VARIATION_LOADING:
+         return {
+            ...state,
+            editSizeVariationLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_EDIT_SIZE_VARIATION_INFO:
+         return {
+            ...state,
+            editSizeVariationInfo: action.payload,
          };
 
       default:

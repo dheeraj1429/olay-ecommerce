@@ -15,6 +15,7 @@ import { GoGitBranch } from "@react-icons/all-files/go/GoGitBranch";
 import { AiOutlineLaptop } from "@react-icons/all-files/ai/AiOutlineLaptop";
 import { GoVersions } from "@react-icons/all-files/go/GoVersions";
 import { GoRepoClone } from "@react-icons/all-files/go/GoRepoClone";
+import { VscTextSize } from "@react-icons/all-files/vsc/VscTextSize";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -128,6 +129,14 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<GoVersions />}
                   innerText={"Variation swatches"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<VscTextSize />}
+                  innerText={"Product size variation"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

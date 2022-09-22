@@ -6,6 +6,7 @@ const { erroResponse } = require("./errorResponse");
 const { imageCompress } = require("../helpers/helpers");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
 const swatchesModel = require("../model/schema/productVariationSwatchesSchema");
+const productSizeVariationModel = require("../model/schema/productSizeVariationSchema");
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -1064,6 +1065,189 @@ const removeSelectedProductSwatches = async function (req, res, next) {
    }
 };
 
+const insertNewProductSizeVairation = async function (req, res, next) {
+   try {
+      const { name, slug, description } = req.body;
+
+      if (!name) {
+         throw new Error("name is reuqired!");
+      }
+
+      const checkSizeVariationIsExists = await productSizeVariationModel.findOne({ name });
+
+      if (checkSizeVariationIsExists) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "Product size variation already exists",
+         });
+      } else {
+         const insertNewVarient = await productSizeVariationModel({
+            name,
+            slug,
+            description,
+         });
+
+         const saveVariation = await insertNewVarient.save();
+
+         if (saveVariation) {
+            return res.status(httpStatusCodes.CREATED).json({
+               success: true,
+               message: "Product size variation saved",
+            });
+         } else {
+            return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+               message: "inertnal server error",
+            });
+         }
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const getAllProductSizeVariations = async function (req, res, next) {
+   try {
+      const allSizeVaraitions = await productSizeVariationModel.find({});
+
+      if (allSizeVaraitions) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            sizeVariations: allSizeVaraitions,
+         });
+      } else {
+         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            message: "Inter server error",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const removeSingleProductSizeVariation = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+
+      if (!id) {
+         throw new Error("id is required");
+      }
+
+      const deleteSelectedSize = await productSizeVariationModel.deleteOne({ _id: id });
+
+      if (!!deleteSelectedSize.deletedCount) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "Product size variation removed form the database",
+         });
+      } else {
+         throw new Error("Somting worng with the size variations!!");
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const deleteAllProductSizeVations = async function (req, res, next) {
+   try {
+      const deleteSizes = await productSizeVariationModel.deleteMany({});
+
+      if (!!deleteSizes.deletedCount) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "Product size variation removed form the database",
+         });
+      } else {
+         throw new Error("Somting worng with the size variations!!");
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const getSingleProductSizeVations = async function (req, res, next) {
+   try {
+      const id = req.params.id;
+
+      if (!id) {
+         throw new Error("id is required");
+      }
+
+      const findSizeVariation = await productSizeVariationModel.findOne({ _id: id });
+
+      if (findSizeVariation) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            variation: findSizeVariation,
+         });
+      } else {
+         throw new Error("Somting worng with the size variations!!");
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const editSingleSizeVariation = async function (req, res, next) {
+   try {
+      const { id } = req.body;
+
+      /**
+       * id is must if there is no id filed then throw new error,
+       * find the dooucment using the id, make also the new index of the document.
+       * @isVariationsExists first find the updated name is exists or not if the product size variation name is exists then send back the reposnse to the client.
+       * check the fileds are update or not then send back the flag to the client.
+       */
+
+      if (!id) {
+         throw new Error("id is required");
+      }
+
+      const isVariationsExists = await productSizeVariationModel.findOne({ name: req.body.name });
+
+      if (isVariationsExists) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "Size variation is alrady exists",
+         });
+      } else {
+         const findSizeVariation = await productSizeVariationModel.updateOne(
+            { _id: id },
+            {
+               $set: {
+                  name: req.body.name,
+                  slug: req.body.slug,
+                  description: req.body.description,
+               },
+            }
+         );
+
+         if (!!findSizeVariation.matchedCount) {
+            return res.status(httpStatusCodes.OK).json({
+               success: true,
+               message: "Product size variation updated",
+            });
+         } else {
+            return res.status(httpStatusCodes.OK).json({
+               success: true,
+               message: "Product size variation already updated",
+            });
+         }
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const insertSelectedProductVariation = async function (req, res, next) {
+   try {
+      // to be continue
+      console.log(req.body);
+      console.log(req.files);
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -1097,4 +1281,11 @@ module.exports = {
    fetchSingleSwatchs,
    editSingleProductSwatches,
    removeSelectedProductSwatches,
+   insertNewProductSizeVairation,
+   insertSelectedProductVariation,
+   getAllProductSizeVariations,
+   removeSingleProductSizeVariation,
+   deleteAllProductSizeVations,
+   getSingleProductSizeVations,
+   editSingleSizeVariation,
 };

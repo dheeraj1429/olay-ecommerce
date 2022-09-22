@@ -11,7 +11,7 @@ import { message } from "antd";
 import { useParams } from "react-router";
 import { getproductSwatches } from "../../Redux/Actions/adminAction";
 import { FaCircle } from "@react-icons/all-files/fa/FaCircle";
-import { Checkbox } from "antd";
+import { insertNewProductVariation } from "../../Redux/Actions/adminAction";
 
 const stock = [
    { value: "in stock", label: "in stock" },
@@ -54,11 +54,26 @@ function CreateSelectedProductVariationComponent() {
    };
 
    const SaveVariationHandler = function () {
-      // send the from data into the backed server
-   };
+      if (VariationInfo.name && params.id) {
+         const formData = new FormData();
+         formData.append("selectedProductId", params.id);
+         formData.append("name", VariationInfo.name);
+         formData.append("sku", VariationInfo.sku);
+         formData.append("regularPrice", VariationInfo.regularPrice);
+         formData.append("salePrice", VariationInfo.salePrice);
+         formData.append("stokeStatus", VariationInfo.stokeStatus);
+         formData.append("description", VariationInfo.description);
+         formData.append("variationImage", VariationInfo.variationImage);
+         formData.append("colorSwatches", VariationInfo.colorSwatches);
+         formData.append("weight", VariationInfo.weight);
+         formData.append("length", VariationInfo.length);
+         formData.append("wide", VariationInfo.wide);
+         formData.append("height", VariationInfo.height);
 
-   const onChange = (e) => {
-      console.log(`checked = ${e.target.checked}`);
+         dispatch(insertNewProductVariation(formData));
+      } else {
+         info("Product variation name is required!");
+      }
    };
 
    useEffect(() => {
@@ -145,15 +160,15 @@ function CreateSelectedProductVariationComponent() {
                               select
                               label="Select"
                               helperText="Product variation swatches"
-                              name="stokeStatus"
-                              value={VariationInfo.stokeStatus}
+                              name="colorSwatches"
+                              value={VariationInfo.colorSwatches}
                               onChange={changeHandler}
                            >
                               {!!allProductSwatches && allProductSwatches.success && allProductSwatches?.allSwatches
                                  ? allProductSwatches.allSwatches.map((option) => (
-                                      <MenuItem key={option.value} value={option._id}>
+                                      <MenuItem key={option._id} value={option._id}>
                                          <variation.flexSpace className="flex_items">
-                                            <div>{option.name}</div>
+                                            {option.name}
                                             <FaCircle
                                                style={{
                                                   fill: `${option.colorCode.hex}`,

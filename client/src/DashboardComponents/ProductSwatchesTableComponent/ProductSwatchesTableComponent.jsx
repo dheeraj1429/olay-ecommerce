@@ -18,12 +18,20 @@ const items = [
    { value: "Delete all", Option: "Delete all", icon: <FcIcons8Cup /> },
 ];
 
+const row = [
+   { elm: "Edit", value: "Edit" },
+   { elm: "Delete", value: "Delete" },
+   { elm: "Color", value: "Color" },
+   { elm: "Name", value: "Name" },
+   { elm: "Slug", value: "Slug" },
+   { elm: "Description", value: "Description" },
+];
+
 function ProductSwatchesTableComponent() {
    const dispatch = useDispatch();
 
    const allProductSwatches = useSelector((state) => state.admin.allProductSwatches);
    const productSwatchesLoading = useSelector((state) => state.admin.productSwatchesLoading);
-
    useEffect(() => {
       dispatch(getproductSwatches());
    }, []);
@@ -34,7 +42,7 @@ function ProductSwatchesTableComponent() {
 
          <table.spaceDiv>
             <ProductSectionFeatureComponent state={allProductSwatches} pageLink={link} field={"allSwatches"} items={items} action={removeAllProductSwatches} />
-            <AllSwatchTableComponent isLoading={productSwatchesLoading} />
+            <AllSwatchTableComponent variation={allProductSwatches} field={"allSwatches"} isLoading={productSwatchesLoading} row={row} color={true} />
          </table.spaceDiv>
       </table.div>
    );

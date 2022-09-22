@@ -1,35 +1,27 @@
 import React from "react";
 import * as tableCm from "./AllSwatchTableComponent.style";
-import { useSelector } from "react-redux";
 import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
 import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
 import { VscClose } from "@react-icons/all-files/vsc/VscClose";
 import { Link } from "react-router-dom";
 import { Popconfirm } from "antd";
-import { removeSelectedProductSwatches } from "../../Redux/Actions/adminAction";
+import { removeSelectedProductSwatches, removeSingleSizeVariations } from "../../Redux/Actions/adminAction";
 import { useDispatch } from "react-redux";
 
-const row = [
-   { elm: "Edit", value: "Edit" },
-   { elm: "Delete", value: "Delete" },
-   { elm: "Color", value: "Color" },
-   { elm: "Name", value: "Name" },
-   { elm: "Slug", value: "Slug" },
-   { elm: "Description", value: "Description" },
-];
-
-function AllSwatchTableComponent() {
-   const allProductSwatches = useSelector((state) => state.admin.allProductSwatches);
-
+function AllSwatchTableComponent({ variation, row, field, color }) {
    const dispatch = useDispatch();
 
    const confirm = (id) => {
-      dispatch(removeSelectedProductSwatches(id));
+      if (field === "allSwatches") {
+         dispatch(removeSelectedProductSwatches(id));
+      } else if (field === "sizeVariations") {
+         dispatch(removeSingleSizeVariations(id));
+      }
    };
 
    return (
       <tableCm.div>
-         {!!allProductSwatches && allProductSwatches.success && !!allProductSwatches.allSwatches.length ? (
+         {!!variation && variation.success && !!variation[field].length ? (
             <tableCm.tableDiv>
                <table>
                   <tr>
@@ -37,26 +29,48 @@ function AllSwatchTableComponent() {
                         <th key={el.elm}>{el.value}</th>
                      ))}
                   </tr>
-                  {allProductSwatches.allSwatches.map((el) => (
+                  {variation[field].map((el) => (
                      <tr>
                         <td>
-                           <Link to={`/dashboard/variation-swatches/${el._id}`}>
+                           <Link to={`/dashboard/variation-swatches/${field}/${el._id}`}>
                               <FiEdit2 />
                            </Link>
                         </td>
                         <td>
-                           <Popconfirm title="Are you sure to delete this product swatches" onConfirm={() => confirm(el._id)} okText="Yes" cancelText="No">
+                           <Popconfirm
+                              title={`Are you sure to delete this product ${field == "allSwatches" ? "swatches" : "size"} variation`}
+                              onConfirm={() => confirm(el._id)}
+                              okText="Yes"
+                              cancelText="No"
+                           >
                               <VscClose />
                            </Popconfirm>
                         </td>
-                        <td>
-                           <div
-                              className="Color-prv_div"
+                        {color ? (
+                           <td>
+                              <div
+                                 className="Color-prv_div"
+                                 style={{
+                                    backgroundColor: `${el.colorCode.hex}`,
+                                 }}
+                              ></div>
+                           </td>
+                        ) : null}
+                        {color ? null : (
+                           <td
                               style={{
-                                 backgroundColor: `${el.colorCode.hex}`,
+                                 width: "3%",
                               }}
-                           ></div>
-                        </td>
+                           >
+                              {el?.createdAt
+                                 ? (function () {
+                                      const date = String(new Date(el.createdAt)).split("GMT")[0];
+                                      return <p>{`${date}`}</p>;
+                                   })()
+                                 : null}
+                           </td>
+                        )}
+
                         <td>
                            <p>{el.name}</p>
                         </td>
@@ -64,7 +78,7 @@ function AllSwatchTableComponent() {
                            <p>{el.slug}</p>
                         </td>
                         <td>
-                           <p>{el.description}</p>
+                           <p>{el.description.slice(0, 70)}</p>
                         </td>
                      </tr>
                   ))}
@@ -72,7 +86,7 @@ function AllSwatchTableComponent() {
             </tableCm.tableDiv>
          ) : (
             <div className="center_div">
-               <p>No Color Swatches</p>
+               <p>No {`${color ? "color swatches" : "size variations"}`}</p>
             </div>
          )}
       </tableCm.div>

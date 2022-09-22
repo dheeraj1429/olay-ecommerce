@@ -30,13 +30,7 @@ function ProductBrandsComponent() {
       <brand.div>
          <DashboardNavbarComponent />
          <brand.innerDiv>
-            <ProductSectionFeatureComponent
-               state={productBrands}
-               pageLink={link}
-               field={"brands"}
-               action={deleteAllBrand}
-               items={items}
-            />
+            <ProductSectionFeatureComponent state={productBrands} pageLink={link} field={"brands"} action={deleteAllBrand} items={items} />
             <ProductBransTableComponent />
             <TableFooterComponent action={"brands"} state={productBrands} />
          </brand.innerDiv>

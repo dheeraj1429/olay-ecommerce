@@ -7,6 +7,8 @@ const logger = require("morgan");
 const port = process.env.PORT || 8000;
 const path = require("path");
 const cors = require("cors");
+const numCPUs = require("node:os").cpus().length;
+const cluster = require("node:cluster");
 
 // database connection
 const databaseConnectionFunction = require("./model/db/db");
@@ -32,9 +34,23 @@ app.use(logger());
 app.use("/admin", adminRoute);
 app.use("/auth", authRoute);
 
-// server
-databaseConnectionFunction(() => {
-   http.listen(port, () => {
-      console.log(`server is running port ${port}`);
+if (cluster.isPrimary) {
+   console.log(`Primary ${process.pid} is running`);
+
+   for (let i = 0; i < numCPUs; i++) {
+      cluster.fork();
+   }
+
+   cluster.on("exit", (Worker, code, signal) => {
+      console.log(`Worker ${Worker.process.pid} died`);
    });
-});
+} else {
+   // server
+   databaseConnectionFunction(() => {
+      http.listen(port, () => {
+         console.log(`server is running port ${port}`);
+      });
+   });
+
+   console.log(`Woker ${process.pid} is running`);
+}

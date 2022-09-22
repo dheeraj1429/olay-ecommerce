@@ -244,3 +244,31 @@ export const removeUpdateProductSwatchesInfo = function (data) {
       payload: data,
    };
 };
+
+export const productSizeVariationLoadingFn = function (data) {
+   return {
+      type: ACTION_TYPE.UPLOD_PRODUCT_SIZE_VARIATION_LOADING,
+      payload: data,
+   };
+};
+
+export const removeProductSizeVariationInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_UPLOD_PRODUCT_SIZE_VARIATION_INFO,
+      payload: data,
+   };
+};
+
+export const editProductSizeVariationsLoadingFn = function (data) {
+   return {
+      type: ACTION_TYPE.EDIT_PRODUCT_SIZE_VARIATION_LOADING,
+      payload: data,
+   };
+};
+
+export const removeSizeVariationInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_EDIT_SIZE_VARIATION_INFO,
+      payload: data,
+   };
+};

@@ -22,6 +22,9 @@ import ProductSwatchesTableComponent from "./DashboardComponents/ProductSwatches
 import EditProductSwatchesComponent from "./DashboardComponents/EditProductSwatchesComponent/EditProductSwatchesComponent";
 import ProductVariationCreatorComponent from "./DashboardComponents/ProductVariationCreatorComponent/ProductVariationCreatorComponent";
 import CreateSelectedProductVariationComponent from "./DashboardComponents/CreateSelectedProductVariationComponent/CreateSelectedProductVariationComponent";
+import ProductSizeVariationComponent from "./DashboardComponents/ProductSizeVariationComponent/ProductSizeVariationComponent";
+import ProductSizeVariationTableComponent from "./DashboardComponents/ProductSizeVariationTableComponent/ProductSizeVariationTableComponent";
+import ProductSizeVariationEditComponent from "./DashboardComponents/ProductSizeVariationEditComponent/ProductSizeVariationEditComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -58,9 +61,12 @@ function App() {
                <Route path="product-tag/edit/:id" element={<AllProductTagEditComponent />} />
                <Route path="variation-swatches" element={<ProductSwatchesTableComponent />} />
                <Route path="variation-swatches/create" element={<VariationSwatchesComponent />} />
-               <Route path="variation-swatches/:id" element={<EditProductSwatchesComponent />} />
+               <Route path="variation-swatches/allSwatches/:id" element={<EditProductSwatchesComponent />} />
                <Route path="product-variation" element={<ProductVariationCreatorComponent />} />
                <Route path="product/create-variations/:id" element={<CreateSelectedProductVariationComponent />} />
+               <Route path="product-size-variation" element={<ProductSizeVariationTableComponent />} />
+               <Route path="product-size-variation/create" element={<ProductSizeVariationComponent />} />
+               <Route path="variation-swatches/sizeVariations/:id" element={<ProductSizeVariationEditComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

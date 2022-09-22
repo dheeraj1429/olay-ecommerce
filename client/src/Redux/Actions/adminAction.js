@@ -575,14 +575,126 @@ export const removeSelectedProductSwatches = function (id) {
       try {
          const deleteSelectedSwatches = await axios.delete(`/admin/delete-selected-product-swatches/${id}`, headers);
 
-         console.log(deleteSelectedSwatches);
-
          if (deleteSelectedSwatches && deleteSelectedSwatches?.data && deleteSelectedSwatches?.data?.success) {
             dispatch({
                type: ACTION_TYPE.DELETE_SELECTED_PRODUCT_SWATCHES,
                payload: id,
             });
          }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const updateNewSizeVariation = function (data) {
+   return async function (dispatch) {
+      try {
+         const insertProductSizeVarient = await axios.post("/admin/insert-new-product-size-variation", data, headers);
+
+         if (insertProductSizeVarient && insertProductSizeVarient?.data) {
+            dispatch({
+               type: ACTION_TYPE.UPLOD_PRODUCT_SIZE_VARIATION,
+               payload: insertProductSizeVarient && insertProductSizeVarient?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getAllProductSizeVariations = function () {
+   return async function (dispatch) {
+      try {
+         const sizeVariations = await axios.get("/admin/get-all-size-variations", headers);
+
+         if (sizeVariations && sizeVariations?.data) {
+            dispatch({
+               type: ACTION_TYPE.GET_ALL_PRODUCTS_SIZE_VARIATIONS,
+               payload: sizeVariations && sizeVariations?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const removeSingleSizeVariations = function (id) {
+   return async function (dispatch) {
+      try {
+         const removeSelectedSize = await axios.delete(`/admin/remove-single-product-size-variation/${id}`, headers);
+
+         if (removeSelectedSize && removeSelectedSize?.data && removeSelectedSize?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.REMOVE_SINGLE_SIZE_VARIATION,
+               payload: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const removeAllProductSizeVaration = function () {
+   return async function (dispatch) {
+      try {
+         const removeAllSizeVariation = await axios.delete("/admin/delete-all-size-varaiton", headers);
+
+         if (removeAllSizeVariation && removeAllSizeVariation?.data && removeAllSizeVariation?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.RMEOVE_ALL_PRODUCT_SIZE_VARIATION,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getSingleProductSizeVations = function (id) {
+   return async function (dispatch) {
+      try {
+         const getSingleSizeVar = await axios.get(`/admin/get-single-size-variation/${id}`, headers);
+
+         if (getSingleSizeVar && getSingleSizeVar?.data) {
+            dispatch({
+               type: ACTION_TYPE.GET_SINGLE_PRODUCT_SIZE_VARIATION,
+               payload: getSingleSizeVar && getSingleSizeVar?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const editProductSizeVariations = function (data) {
+   return async function (dispatch) {
+      try {
+         const editSizeVariations = await axios.patch("/admin/edit-size-variation", data, headers);
+
+         if (editSizeVariations && editSizeVariations?.data) {
+            dispatch({
+               type: ACTION_TYPE.EDIT_PRODUCT_SIZE_VARIATION,
+               payload: editSizeVariations && editSizeVariations?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+// [-]
+export const insertNewProductVariation = function (data) {
+   return async function (dispatch) {
+      try {
+         const insertVariation = await axios.post("/admin/insert-new-product-variation", data, headers);
+
+         console.log(insertVariation);
       } catch (err) {
          console.log(err);
       }

@@ -45,14 +45,14 @@ export const tr = styled.tr`
       background-color: var(--spec-themed-green);
       color: var(--main-cl);
    }
-   .On-backorder {
+   .on-backorder {
       padding: 0.2rem 2rem;
       width: max-content;
       border-radius: 5px;
       background-color: var(--spec-themed-green);
       color: var(--main-cl);
    }
-   .Out-of-stock {
+   .out-of-stock {
       padding: 0.2rem 2rem;
       width: max-content;
       border-radius: 5px;

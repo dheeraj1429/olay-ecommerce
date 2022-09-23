@@ -27,7 +27,13 @@ function AllProductTableComponent() {
 
    return (
       <table.div>
-         <ProductSectionFeatureComponent state={allProducts} pageLink={link} field={"products"} items={items} action={deleteAllProducts} />
+         <ProductSectionFeatureComponent
+            state={allProducts}
+            pageLink={link}
+            field={"products"}
+            items={items}
+            action={deleteAllProducts}
+         />
          <AllProductsTableComponent />
          <TableFooterComponent state={allProducts} action={"products"} />
       </table.div>

@@ -32,6 +32,7 @@ const productSchema = new mongoose.Schema({
          wide: { type: Number },
          height: { type: Number },
          size: { type: mongoose.Types.ObjectId, ref: "sizeVariation" },
+         createdAt: { type: Date, default: Date.now },
       },
    ],
 });

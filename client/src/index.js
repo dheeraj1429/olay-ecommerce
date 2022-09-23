@@ -22,15 +22,15 @@ const darkTheme = createTheme({
 
 root.render(
    <ThemeProvider theme={darkTheme}>
-      <CookiesProvider>
-         <BrowserRouter>
-            <Provider store={store}>
+      <Provider store={store}>
+         <CookiesProvider>
+            <BrowserRouter>
                {/* <React.StrictMode> */}
                <App />
                {/* </React.StrictMode> */}
-            </Provider>
-         </BrowserRouter>
-      </CookiesProvider>
+            </BrowserRouter>
+         </CookiesProvider>
+      </Provider>
    </ThemeProvider>
 );
 

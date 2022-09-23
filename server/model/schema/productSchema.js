@@ -17,6 +17,23 @@ const productSchema = new mongoose.Schema({
    createdAt: { type: Date, default: Date.now },
    productStatusInfo: { type: String, default: "draft" },
    tags: [{ _id: { type: mongoose.Types.ObjectId, ref: "tag" } }],
+   variations: [
+      {
+         variationName: { type: String, required: [true, "product sub variation name is reuqired"] },
+         sku: { type: String },
+         regularPrice: { type: Number },
+         salePrice: { type: Number },
+         stokeStatus: { type: String, default: "draft" },
+         description: { type: String },
+         variationImage: { type: String },
+         colorSwatches: { type: mongoose.Types.ObjectId, ref: "swatches" },
+         weight: { type: Number },
+         length: { type: Number },
+         wide: { type: Number },
+         height: { type: Number },
+         size: { type: mongoose.Types.ObjectId, ref: "sizeVariation" },
+      },
+   ],
 });
 
 const productModel = mongoose.model("product", productSchema);

@@ -252,10 +252,13 @@ export const uplodNewProduct = function (data) {
    };
 };
 
-export const fetchUploadProducts = function (page) {
+export const fetchUploadProducts = function (page, docItems) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}`, headers);
+         const fetchProducts = await axios.get(
+            `/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`,
+            headers
+         );
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
@@ -688,13 +691,19 @@ export const editProductSizeVariations = function (data) {
    };
 };
 
-// [-]
-export const insertNewProductVariation = function (data) {
+export const insertProductSubVariation = function (data) {
    return async function (dispatch) {
       try {
          const insertVariation = await axios.post("/admin/insert-new-product-variation", data, headers);
 
-         console.log(insertVariation);
+         if (insertVariation && insertVariation?.data && insertVariation?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.INSERT_PRODUCT_SUB_VARIATION,
+               payload: insertVariation && insertVariation?.data,
+            });
+         } else {
+            console.log(insertVariation && insertVariation?.data);
+         }
       } catch (err) {
          console.log(err);
       }

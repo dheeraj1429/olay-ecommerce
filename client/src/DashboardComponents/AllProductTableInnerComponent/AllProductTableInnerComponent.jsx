@@ -53,26 +53,51 @@ function AllProductTableInnerComponent({ allProducts, variation }) {
                                 </Link>
                              </inner.td>
                              <inner.td>
-                                <Popconfirm title="Are you sure to delete this product?" onConfirm={() => confirm(el._id)} okText="Yes" cancelText="No">
+                                <Popconfirm
+                                   title="Are you sure to delete this product?"
+                                   onConfirm={() => confirm(el._id)}
+                                   okText="Yes"
+                                   cancelText="No"
+                                >
                                    <VscClose />
                                 </Popconfirm>
                              </inner.td>
                           </>
                        )}
                        {
-                          <Link to={location.pathname === "/dashboard/all-products" ? location.pathname : `/dashboard/product/create-variations/${el._id}`}>
+                          <Link
+                             to={
+                                location.pathname === "/dashboard/all-products"
+                                   ? location.pathname
+                                   : `/dashboard/product/create-variations/${el._id}`
+                             }
+                          >
                              <inner.td>
                                 <div className={variation ? "produvt-variation-image-div" : "product_image_prv"}>
-                                   <img crossOrigin="anonymous" src={`${backendConfigData.URL}productImagesCompress/${el.productImage}`} alt="" />
+                                   <img
+                                      crossOrigin="anonymous"
+                                      src={`${backendConfigData.URL}productImagesCompress/${el.productImage}`}
+                                      alt=""
+                                   />
                                 </div>
                              </inner.td>
                           </Link>
                        }
                        <inner.td>{el.name.slice(0, 40)}</inner.td>
                        <inner.td>{el.price}</inner.td>
-                       <inner.td>{el?.salePrice && !!el.salePrice ? <div className="Sale">{el.salePrice}</div> : <div className="no_sale">No Sale</div>}</inner.td>
+                       <inner.td>
+                          {el?.salePrice && !!el.salePrice ? (
+                             <div className="Sale">{el.salePrice}</div>
+                          ) : (
+                             <div className="no_sale">No Sale</div>
+                          )}
+                       </inner.td>
                        <inner.td></inner.td>
-                       <inner.td>{el?.stockStatus && el.stockStatus ? <div className={el.stockStatus.split(" ").join("-")}>{el.stockStatus}</div> : null}</inner.td>
+                       <inner.td>
+                          {el?.stockStatus && el.stockStatus ? (
+                             <div className={el.stockStatus.split(" ").join("-")}>{el.stockStatus}</div>
+                          ) : null}
+                       </inner.td>
                        <inner.td>{el?.weight ? el.weight : "-"}</inner.td>
                        <inner.td>{el?.length ? el.length : "-"}</inner.td>
                        <inner.td>{el?.wide ? el.wide : "-"}</inner.td>
@@ -88,7 +113,11 @@ function AllProductTableInnerComponent({ allProducts, variation }) {
                                })()
                              : null}
                        </inner.td>
-                       <inner.td>{el?.productStatusInfo ? <div className={el.productStatusInfo}>{el.productStatusInfo}</div> : null}</inner.td>
+                       <inner.td>
+                          {el?.productStatusInfo ? (
+                             <div className={el.productStatusInfo}>{el.productStatusInfo}</div>
+                          ) : null}
+                       </inner.td>
                     </inner.tr>
                  </>
               ))

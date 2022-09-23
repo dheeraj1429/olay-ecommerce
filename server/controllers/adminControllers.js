@@ -7,6 +7,7 @@ const { imageCompress } = require("../helpers/helpers");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
 const swatchesModel = require("../model/schema/productVariationSwatchesSchema");
 const productSizeVariationModel = require("../model/schema/productSizeVariationSchema");
+const AppError = require("../helpers/appError");
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -200,7 +201,7 @@ const insertNewProductBrand = async function (req, res, next) {
             const originalname = file.originalname;
             const imagePath = file.path;
 
-            await imageCompress(imagePath, 200, "brandImagesCompress", originalname);
+            await imageCompress(imagePath, 130, "brandImagesCompress", originalname);
 
             insertBrandInfo = await productBrandModel({
                name,
@@ -403,7 +404,7 @@ const editSelectedBrand = async function (req, res, next) {
          updateObject.brandIcon = originalname;
          const imagePath = file.path;
 
-         await imageCompress(imagePath, 200, "brandImagesCompress", originalname);
+         await imageCompress(imagePath, 130, "brandImagesCompress", originalname);
 
          updateSelectedProductBrand = updateFildes(id, updateObject, res);
       } else {
@@ -499,7 +500,7 @@ const uploadNewProduct = async function (req, res, next) {
             const originalname = req.files[0].originalname;
             const imagePath = req.files[0].path;
 
-            await imageCompress(imagePath, 400, "productImagesCompress", originalname);
+            await imageCompress(imagePath, 250, "productImagesCompress", originalname);
 
             productObject.productImage = originalname;
             await saveProductInDb(productObject, res);
@@ -518,6 +519,7 @@ const uploadNewProduct = async function (req, res, next) {
 const fetchUploadProducts = async function (req, res, next) {
    try {
       const page = req.query.page;
+      // const subVatiaions = req.query.subVatiaions;
 
       if (!page) {
          return res.status(httpStatusCodes.OK).json({
@@ -642,7 +644,11 @@ const fetchSingleProduct = async function (req, res, next) {
          });
       }
 
-      const findSingleProduct = await productModel.findOne({ _id: id }).populate("category", { name: 1 }).populate("brand", { name: 1 }).populate("tags._id", { name: 1 });
+      const findSingleProduct = await productModel
+         .findOne({ _id: id })
+         .populate("category", { name: 1 })
+         .populate("brand", { name: 1 })
+         .populate("tags._id", { name: 1 });
 
       if (findSingleProduct) {
          return res.status(httpStatusCodes.OK).json({
@@ -1202,47 +1208,133 @@ const editSingleSizeVariation = async function (req, res, next) {
          throw new Error("id is required");
       }
 
-      const isVariationsExists = await productSizeVariationModel.findOne({ name: req.body.name });
+      // const isVariationsExists = await productSizeVariationModel.findOne({ name: req.body.name });
 
-      if (isVariationsExists) {
+      // if (isVariationsExists) {
+      //    return res.status(httpStatusCodes.OK).json({
+      //       success: true,
+      //       message: "Size variation is alrady exists",
+      //    });
+      // } else {
+      const findSizeVariation = await productSizeVariationModel.updateOne(
+         { _id: id },
+         {
+            $set: {
+               name: req.body.name,
+               slug: req.body.slug,
+               description: req.body.description,
+            },
+         }
+      );
+
+      if (!!findSizeVariation.matchedCount) {
          return res.status(httpStatusCodes.OK).json({
             success: true,
-            message: "Size variation is alrady exists",
+            message: "Product size variation updated",
          });
       } else {
-         const findSizeVariation = await productSizeVariationModel.updateOne(
-            { _id: id },
-            {
-               $set: {
-                  name: req.body.name,
-                  slug: req.body.slug,
-                  description: req.body.description,
-               },
-            }
-         );
-
-         if (!!findSizeVariation.matchedCount) {
-            return res.status(httpStatusCodes.OK).json({
-               success: true,
-               message: "Product size variation updated",
-            });
-         } else {
-            return res.status(httpStatusCodes.OK).json({
-               success: true,
-               message: "Product size variation already updated",
-            });
-         }
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "Product size variation already updated",
+         });
       }
+      // }
    } catch (err) {
       console.log(err);
    }
 };
 
+const sendClientResponse = function (res, updateDocument) {
+   if (!!updateDocument.modifiedCount) {
+      res.status(httpStatusCodes.CREATED).json({
+         success: true,
+         message: "Product sub variation created",
+      });
+   } else {
+      res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
+   }
+};
+
 const insertSelectedProductVariation = async function (req, res, next) {
    try {
-      // to be continue
-      console.log(req.body);
-      console.log(req.files);
+      const { selectedProductId } = req.body;
+      let insertNewSubProductVariation;
+
+      if (!selectedProductId) {
+         throw new Error(`product perent id is required`);
+      }
+
+      /**
+       * @findParentProduct find the parent product. because we want to update onlye the selected product.
+       */
+      const findParentProduct = await productModel.findOne({ _id: selectedProductId });
+
+      if (findParentProduct) {
+         /**
+          * fiest we need to find the varitions is exists or not. if the product varitions is exits then send back the response to client. otherwise insert the new product sub vaitions.
+          */
+
+         const findProductSubVaitionIsExist = await productModel.findOne({
+            _id: selectedProductId,
+            "variations.variationName": req.body.name,
+         });
+
+         if (!!findProductSubVaitionIsExist?.variations.length) {
+            return res.status(httpStatusCodes.OK).json({
+               success: true,
+               message: "Product sub vaition is alrady exists",
+            });
+         } else {
+            const updatedFildes = {
+               variationName: req.body.name,
+               sku: req.body.sku,
+               regularPrice: !!req.body.regularPrice ? req.body.regularPrice : findParentProduct.price,
+               salePrice: req.body.salePrice,
+               stokeStatus: !!req.body.stokeStatus ? req.body.stokeStatus : "draft",
+               description: req.body.description,
+               colorSwatches: req.body.colorSwatches,
+               weight: !!req.body.weight,
+               length: !!req.body.length,
+               wide: !!req.body.wide,
+               height: !!req.body.height,
+            };
+
+            if (req.files[0]) {
+               const file = req.files[0];
+               const originalname = file.originalname;
+               const imagePath = file.path;
+               updatedFildes.variationImage = originalname;
+
+               /**
+                * compress the uploaded file into the another folder. when the user requret for the small size image then send back the compress version of image ( for the load time ).
+                */
+               await imageCompress(imagePath, 150, "brandImagesCompress", originalname);
+
+               insertNewSubProductVariation = await productModel.updateOne(
+                  { _id: selectedProductId },
+                  { $push: { variations: updatedFildes } }
+               );
+
+               sendClientResponse(res, insertNewSubProductVariation);
+            } else {
+               /**
+                * if the product image is not posted then use the parnet image path to fecth the parent image with sub vaitions.
+                */
+               updatedFildes.variationImage = productModel.productImage;
+
+               insertNewSubProductVariation = await productModel.updateOne(
+                  { _id: selectedProductId },
+                  { $push: { variations: updatedFildes } }
+               );
+
+               sendClientResponse(res, insertNewSubProductVariation);
+            }
+         }
+      } else {
+         new AppError("Parent product id is required!");
+      }
    } catch (err) {
       console.log(err);
    }

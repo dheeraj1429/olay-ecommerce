@@ -5,11 +5,13 @@ import AllProductTableComponent from "../AllProductTableComponent/AllProductTabl
 import { useDispatch } from "react-redux";
 import { fetchUploadProducts } from "../../Redux/Actions/adminAction";
 
+const subVatiaions = 0;
+
 function AllProductComponent() {
    const dispatch = useDispatch();
 
    useEffect(() => {
-      dispatch(fetchUploadProducts(0));
+      dispatch(fetchUploadProducts(0, subVatiaions));
    }, []);
 
    return (

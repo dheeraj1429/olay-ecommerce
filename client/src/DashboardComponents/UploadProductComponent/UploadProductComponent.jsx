@@ -5,11 +5,7 @@ import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent
 import ProductUploadFirstComponent from "../ProductUploadFirstComponent/ProductUploadFirstComponent";
 import ProductUploadSecondComponent from "../ProductUploadSecondComponent/ProductUploadSecondComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import {
-   uplodNewProduct,
-   fetchSingleProduct,
-   editSingleProduct,
-} from "../../Redux/Actions/adminAction";
+import { uplodNewProduct, fetchSingleProduct, editSingleProduct } from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import {

@@ -52,6 +52,8 @@ const INITAL_STATE = {
    editSizeVariationLoading: false,
    editSizeVariationInfo: null,
    singleSizeVariation: null,
+   productSubVariationInfo: null,
+   productSubVariationLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -654,6 +656,25 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             editSizeVariationInfo: action.payload,
+         };
+
+      case ACTION_TYPE.INSERT_PRODUCT_SUB_VARIATION_LOADING:
+         return {
+            ...state,
+            productSubVariationLoading: action.payload,
+         };
+
+      case ACTION_TYPE.INSERT_PRODUCT_SUB_VARIATION:
+         return {
+            ...state,
+            productSubVariationInfo: action.payload,
+            productSubVariationLoading: false,
+         };
+
+      case ACTION_TYPE.REMOVE_PRODUCT_SUB_INFO:
+         return {
+            ...state,
+            productSubVariationInfo: action.payload,
          };
 
       default:

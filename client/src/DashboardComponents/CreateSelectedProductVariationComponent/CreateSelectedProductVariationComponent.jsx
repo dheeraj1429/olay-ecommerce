@@ -9,9 +9,13 @@ import CustombuttonComponent from "../../Components/CustombuttonComponent/Custom
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import { useParams } from "react-router";
-import { getproductSwatches } from "../../Redux/Actions/adminAction";
+import {
+   getAllProductSizeVariations,
+   getproductSwatches,
+   insertProductSubVariation,
+} from "../../Redux/Actions/adminAction";
 import { FaCircle } from "@react-icons/all-files/fa/FaCircle";
-import { insertNewProductVariation } from "../../Redux/Actions/adminAction";
+import { insertNewSubVationLoading, removeProductSubInfo } from "../../Redux/Actions/appAction";
 
 const stock = [
    { value: "in stock", label: "in stock" },
@@ -32,11 +36,16 @@ function CreateSelectedProductVariationComponent() {
       length: "",
       wide: "",
       height: "",
+      size: "",
    });
 
    const params = useParams();
    const dispatch = useDispatch();
+
    const allProductSwatches = useSelector((state) => state.admin.allProductSwatches);
+   const allSizeVariations = useSelector((state) => state.admin.allSizeVariations);
+   const productSubVariationLoading = useSelector((state) => state.admin.productSubVariationLoading);
+   const productSubVariationInfo = useSelector((state) => state.admin.productSubVariationInfo);
 
    const info = (msg) => {
       message.info(msg);
@@ -70,7 +79,8 @@ function CreateSelectedProductVariationComponent() {
          formData.append("wide", VariationInfo.wide);
          formData.append("height", VariationInfo.height);
 
-         dispatch(insertNewProductVariation(formData));
+         dispatch(insertProductSubVariation(formData));
+         dispatch(insertNewSubVationLoading(true));
       } else {
          info("Product variation name is required!");
       }
@@ -78,7 +88,18 @@ function CreateSelectedProductVariationComponent() {
 
    useEffect(() => {
       dispatch(getproductSwatches());
+      dispatch(getAllProductSizeVariations());
+
+      return () => {
+         dispatch(removeProductSubInfo(null));
+      };
    }, []);
+
+   useEffect(() => {
+      if (!!productSubVariationInfo && productSubVariationInfo.success) {
+         message.success(productSubVariationInfo.message);
+      }
+   }, [productSubVariationInfo]);
 
    return (
       <variation.div>
@@ -110,7 +131,15 @@ function CreateSelectedProductVariationComponent() {
                         onChange={changeHandler}
                         helperText="Product variations name for example: color red variation, size xl variation"
                      />
-                     <TextField id="outlined-basic" label="SKU" variant="outlined" type={"text"} name="sku" value={VariationInfo.sku} onChange={changeHandler} />
+                     <TextField
+                        id="outlined-basic"
+                        label="SKU"
+                        variant="outlined"
+                        type={"text"}
+                        name="sku"
+                        value={VariationInfo.sku}
+                        onChange={changeHandler}
+                     />
                      <variation.flex>
                         <div className="half-width">
                            <TextField
@@ -151,6 +180,26 @@ function CreateSelectedProductVariationComponent() {
                                     {option.label}
                                  </MenuItem>
                               ))}
+                           </TextField>
+                        </div>
+
+                        <div className="half-width">
+                           <TextField
+                              id="outlined-select-currency"
+                              select
+                              label="Select"
+                              helperText="Product size variation"
+                              name="size"
+                              value={VariationInfo.size}
+                              onChange={changeHandler}
+                           >
+                              {!!allSizeVariations && allSizeVariations.success && allSizeVariations?.sizeVariations
+                                 ? allSizeVariations.sizeVariations.map((option) => (
+                                      <MenuItem key={option._id} value={option._id}>
+                                         {option.name}
+                                      </MenuItem>
+                                   ))
+                                 : null}
                            </TextField>
                         </div>
 
@@ -205,8 +254,18 @@ function CreateSelectedProductVariationComponent() {
                               onChange={changeHandler}
                            />
                         </div>
+                     </variation.flex>
+                     <variation.flex>
                         <div className="half-width">
-                           <TextField id="outlined-basic" label="Product wide" variant="outlined" type={"number"} name="wide" value={VariationInfo.wide} onChange={changeHandler} />
+                           <TextField
+                              id="outlined-basic"
+                              label="Product wide"
+                              variant="outlined"
+                              type={"number"}
+                              name="wide"
+                              value={VariationInfo.wide}
+                              onChange={changeHandler}
+                           />
                         </div>
                         <div className="half-width">
                            <TextField
@@ -234,7 +293,12 @@ function CreateSelectedProductVariationComponent() {
                      <HeadingComponent cl="sm_heading" Heading={"Product variations image"} />
                      <ProductUploadImageComponent onChange={ImageGrabHandler} name="variationImage" />
                   </Box>
-                  <CustombuttonComponent innerText={"Save"} btnCl={"category_upload"} onClick={SaveVariationHandler} />
+                  <CustombuttonComponent
+                     innerText={"Save"}
+                     btnCl={"category_upload"}
+                     onClick={SaveVariationHandler}
+                     isLoading={productSubVariationLoading}
+                  />
                </li>
             </ul>
          </variation.spaceDiv>

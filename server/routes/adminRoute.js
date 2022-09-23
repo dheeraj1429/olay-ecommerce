@@ -7,7 +7,7 @@ const adminController = require("../controllers/adminControllers");
 const storage = multer.diskStorage({
    destination: function (req, file, cb) {
       if (file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/jpg") {
-         if (file.fieldname === "productImage") {
+         if (file.fieldname === "productImage" || file.fieldname === "variationImage") {
             cb(null, "./upload/productImages");
          } else {
             cb(null, "./upload/brandImages");
@@ -46,7 +46,7 @@ route.post("/delete-selected-products", adminController.deleteSelectedProducts);
 route.post("/save-new-product-tag", adminController.insertNewProductTag);
 route.post("/insert-new-product-swatches", adminController.insertNewProductSwatches);
 route.post("/insert-new-product-size-variation", adminController.insertNewProductSizeVairation);
-route.post("/insert-new-product-variation", adminController.insertSelectedProductVariation);
+route.post("/insert-new-product-variation", upload, adminController.insertSelectedProductVariation);
 // ---------------------------------------------------------------------------------------
 
 // Apis => PATCH

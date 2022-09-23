@@ -272,3 +272,17 @@ export const removeSizeVariationInfo = function (data) {
       payload: data,
    };
 };
+
+export const insertNewSubVationLoading = function (data) {
+   return {
+      type: ACTION_TYPE.INSERT_PRODUCT_SUB_VARIATION_LOADING,
+      payload: data,
+   };
+};
+
+export const removeProductSubInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_PRODUCT_SUB_INFO,
+      payload: data,
+   };
+};

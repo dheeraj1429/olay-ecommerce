@@ -72,6 +72,7 @@ route.delete("/remove-all-color-swatches", adminController.removeAllProductsSwat
 route.delete("/delete-selected-product-swatches/:id", adminController.removeSelectedProductSwatches);
 route.delete("/remove-single-product-size-variation/:id", adminController.removeSingleProductSizeVariation);
 route.delete("/delete-all-size-varaiton", adminController.deleteAllProductSizeVations);
+route.delete("/delete-single-sub-variaiton", adminController.deleteSingleSubVariation);
 // ---------------------------------------------------------------------------------------
 
 module.exports = route;

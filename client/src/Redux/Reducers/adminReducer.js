@@ -57,6 +57,8 @@ const INITAL_STATE = {
    fetchSingleSubVarition: null,
    editProductSingleVariationLoading: false,
    updateSingleSubVariation: null,
+   deleteSubVaritionInfo: null,
+   deleteSubVaritionLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -703,6 +705,31 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             updateSingleSubVariation: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_SINGLE_PRODUCT_SUB_VARIATION_INFO:
+         return {
+            ...state,
+            fetchSingleSubVarition: action.payload,
+         };
+
+      case ACTION_TYPE.DELETE_SINGLE_SUB_VARIATION:
+         return {
+            ...state,
+            deleteSubVaritionInfo: action.payload,
+            deleteSubVaritionLoading: false,
+         };
+
+      case ACTION_TYPE.DELETE_SINGLE_SUB_VARIATION_LOADING:
+         return {
+            ...state,
+            deleteSubVaritionLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_DELTE_SUB_VARIATION_INFO:
+         return {
+            ...state,
+            deleteSubVaritionInfo: null,
          };
 
       default:

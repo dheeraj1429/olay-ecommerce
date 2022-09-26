@@ -300,3 +300,24 @@ export const removeSubVaritionInfo = function (data) {
       payload: data,
    };
 };
+
+export const removeProductSubVaritionInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_SINGLE_PRODUCT_SUB_VARIATION_INFO,
+      payload: data,
+   };
+};
+
+export const deleteSubVaritionLoadingFn = function (data) {
+   return {
+      type: ACTION_TYPE.DELETE_SINGLE_SUB_VARIATION_LOADING,
+      payload: data,
+   };
+};
+
+export const removeDeleteSubVariationInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_DELTE_SUB_VARIATION_INFO,
+      payload: data,
+   };
+};

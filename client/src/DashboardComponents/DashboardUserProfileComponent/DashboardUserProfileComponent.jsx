@@ -24,11 +24,10 @@ function DashboardUserProfileComponent() {
       setAnchorEl(null);
    };
    const LogOutHandler = function () {
-      if (cookies.user) {
-         removeCookie("user");
-      }
+      removeCookie("user");
       navigation("/admin/sign-in");
       dispatch(removeUser(null));
+      console.log(cookies);
    };
 
    return (

@@ -9,6 +9,7 @@ const productBrandSchema = new mongoose.Schema({
    brandIcon: { type: String },
    SEOTitle: { type: String, default: "No title" },
    SEODescription: { type: String, default: "No description" },
+   products: [{ productId: { type: mongoose.Types.ObjectId, ref: "product" } }],
 });
 
 const productBrandModel = mongoose.model("productBrand", productBrandSchema);

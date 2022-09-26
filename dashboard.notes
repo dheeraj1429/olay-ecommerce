@@ -73,3 +73,5 @@ BUGS: -> [fixed]
 [+] delete all product swatches
 [+] delete product swatches by click on close btn
 [+] edit product swatches
+
+[-] when user upload the product then, also store the product id into the category seected scheam and product brands collections.

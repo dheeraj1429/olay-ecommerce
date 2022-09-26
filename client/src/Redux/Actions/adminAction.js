@@ -352,10 +352,14 @@ export const fetchSingleProduct = function (id) {
    };
 };
 
-export const editSingleProduct = function (data, id) {
+export const editSingleProduct = function (data, id, selectedProductId) {
    return async function (dispatch) {
       try {
-         const editSingleProduct = await axios.patch(`/admin/eidt-single-product/${id}`, data, headers);
+         const editSingleProduct = await axios.patch(
+            `/admin/eidt-single-product/${id}?selectedProductId=${selectedProductId}`,
+            data,
+            headers
+         );
 
          if (editSingleProduct && editSingleProduct?.data) {
             dispatch({
@@ -742,6 +746,27 @@ export const updateSubVarition = function (data) {
             });
          } else {
             console.log(updatedData && updatedData?.data);
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const delteSingleSubVariatoion = function (data) {
+   return async function (dispatch) {
+      try {
+         const deleteSingleVariation = await axios.delete(
+            `/admin/delete-single-sub-variaiton?parentId=${data.parentProductId}&subVariationId=${data.subVariationId}`,
+            data,
+            headers
+         );
+
+         if (deleteSingleVariation && deleteSingleVariation?.data) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_SINGLE_SUB_VARIATION,
+               payload: deleteSingleVariation && deleteSingleVariation?.data,
+            });
          }
       } catch (err) {
          console.log(err);

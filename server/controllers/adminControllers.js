@@ -161,7 +161,8 @@ const sendBrandResponseFunction = function (res) {
  * @return produict barnd is successful inserted or not
  */
 const insertNewProductBrand = catchAsync(async function (req, res, next) {
-   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription } = req.body;
+   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription } =
+      req.body;
    const file = req.files[0];
 
    // TODO: function scope variables
@@ -311,7 +312,9 @@ const getSelectedBrandProduct = catchAsync(async function (req, res, next) {
       });
    }
 
-   const findSelectedBrandProduct = await productBrandModel.findOne({ _id: id });
+   const findSelectedBrandProduct = await productBrandModel.findOne({
+      _id: id,
+   });
 
    if (findSelectedBrandProduct) {
       return res.status(httpStatusCodes.OK).json({
@@ -345,7 +348,8 @@ const updateFildes = async function (id, updateObject, res) {
  * @return flag true || false
  */
 const editSelectedBrand = catchAsync(async function (req, res, next) {
-   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription, id } = req.body;
+   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription, id } =
+      req.body;
 
    const updateObject = {
       name,
@@ -407,10 +411,44 @@ const getProductBrands = catchAsync(async function (req, res, next) {
 /**
  * @saveProductInDb send back the reponse the the client
  */
+
+/**
+ * @updateSelectedCollections insert product id into the product brand collections and the product category collection.
+ */
+const updateSelectedCollections = catchAsync(async function (id, uploadProductId, collection) {
+   await collection.updateOne(
+      { _id: id },
+      {
+         $push: {
+            products: { productId: uploadProductId },
+         },
+      }
+   );
+});
+
 const saveProductInDb = async function (object, res) {
    let insertProduct, saveProduct;
    insertProduct = await productModel(object);
    saveProduct = await insertProduct.save();
+   let uploadProductId = saveProduct._id;
+
+   /**
+    * insert the product id into the selected barnds and the selected category collections.
+    * if the product  barnd collections does not contains the product upload id, so we want to push
+    * the id into the brand collections or the selected category collections.
+    * if user just search by the category the we can send back the all products filtes by products id.
+    * which is inside the category or the brands collections.
+    * first we want the check the id is exists not inside the selected brand and the category collections.
+    * if the is is exists then no neet to store the id into the collections.
+    */
+
+   if (object?.brand) {
+      await updateSelectedCollections(object.brand, uploadProductId, productBrandModel);
+   }
+
+   if (object?.category) {
+      await updateSelectedCollections(object.category, uploadProductId, categoryModel);
+   }
 
    if (saveProduct) {
       return res.status(httpStatusCodes.CREATED).json({
@@ -425,9 +463,8 @@ const saveProductInDb = async function (object, res) {
 const uploadNewProduct = catchAsync(async function (req, res, next) {
    const { name } = req.body;
 
-   console.log(req.body);
-
    /**
+    * when user upload new product with selected category and selected barnd then product id store into the product category collection and alost the product brand collection.
     * @productObject { copy all the client send data }
     */
    const productObject = { ...req.body };
@@ -591,9 +628,39 @@ const fetchSingleProduct = catchAsync(async function (req, res, next) {
    }
 });
 
+const changeCollectionDataPosition = async function (field, productId, collection, prevId) {
+   try {
+      const checkIsProductAlreadyExists = await collection.findOne({
+         _id: field,
+         "products.productId": productId,
+      });
+
+      if (!checkIsProductAlreadyExists) {
+         const findBrandProductAndInsertId = await collection.updateOne(
+            { _id: field },
+            { $push: { products: { productId: productId } } }
+         );
+
+         if (!!findBrandProductAndInsertId.modifiedCount) {
+            await collection.updateOne(
+               { _id: prevId },
+               { $pull: { products: { productId: productId } } }
+            );
+         }
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 const editSingleProduct = catchAsync(async function (req, res, next) {
    const id = req.params.id;
    const file = req.files[0];
+
+   /**
+    * if the user remove remove the selected barnd or selected category then remove the product id from the brand and also from the category.
+    */
+   const { selectedProductId } = req.query;
 
    if (!id) {
       return res.status(httpStatusCodes.OK).json({
@@ -604,6 +671,55 @@ const editSingleProduct = catchAsync(async function (req, res, next) {
 
    const updateObjectInfo = { ...req.body };
    // updateObjectInfo.tag = JSON.parse(editSingleProduct.tags);
+
+   /**
+    * if the admin want to update the brand and the category fileds.
+    * first we want to grab the client data to find the which id we want to store into the database.
+    * if the admin upload the product without the selecting the brand the the category fileds.
+    * that time we want to store '' string.
+    *
+    * if the admin update the product and change the category and the brand fileds. we want to first grab
+    * the prev id and keep tracking to which id or which collections data has alrady.
+    * if we grab the id and the prve collections id. first we need to store the id into the new collection
+    * and push the id into the new collections document and store.
+    *
+    * and then remove the id -> product id from the prev colletions. because we don't want to store product
+    * into the multipal collecitons.
+    *
+    * if the prev id is '' string then we want to sstore the id into the selected brand or category
+    * documents.
+    *
+    * store all the data ( update ) into the selected product collection.
+    * and sends back the response to the client.
+    */
+
+   const findProduct = await productModel.findOne({ _id: selectedProductId });
+   const productId = findProduct._id;
+   const prevBrandId = findProduct?.brand;
+   const prevCategoryId = findProduct?.category;
+
+   if (req.body?.brand && prevBrandId && prevBrandId !== req.body.brand) {
+      await changeCollectionDataPosition(req.body.brand, productId, productBrandModel, prevBrandId);
+   } else if (req.body?.brand && !prevBrandId) {
+      await productBrandModel.updateOne(
+         { _id: req.body.brand },
+         { $push: { products: { productId: productId } } }
+      );
+   }
+
+   if (req.body?.category && prevCategoryId && prevCategoryId !== req.body.category) {
+      await changeCollectionDataPosition(
+         req.body.category,
+         productId,
+         categoryModel,
+         prevCategoryId
+      );
+   } else if (req.body?.category && !prevCategoryId) {
+      await categoryModel.updateOne(
+         { _id: req.body.category },
+         { $push: { products: { productId: productId } } }
+      );
+   }
 
    // if there is the file uploded then upload new file name and store into the database, but if there is no image updated then update only the new information.
    if (file?.originalname) {
@@ -950,7 +1066,9 @@ const insertNewProductSizeVairation = catchAsync(async function (req, res, next)
       throw new Error("name is reuqired!");
    }
 
-   const checkSizeVariationIsExists = await productSizeVariationModel.findOne({ name });
+   const checkSizeVariationIsExists = await productSizeVariationModel.findOne({
+      name,
+   });
 
    if (checkSizeVariationIsExists) {
       return res.status(httpStatusCodes.OK).json({
@@ -1001,7 +1119,9 @@ const removeSingleProductSizeVariation = catchAsync(async function (req, res, ne
       throw new Error("id is required");
    }
 
-   const deleteSelectedSize = await productSizeVariationModel.deleteOne({ _id: id });
+   const deleteSelectedSize = await productSizeVariationModel.deleteOne({
+      _id: id,
+   });
 
    if (!!deleteSelectedSize.deletedCount) {
       return res.status(httpStatusCodes.OK).json({
@@ -1033,7 +1153,9 @@ const getSingleProductSizeVations = catchAsync(async function (req, res, next) {
       throw new Error("id is required");
    }
 
-   const findSizeVariation = await productSizeVariationModel.findOne({ _id: id });
+   const findSizeVariation = await productSizeVariationModel.findOne({
+      _id: id,
+   });
 
    if (findSizeVariation) {
       return res.status(httpStatusCodes.OK).json({
@@ -1116,7 +1238,9 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
    /**
     * @findParentProduct find the parent product. because we want to update onlye the selected product.
     */
-   const findParentProduct = await productModel.findOne({ _id: selectedProductId });
+   const findParentProduct = await productModel.findOne({
+      _id: selectedProductId,
+   });
 
    if (findParentProduct) {
       /**
@@ -1135,7 +1259,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
          });
       } else {
          const updatedFildes = {
-            variationName: req.body.name,
+            variationName: req.body.variationName,
             sku: req.body.sku,
             regularPrice: !!req.body.regularPrice ? req.body.regularPrice : findParentProduct.price,
             salePrice: req.body.salePrice,
@@ -1143,10 +1267,10 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
             description: req.body.description,
             colorSwatches: req.body.colorSwatches,
             size: req.body.size,
-            weight: !!req.body.weight ? !!req.body.weight : findParentProduct.weight,
-            length: !!req.body.length ? !!req.body.length : findParentProduct.length,
-            wide: !!req.body.wide ? !!req.body.wide : findParentProduct.wide,
-            height: !!req.body.height ? !!req.body.height : findParentProduct.height,
+            weight: !!req.body.weight ? !!req.body.weight : findParentProduct.weight || "",
+            length: !!req.body.length ? !!req.body.length : findParentProduct.length || "",
+            wide: !!req.body.wide ? !!req.body.wide : findParentProduct.wide || "",
+            height: !!req.body.height ? !!req.body.height : findParentProduct.height || "",
          };
 
          if (req.files[0]) {
@@ -1198,7 +1322,10 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
    }
 
    const findSubVaition = await productModel
-      .findOne({ _id: parentProductId, "variations._id": { $eq: subVariation } }, { "variations.$": 1 })
+      .findOne(
+         { _id: parentProductId, "variations._id": { $eq: subVariation } },
+         { "variations.$": 1 }
+      )
       .populate("variations.size")
       .populate("variations.colorSwatches");
 
@@ -1221,7 +1348,12 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
  * @param { Object } updateObject
  * @param { Object } res
  */
-const updateSubVaritionFunction = async function (parentProductId, subVaritionId, updateObject, res) {
+const updateSubVaritionFunction = async function (
+   parentProductId,
+   subVaritionId,
+   updateObject,
+   res
+) {
    let findSubVariationAndUpdate;
 
    /**
@@ -1298,6 +1430,38 @@ const updateSingleSubVariation = catchAsync(async function (req, res, next) {
    }
 });
 
+const deleteSingleSubVariation = catchAsync(async function (req, res, next) {
+   const { parentId, subVariationId } = req.query;
+
+   if (!parentId) {
+      next(new AppError("parent id is required for delete sub variation"));
+   }
+
+   if (!subVariationId) {
+      next(new AppError("sub variation id is required"));
+   }
+
+   const findSubVaitionAndDelete = await productModel.updateOne(
+      { _id: parentId },
+      {
+         $pull: {
+            variations: { _id: subVariationId },
+         },
+      }
+   );
+
+   if (!!findSubVaitionAndDelete.modifiedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: "true",
+         message: "product sub variation deleted",
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).jons({
+         message: "Internal server error",
+      });
+   }
+});
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -1340,4 +1504,5 @@ module.exports = {
    editSingleSizeVariation,
    getSingelSubProductVariation,
    updateSingleSubVariation,
+   deleteSingleSubVariation,
 };

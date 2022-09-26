@@ -162,7 +162,7 @@ function UploadProductComponent() {
    const updateHandler = function () {
       if (param?.id) {
          const formData = createFormDateHandler();
-         dispatch(editSingleProduct(formData, param.id));
+         dispatch(editSingleProduct(formData, param.id, singleProductFetch.product._id));
          dispatch(editSingleProductLoading(true));
       } else {
          throw Error("Id is reuqired!");
@@ -200,7 +200,7 @@ function UploadProductComponent() {
                      innerText={param?.id ? "Update" : "Save"}
                      btnCl={"category_upload"}
                      onClick={param?.id ? updateHandler : SendDataHandler}
-                     isLoading={!param?.id ? uploadProductLoading : productEditLoading}
+                     // isLoading={!param?.id ? uploadProductLoading : productEditLoading}
                   />
                </upload.flexEnd>
             </div>

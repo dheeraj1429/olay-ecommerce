@@ -7,7 +7,6 @@ import MenuItem from "@mui/material/MenuItem";
 import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { message } from "antd";
 import { useParams } from "react-router";
 import {
    getAllProductSizeVariations,
@@ -15,6 +14,7 @@ import {
    insertProductSubVariation,
    fecthSingleSubVariation,
    updateSubVarition,
+   delteSingleSubVariatoion,
 } from "../../Redux/Actions/adminAction";
 import { FaCircle } from "@react-icons/all-files/fa/FaCircle";
 import {
@@ -22,8 +22,13 @@ import {
    removeProductSubInfo,
    loadingUpdateSubVariation,
    removeSubVaritionInfo,
+   removeProductSubVaritionInfo,
+   deleteSubVaritionLoadingFn,
+   removeDeleteSubVariationInfo,
 } from "../../Redux/Actions/appAction";
 import { useLocation } from "react-router";
+import { message, Popconfirm } from "antd";
+import { useNavigate } from "react-router";
 
 const stock = [
    { value: "in stock", label: "in stock" },
@@ -50,6 +55,7 @@ function CreateSelectedProductVariationComponent() {
    const params = useParams();
    const dispatch = useDispatch();
    const location = useLocation();
+   const navigation = useNavigate();
 
    const allProductSwatches = useSelector((state) => state.admin.allProductSwatches);
    const allSizeVariations = useSelector((state) => state.admin.allSizeVariations);
@@ -58,6 +64,8 @@ function CreateSelectedProductVariationComponent() {
    const fetchSingleSubVarition = useSelector((state) => state.admin.fetchSingleSubVarition);
    const editProductSingleVariationLoading = useSelector((state) => state.admin.editProductSingleVariationLoading);
    const updateSingleSubVariation = useSelector((state) => state.admin.updateSingleSubVariation);
+   const deleteSubVaritionInfo = useSelector((state) => state.admin.deleteSubVaritionInfo);
+   const deleteSubVaritionLoading = useSelector((state) => state.admin.deleteSubVaritionLoading);
 
    const info = (msg) => {
       message.info(msg);
@@ -104,9 +112,13 @@ function CreateSelectedProductVariationComponent() {
 
    const SaveVariationHandler = function () {
       if (VariationInfo.name && params.id) {
-         const formData = createFormData();
-         dispatch(insertProductSubVariation(formData));
-         dispatch(insertNewSubVationLoading(true));
+         if (VariationInfo.size && VariationInfo.colorSwatches) {
+            const formData = createFormData();
+            dispatch(insertProductSubVariation(formData));
+            dispatch(insertNewSubVationLoading(true));
+         } else {
+            info("Product also required color and size varition.");
+         }
       } else {
          info("Product variation name is required!");
       }
@@ -135,6 +147,12 @@ function CreateSelectedProductVariationComponent() {
       dispatch(updateSubVarition(formData));
    };
 
+   const DeleteHandler = () => {
+      const { parentProductId, last } = getIdFunction();
+      dispatch(delteSingleSubVariatoion({ parentProductId, subVariationId: last }));
+      dispatch(deleteSubVaritionLoadingFn(true));
+   };
+
    useEffect(() => {
       const { secondLast, parentProductId, last } = getIdFunction();
 
@@ -152,6 +170,7 @@ function CreateSelectedProductVariationComponent() {
 
          if (secondLast === "editSub") {
             dispatch(removeSubVaritionInfo(null));
+            dispatch(removeProductSubVaritionInfo(null));
          }
       };
    }, []);
@@ -189,6 +208,17 @@ function CreateSelectedProductVariationComponent() {
          info(updateSingleSubVariation.message);
       }
    }, [updateSingleSubVariation]);
+
+   useEffect(() => {
+      if (!!deleteSubVaritionInfo) {
+         info(deleteSubVaritionInfo.message);
+
+         if (deleteSubVaritionInfo.success) {
+            navigation("/dashboard/product-variation");
+            dispatch(removeDeleteSubVariationInfo(true));
+         }
+      }
+   }, [deleteSubVaritionInfo]);
 
    return (
       <variation.div>
@@ -394,12 +424,27 @@ function CreateSelectedProductVariationComponent() {
                   {!!fetchSingleSubVarition &&
                   fetchSingleSubVarition?.success &&
                   fetchSingleSubVarition?.subVariation ? (
-                     <CustombuttonComponent
-                        innerText={"Update"}
-                        btnCl={"category_upload"}
-                        onClick={updateHandler}
-                        isLoading={editProductSingleVariationLoading}
-                     />
+                     <variation.flex>
+                        <CustombuttonComponent
+                           innerText={"Update"}
+                           btnCl={"category_upload"}
+                           onClick={updateHandler}
+                           isLoading={editProductSingleVariationLoading}
+                        />
+
+                        <Popconfirm
+                           title="Are you sure to delete this sub variation ?"
+                           onConfirm={DeleteHandler}
+                           okText="Yes"
+                           cancelText="No"
+                        >
+                           <CustombuttonComponent
+                              innerText={"Delete"}
+                              btnCl={"Delete_btn"}
+                              isLoading={deleteSubVaritionLoading}
+                           />
+                        </Popconfirm>
+                     </variation.flex>
                   ) : (
                      <CustombuttonComponent
                         innerText={"Save"}

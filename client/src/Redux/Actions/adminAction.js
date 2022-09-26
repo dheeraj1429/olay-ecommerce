@@ -709,3 +709,42 @@ export const insertProductSubVariation = function (data) {
       }
    };
 };
+
+export const fecthSingleSubVariation = function (id, parentProductId) {
+   return async function (dispatch) {
+      try {
+         const singelSubVariation = await axios.get(
+            `/admin/get-single-sub-variation?subVariation=${id}&parentProductId=${parentProductId}`,
+            headers
+         );
+
+         if (singelSubVariation && singelSubVariation?.data && singelSubVariation?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_SINGLE_SUBVARIATION,
+               payload: singelSubVariation && singelSubVariation?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const updateSubVarition = function (data) {
+   return async function (dispatch) {
+      try {
+         const updatedData = await axios.patch("/admin/update-single-sub-varitions", data, headers);
+
+         if (updatedData && updatedData?.data && updatedData?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.UPDATE_SINGLE_SUB_VARIATION,
+               payload: updatedData && updatedData?.data,
+            });
+         } else {
+            console.log(updatedData && updatedData?.data);
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

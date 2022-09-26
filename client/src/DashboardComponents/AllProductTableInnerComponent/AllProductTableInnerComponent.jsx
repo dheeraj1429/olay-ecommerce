@@ -18,11 +18,16 @@ function AllProductTableInnerComponent({ allProducts, variation }) {
          {!!allProducts && allProducts.success && allProducts.products.length
             ? allProducts.products.map((el) => (
                  <>
-                    <AllProductsTableViewComponent variation={variation} el={el} />
+                    <AllProductsTableViewComponent variation={variation} el={el} id={el._id} />
                     {variation
                        ? el?.variations
                           ? el.variations.map((elm) => (
-                               <AllProductsTableViewComponent subVaition={true} variation={variation} el={elm} />
+                               <AllProductsTableViewComponent
+                                  subVaition={true}
+                                  id={el._id}
+                                  variation={variation}
+                                  el={elm}
+                               />
                             ))
                           : null
                        : null}

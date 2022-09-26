@@ -286,3 +286,17 @@ export const removeProductSubInfo = function (data) {
       payload: data,
    };
 };
+
+export const loadingUpdateSubVariation = function (data) {
+   return {
+      type: ACTION_TYPE.UPDATE_SINGLE_SUB_VARIATION_LOADING,
+      payload: data,
+   };
+};
+
+export const removeSubVaritionInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_UPDATE_SINGLE_SUB_VARIATION_INFO,
+      payload: data,
+   };
+};

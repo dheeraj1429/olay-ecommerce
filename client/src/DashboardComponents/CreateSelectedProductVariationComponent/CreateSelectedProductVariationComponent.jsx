@@ -13,9 +13,17 @@ import {
    getAllProductSizeVariations,
    getproductSwatches,
    insertProductSubVariation,
+   fecthSingleSubVariation,
+   updateSubVarition,
 } from "../../Redux/Actions/adminAction";
 import { FaCircle } from "@react-icons/all-files/fa/FaCircle";
-import { insertNewSubVationLoading, removeProductSubInfo } from "../../Redux/Actions/appAction";
+import {
+   insertNewSubVationLoading,
+   removeProductSubInfo,
+   loadingUpdateSubVariation,
+   removeSubVaritionInfo,
+} from "../../Redux/Actions/appAction";
+import { useLocation } from "react-router";
 
 const stock = [
    { value: "in stock", label: "in stock" },
@@ -41,11 +49,15 @@ function CreateSelectedProductVariationComponent() {
 
    const params = useParams();
    const dispatch = useDispatch();
+   const location = useLocation();
 
    const allProductSwatches = useSelector((state) => state.admin.allProductSwatches);
    const allSizeVariations = useSelector((state) => state.admin.allSizeVariations);
    const productSubVariationLoading = useSelector((state) => state.admin.productSubVariationLoading);
    const productSubVariationInfo = useSelector((state) => state.admin.productSubVariationInfo);
+   const fetchSingleSubVarition = useSelector((state) => state.admin.fetchSingleSubVarition);
+   const editProductSingleVariationLoading = useSelector((state) => state.admin.editProductSingleVariationLoading);
+   const updateSingleSubVariation = useSelector((state) => state.admin.updateSingleSubVariation);
 
    const info = (msg) => {
       message.info(msg);
@@ -62,23 +74,37 @@ function CreateSelectedProductVariationComponent() {
       setVariationInfo({ ...VariationInfo, variationImage: data });
    };
 
+   const createFormData = function (id = undefined, parentTargetProduct = undefined) {
+      const formData = new FormData();
+      formData.append("selectedProductId", params.id);
+      formData.append("variationName", VariationInfo.name);
+      formData.append("sku", VariationInfo.sku);
+      formData.append("regularPrice", VariationInfo.regularPrice);
+      formData.append("salePrice", VariationInfo.salePrice);
+      formData.append("stokeStatus", VariationInfo.stokeStatus);
+      formData.append("description", VariationInfo.description);
+      formData.append("variationImage", VariationInfo.variationImage);
+      formData.append("colorSwatches", VariationInfo.colorSwatches);
+      formData.append("weight", VariationInfo.weight);
+      formData.append("length", VariationInfo.length);
+      formData.append("wide", VariationInfo.wide);
+      formData.append("height", VariationInfo.height);
+      formData.append("size", VariationInfo.size);
+
+      if (!!id) {
+         formData.append("subVaritionId", id);
+      }
+
+      if (!!parentTargetProduct) {
+         formData.append("parentProductId", parentTargetProduct);
+      }
+
+      return formData;
+   };
+
    const SaveVariationHandler = function () {
       if (VariationInfo.name && params.id) {
-         const formData = new FormData();
-         formData.append("selectedProductId", params.id);
-         formData.append("name", VariationInfo.name);
-         formData.append("sku", VariationInfo.sku);
-         formData.append("regularPrice", VariationInfo.regularPrice);
-         formData.append("salePrice", VariationInfo.salePrice);
-         formData.append("stokeStatus", VariationInfo.stokeStatus);
-         formData.append("description", VariationInfo.description);
-         formData.append("variationImage", VariationInfo.variationImage);
-         formData.append("colorSwatches", VariationInfo.colorSwatches);
-         formData.append("weight", VariationInfo.weight);
-         formData.append("length", VariationInfo.length);
-         formData.append("wide", VariationInfo.wide);
-         formData.append("height", VariationInfo.height);
-
+         const formData = createFormData();
          dispatch(insertProductSubVariation(formData));
          dispatch(insertNewSubVationLoading(true));
       } else {
@@ -86,12 +112,47 @@ function CreateSelectedProductVariationComponent() {
       }
    };
 
+   const getIdFunction = function () {
+      const locationAr = location.pathname.split("/");
+
+      let secondLast = locationAr[locationAr.length - 2],
+         parentProductId = locationAr[4],
+         last = locationAr[locationAr.length - 1];
+
+      return {
+         secondLast,
+         parentProductId,
+         last,
+      };
+   };
+
+   const updateHandler = function () {
+      const { parentProductId } = getIdFunction();
+
+      const formData = createFormData(fetchSingleSubVarition.subVariation?.variations[0]._id, parentProductId);
+
+      dispatch(loadingUpdateSubVariation(true));
+      dispatch(updateSubVarition(formData));
+   };
+
    useEffect(() => {
+      const { secondLast, parentProductId, last } = getIdFunction();
+
+      console.log(parentProductId);
+
+      if (secondLast === "editSub") {
+         dispatch(fecthSingleSubVariation(last, parentProductId));
+      }
+
       dispatch(getproductSwatches());
       dispatch(getAllProductSizeVariations());
 
       return () => {
          dispatch(removeProductSubInfo(null));
+
+         if (secondLast === "editSub") {
+            dispatch(removeSubVaritionInfo(null));
+         }
       };
    }, []);
 
@@ -101,13 +162,45 @@ function CreateSelectedProductVariationComponent() {
       }
    }, [productSubVariationInfo]);
 
+   useEffect(() => {
+      if (!!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation) {
+         let subVariation = fetchSingleSubVarition.subVariation?.variations[0];
+
+         setVariationInfo({
+            name: subVariation.variationName,
+            sku: subVariation.sku,
+            regularPrice: !!subVariation.regularPrice ? subVariation.regularPrice : "",
+            salePrice: !!subVariation?.salePrice ? subVariation.salePrice : "",
+            stokeStatus: subVariation?.stokeStatus,
+            description: subVariation?.description,
+            variationImage: subVariation.variationImage,
+            colorSwatches: subVariation?.colorSwatches?._id,
+            weight: subVariation?.weight ? subVariation.weight : "",
+            length: subVariation?.length ? subVariation.length : "",
+            wide: subVariation?.wide ? subVariation.wide : "",
+            height: subVariation?.height ? subVariation.height : "",
+            size: subVariation?.size ? subVariation?.size._id : "",
+         });
+      }
+   }, [fetchSingleSubVarition]);
+
+   useEffect(() => {
+      if (!!updateSingleSubVariation) {
+         info(updateSingleSubVariation.message);
+      }
+   }, [updateSingleSubVariation]);
+
    return (
       <variation.div>
          <DashboardNavbarComponent />
 
          <variation.spaceDiv>
             <HeadingComponent
-               Heading={"Create product variations"}
+               Heading={
+                  !!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation
+                     ? "Edit Product sub varition"
+                     : "Create product variations"
+               }
                subHeading={`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.`}
             />
 
@@ -291,14 +384,30 @@ function CreateSelectedProductVariationComponent() {
                         onChange={changeHandler}
                      />
                      <HeadingComponent cl="sm_heading" Heading={"Product variations image"} />
-                     <ProductUploadImageComponent onChange={ImageGrabHandler} name="variationImage" />
+                     <ProductUploadImageComponent
+                        selectedPrevImage={!!VariationInfo?.variationImage ? VariationInfo?.variationImage : null}
+                        filde="productImages"
+                        onChange={ImageGrabHandler}
+                        name="variationImage"
+                     />
                   </Box>
-                  <CustombuttonComponent
-                     innerText={"Save"}
-                     btnCl={"category_upload"}
-                     onClick={SaveVariationHandler}
-                     isLoading={productSubVariationLoading}
-                  />
+                  {!!fetchSingleSubVarition &&
+                  fetchSingleSubVarition?.success &&
+                  fetchSingleSubVarition?.subVariation ? (
+                     <CustombuttonComponent
+                        innerText={"Update"}
+                        btnCl={"category_upload"}
+                        onClick={updateHandler}
+                        isLoading={editProductSingleVariationLoading}
+                     />
+                  ) : (
+                     <CustombuttonComponent
+                        innerText={"Save"}
+                        btnCl={"category_upload"}
+                        onClick={SaveVariationHandler}
+                        isLoading={productSubVariationLoading}
+                     />
+                  )}
                </li>
             </ul>
          </variation.spaceDiv>

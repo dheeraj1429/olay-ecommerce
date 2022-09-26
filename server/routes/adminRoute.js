@@ -34,6 +34,7 @@ route.get("/get-all-product-tags-documents", adminController.getAllProductTagsDo
 route.get("/get-single-product-swatches/:id", adminController.fetchSingleSwatchs);
 route.get("/get-all-size-variations", adminController.getAllProductSizeVariations);
 route.get("/get-single-size-variation/:id", adminController.getSingleProductSizeVations);
+route.get("/get-single-sub-variation", adminController.getSingelSubProductVariation);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
@@ -56,6 +57,7 @@ route.patch("/eidt-single-product/:id", upload, adminController.editSingleProduc
 route.patch("/update-product-tag", adminController.udpateProductTag);
 route.patch("/edit-single-product-swatches", adminController.editSingleProductSwatches);
 route.patch("/edit-size-variation", adminController.editSingleSizeVariation);
+route.patch("/update-single-sub-varitions", upload, adminController.updateSingleSubVariation);
 // ---------------------------------------------------------------------------------------
 
 // Apis => DELETE

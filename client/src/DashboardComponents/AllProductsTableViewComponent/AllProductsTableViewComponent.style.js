@@ -6,6 +6,15 @@ export const tr = styled.tr`
    transition: all 0.2s ease;
    border-bottom: 1px solid transparent;
 
+   .flex_div {
+      display: flex;
+      align-items: center;
+      p {
+         font-size: 10px;
+         margin-right: 0.5rem;
+      }
+   }
+
    &:hover {
       border-bottom: ${(props) => (props.variation ? "1px solid var(--icon-cl)" : null)};
       background-color: var(--spec-static-grey);

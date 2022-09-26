@@ -35,10 +35,11 @@ app.use(logger());
 app.use("/admin", adminRoute);
 app.use("/auth", authRoute);
 
-app.all("*", (req, res, next) => {
-   next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
-});
+// app.all("*", (req, res, next) => {
+//    next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
+// });
 
+// catch the error.
 app.use((err, req, res, next) => {
    console.log(err.stack);
 

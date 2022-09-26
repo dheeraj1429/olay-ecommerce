@@ -71,5 +71,5 @@ BUGS: -> [fixed]
 [+] admin can create color swatches
 [+] filter feature product swatches
 [+] delete all product swatches
-[-] delete product swatches by click on close btn
-[-] edit product swatches
+[+] delete product swatches by click on close btn
+[+] edit product swatches

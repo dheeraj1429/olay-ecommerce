@@ -3,16 +3,7 @@ import * as prImage from "./ProductUploadImageComponent.style";
 import { AiOutlineFileImage } from "@react-icons/all-files/ai/AiOutlineFileImage";
 import backendConfigData from "../../backendConfig";
 
-function ProductUploadImageComponent({
-   Heading,
-   name,
-   value,
-   onChange,
-   Clear,
-   selectedPrevImage,
-   size,
-   filde,
-}) {
+function ProductUploadImageComponent({ Heading, name, value, onChange, Clear, selectedPrevImage, size, filde }) {
    const image = useRef(null);
    const [Src, setSrc] = useState("");
    const ClickHandler = function (e) {
@@ -55,10 +46,7 @@ function ProductUploadImageComponent({
                   {!!Src ? (
                      <img src={Src} />
                   ) : !!selectedPrevImage ? (
-                     <img
-                        crossorigin="anonymous"
-                        src={`${backendConfigData.URL}${filde}/${selectedPrevImage}`}
-                     />
+                     <img crossorigin="anonymous" src={`${backendConfigData.URL}${filde}/${selectedPrevImage}`} />
                   ) : null}
                </div>
             </prImage.div>

@@ -12,9 +12,11 @@ import backendConfigData from "../../backendConfig";
 import { BsArrowReturnRight } from "@react-icons/all-files/bs/BsArrowReturnRight";
 import { GoPrimitiveDot } from "@react-icons/all-files/go/GoPrimitiveDot";
 
-function AllProductsTableViewComponent({ variation, el, subVaition }) {
+function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
    const location = useLocation();
    const dispatch = useDispatch();
+
+   console.log(el);
 
    const confirm = (id) => {
       dispatch(deleteOneProduct(id));
@@ -55,17 +57,23 @@ function AllProductsTableViewComponent({ variation, el, subVaition }) {
             </>
          )}
 
-         {subVaition ? (
+         {location.pathname == "/dashboard/all-products" ? null : subVaition ? (
             <inner.td
                style={{
                   paddingLeft: "1.5rem",
                }}
             >
-               <BsArrowReturnRight />
+               <div className="flex_div">
+                  <p>Sub</p>
+                  <BsArrowReturnRight />
+               </div>
             </inner.td>
          ) : (
             <inner.td>
-               <GoPrimitiveDot />
+               <div className="flex_div">
+                  <p>Parent</p>
+                  <GoPrimitiveDot />
+               </div>
             </inner.td>
          )}
          {
@@ -73,7 +81,9 @@ function AllProductsTableViewComponent({ variation, el, subVaition }) {
                to={
                   location.pathname === "/dashboard/all-products"
                      ? location.pathname
-                     : `/dashboard/product/create-variations/${el._id}`
+                     : !subVaition
+                     ? `/dashboard/product/create-variations/${el._id}`
+                     : `/dashboard/product/sub-variations/${id}/editSub/${el._id}`
                }
             >
                <inner.td>

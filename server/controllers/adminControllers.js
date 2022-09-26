@@ -1142,6 +1142,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
             stokeStatus: !!req.body.stokeStatus ? req.body.stokeStatus : "draft",
             description: req.body.description,
             colorSwatches: req.body.colorSwatches,
+            size: req.body.size,
             weight: !!req.body.weight ? !!req.body.weight : findParentProduct.weight,
             length: !!req.body.length ? !!req.body.length : findParentProduct.length,
             wide: !!req.body.wide ? !!req.body.wide : findParentProduct.wide,
@@ -1181,6 +1182,119 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
       }
    } else {
       next(new AppError("Parent product id is required!", 404));
+   }
+});
+
+const getSingelSubProductVariation = catchAsync(async function (req, res, next) {
+   const { subVariation, parentProductId } = req.query;
+
+   /**
+    * @findSubVaition find the sub variation is exits or not if the sub viation is exits then return data to the client.
+    * find the sub document using the id.
+    */
+
+   if (!parentProductId || !subVariation) {
+      next(new AppError("sub variation id is required"));
+   }
+
+   const findSubVaition = await productModel
+      .findOne({ _id: parentProductId, "variations._id": { $eq: subVariation } }, { "variations.$": 1 })
+      .populate("variations.size")
+      .populate("variations.colorSwatches");
+
+   if (findSubVaition) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         subVariation: findSubVaition,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "internal server error",
+      });
+   }
+});
+
+/**
+ *
+ * @param { Id } parentProductId
+ * @param { Id } subVaritionId
+ * @param { Object } updateObject
+ * @param { Object } res
+ */
+const updateSubVaritionFunction = async function (parentProductId, subVaritionId, updateObject, res) {
+   let findSubVariationAndUpdate;
+
+   /**
+    * @findSubVariationAndUpdate update the selected varition
+    * @return send back the reponse
+    */
+   findSubVariationAndUpdate = await productModel.updateOne(
+      { _id: parentProductId, "variations._id": subVaritionId },
+      {
+         $set: updateObject,
+      }
+   );
+
+   if (!!findSubVariationAndUpdate.modifiedCount && findSubVariationAndUpdate.acknowledged) {
+      res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "product updated",
+      });
+   } else if (findSubVariationAndUpdate.acknowledged) {
+      res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "Product sub varition alrady updated",
+      });
+   } else {
+      res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
+   }
+};
+
+const updateSingleSubVariation = catchAsync(async function (req, res, next) {
+   /**
+    * grab all the data from the client side. if the user send the image and want to upload the image then update image path form the database. if admin only update the others fildes then only store the others files.
+    * check first if the sub variation is exits or not if not then throw new error.
+    * check the subvaritions by id.
+    * if the admin update already then send another response to the client.
+    */
+   const file = req.files;
+
+   // sub varition id for finding the target sub varition
+   const { subVaritionId, parentProductId } = req.body;
+
+   const updateObject = {
+      "variations.$.variationName": req.body.name,
+      "variations.$.sku": req.body.sku,
+      "variations.$.regularPrice": req.body.regularPrice,
+      "variations.$.salePrice": req.body.salePrice,
+      "variations.$.stokeStatus": req.body.stokeStatus,
+      "variations.$.description": req.body.description,
+      "variations.$.variationImage": req.body.variationImage,
+      "variations.$.colorSwatches": req.body.colorSwatches,
+      "variations.$.colorSwatches": req.body.colorSwatches,
+      "variations.$.size": req.body.size,
+      "variations.$.weight": req.body.weight,
+      "variations.$.length": req.body.length,
+      "variations.$.wide": req.body.wide,
+      "variations.$.height": req.body.height,
+   };
+
+   if (!subVaritionId) {
+      next(new AppError("sub variation id is required!"));
+   }
+
+   if (!!file.length) {
+      const imagePath = file[0].path;
+      const originalname = file[0].originalname;
+
+      await imageCompress(imagePath, 400, "productImagesCompress", originalname);
+
+      updateObject["variations.$.variationImage"] = originalname;
+      await updateSubVaritionFunction(parentProductId, subVaritionId, updateObject, res);
+   } else {
+      await updateSubVaritionFunction(parentProductId, subVaritionId, updateObject, res);
    }
 });
 
@@ -1224,4 +1338,6 @@ module.exports = {
    deleteAllProductSizeVations,
    getSingleProductSizeVations,
    editSingleSizeVariation,
+   getSingelSubProductVariation,
+   updateSingleSubVariation,
 };

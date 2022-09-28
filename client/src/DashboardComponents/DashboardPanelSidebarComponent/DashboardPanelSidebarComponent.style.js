@@ -15,4 +15,9 @@ export const div = styled.div`
       cursor: pointer;
       fill: var(--main-cl);
    }
+
+   h1 {
+      font-size: 20px;
+      color: var(--smooth-light-color);
+   }
 `;

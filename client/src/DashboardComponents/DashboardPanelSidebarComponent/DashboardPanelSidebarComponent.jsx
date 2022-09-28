@@ -16,6 +16,7 @@ import { AiOutlineLaptop } from "@react-icons/all-files/ai/AiOutlineLaptop";
 import { GoVersions } from "@react-icons/all-files/go/GoVersions";
 import { GoRepoClone } from "@react-icons/all-files/go/GoRepoClone";
 import { VscTextSize } from "@react-icons/all-files/vsc/VscTextSize";
+import { GoZap } from "@react-icons/all-files/go/GoZap";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -69,9 +70,17 @@ function DashboardPanelSidebarComponent() {
 
    return (
       <sidebar.div SmSidebar={SmSidebar ? SmSidebar : null}>
-         <AiOutlineBars onClick={SmSidebarHandler} className="Margin_elm" />
+         {/* <AiOutlineBars onClick={SmSidebarHandler} className="Margin_elm" /> */}
+         <h1>Dashboard</h1>
          <div className="sidebar_fix_container">
-            <DashboardSidebarCardComponent heading={"Home"} icon={<VscHome />} onClick={dashboardActiveHandler} show={DashboardCard} showSub={ShowSubItems} isShow={SmSidebar}>
+            <DashboardSidebarCardComponent
+               heading={"Home"}
+               icon={<VscHome />}
+               onClick={dashboardActiveHandler}
+               show={DashboardCard}
+               showSub={ShowSubItems}
+               isShow={SmSidebar}
+            >
                <DashboardNavigationComponent
                   icon={<FcHome />}
                   innerText={"Home"}
@@ -111,6 +120,15 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<AiOutlineLaptop />}
                   innerText={"Product brands"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+
+               <DashboardNavigationComponent
+                  icon={<GoZap />}
+                  innerText={"Flash sale"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

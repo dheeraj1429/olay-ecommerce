@@ -48,6 +48,7 @@ route.post("/save-new-product-tag", adminController.insertNewProductTag);
 route.post("/insert-new-product-swatches", adminController.insertNewProductSwatches);
 route.post("/insert-new-product-size-variation", adminController.insertNewProductSizeVairation);
 route.post("/insert-new-product-variation", upload, adminController.insertSelectedProductVariation);
+route.post("/insert-new-product-flash-sale", adminController.insertNewProductFlashSale);
 // ---------------------------------------------------------------------------------------
 
 // Apis => PATCH

@@ -59,6 +59,10 @@ const INITAL_STATE = {
    updateSingleSubVariation: null,
    deleteSubVaritionInfo: null,
    deleteSubVaritionLoading: false,
+   selectedFlashSaleProducts: [],
+   showFlashSaleComponent: false,
+   storeSelectedProductSale: null,
+   storeSelectedProductSaleLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -730,6 +734,28 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             deleteSubVaritionInfo: null,
+         };
+
+      case ACTION_TYPE.STORE_SALE_SELECTED_PRODIUCT_INFO:
+         const checkProductIsExists = function (state, data) {
+            const check = state.find((el) => el.id === data.id);
+
+            if (check) {
+               return state;
+            } else {
+               return state.concat(data);
+            }
+         };
+
+         return {
+            ...state,
+            selectedFlashSaleProducts: checkProductIsExists(state.selectedFlashSaleProducts, action.payload),
+         };
+
+      case ACTION_TYPE.SHOW_FETCH_SALE_COLLECTION_COMPONENT:
+         return {
+            ...state,
+            showFlashSaleComponent: action.payload,
          };
 
       default:

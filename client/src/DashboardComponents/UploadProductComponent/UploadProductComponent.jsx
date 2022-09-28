@@ -5,7 +5,11 @@ import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent
 import ProductUploadFirstComponent from "../ProductUploadFirstComponent/ProductUploadFirstComponent";
 import ProductUploadSecondComponent from "../ProductUploadSecondComponent/ProductUploadSecondComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { uplodNewProduct, fetchSingleProduct, editSingleProduct } from "../../Redux/Actions/adminAction";
+import {
+   uplodNewProduct,
+   fetchSingleProduct,
+   editSingleProduct,
+} from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import {
@@ -200,7 +204,7 @@ function UploadProductComponent() {
                      innerText={param?.id ? "Update" : "Save"}
                      btnCl={"category_upload"}
                      onClick={param?.id ? updateHandler : SendDataHandler}
-                     // isLoading={!param?.id ? uploadProductLoading : productEditLoading}
+                     isLoading={!param?.id ? uploadProductLoading : productEditLoading}
                   />
                </upload.flexEnd>
             </div>

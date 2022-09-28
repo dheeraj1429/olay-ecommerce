@@ -6,8 +6,19 @@ import { Popconfirm } from "antd";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import * as table from "./TableFooterComponent.style";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllProductBrand, deleteMultiSelectedProductBrand, deleteSelectedproducts, fetchUploadProducts, getProductTags } from "../../Redux/Actions/adminAction";
-import { fetchBrandProductLoading, removeAllSelectedItems, fetchLoadingProducts, productTagsFetchLoading } from "../../Redux/Actions/appAction";
+import {
+   fetchAllProductBrand,
+   deleteMultiSelectedProductBrand,
+   deleteSelectedproducts,
+   fetchUploadProducts,
+   getProductTags,
+} from "../../Redux/Actions/adminAction";
+import {
+   fetchBrandProductLoading,
+   removeAllSelectedItems,
+   fetchLoadingProducts,
+   productTagsFetchLoading,
+} from "../../Redux/Actions/appAction";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 function TableFooterComponent({ action, state }) {

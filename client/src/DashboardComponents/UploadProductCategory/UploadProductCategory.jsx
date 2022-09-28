@@ -60,7 +60,7 @@ function UploadProductCategory() {
          });
          const { categoryName, categoryDescription } = CategoryInfo;
          dispatch(removeCategoryInfo(null));
-         dispatch(insertNewCategory({ name: categoryName, description: categoryDescription }));
+         dispatch(insertNewCategory({ name: categoryName, description: categoryDescription, products: [] }));
       } else if (!!productCategory && !productCategory.success) {
          info(productCategory.message);
          dispatch(removeCategoryInfo(null));
@@ -90,7 +90,14 @@ function UploadProductCategory() {
                      noValidate
                      autoComplete="off"
                   >
-                     <TextField id="outlined-basic" name="categoryName" value={CategoryInfo.categoryName} label="Category Name" variant="outlined" onChange={ChangeHandler} />
+                     <TextField
+                        id="outlined-basic"
+                        name="categoryName"
+                        value={CategoryInfo.categoryName}
+                        label="Category Name"
+                        variant="outlined"
+                        onChange={ChangeHandler}
+                     />
                      <TextField
                         id="outlined-multiline-static"
                         label="Category Description"
@@ -101,7 +108,12 @@ function UploadProductCategory() {
                         onChange={ChangeHandler}
                      />
                   </Box>
-                  <CustombuttonComponent innerText={"Save"} btnCl={"category_upload"} onClick={UploadHandler} isLoading={productCategoryLoading} />
+                  <CustombuttonComponent
+                     innerText={"Save"}
+                     btnCl={"category_upload"}
+                     onClick={UploadHandler}
+                     isLoading={productCategoryLoading}
+                  />
                </category.contentDiv>
             </category.flex>
          </category.innerDiv>

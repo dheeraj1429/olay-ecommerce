@@ -321,3 +321,17 @@ export const removeDeleteSubVariationInfo = function (data) {
       payload: data,
    };
 };
+
+export const storeSelectedSaleProduct = function (data) {
+   return {
+      type: ACTION_TYPE.STORE_SALE_SELECTED_PRODIUCT_INFO,
+      payload: data,
+   };
+};
+
+export const showFetchSaleComponent = function (data) {
+   return {
+      type: ACTION_TYPE.SHOW_FETCH_SALE_COLLECTION_COMPONENT,
+      payload: data,
+   };
+};

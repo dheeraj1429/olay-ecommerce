@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { editProductCategory, selectedCategory } from "../../Redux/Actions/appAction";
 import { FcSupport } from "@react-icons/all-files/fc/FcSupport";
 import { FcGenealogy } from "@react-icons/all-files/fc/FcGenealogy";
+import Badge from "@mui/material/Badge";
 
 function ProductCategoryInnerComponent({ CategoryName, description, edit, folder, data }) {
    const [open, setOpen] = useState(false);
@@ -35,7 +36,9 @@ function ProductCategoryInnerComponent({ CategoryName, description, edit, folder
                   {folder ? (
                      <>
                         <div className="img_div">
-                           <FcGenealogy />
+                           <Badge badgeContent={data?.products.length ? data.products.length : 0} color="primary">
+                              <FcGenealogy />
+                           </Badge>
                         </div>
                         <div>
                            <h4>{CategoryName}</h4>

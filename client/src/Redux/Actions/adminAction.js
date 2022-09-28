@@ -255,10 +255,7 @@ export const uplodNewProduct = function (data) {
 export const fetchUploadProducts = function (page, docItems) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(
-            `/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`,
-            headers
-         );
+         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`, headers);
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
@@ -768,6 +765,19 @@ export const delteSingleSubVariatoion = function (data) {
                payload: deleteSingleVariation && deleteSingleVariation?.data,
             });
          }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const insertNewProductFlashSale = function (data) {
+   return async function (dispatch) {
+      try {
+         // [-]
+         const saleResponse = await axios.post("/admin/insert-new-product-flash-sale", data, headers);
+
+         console.log(saleResponse);
       } catch (err) {
          console.log(err);
       }

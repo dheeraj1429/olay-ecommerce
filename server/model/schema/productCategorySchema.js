@@ -5,6 +5,8 @@ const categoryScheam = new mongoose.Schema({
    products: [{ productId: { type: mongoose.Types.ObjectId, ref: "product" } }],
 });
 
+categoryScheam.index({ name: 1 });
+
 const categoryModel = mongoose.model("category", categoryScheam);
 
 module.exports = categoryModel;

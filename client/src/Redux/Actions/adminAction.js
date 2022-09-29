@@ -774,10 +774,83 @@ export const delteSingleSubVariatoion = function (data) {
 export const insertNewProductFlashSale = function (data) {
    return async function (dispatch) {
       try {
-         // [-]
          const saleResponse = await axios.post("/admin/insert-new-product-flash-sale", data, headers);
 
-         console.log(saleResponse);
+         if (saleResponse && saleResponse?.data) {
+            dispatch({
+               type: ACTION_TYPE.INSERT_FLASHSALE_COLLECTIONS,
+               payload: saleResponse && saleResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getAllFlashSales = function (page) {
+   return async function (dispatch) {
+      try {
+         const getAllSales = await axios.get(`/admin/get-all-sales?page=${page}`, headers);
+
+         if (getAllSales && getAllSales?.data) {
+            dispatch({
+               type: ACTION_TYPE.GET_ALL_FLASH_SALE,
+               payload: getAllSales && getAllSales?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteAllFlashSales = function () {
+   return async function (dispatch) {
+      try {
+         const deleteAllSales = await axios.delete("/admin/delete-all-flash-sale", headers);
+
+         if (deleteAllSales && deleteAllSales?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_ALL_FLASH_SALE,
+            });
+         } else {
+            console.log(deleteAllSales?.data);
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteSingleFlashSale = function (id) {
+   return async function (dispatch) {
+      try {
+         const deleteSingleSale = await axios.delete(`/admin/delete-single-flash-sale/${id}`, headers);
+
+         if (deleteSingleSale && deleteSingleSale?.data && deleteSingleSale?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.DELTE_SINGLE_SALE,
+               payload: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getSinlgeFlashSale = function (id) {
+   return async function (dispatch) {
+      try {
+         const singleSale = await axios.get(`/admin/get-sinlge-flash-sale/${id}`, headers);
+
+         if (singleSale && singleSale?.data && singleSale?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.FETCH_SINGLE_FLASH_SALE,
+               payload: singleSale && singleSale?.data,
+            });
+         }
       } catch (err) {
          console.log(err);
       }

@@ -335,3 +335,30 @@ export const showFetchSaleComponent = function (data) {
       payload: data,
    };
 };
+
+export const insertNewSaleCollectionLodingFn = function (data) {
+   return {
+      type: ACTION_TYPE.INSERT_FLASHSALE_COLLECTIONS_LOADING,
+      payload: data,
+   };
+};
+
+export const removeFlashSaleInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_FLASHSALE_COLLECTIONS_INFO,
+      payload: data,
+   };
+};
+
+export const getAllFlashSalesLoading = function (data) {
+   return {
+      type: ACTION_TYPE.GET_ALL_FLASH_SALE_LOADING,
+      payload: data,
+   };
+};
+
+export const removeSingleFlashSaleData = function () {
+   return {
+      type: ACTION_TYPE.REMOVE_SINGLE_FLASH_SALE,
+   };
+};

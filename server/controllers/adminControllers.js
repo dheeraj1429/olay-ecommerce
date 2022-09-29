@@ -3,7 +3,7 @@ const categoryModel = require("../model/schema/productCategorySchema");
 const productBrandModel = require("../model/schema/productBrandSchema");
 const productsTagsModel = require("../model/schema/productsTagsSchema");
 const { erroResponse } = require("./errorResponse");
-const { imageCompress, catchAsync } = require("../helpers/helpers");
+const { imageCompress, catchAsync, fetchLimitDocument } = require("../helpers/helpers");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
 const swatchesModel = require("../model/schema/productVariationSwatchesSchema");
 const productSizeVariationModel = require("../model/schema/productSizeVariationSchema");
@@ -227,29 +227,9 @@ const getAllProductBrand = catchAsync(async function (req, res, next, perItems =
     * @page which page is client right now ?page=1 ......
     * @totalProductBrandSize how many document we have in a database.
     */
-   const BRAND_LIMIT = perItems ? perItems : 10;
+   const BRAND_LIMIT = perItems ? perItems : 2;
    const page = req.query.page || 0;
-   const totalProductBrandSize = await productBrandModel.countDocuments({});
-
-   /**
-    * @getAllBrands find all the document from the database and return some limited document to the client. it's usefull to mane a pagination. if there is some problem then send the some error the the client
-    */
-   const getAllBrands = await productBrandModel
-      .find({})
-      .limit(BRAND_LIMIT)
-      .skip(BRAND_LIMIT * page);
-
-   if (!getAllBrands) {
-      // TODO: send back error
-      erroResponse(res);
-   } else {
-      return res.status(httpStatusCodes.OK).json({
-         success: true,
-         totalPages: Math.ceil(totalProductBrandSize / BRAND_LIMIT - 1),
-         totalDocuments: totalProductBrandSize,
-         brands: getAllBrands,
-      });
-   }
+   await fetchLimitDocument(productBrandModel, page, res, httpStatusCodes, BRAND_LIMIT, "brands");
 });
 
 const deleteOneProductBrand = catchAsync(async function (req, res, next) {
@@ -515,24 +495,8 @@ const fetchUploadProducts = catchAsync(async function (req, res, next) {
     * @DOCUMENT_LIMIT how to document we want the send back to the client
     */
    const DOCUMENT_LIMIT = 6;
-   const totalDocuments = await productModel.countDocuments({});
-   const fetchDoc = await productModel
-      .find({})
-      .populate("category", { name: 1 })
-      .populate("brand", { name: 1 })
-      .limit(DOCUMENT_LIMIT)
-      .skip(DOCUMENT_LIMIT * page);
 
-   if (fetchDoc) {
-      return res.status(httpStatusCodes.OK).json({
-         success: true,
-         totalPages: Math.ceil(totalDocuments / DOCUMENT_LIMIT - 1),
-         totalDocuments: totalDocuments,
-         products: fetchDoc,
-      });
-   } else {
-      erroResponse(res);
-   }
+   await fetchLimitDocument(productModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, "products");
 });
 
 const deleteAllProducts = catchAsync(async function (req, res, next) {
@@ -1436,12 +1400,37 @@ const deleteSingleSubVariation = catchAsync(async function (req, res, next) {
    }
 });
 
+// store the flash sale data into the database and the send back to reponse.
+const storeSaleInfo = async function (data, response) {
+   try {
+      let insertNewSale = await saleModel(data);
+      let saleSave = await insertNewSale.save();
+
+      if (saleSave) {
+         return response.status(httpStatusCodes.CREATED).json({
+            success: true,
+            message: "new sale saved",
+         });
+      } else {
+         return response.status(httpStatusCodes.INTERNAL_SERVER).json({
+            message: "Internal server error",
+         });
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
    const { name, statusInfo } = req.body;
 
    const findIsSaleExists = await saleModel.findOne({ name });
 
-   // [-]
+   const data = {
+      name,
+      statusInfo,
+   };
+
    if (findIsSaleExists) {
       return res.status(httpStatusCodes.OK).json({
          success: true,
@@ -1449,9 +1438,97 @@ const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
       });
    } else {
       if (req.body?.selectedProduct) {
+         /**
+          * store the name or the status info the database.
+          * for the sub selected product. first loop over the the object to get the access the object
+          * key and values and then selcted the each sub object key and values then then push inside
+          * the sale model.
+          */
+
          const selectedProduct = req.body?.selectedProduct;
+         let selectedProductAr = [];
+
+         for (let item in selectedProduct) {
+            selectedProductAr.push({
+               productId: item,
+               quntity: selectedProduct[item].quntity,
+               salePrice: selectedProduct[item].salePrice,
+            });
+         }
+
+         data.products = selectedProductAr;
+
+         await storeSaleInfo(data, res);
       } else {
+         await storeSaleInfo(data, res);
       }
+   }
+});
+
+const getAllFlashSales = catchAsync(async function (req, res, next) {
+   const page = req.query.page;
+
+   if (!page) next(new AppError("flash sale page number is required!"));
+
+   const DOCUMENT_LIMIT = 3;
+
+   await fetchLimitDocument(saleModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, "sales", { products: 0 });
+});
+
+const deleteAllFlashSales = catchAsync(async function (req, res, next) {
+   const deleteAllSales = await saleModel.deleteMany({});
+
+   if (!!deleteAllSales.deletedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "All Flash sales deleted",
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
+   }
+});
+
+const deleteSingleFlashSale = catchAsync(async function (req, res, next) {
+   const id = req.params.id;
+
+   if (!id) {
+      next(new AppError("flash sale id is required!"));
+   }
+
+   const findFlashSaleAndDelete = await saleModel.deleteOne({ _id: id });
+
+   if (!!findFlashSaleAndDelete.deletedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "Flash sales deleted",
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
+   }
+});
+
+const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
+   const id = req.params.id;
+
+   if (!id) {
+      next(new AppError("Flash sale id is required!"));
+   }
+
+   const findSinlgeFlashSale = await saleModel.findOne({ _id: id }).populate("products.productId", { name: 1, productImage: 1 });
+
+   if (findSinlgeFlashSale) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         sale: findSinlgeFlashSale,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
    }
 });
 
@@ -1499,4 +1576,8 @@ module.exports = {
    updateSingleSubVariation,
    deleteSingleSubVariation,
    insertNewProductFlashSale,
+   getAllFlashSales,
+   deleteAllFlashSales,
+   deleteSingleFlashSale,
+   getSinlgeFlashSale,
 };

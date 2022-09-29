@@ -5,12 +5,13 @@ import TextField from "@mui/material/TextField";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 import FetchListComponent from "../FetchListComponent/FetchListComponent";
 import { useSelector, useDispatch } from "react-redux";
-import { showFetchSaleComponent } from "../../Redux/Actions/appAction";
+import { removeSingleFlashSaleData, showFetchSaleComponent } from "../../Redux/Actions/appAction";
 import SaleSelectedProductComponent from "../SaleSelectedProductComponent/SaleSelectedProductComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { MenuItem } from "@mui/material";
 import { message } from "antd";
 import { insertNewProductFlashSale } from "../../Redux/Actions/adminAction";
+import { insertNewSaleCollectionLodingFn, removeFlashSaleInfo } from "../../Redux/Actions/appAction";
 
 const STATUS = [
    { value: "Published", label: "Published" },
@@ -18,7 +19,7 @@ const STATUS = [
    { value: "Pending", label: "Pending" },
 ];
 
-function CreateNewFlashSaleComponent() {
+function CreateNewFlashSaleComponent({ param }) {
    const [SaleInfo, setSaleInfo] = useState({
       name: "",
       statusInfo: "",
@@ -29,6 +30,8 @@ function CreateNewFlashSaleComponent() {
    const showFlashSaleComponent = useSelector((state) => state.admin.showFlashSaleComponent);
    const selectedFlashSaleProducts = useSelector((state) => state.admin.selectedFlashSaleProducts);
    const storeSelectedProductSaleLoading = useSelector((state) => state.admin.storeSelectedProductSaleLoading);
+   const storeSelectedProductSale = useSelector((state) => state.admin.storeSelectedProductSale);
+   const singleFlashSale = useSelector((state) => state.admin.singleFlashSale);
 
    const ChangeHandler = function (e, id = undefined) {
       const name = e.target.name;
@@ -77,15 +80,52 @@ function CreateNewFlashSaleComponent() {
    const SendHandler = function () {
       if (SaleInfo.name) {
          dispatch(insertNewProductFlashSale(SaleInfo));
+         dispatch(insertNewSaleCollectionLodingFn(true));
       } else {
          info("Sale name is required");
       }
    };
 
+   useEffect(() => {
+      if (!!storeSelectedProductSale) {
+         info(storeSelectedProductSale.message);
+         dispatch(removeFlashSaleInfo(null));
+      }
+   }, [storeSelectedProductSale]);
+
+   useEffect(() => {
+      if (!!selectedFlashSaleProducts.length && !!singleFlashSale) {
+         const dataConvertObject = {};
+
+         for (let i = 0; i < selectedFlashSaleProducts.length; i++) {
+            dataConvertObject[selectedFlashSaleProducts[i].id] = {
+               salePrice: selectedFlashSaleProducts[i].salePrice,
+               quntity: selectedFlashSaleProducts[i].quntity,
+            };
+         }
+
+         setSaleInfo({
+            name: singleFlashSale.sale.name,
+            statusInfo: singleFlashSale.sale.statusInfo,
+            selectedProduct: dataConvertObject,
+         });
+      }
+   }, [singleFlashSale, selectedFlashSaleProducts]);
+
+   useEffect(() => {
+      if (!param) {
+         dispatch(removeSingleFlashSaleData());
+         setSaleInfo({
+            name: "",
+            statusInfo: "",
+         });
+      }
+   }, [param]);
+
    return (
       <sale.container>
          <HeadingComponent
-            Heading={"Product flash sale"}
+            Heading={param ? "Edit product flash sale" : "Product flash sale"}
             subHeading={`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,`}
          />
          <div className="flexDiv">
@@ -151,7 +191,7 @@ function CreateNewFlashSaleComponent() {
                      ref={(el) => (productRef.current = el)}
                   />
 
-                  {!!selectedFlashSaleProducts.length ? (
+                  {SaleInfo?.selectedProduct && !!selectedFlashSaleProducts.length ? (
                      <sale.selectedBrands>
                         <p>Selected products :</p>
                         {!!selectedFlashSaleProducts.length
@@ -191,8 +231,8 @@ function CreateNewFlashSaleComponent() {
 
                <CustombuttonComponent
                   onClick={SendHandler}
-                  isLoading={storeSelectedProductSaleLoading}
-                  innerText={"Save"}
+                  isLoading={param ? "" : storeSelectedProductSaleLoading}
+                  innerText={param ? "Update" : "Save"}
                   btnCl={"category_upload"}
                />
             </div>

@@ -16,4 +16,23 @@ const catchAsync = (fn) => {
    };
 };
 
-module.exports = { imageCompress, catchAsync };
+const fetchLimitDocument = async function (collection, page, res, httpStatusCodes, DOCUMENT_LIMIT, filed, item = undefined) {
+   const documents = await collection.countDocuments({});
+   const findData = await collection
+      .find({}, item ? item : null)
+      .limit(DOCUMENT_LIMIT)
+      .skip(page * DOCUMENT_LIMIT);
+
+   if (filed) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         totalPages: Math.ceil(documents / DOCUMENT_LIMIT - 1),
+         totalDocuments: documents,
+         [`${filed}`]: findData,
+      });
+   } else {
+      throw new Error("somting worng with fetching document");
+   }
+};
+
+module.exports = { imageCompress, catchAsync, fetchLimitDocument };

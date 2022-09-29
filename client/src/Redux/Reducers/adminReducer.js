@@ -63,6 +63,9 @@ const INITAL_STATE = {
    showFlashSaleComponent: false,
    storeSelectedProductSale: null,
    storeSelectedProductSaleLoading: false,
+   allSales: null,
+   allSaleLoading: false,
+   singleFlashSale: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -288,6 +291,14 @@ const adminReducer = function (state = INITAL_STATE, action) {
                allSizeVariations: {
                   ...state.allSizeVariations,
                   sizeVariations: CampareFunction(action.payload.filter, state.allSizeVariations, "sizeVariations"),
+               },
+            };
+         } else if (action.payload.filde === "sales") {
+            return {
+               ...state,
+               allSales: {
+                  ...state.allSales,
+                  sales: CampareFunction(action.payload.filter, state.allSales, "sales"),
                },
             };
          }
@@ -756,6 +767,94 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             showFlashSaleComponent: action.payload,
+         };
+
+      case ACTION_TYPE.INSERT_FLASHSALE_COLLECTIONS:
+         return {
+            ...state,
+            storeSelectedProductSale: action.payload,
+            storeSelectedProductSaleLoading: false,
+         };
+
+      case ACTION_TYPE.INSERT_FLASHSALE_COLLECTIONS_LOADING:
+         return {
+            ...state,
+            storeSelectedProductSaleLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_FLASHSALE_COLLECTIONS_INFO:
+         return {
+            ...state,
+            storeSelectedProductSale: action.payload,
+         };
+
+      case ACTION_TYPE.GET_ALL_FLASH_SALE:
+         return {
+            ...state,
+            allSales: action.payload,
+            allSaleLoading: false,
+         };
+
+      case ACTION_TYPE.DELETE_ALL_FLASH_SALE:
+         return {
+            ...state,
+            allSales: {
+               ...state.allSales,
+               sales: [],
+            },
+         };
+
+      case ACTION_TYPE.DELTE_SINGLE_SALE:
+         return {
+            ...state,
+            allSales: {
+               ...state.allSales,
+               sales: state.allSales.sales.filter((el) => el._id !== action.payload),
+            },
+         };
+
+      case ACTION_TYPE.GET_ALL_FLASH_SALE_LOADING:
+         return {
+            ...state,
+            allSaleLoading: action.payload,
+         };
+
+      case ACTION_TYPE.FETCH_SINGLE_FLASH_SALE:
+         const checkFlashSaleExists = function () {
+            let selectedFlashSaleArray = [];
+
+            if (action.payload?.sale?.products && !!action.payload?.sale?.products) {
+               action.payload.sale.products.map((el) => {
+                  selectedFlashSaleArray.push({
+                     productImage: el.productId.productImage,
+                     name: el.productId.name,
+                     id: el.productId._id,
+                     quntity: el.quntity,
+                     salePrice: el.salePrice,
+                  });
+               });
+            }
+
+            return selectedFlashSaleArray;
+         };
+
+         return {
+            ...state,
+            singleFlashSale: {
+               sale: {
+                  name: action.payload.sale.name,
+                  statusInfo: action.payload.sale.statusInfo,
+                  _id: action.payload.sale._id,
+               },
+            },
+            selectedFlashSaleProducts: checkFlashSaleExists(),
+         };
+
+      case ACTION_TYPE.REMOVE_SINGLE_FLASH_SALE:
+         return {
+            ...state,
+            singleFlashSale: null,
+            selectedFlashSaleProducts: [],
          };
 
       default:

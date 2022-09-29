@@ -35,6 +35,8 @@ route.get("/get-single-product-swatches/:id", adminController.fetchSingleSwatchs
 route.get("/get-all-size-variations", adminController.getAllProductSizeVariations);
 route.get("/get-single-size-variation/:id", adminController.getSingleProductSizeVations);
 route.get("/get-single-sub-variation", adminController.getSingelSubProductVariation);
+route.get("/get-all-sales", adminController.getAllFlashSales);
+route.get("/get-sinlge-flash-sale/:id", adminController.getSinlgeFlashSale);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
@@ -74,6 +76,8 @@ route.delete("/delete-selected-product-swatches/:id", adminController.removeSele
 route.delete("/remove-single-product-size-variation/:id", adminController.removeSingleProductSizeVariation);
 route.delete("/delete-all-size-varaiton", adminController.deleteAllProductSizeVations);
 route.delete("/delete-single-sub-variaiton", adminController.deleteSingleSubVariation);
+route.delete("/delete-all-flash-sale", adminController.deleteAllFlashSales);
+route.delete("/delete-single-flash-sale/:id", adminController.deleteSingleFlashSale);
 // ---------------------------------------------------------------------------------------
 
 module.exports = route;

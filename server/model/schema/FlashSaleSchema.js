@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const saleScheam = new mongoose.Schema({
    name: { type: String, required: [true, "plase enter the sale name"], index: true },
    statusInfo: { type: String, default: "Draft" },
+   createdAt: { type: Date, default: Date.now },
    products: [
       {
          productId: { type: mongoose.Types.ObjectId, ref: "product" },
@@ -11,6 +12,8 @@ const saleScheam = new mongoose.Schema({
       },
    ],
 });
+
+saleScheam.index({ name: 1 });
 
 const saleModel = mongoose.model("FlashSale", saleScheam);
 

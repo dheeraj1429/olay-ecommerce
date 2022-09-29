@@ -25,7 +25,9 @@ import CreateSelectedProductVariationComponent from "./DashboardComponents/Creat
 import ProductSizeVariationComponent from "./DashboardComponents/ProductSizeVariationComponent/ProductSizeVariationComponent";
 import ProductSizeVariationTableComponent from "./DashboardComponents/ProductSizeVariationTableComponent/ProductSizeVariationTableComponent";
 import ProductSizeVariationEditComponent from "./DashboardComponents/ProductSizeVariationEditComponent/ProductSizeVariationEditComponent";
-import ProductFlashSaleComponent from "./DashboardComponents/ProductFlashSaleComponent/ProductFlashSaleComponent";
+import FlashSaleTableViewComponent from "./DashboardComponents/FlashSaleTableViewComponent/FlashSaleTableViewComponent";
+import CreateNewFlashSaleComponent from "./DashboardComponents/CreateNewFlashSaleComponent/CreateNewFlashSaleComponent";
+import EditProductFlashSaleComponent from "./DashboardComponents/EditProductFlashSaleComponent/EditProductFlashSaleComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -69,7 +71,9 @@ function App() {
                <Route path="product-size-variation" element={<ProductSizeVariationTableComponent />} />
                <Route path="product-size-variation/create" element={<ProductSizeVariationComponent />} />
                <Route path="variation-swatches/sizeVariations/:id" element={<ProductSizeVariationEditComponent />} />
-               <Route path="flash-sale" element={<ProductFlashSaleComponent />} />
+               <Route path="flash-sale" element={<FlashSaleTableViewComponent />} />
+               <Route path="flash-sale/create" element={<CreateNewFlashSaleComponent />} />
+               <Route path="flash-sale/edit/:id" element={<EditProductFlashSaleComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

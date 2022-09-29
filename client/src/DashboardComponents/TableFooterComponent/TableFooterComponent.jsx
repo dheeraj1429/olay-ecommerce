@@ -12,12 +12,14 @@ import {
    deleteSelectedproducts,
    fetchUploadProducts,
    getProductTags,
+   getAllFlashSales,
 } from "../../Redux/Actions/adminAction";
 import {
    fetchBrandProductLoading,
    removeAllSelectedItems,
    fetchLoadingProducts,
    productTagsFetchLoading,
+   getAllFlashSalesLoading,
 } from "../../Redux/Actions/appAction";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
@@ -35,6 +37,8 @@ function TableFooterComponent({ action, state }) {
             dispatch(fetchLoadingProducts(true));
          } else if (action === "tags") {
             dispatch(productTagsFetchLoading(true));
+         } else if (action === "sales") {
+            dispatch(getAllFlashSalesLoading(true));
          }
       }
    };
@@ -48,6 +52,8 @@ function TableFooterComponent({ action, state }) {
             dispatch(fetchLoadingProducts(true));
          } else if (action === "tags") {
             dispatch(productTagsFetchLoading(true));
+         } else if (action === "sales") {
+            dispatch(getAllFlashSalesLoading(true));
          }
       }
    };
@@ -68,6 +74,8 @@ function TableFooterComponent({ action, state }) {
          dispatch(fetchUploadProducts(Limit));
       } else if (action === "tags") {
          dispatch(getProductTags(Limit));
+      } else if (action === "sales") {
+         dispatch(getAllFlashSales(Limit));
       }
    }, [Limit]);
 

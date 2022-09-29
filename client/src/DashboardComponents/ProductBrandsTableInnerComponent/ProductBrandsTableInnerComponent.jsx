@@ -11,6 +11,7 @@ import { deleteOneProductBrand } from "../../Redux/Actions/adminAction";
 import { useDispatch } from "react-redux";
 import { removeAllSelctedIds, selectedBrandProduct } from "../../Redux/Actions/appAction";
 import { Link } from "react-router-dom";
+import * as globalClass from "../../Global.style";
 
 function ProductBrandsTableInnerComponent({ AllBrands, change }) {
    const dispatch = useDispatch();
@@ -39,10 +40,7 @@ function ProductBrandsTableInnerComponent({ AllBrands, change }) {
                <td>
                   <table.btnDiv>
                      <Link to={`/dashboard/product-brands/edit/${el._id}`}>
-                        <CustombuttonComponent
-                           btnCl={"table_btn"}
-                           onClick={() => selectedBrand(el)}
-                        >
+                        <CustombuttonComponent btnCl={"table_btn"} onClick={() => selectedBrand(el)}>
                            <FiEdit2 />
                         </CustombuttonComponent>
                      </Link>
@@ -61,11 +59,7 @@ function ProductBrandsTableInnerComponent({ AllBrands, change }) {
                      {!!el.brandIcon ? (
                         <img
                            crossorigin="anonymous"
-                           src={
-                              !!el.brandIcon
-                                 ? `${backendConfigData.URL}brandImagesCompress/${el.brandIcon}`
-                                 : null
-                           }
+                           src={!!el.brandIcon ? `${backendConfigData.URL}brandImagesCompress/${el.brandIcon}` : null}
                         />
                      ) : (
                         <div className="brand"></div>
@@ -79,7 +73,9 @@ function ProductBrandsTableInnerComponent({ AllBrands, change }) {
                </td>
                <td>{!!el.order ? el.order : 0}</td>
                <td>
-                  <div className={el.brandStatusInfo}>{el.brandStatusInfo}</div>
+                  <globalClass.mainDiv>
+                     <div className={el.brandStatusInfo}>{el.brandStatusInfo}</div>
+                  </globalClass.mainDiv>
                </td>
             </tr>
          ))}

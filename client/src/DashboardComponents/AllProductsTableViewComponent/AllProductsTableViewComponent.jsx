@@ -11,12 +11,11 @@ import { VscClose } from "@react-icons/all-files/vsc/VscClose";
 import backendConfigData from "../../backendConfig";
 import { BsArrowReturnRight } from "@react-icons/all-files/bs/BsArrowReturnRight";
 import { GoPrimitiveDot } from "@react-icons/all-files/go/GoPrimitiveDot";
+import * as globalClass from "../../Global.style";
 
 function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
    const location = useLocation();
    const dispatch = useDispatch();
-
-   console.log(el);
 
    const confirm = (id) => {
       dispatch(deleteOneProduct(id));
@@ -45,12 +44,7 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
                   </Link>
                </inner.td>
                <inner.td>
-                  <Popconfirm
-                     title="Are you sure to delete this product?"
-                     onConfirm={() => confirm(el._id)}
-                     okText="Yes"
-                     cancelText="No"
-                  >
+                  <Popconfirm title="Are you sure to delete this product?" onConfirm={() => confirm(el._id)} okText="Yes" cancelText="No">
                      <VscClose />
                   </Popconfirm>
                </inner.td>
@@ -99,16 +93,10 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
                </inner.td>
             </Link>
          }
-         <inner.td>
-            {el?.name ? el.name.slice(0, 40) : el?.variationName ? el.variationName.slice(0, 40) : null}
-         </inner.td>
+         <inner.td>{el?.name ? el.name.slice(0, 40) : el?.variationName ? el.variationName.slice(0, 40) : null}</inner.td>
          <inner.td>{el?.price ? el.price : el?.regularPrice ? el?.regularPrice : null}</inner.td>
          <inner.td>
-            {el?.salePrice && !!el.salePrice ? (
-               <div className="Sale">{el.salePrice}</div>
-            ) : (
-               <div className="no_sale">No Sale</div>
-            )}
+            {el?.salePrice && !!el.salePrice ? <div className="Sale">{el.salePrice}</div> : <div className="no_sale">No Sale</div>}
          </inner.td>
          <inner.td></inner.td>
          <inner.td>
@@ -134,7 +122,13 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
                : null}
          </inner.td>
          <inner.td>
-            {el?.productStatusInfo ? <div className={el.productStatusInfo}>{el.productStatusInfo}</div> : <div>-</div>}
+            {el?.productStatusInfo ? (
+               <globalClass.mainDiv>
+                  <div className={el.productStatusInfo}> {el.productStatusInfo}</div>
+               </globalClass.mainDiv>
+            ) : (
+               <div>-</div>
+            )}
          </inner.td>
       </inner.tr>
    );

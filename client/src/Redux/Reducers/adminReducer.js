@@ -66,6 +66,8 @@ const INITAL_STATE = {
    allSales: null,
    allSaleLoading: false,
    singleFlashSale: null,
+   updateFlashSale: null,
+   updateFlashSaleLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -150,7 +152,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
          };
 
       case ACTION_TYPE.DELETE_SELECTED_CATEGORY:
-         const filterCategory = state.productAllCategory.allCategory.filter((el) => el._id !== action.payload);
+         const filterCategory = state.productAllCategory.allCategory.filter(
+            (el) => el._id !== action.payload
+         );
          return {
             ...state,
             productAllCategory: {
@@ -198,7 +202,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                return {
                   ...state.productBrands,
                   totalDocuments: state.productBrands.totalDocuments - 1,
-                  brands: state.productBrands.brands.filter((el) => el._id !== action.selectedBrandId),
+                  brands: state.productBrands.brands.filter(
+                     (el) => el._id !== action.selectedBrandId
+                  ),
                };
             } else return state.productBrands;
          };
@@ -217,7 +223,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                productBrands: {
                   ...state.productBrands,
-                  brands: state.productBrands.brands.filter((el) => (el._id = !setPayload.has(el._id))),
+                  brands: state.productBrands.brands.filter(
+                     (el) => (el._id = !setPayload.has(el._id))
+                  ),
                },
             };
          } else {
@@ -282,7 +290,11 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allProductSwatches: {
                   ...state.allProductSwatches,
-                  allSwatches: CampareFunction(action.payload.filter, state.allProductSwatches, "allSwatches"),
+                  allSwatches: CampareFunction(
+                     action.payload.filter,
+                     state.allProductSwatches,
+                     "allSwatches"
+                  ),
                },
             };
          } else if (action.payload.filde === "sizeVariations") {
@@ -290,7 +302,11 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allSizeVariations: {
                   ...state.allSizeVariations,
-                  sizeVariations: CampareFunction(action.payload.filter, state.allSizeVariations, "sizeVariations"),
+                  sizeVariations: CampareFunction(
+                     action.payload.filter,
+                     state.allSizeVariations,
+                     "sizeVariations"
+                  ),
                },
             };
          } else if (action.payload.filde === "sales") {
@@ -402,7 +418,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allProducts: {
                   ...state.allProducts,
-                  products: state.allProducts.products.filter((el) => (el._id = !setPayload.has(el._id))),
+                  products: state.allProducts.products.filter(
+                     (el) => (el._id = !setPayload.has(el._id))
+                  ),
                },
             };
          } else {
@@ -606,7 +624,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             allProductSwatches: {
                ...state.allProductSwatches,
-               allSwatches: state.allProductSwatches.allSwatches.filter((el) => el._id !== action.payload),
+               allSwatches: state.allProductSwatches.allSwatches.filter(
+                  (el) => el._id !== action.payload
+               ),
             },
          };
 
@@ -640,7 +660,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             allSizeVariations: {
                ...state.allSizeVariations,
-               sizeVariations: state.allSizeVariations.sizeVariations.filter((el) => el._id !== action.payload),
+               sizeVariations: state.allSizeVariations.sizeVariations.filter(
+                  (el) => el._id !== action.payload
+               ),
             },
          };
 
@@ -760,7 +782,10 @@ const adminReducer = function (state = INITAL_STATE, action) {
 
          return {
             ...state,
-            selectedFlashSaleProducts: checkProductIsExists(state.selectedFlashSaleProducts, action.payload),
+            selectedFlashSaleProducts: checkProductIsExists(
+               state.selectedFlashSaleProducts,
+               action.payload
+            ),
          };
 
       case ACTION_TYPE.SHOW_FETCH_SALE_COLLECTION_COMPONENT:
@@ -845,6 +870,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                   name: action.payload.sale.name,
                   statusInfo: action.payload.sale.statusInfo,
                   _id: action.payload.sale._id,
+                  dateOfend: action.payload.sale.dateOfend,
                },
             },
             selectedFlashSaleProducts: checkFlashSaleExists(),
@@ -855,6 +881,25 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             singleFlashSale: null,
             selectedFlashSaleProducts: [],
+         };
+
+      case ACTION_TYPE.UPDATE_SINGLE_FLASH_SALE:
+         return {
+            ...state,
+            updateFlashSale: action.payload,
+            updateFlashSaleLoading: false,
+         };
+
+      case ACTION_TYPE.UPDATE_SINGLE_FLASH_SALE_LOADING:
+         return {
+            ...state,
+            updateFlashSaleLoading: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_UPDATE_FLASH_SALE_INFO:
+         return {
+            ...state,
+            updateFlashSale: action.payload,
          };
 
       default:

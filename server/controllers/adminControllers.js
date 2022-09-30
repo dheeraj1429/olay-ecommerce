@@ -3,7 +3,12 @@ const categoryModel = require("../model/schema/productCategorySchema");
 const productBrandModel = require("../model/schema/productBrandSchema");
 const productsTagsModel = require("../model/schema/productsTagsSchema");
 const { erroResponse } = require("./errorResponse");
-const { imageCompress, catchAsync, fetchLimitDocument } = require("../helpers/helpers");
+const {
+   imageCompress,
+   catchAsync,
+   fetchLimitDocument,
+   convertObjectDataIntoArray,
+} = require("../helpers/helpers");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
 const swatchesModel = require("../model/schema/productVariationSwatchesSchema");
 const productSizeVariationModel = require("../model/schema/productSizeVariationSchema");
@@ -162,7 +167,8 @@ const sendBrandResponseFunction = function (res) {
  * @return produict barnd is successful inserted or not
  */
 const insertNewProductBrand = catchAsync(async function (req, res, next) {
-   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription } = req.body;
+   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription } =
+      req.body;
    const file = req.files[0];
 
    // TODO: function scope variables
@@ -328,7 +334,8 @@ const updateFildes = async function (id, updateObject, res) {
  * @return flag true || false
  */
 const editSelectedBrand = catchAsync(async function (req, res, next) {
-   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription, id } = req.body;
+   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription, id } =
+      req.body;
 
    const updateObject = {
       name,
@@ -599,10 +606,16 @@ const changeCollectionDataPosition = async function (field, productId, collectio
       });
 
       if (!checkIsProductAlreadyExists) {
-         const findBrandProductAndInsertId = await collection.updateOne({ _id: field }, { $push: { products: { productId: productId } } });
+         const findBrandProductAndInsertId = await collection.updateOne(
+            { _id: field },
+            { $push: { products: { productId: productId } } }
+         );
 
          if (!!findBrandProductAndInsertId.modifiedCount) {
-            await collection.updateOne({ _id: prevId }, { $pull: { products: { productId: productId } } });
+            await collection.updateOne(
+               { _id: prevId },
+               { $pull: { products: { productId: productId } } }
+            );
          }
       }
    } catch (err) {
@@ -658,13 +671,24 @@ const editSingleProduct = catchAsync(async function (req, res, next) {
    if (req.body?.brand && prevBrandId && prevBrandId !== req.body.brand) {
       await changeCollectionDataPosition(req.body.brand, productId, productBrandModel, prevBrandId);
    } else if (req.body?.brand && !prevBrandId) {
-      await productBrandModel.updateOne({ _id: req.body.brand }, { $push: { products: { productId: productId } } });
+      await productBrandModel.updateOne(
+         { _id: req.body.brand },
+         { $push: { products: { productId: productId } } }
+      );
    }
 
    if (req.body?.category && prevCategoryId && prevCategoryId !== req.body.category) {
-      await changeCollectionDataPosition(req.body.category, productId, categoryModel, prevCategoryId);
+      await changeCollectionDataPosition(
+         req.body.category,
+         productId,
+         categoryModel,
+         prevCategoryId
+      );
    } else if (req.body?.category && !prevCategoryId) {
-      await categoryModel.updateOne({ _id: req.body.category }, { $push: { products: { productId: productId } } });
+      await categoryModel.updateOne(
+         { _id: req.body.category },
+         { $push: { products: { productId: productId } } }
+      );
    }
 
    // if there is the file uploded then upload new file name and store into the database, but if there is no image updated then update only the new information.
@@ -1268,7 +1292,10 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
    }
 
    const findSubVaition = await productModel
-      .findOne({ _id: parentProductId, "variations._id": { $eq: subVariation } }, { "variations.$": 1 })
+      .findOne(
+         { _id: parentProductId, "variations._id": { $eq: subVariation } },
+         { "variations.$": 1 }
+      )
       .populate("variations.size")
       .populate("variations.colorSwatches");
 
@@ -1291,7 +1318,12 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
  * @param { Object } updateObject
  * @param { Object } res
  */
-const updateSubVaritionFunction = async function (parentProductId, subVaritionId, updateObject, res) {
+const updateSubVaritionFunction = async function (
+   parentProductId,
+   subVaritionId,
+   updateObject,
+   res
+) {
    let findSubVariationAndUpdate;
 
    /**
@@ -1445,18 +1477,7 @@ const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
           * the sale model.
           */
 
-         const selectedProduct = req.body?.selectedProduct;
-         let selectedProductAr = [];
-
-         for (let item in selectedProduct) {
-            selectedProductAr.push({
-               productId: item,
-               quntity: selectedProduct[item].quntity,
-               salePrice: selectedProduct[item].salePrice,
-            });
-         }
-
-         data.products = selectedProductAr;
+         data.products = convertObjectDataIntoArray(req.body.selectedProduct);
 
          await storeSaleInfo(data, res);
       } else {
@@ -1472,7 +1493,9 @@ const getAllFlashSales = catchAsync(async function (req, res, next) {
 
    const DOCUMENT_LIMIT = 3;
 
-   await fetchLimitDocument(saleModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, "sales", { products: 0 });
+   await fetchLimitDocument(saleModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, "sales", {
+      products: 0,
+   });
 });
 
 const deleteAllFlashSales = catchAsync(async function (req, res, next) {
@@ -1518,7 +1541,9 @@ const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
       next(new AppError("Flash sale id is required!"));
    }
 
-   const findSinlgeFlashSale = await saleModel.findOne({ _id: id }).populate("products.productId", { name: 1, productImage: 1 });
+   const findSinlgeFlashSale = await saleModel
+      .findOne({ _id: id })
+      .populate("products.productId", { name: 1, productImage: 1 });
 
    if (findSinlgeFlashSale) {
       return res.status(httpStatusCodes.OK).json({
@@ -1529,6 +1554,64 @@ const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
       return res.status(httpStatusCodes.INTERNAL_SERVER).json({
          message: "Internal server error",
       });
+   }
+});
+
+const updateFlashSaleInfo = async function (colleciton, flashSaleId, data, res) {
+   try {
+      const findAndUpdateFlashSaleDetails = await colleciton.updateOne(
+         { _id: flashSaleId },
+         { $set: data },
+         { upsert: true }
+      );
+
+      console.log(findAndUpdateFlashSaleDetails);
+
+      if (
+         findAndUpdateFlashSaleDetails.acknowledged &&
+         !!findAndUpdateFlashSaleDetails.modifiedCount
+      ) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "Flash sale updated",
+         });
+      } else if (
+         findAndUpdateFlashSaleDetails.acknowledged &&
+         !findAndUpdateFlashSaleDetails.modifiedCount
+      ) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: "Flash sale alrady updated",
+         });
+      } else {
+         next(new AppError("Can't update the flash sale document"));
+      }
+   } catch (err) {
+      console.log(err);
+   }
+};
+
+const updateSingleFlashSale = catchAsync(async function (req, res, next) {
+   const { flashSaleId } = req.body;
+
+   if (!flashSaleId) {
+      next(new AppError("Flash sale id is required for update the sub variaitons products data"));
+   }
+
+   const { statusInfo, name, dateOfend } = req.body;
+
+   const data = {
+      name,
+      statusInfo,
+      dateOfend: !!dateOfend ? dateOfend : "",
+   };
+
+   if (req.body?.selectedProduct) {
+      data.products = convertObjectDataIntoArray(req.body.selectedProduct);
+
+      await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
+   } else {
+      await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
    }
 });
 
@@ -1580,4 +1663,5 @@ module.exports = {
    deleteAllFlashSales,
    deleteSingleFlashSale,
    getSinlgeFlashSale,
+   updateSingleFlashSale,
 };

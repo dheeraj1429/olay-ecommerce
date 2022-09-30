@@ -362,3 +362,17 @@ export const removeSingleFlashSaleData = function () {
       type: ACTION_TYPE.REMOVE_SINGLE_FLASH_SALE,
    };
 };
+
+export const loadingUpdateSingleFlashSale = function (data) {
+   return {
+      type: ACTION_TYPE.UPDATE_SINGLE_FLASH_SALE_LOADING,
+      payload: data,
+   };
+};
+
+export const removeUpdateFlashSaleInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_UPDATE_FLASH_SALE_INFO,
+      payload: data,
+   };
+};

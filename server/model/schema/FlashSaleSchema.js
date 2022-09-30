@@ -4,6 +4,7 @@ const saleScheam = new mongoose.Schema({
    name: { type: String, required: [true, "plase enter the sale name"], index: true },
    statusInfo: { type: String, default: "Draft" },
    createdAt: { type: Date, default: Date.now },
+   dateOfend: { type: Date },
    products: [
       {
          productId: { type: mongoose.Types.ObjectId, ref: "product" },

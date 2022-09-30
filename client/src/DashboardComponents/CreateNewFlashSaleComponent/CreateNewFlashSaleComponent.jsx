@@ -5,13 +5,23 @@ import TextField from "@mui/material/TextField";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 import FetchListComponent from "../FetchListComponent/FetchListComponent";
 import { useSelector, useDispatch } from "react-redux";
-import { removeSingleFlashSaleData, showFetchSaleComponent } from "../../Redux/Actions/appAction";
+import {
+   removeSingleFlashSaleData,
+   removeUpdateFlashSaleInfo,
+   showFetchSaleComponent,
+   insertNewSaleCollectionLodingFn,
+   removeFlashSaleInfo,
+   loadingUpdateSingleFlashSale,
+} from "../../Redux/Actions/appAction";
 import SaleSelectedProductComponent from "../SaleSelectedProductComponent/SaleSelectedProductComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { MenuItem } from "@mui/material";
 import { message } from "antd";
-import { insertNewProductFlashSale } from "../../Redux/Actions/adminAction";
-import { insertNewSaleCollectionLodingFn, removeFlashSaleInfo } from "../../Redux/Actions/appAction";
+import { insertNewProductFlashSale, updateSingleFlashSale } from "../../Redux/Actions/adminAction";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useLayoutEffect } from "react";
 
 const STATUS = [
    { value: "Published", label: "Published" },
@@ -23,15 +33,24 @@ function CreateNewFlashSaleComponent({ param }) {
    const [SaleInfo, setSaleInfo] = useState({
       name: "",
       statusInfo: "",
+      dateOfend: "",
    });
 
    const productRef = useRef();
    const dispatch = useDispatch();
    const showFlashSaleComponent = useSelector((state) => state.admin.showFlashSaleComponent);
    const selectedFlashSaleProducts = useSelector((state) => state.admin.selectedFlashSaleProducts);
-   const storeSelectedProductSaleLoading = useSelector((state) => state.admin.storeSelectedProductSaleLoading);
+   const storeSelectedProductSaleLoading = useSelector(
+      (state) => state.admin.storeSelectedProductSaleLoading
+   );
    const storeSelectedProductSale = useSelector((state) => state.admin.storeSelectedProductSale);
    const singleFlashSale = useSelector((state) => state.admin.singleFlashSale);
+   const updateFlashSaleLoading = useSelector((state) => state.admin.updateFlashSaleLoading);
+   const updateFlashSale = useSelector((state) => state.admin.updateFlashSale);
+
+   const DataChangeHandler = (newValue) => {
+      setSaleInfo({ ...SaleInfo, dateOfend: newValue.$d });
+   };
 
    const ChangeHandler = function (e, id = undefined) {
       const name = e.target.name;
@@ -79,8 +98,13 @@ function CreateNewFlashSaleComponent({ param }) {
 
    const SendHandler = function () {
       if (SaleInfo.name) {
-         dispatch(insertNewProductFlashSale(SaleInfo));
-         dispatch(insertNewSaleCollectionLodingFn(true));
+         if (!param) {
+            dispatch(insertNewProductFlashSale(SaleInfo));
+            dispatch(insertNewSaleCollectionLodingFn(true));
+         } else {
+            dispatch(updateSingleFlashSale(SaleInfo));
+            dispatch(loadingUpdateSingleFlashSale(true));
+         }
       } else {
          info("Sale name is required");
       }
@@ -94,33 +118,45 @@ function CreateNewFlashSaleComponent({ param }) {
    }, [storeSelectedProductSale]);
 
    useEffect(() => {
-      if (!!selectedFlashSaleProducts.length && !!singleFlashSale) {
+      if (!!singleFlashSale) {
          const dataConvertObject = {};
 
-         for (let i = 0; i < selectedFlashSaleProducts.length; i++) {
-            dataConvertObject[selectedFlashSaleProducts[i].id] = {
-               salePrice: selectedFlashSaleProducts[i].salePrice,
-               quntity: selectedFlashSaleProducts[i].quntity,
-            };
+         if (!!selectedFlashSaleProducts.length) {
+            for (let i = 0; i < selectedFlashSaleProducts.length; i++) {
+               dataConvertObject[selectedFlashSaleProducts[i].id] = {
+                  salePrice: selectedFlashSaleProducts[i].salePrice,
+                  quntity: selectedFlashSaleProducts[i].quntity,
+               };
+            }
          }
 
          setSaleInfo({
             name: singleFlashSale.sale.name,
             statusInfo: singleFlashSale.sale.statusInfo,
+            flashSaleId: singleFlashSale.sale._id,
+            dateOfend: singleFlashSale.sale.dateOfend,
             selectedProduct: dataConvertObject,
          });
       }
    }, [singleFlashSale, selectedFlashSaleProducts]);
 
    useEffect(() => {
-      if (!param) {
-         dispatch(removeSingleFlashSaleData());
-         setSaleInfo({
-            name: "",
-            statusInfo: "",
-         });
+      if (!!updateFlashSale) {
+         info(updateFlashSale.message);
+         dispatch(removeUpdateFlashSaleInfo(null));
       }
-   }, [param]);
+   }, [updateFlashSale]);
+
+   useLayoutEffect(() => {
+      const currentData = Date.$d;
+      setSaleInfo({ ...SaleInfo, dateOfend: currentData });
+   }, []);
+
+   useEffect(() => {
+      return () => {
+         dispatch(removeSingleFlashSaleData());
+      };
+   }, []);
 
    return (
       <sale.container>
@@ -196,7 +232,12 @@ function CreateNewFlashSaleComponent({ param }) {
                         <p>Selected products :</p>
                         {!!selectedFlashSaleProducts.length
                            ? selectedFlashSaleProducts.map((el) => (
-                                <SaleSelectedProductComponent onChange={ChangeHandler} key={el.id} state={SaleInfo} data={el} />
+                                <SaleSelectedProductComponent
+                                   onChange={ChangeHandler}
+                                   key={el.id}
+                                   state={SaleInfo}
+                                   data={el}
+                                />
                              ))
                            : null}
                      </sale.selectedBrands>
@@ -227,11 +268,21 @@ function CreateNewFlashSaleComponent({ param }) {
                         </MenuItem>
                      ))}
                   </TextField>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                     <DesktopDatePicker
+                        disablePast
+                        label="Last date of sale"
+                        inputFormat="MM/DD/YYYY"
+                        value={SaleInfo.dateOfend}
+                        onChange={DataChangeHandler}
+                        renderInput={(params) => <TextField {...params} />}
+                     />
+                  </LocalizationProvider>
                </Box>
 
                <CustombuttonComponent
                   onClick={SendHandler}
-                  isLoading={param ? "" : storeSelectedProductSaleLoading}
+                  isLoading={param ? updateFlashSaleLoading : storeSelectedProductSaleLoading}
                   innerText={param ? "Update" : "Save"}
                   btnCl={"category_upload"}
                />

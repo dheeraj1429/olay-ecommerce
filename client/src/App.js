@@ -64,13 +64,31 @@ function App() {
                <Route path="product-tag/edit/:id" element={<AllProductTagEditComponent />} />
                <Route path="variation-swatches" element={<ProductSwatchesTableComponent />} />
                <Route path="variation-swatches/create" element={<VariationSwatchesComponent />} />
-               <Route path="variation-swatches/allSwatches/:id" element={<EditProductSwatchesComponent />} />
+               <Route
+                  path="variation-swatches/allSwatches/:id"
+                  element={<EditProductSwatchesComponent />}
+               />
                <Route path="product-variation" element={<ProductVariationCreatorComponent />} />
-               <Route path="product/create-variations/:id" element={<CreateSelectedProductVariationComponent />} />
-               <Route path="/dashboard/product/sub-variations/:id/editSub/:id" element={<CreateSelectedProductVariationComponent />} />
-               <Route path="product-size-variation" element={<ProductSizeVariationTableComponent />} />
-               <Route path="product-size-variation/create" element={<ProductSizeVariationComponent />} />
-               <Route path="variation-swatches/sizeVariations/:id" element={<ProductSizeVariationEditComponent />} />
+               <Route
+                  path="product/create-variations/:id"
+                  element={<CreateSelectedProductVariationComponent />}
+               />
+               <Route
+                  path="/dashboard/product/sub-variations/:id/editSub/:id"
+                  element={<CreateSelectedProductVariationComponent />}
+               />
+               <Route
+                  path="product-size-variation"
+                  element={<ProductSizeVariationTableComponent />}
+               />
+               <Route
+                  path="product-size-variation/create"
+                  element={<ProductSizeVariationComponent />}
+               />
+               <Route
+                  path="variation-swatches/sizeVariations/:id"
+                  element={<ProductSizeVariationEditComponent />}
+               />
                <Route path="flash-sale" element={<FlashSaleTableViewComponent />} />
                <Route path="flash-sale/create" element={<CreateNewFlashSaleComponent />} />
                <Route path="flash-sale/edit/:id" element={<EditProductFlashSaleComponent />} />

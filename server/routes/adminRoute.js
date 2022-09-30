@@ -89,6 +89,7 @@ route.delete("/delete-all-size-varaiton", adminController.deleteAllProductSizeVa
 route.delete("/delete-single-sub-variaiton", adminController.deleteSingleSubVariation);
 route.delete("/delete-all-flash-sale", adminController.deleteAllFlashSales);
 route.delete("/delete-single-flash-sale/:id", adminController.deleteSingleFlashSale);
+route.delete("/delete-selected-flash-sale-product", adminController.deleteFlashSaleProduct);
 // ---------------------------------------------------------------------------------------
 
 module.exports = route;

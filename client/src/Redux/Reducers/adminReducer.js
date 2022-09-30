@@ -902,6 +902,14 @@ const adminReducer = function (state = INITAL_STATE, action) {
             updateFlashSale: action.payload,
          };
 
+      case ACTION_TYPE.REMOVE_FLASH_SALE_PRODUCTS:
+         return {
+            ...state,
+            selectedFlashSaleProducts: state.selectedFlashSaleProducts.filter(
+               (el) => el.id !== action.payload
+            ),
+         };
+
       default:
          return {
             ...state,

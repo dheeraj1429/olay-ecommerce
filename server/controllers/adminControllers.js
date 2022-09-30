@@ -1561,11 +1561,8 @@ const updateFlashSaleInfo = async function (colleciton, flashSaleId, data, res) 
    try {
       const findAndUpdateFlashSaleDetails = await colleciton.updateOne(
          { _id: flashSaleId },
-         { $set: data },
-         { upsert: true }
+         { $set: data }
       );
-
-      console.log(findAndUpdateFlashSaleDetails);
 
       if (
          findAndUpdateFlashSaleDetails.acknowledged &&
@@ -1612,6 +1609,33 @@ const updateSingleFlashSale = catchAsync(async function (req, res, next) {
       await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
    } else {
       await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
+   }
+});
+
+const deleteFlashSaleProduct = catchAsync(async function (req, res, next) {
+   const { productId, parentSaleId } = req.query;
+
+   if (!productId) next(new AppError("Flash sale product id is required!"));
+   if (!parentSaleId) next(new AppError("Flash sale id is required!"));
+
+   const findFlashProductAndRemove = await saleModel.updateOne(
+      { _id: parentSaleId },
+      {
+         $pull: {
+            products: { productId: productId },
+         },
+      }
+   );
+
+   if (!!findFlashProductAndRemove.modifiedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "Flash sale product removed",
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
    }
 });
 
@@ -1664,4 +1688,5 @@ module.exports = {
    deleteSingleFlashSale,
    getSinlgeFlashSale,
    updateSingleFlashSale,
+   deleteFlashSaleProduct,
 };

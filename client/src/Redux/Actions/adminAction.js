@@ -219,21 +219,6 @@ export const deleteAllBrand = function () {
    };
 };
 
-// export const fetchProductBrandItems = function (items) {
-//    return async function (dispatch) {
-//       try {
-//          const fetchProductsItems = await axios.post(
-//             `/admin/fetch-product-brands-items/${items}`,
-//             headers
-//          );
-
-//          console.log(fetchProductsItems);
-//       } catch (err) {
-//          console.log(err);
-//       }
-//    };
-// };
-
 export const fetchProductBrandItemsInfo = function () {
    return async function (dispatch) {
       try {
@@ -927,6 +912,30 @@ export const updateSingleFlashSale = function (data) {
             dispatch({
                type: ACTION_TYPE.UPDATE_SINGLE_FLASH_SALE,
                payload: updateSale && updateSale?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const removeFlashSaleProducts = function (id, parentSaleId) {
+   return async function (dispatch) {
+      try {
+         const removeSelectedFlashSaleProduct = await axios.delete(
+            `/admin/delete-selected-flash-sale-product?productId=${id}&parentSaleId=${parentSaleId}`,
+            headers
+         );
+
+         if (
+            removeSelectedFlashSaleProduct &&
+            !!removeSelectedFlashSaleProduct?.data &&
+            !!removeSelectedFlashSaleProduct?.data.success
+         ) {
+            dispatch({
+               type: ACTION_TYPE.REMOVE_FLASH_SALE_PRODUCTS,
+               payload: id,
             });
          }
       } catch (err) {

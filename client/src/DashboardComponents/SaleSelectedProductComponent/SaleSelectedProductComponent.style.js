@@ -16,6 +16,15 @@ export const fullView = styled.div`
 export const flex = styled.div`
    display: felx;
    align-items: center;
+
+   .closeButton_div {
+      padding: 0 1rem;
+
+      svg {
+         cursor: pointer;
+         fill: var(--smooth-light-color);
+      }
+   }
 `;
 
 export const spaceDiv = styled.div`

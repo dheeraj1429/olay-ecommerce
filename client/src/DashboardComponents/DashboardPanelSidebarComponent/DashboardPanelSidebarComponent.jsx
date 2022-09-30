@@ -9,7 +9,6 @@ import DashboardSidebarCardComponent from "../DashboardSidebarCardComponent/Dash
 import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppingCart";
 import { VscHome } from "@react-icons/all-files/vsc/VscHome";
 import { FcHome } from "@react-icons/all-files/fc/FcHome";
-import { GoTag } from "@react-icons/all-files/go/GoTag";
 import { BsPhone } from "@react-icons/all-files/bs/BsPhone";
 import { GoGitBranch } from "@react-icons/all-files/go/GoGitBranch";
 import { AiOutlineLaptop } from "@react-icons/all-files/ai/AiOutlineLaptop";
@@ -134,16 +133,7 @@ function DashboardPanelSidebarComponent() {
                   Active={Active}
                   HideHandler={HideSubControllerFunction}
                />
-            </DashboardSidebarCardComponent>
 
-            <DashboardSidebarCardComponent
-               heading={"Product Variations"}
-               icon={<GoTag />}
-               onClick={dashboardActiveHandler}
-               show={DashboardCard}
-               showSub={ShowSubItems}
-               isShow={SmSidebar}
-            >
                <DashboardNavigationComponent
                   icon={<GoVersions />}
                   innerText={"Variation swatches"}

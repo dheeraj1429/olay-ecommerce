@@ -8,7 +8,8 @@
     "server": "npm run dev --prefix server",
     "client": "npm start --prefix client",
     "server-dep": "sudo npm install --prefix server",
-    "client-dep": "sudo npm install --prefix client"
+    "client-dep": "sudo npm install --prefix client",
+    "client-build": "npm run build --prefix client"
   },
   "repository": {
     "type": "git",

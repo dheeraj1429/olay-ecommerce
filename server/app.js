@@ -9,7 +9,6 @@ const path = require("path");
 const cors = require("cors");
 const numCPUs = require("node:os").cpus().length;
 const cluster = require("node:cluster");
-const AppError = require("./helpers/appError");
 
 // database connection
 const databaseConnectionFunction = require("./model/db/db");
@@ -29,15 +28,17 @@ app.use(helmat());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "upload")));
+app.use(express.static(path.join(__dirname, "build")));
 app.use(logger());
 
 // routes
 app.use("/admin", adminRoute);
 app.use("/auth", authRoute);
 
-// app.all("*", (req, res, next) => {
-//    next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
-// });
+// server the build file.
+app.all("*", (req, res) => {
+   res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 // catch the error.
 app.use((err, req, res, next) => {

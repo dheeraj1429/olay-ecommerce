@@ -3,12 +3,7 @@ const categoryModel = require("../model/schema/productCategorySchema");
 const productBrandModel = require("../model/schema/productBrandSchema");
 const productsTagsModel = require("../model/schema/productsTagsSchema");
 const { erroResponse } = require("./errorResponse");
-const {
-   imageCompress,
-   catchAsync,
-   fetchLimitDocument,
-   convertObjectDataIntoArray,
-} = require("../helpers/helpers");
+const { imageCompress, catchAsync, fetchLimitDocument, convertObjectDataIntoArray } = require("../helpers/helpers");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
 const swatchesModel = require("../model/schema/productVariationSwatchesSchema");
 const productSizeVariationModel = require("../model/schema/productSizeVariationSchema");
@@ -167,8 +162,7 @@ const sendBrandResponseFunction = function (res) {
  * @return produict barnd is successful inserted or not
  */
 const insertNewProductBrand = catchAsync(async function (req, res, next) {
-   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription } =
-      req.body;
+   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription } = req.body;
    const file = req.files[0];
 
    // TODO: function scope variables
@@ -334,8 +328,7 @@ const updateFildes = async function (id, updateObject, res) {
  * @return flag true || false
  */
 const editSelectedBrand = catchAsync(async function (req, res, next) {
-   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription, id } =
-      req.body;
+   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription, id } = req.body;
 
    const updateObject = {
       name,
@@ -612,10 +605,7 @@ const changeCollectionDataPosition = async function (field, productId, collectio
          );
 
          if (!!findBrandProductAndInsertId.modifiedCount) {
-            await collection.updateOne(
-               { _id: prevId },
-               { $pull: { products: { productId: productId } } }
-            );
+            await collection.updateOne({ _id: prevId }, { $pull: { products: { productId: productId } } });
          }
       }
    } catch (err) {
@@ -671,24 +661,13 @@ const editSingleProduct = catchAsync(async function (req, res, next) {
    if (req.body?.brand && prevBrandId && prevBrandId !== req.body.brand) {
       await changeCollectionDataPosition(req.body.brand, productId, productBrandModel, prevBrandId);
    } else if (req.body?.brand && !prevBrandId) {
-      await productBrandModel.updateOne(
-         { _id: req.body.brand },
-         { $push: { products: { productId: productId } } }
-      );
+      await productBrandModel.updateOne({ _id: req.body.brand }, { $push: { products: { productId: productId } } });
    }
 
    if (req.body?.category && prevCategoryId && prevCategoryId !== req.body.category) {
-      await changeCollectionDataPosition(
-         req.body.category,
-         productId,
-         categoryModel,
-         prevCategoryId
-      );
+      await changeCollectionDataPosition(req.body.category, productId, categoryModel, prevCategoryId);
    } else if (req.body?.category && !prevCategoryId) {
-      await categoryModel.updateOne(
-         { _id: req.body.category },
-         { $push: { products: { productId: productId } } }
-      );
+      await categoryModel.updateOne({ _id: req.body.category }, { $push: { products: { productId: productId } } });
    }
 
    // if there is the file uploded then upload new file name and store into the database, but if there is no image updated then update only the new information.
@@ -1292,10 +1271,7 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
    }
 
    const findSubVaition = await productModel
-      .findOne(
-         { _id: parentProductId, "variations._id": { $eq: subVariation } },
-         { "variations.$": 1 }
-      )
+      .findOne({ _id: parentProductId, "variations._id": { $eq: subVariation } }, { "variations.$": 1 })
       .populate("variations.size")
       .populate("variations.colorSwatches");
 
@@ -1318,12 +1294,7 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
  * @param { Object } updateObject
  * @param { Object } res
  */
-const updateSubVaritionFunction = async function (
-   parentProductId,
-   subVaritionId,
-   updateObject,
-   res
-) {
+const updateSubVaritionFunction = async function (parentProductId, subVaritionId, updateObject, res) {
    let findSubVariationAndUpdate;
 
    /**
@@ -1559,23 +1530,14 @@ const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
 
 const updateFlashSaleInfo = async function (colleciton, flashSaleId, data, res) {
    try {
-      const findAndUpdateFlashSaleDetails = await colleciton.updateOne(
-         { _id: flashSaleId },
-         { $set: data }
-      );
+      const findAndUpdateFlashSaleDetails = await colleciton.updateOne({ _id: flashSaleId }, { $set: data });
 
-      if (
-         findAndUpdateFlashSaleDetails.acknowledged &&
-         !!findAndUpdateFlashSaleDetails.modifiedCount
-      ) {
+      if (findAndUpdateFlashSaleDetails.acknowledged && !!findAndUpdateFlashSaleDetails.modifiedCount) {
          return res.status(httpStatusCodes.OK).json({
             success: true,
             message: "Flash sale updated",
          });
-      } else if (
-         findAndUpdateFlashSaleDetails.acknowledged &&
-         !findAndUpdateFlashSaleDetails.modifiedCount
-      ) {
+      } else if (findAndUpdateFlashSaleDetails.acknowledged && !findAndUpdateFlashSaleDetails.modifiedCount) {
          return res.status(httpStatusCodes.OK).json({
             success: true,
             message: "Flash sale alrady updated",
@@ -1638,6 +1600,36 @@ const deleteFlashSaleProduct = catchAsync(async function (req, res, next) {
       });
    }
 });
+
+/* ---------------------------------------------------------------
+const databaseConnectionFunction = catchAsync(async function (req, res, next) {
+   const { name, mongodb, password } = req.body;
+   const filePath = path.resolve(__dirname, "..", "config.json");
+
+   if (name && mongodb && password) {
+      if (!mongodb.includes("<password>")) {
+         console.log("store the info");
+      } else {
+         const mongodbSrv = mongodb.replace("<password>", password);
+
+         const databaseConfigObject = {
+            DATABASE_NAME: name,
+            DATABASE_URL: mongodbSrv,
+            DATABASE_USER_ACCESS_PASSWORD: password,
+         };
+
+         fs.writeFile(filePath, JSON.stringify(databaseConfigObject, null, 2), (err, data) => {
+            if (err) throw err;
+            console.log(data);
+         });
+      }
+   } else {
+      return res.status(httpStatusCodes.Error).json({
+         message: "Some filed are empty. plase fill all the details.",
+      });
+   }
+});
+*/
 
 module.exports = {
    uploadProductCategory,

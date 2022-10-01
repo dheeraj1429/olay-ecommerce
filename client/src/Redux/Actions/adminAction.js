@@ -943,3 +943,16 @@ export const removeFlashSaleProducts = function (id, parentSaleId) {
       }
    };
 };
+
+export const databaseConenctionFn = function(data) {
+   return async function(dispatch) {
+      try {
+         const storeDatabaseConnectioninfomation = await axios.post('/admin/database-connection-info', data, headers);
+
+         console.log(storeDatabaseConnectioninfomation)
+
+      }catch(err) {
+         console.log(err)
+      }
+   }
+}

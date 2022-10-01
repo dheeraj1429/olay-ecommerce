@@ -6,11 +6,7 @@ const adminController = require("../controllers/adminControllers");
 
 const storage = multer.diskStorage({
    destination: function (req, file, cb) {
-      if (
-         file.mimetype === "image/png" ||
-         file.mimetype === "image/jpeg" ||
-         file.mimetype === "image/jpg"
-      ) {
+      if (file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/jpg") {
          if (file.fieldname === "productImage" || file.fieldname === "variationImage") {
             cb(null, "./upload/productImages");
          } else {
@@ -44,6 +40,7 @@ route.get("/get-sinlge-flash-sale/:id", adminController.getSinlgeFlashSale);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
+// route.post("/database-connection-info", adminController.databaseConnectionFunction);
 route.post("/upload-category", adminController.uploadProductCategory);
 route.post("/insert-new-product-brand", upload, adminController.insertNewProductBrand);
 route.post("/delete-multi-product-brand", adminController.deleteSelectedProductBrand);
@@ -77,14 +74,8 @@ route.delete("/delete-one-product/:id", adminController.deleteOneProduct);
 route.delete("/delete-all-products-tags", adminController.deleteAllProductTags);
 route.delete("/delete-single-product-tags/:id", adminController.deleteSelectedTag);
 route.delete("/remove-all-color-swatches", adminController.removeAllProductsSwatches);
-route.delete(
-   "/delete-selected-product-swatches/:id",
-   adminController.removeSelectedProductSwatches
-);
-route.delete(
-   "/remove-single-product-size-variation/:id",
-   adminController.removeSingleProductSizeVariation
-);
+route.delete("/delete-selected-product-swatches/:id", adminController.removeSelectedProductSwatches);
+route.delete("/remove-single-product-size-variation/:id", adminController.removeSingleProductSizeVariation);
 route.delete("/delete-all-size-varaiton", adminController.deleteAllProductSizeVations);
 route.delete("/delete-single-sub-variaiton", adminController.deleteSingleSubVariation);
 route.delete("/delete-all-flash-sale", adminController.deleteAllFlashSales);

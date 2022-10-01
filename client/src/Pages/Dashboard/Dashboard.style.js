@@ -16,7 +16,7 @@ export const flex = styled.div`
 export const renderDiv = styled.div`
    width: 50%;
    padding: 2rem;
-   background-image: url(/images/login-image.jpg);
+   /* background-image: url(/images/login-image.jpg); */
    background-position: center;
    background-repeat: no-repeat;
    background-size: cover;
@@ -31,5 +31,5 @@ export const imageDiv = styled.div`
    background-position: center;
    background-size: cover;
    background-repeat: no-repeat;
-   background-image: url(/images/nature.jpg);
+   background-image: url(https://images.pexels.com/photos/1144687/pexels-photo-1144687.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);
 `;

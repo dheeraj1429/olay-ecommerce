@@ -18,8 +18,6 @@ function AllProductTableViewComponent() {
 
    return (
       <product.div>
-         <p>10 request products</p>
-
          <product.tableView>
             <table>
                {!!allProducts && allProducts.success && !!allProducts?.products.length ? (

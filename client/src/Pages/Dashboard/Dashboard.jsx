@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import * as dashboard from "./Dashboard.style";
 import { Outlet } from "react-router";
 import { useSelector } from "react-redux";
@@ -8,11 +8,13 @@ function Dashboard() {
    const auth = useSelector((state) => state.auth.auth);
    const navigation = useNavigate();
 
-   useLayoutEffect(() => {
+   useEffect(() => {
       if (!!auth && auth.success && auth.userObject.isAdmin === "admin") {
          navigation("/dashboard");
       } else if (!!auth && auth.success && auth.userObject.isAdmin === "user") {
          navigation("/");
+      } else {
+         navigation("/sign-in");
       }
    }, [auth]);
 

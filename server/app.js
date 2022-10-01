@@ -18,11 +18,7 @@ const adminRoute = require("./routes/adminRoute");
 const authRoute = require("./routes/authRoute");
 
 // middlewares
-app.use(
-   cors({
-      origin: "http://localhost:3000",
-   })
-);
+app.use(cors("*"));
 app.options("*", cors());
 app.use(helmat());
 app.use(express.json());
@@ -64,8 +60,8 @@ if (cluster.isPrimary) {
       console.log(`Worker ${Worker.process.pid} died`);
    });
 } else {
-   // server
    databaseConnectionFunction(() => {
+      // server
       http.listen(port, () => {
          console.log(`server is running port ${port}`);
       });
@@ -73,3 +69,16 @@ if (cluster.isPrimary) {
 
    console.log(`Woker ${process.pid} is running`);
 }
+
+// fs.readFile(path.join(__dirname, "config.json"), "utf-8", (err, data) => {
+//    if (err) throw err;
+//    const configObject = JSON.parse(data);
+//    const { DATABASE_NAME, DATABASE_URL, DATABASE_USER_ACCESS_PASSWORD } = configObject;
+
+//    if (!!DATABASE_NAME && !!DATABASE_URL && !!DATABASE_USER_ACCESS_PASSWORD) {
+//       /**
+//        * one the user fill the all details then check the database is connection is stable or not.
+//        */
+//       databaseConnectionFunction();
+//    }
+// });

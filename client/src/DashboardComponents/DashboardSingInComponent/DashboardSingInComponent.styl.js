@@ -5,6 +5,7 @@ export const div = styled.div`
    margin: auto;
    padding: 1rem;
    border-radius: 10px;
+   background-color: var(--dark-gray-spec-color);
 
    .Loding {
       width: 100%;

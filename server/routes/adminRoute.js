@@ -37,6 +37,7 @@ route.get("/get-single-size-variation/:id", adminController.getSingleProductSize
 route.get("/get-single-sub-variation", adminController.getSingelSubProductVariation);
 route.get("/get-all-sales", adminController.getAllFlashSales);
 route.get("/get-sinlge-flash-sale/:id", adminController.getSinlgeFlashSale);
+route.get("/get-all-product-label", adminController.getAllProductLable);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
@@ -52,6 +53,7 @@ route.post("/insert-new-product-swatches", adminController.insertNewProductSwatc
 route.post("/insert-new-product-size-variation", adminController.insertNewProductSizeVairation);
 route.post("/insert-new-product-variation", upload, adminController.insertSelectedProductVariation);
 route.post("/insert-new-product-flash-sale", adminController.insertNewProductFlashSale);
+route.post("/insert-new-product-label", adminController.insertNewProductColorLable);
 // ---------------------------------------------------------------------------------------
 
 // Apis => PATCH
@@ -81,6 +83,8 @@ route.delete("/delete-single-sub-variaiton", adminController.deleteSingleSubVari
 route.delete("/delete-all-flash-sale", adminController.deleteAllFlashSales);
 route.delete("/delete-single-flash-sale/:id", adminController.deleteSingleFlashSale);
 route.delete("/delete-selected-flash-sale-product", adminController.deleteFlashSaleProduct);
+route.delete("/delete-all-lables", adminController.deleteAllProductLabel);
+route.delete("/delete-single-product-label/:id", adminController.deleteSingleProductLabel);
 // ---------------------------------------------------------------------------------------
 
 module.exports = route;

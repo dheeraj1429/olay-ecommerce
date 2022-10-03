@@ -7,7 +7,13 @@ import TextField from "@mui/material/TextField";
 import { ColorPicker, useColor } from "react-color-palette";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { message } from "antd";
-import { storeProductSwatches, editSingleProductSwatches, updateNewSizeVariation, editProductSizeVariations } from "../../Redux/Actions/adminAction";
+import {
+   storeProductSwatches,
+   editSingleProductSwatches,
+   updateNewSizeVariation,
+   editProductSizeVariations,
+   insertNewProductColorLable,
+} from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import {
    productSwatchesLoadingFn,
@@ -18,10 +24,12 @@ import {
    productSizeVariationLoadingFn,
    editProductSizeVariationsLoadingFn,
    removeSizeVariationInfo,
+   labelLoading,
+   removerProductLabelInfo,
 } from "../../Redux/Actions/appAction";
 import { useParams } from "react-router";
 
-function VariationSwatchesComponent({ editId, variation, edit }) {
+function VariationSwatchesComponent({ editId, variation, edit, label = undefined }) {
    const [Swatches, setSwatches] = useState({
       name: "",
       slug: "",
@@ -46,6 +54,8 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
    const editSizeVariationLoading = useSelector((state) => state.admin.editSizeVariationLoading);
    const singleSizeVariation = useSelector((state) => state.admin.singleSizeVariation);
    const editSizeVariationInfo = useSelector((state) => state.admin.editSizeVariationInfo);
+   const newLabelInfoLoading = useSelector((state) => state.admin.newLabelInfoLoading);
+   const newLabelInfo = useSelector((state) => state.admin.newLabelInfo);
 
    const info = (msg) => {
       message.info(msg);
@@ -60,22 +70,25 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
    const SendHandler = function () {
       const { name, slug, description } = Swatches;
 
+      const InfoObject = {
+         name,
+         slug: slug.toLowerCase(),
+         description,
+         color: ColorPickerInfo,
+      };
+
       if (name) {
-         if (!variation) {
-            dispatch(
-               storeProductSwatches({
-                  name,
-                  slug: slug.toLowerCase(),
-                  description,
-                  color: ColorPickerInfo,
-               })
-            );
+         if (!variation && !label) {
+            dispatch(storeProductSwatches(InfoObject));
             pickerRef.current.style.opacity = "0";
             pickerRef.current.style.visibility = "hidden";
             dispatch(productSwatchesLoadingFn(true));
-         } else {
+         } else if (variation && !label) {
             dispatch(updateNewSizeVariation({ name, slug, description }));
             dispatch(productSizeVariationLoadingFn(true));
+         } else if (label) {
+            dispatch(labelLoading(true));
+            dispatch(insertNewProductColorLable(InfoObject));
          }
       } else {
          info("Swatches name is required");
@@ -110,14 +123,16 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
       }
 
       return () => {
-         if (!variation) {
+         if (!variation && !label) {
             element.removeEventListener("click", ShowPickerHandler);
             backroundElement.removeEventListener("click", HidPickerHandler);
             dispatch(removeUpdateProductSwatchesInfo(null));
             dispatch(removeproductSwatchesInfo([]));
-         } else {
+         } else if (!label) {
             dispatch(removeProductSizeVariationInfo(null));
             dispatch(removeSizeVariationInfo(null));
+         } else if (label) {
+            dispatch(removerProductLabelInfo(null));
          }
       };
    }, []);
@@ -161,6 +176,12 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
       }
    }, [!!editProductSwatches]);
 
+   useEffect(() => {
+      if (!!newLabelInfo && newLabelInfo.success) {
+         info(newLabelInfo.message);
+      }
+   }, [newLabelInfo]);
+
    const UpdateHandler = function () {
       const sendObject = {
          name: Swatches.name,
@@ -186,14 +207,24 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
          <DashboardNavbarComponent />
          <color.spaceDiv>
             <HeadingComponent
-               Heading={editId ? "Edit Color" : variation && !edit ? "Product size variation" : variation && edit == "size" ? "Edit size variation" : "Color"}
+               Heading={
+                  editId
+                     ? "Edit Color"
+                     : variation && !edit
+                     ? "Product size variation"
+                     : variation && edit == "size"
+                     ? "Edit size variation"
+                     : label
+                     ? "Create product color label"
+                     : "Color"
+               }
                subHeading={"Attribute terms can be assigned to product and variations"}
             />
 
             {variation ? null : (
                <p>
-                  <strong>Note:</strong> Deleting a term will remove if from all products and variations to which it has been assigned. Recreating a term will not automatically
-                  assign to back to products
+                  <strong>Note:</strong> Deleting a term will remove if from all products and variations to which it has
+                  been assigned. Recreating a term will not automatically assign to back to products
                </p>
             )}
 
@@ -206,7 +237,20 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
                   noValidate
                   autoComplete="off"
                >
-                  <HeadingComponent Heading={editId ? "Edit color" : variation && !edit ? "Add new size" : variation && edit ? "Edit size" : "Add new color"} cl="sm_heading" />
+                  <HeadingComponent
+                     Heading={
+                        editId
+                           ? "Edit color"
+                           : variation && !edit
+                           ? "Add new size"
+                           : variation && edit
+                           ? "Edit size"
+                           : label
+                           ? "Add product color label"
+                           : "Add new color"
+                     }
+                     cl="sm_heading"
+                  />
                   <TextField
                      id="outlined-basic"
                      label="Name"
@@ -225,7 +269,15 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
                      value={Swatches.slug}
                      onChange={ChangeHandler}
                   />
-                  <TextField id="outlined-multiline-static" label="Description" multiline rows={6} name="description" value={Swatches.description} onChange={ChangeHandler} />
+                  <TextField
+                     id="outlined-multiline-static"
+                     label="Description"
+                     multiline
+                     rows={6}
+                     name="description"
+                     value={Swatches.description}
+                     onChange={ChangeHandler}
+                  />
                   {variation ? null : (
                      <>
                         <HeadingComponent Heading={"Color"} cl="sm_heading" />
@@ -238,7 +290,14 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
                            />
                            <div ref={pickerRef} className="color-picker">
                               <color.AciverBackgrond className="bd_" ref={(el) => (backgroundRef.current = el)}>
-                                 <ColorPicker width={300} height={200} color={ColorPickerInfo} onChange={setColorPickerInfo} hideHSV dark />
+                                 <ColorPicker
+                                    width={300}
+                                    height={200}
+                                    color={ColorPickerInfo}
+                                    onChange={setColorPickerInfo}
+                                    hideHSV
+                                    dark
+                                 />
                               </color.AciverBackgrond>
                            </div>
                         </color.colorBox>
@@ -251,7 +310,15 @@ function VariationSwatchesComponent({ editId, variation, edit }) {
                   btnCl={"category_upload"}
                   onClick={editId || edit ? UpdateHandler : SendHandler}
                   isLoading={
-                     editId ? editProductSwatchesLoading : variation && !edit ? productSizeVariationLoading : edit && variation ? editSizeVariationLoading : productSwatchesLoading
+                     editId
+                        ? editProductSwatchesLoading
+                        : variation && !edit && !label
+                        ? productSizeVariationLoading
+                        : edit && variation && !label
+                        ? editSizeVariationLoading
+                        : label
+                        ? newLabelInfoLoading
+                        : productSwatchesLoading
                   }
                />
             </color.contentDiv>

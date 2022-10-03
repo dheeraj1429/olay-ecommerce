@@ -28,12 +28,13 @@ import ProductSizeVariationEditComponent from "./DashboardComponents/ProductSize
 import FlashSaleTableViewComponent from "./DashboardComponents/FlashSaleTableViewComponent/FlashSaleTableViewComponent";
 import CreateNewFlashSaleComponent from "./DashboardComponents/CreateNewFlashSaleComponent/CreateNewFlashSaleComponent";
 import EditProductFlashSaleComponent from "./DashboardComponents/EditProductFlashSaleComponent/EditProductFlashSaleComponent";
+import ProductSaleLabelComponent from "./DashboardComponents/ProductSaleLabelComponent/ProductSaleLabelComponent";
+import ProductLabelTableViewComponent from "./DashboardComponents/ProductLabelTableViewComponent/ProductLabelTableViewComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import DashboardPanel from "./Pages/DashboardPanel/DashboardPanel";
 import PageNotFound from "./Pages/PageNotFound/PageNotFound";
-import DatabaseConnection from "./Pages/DatabaseConnection/DatabaseConnection";
 
 function App() {
    const [cookie] = useCookies(["user"]);
@@ -79,6 +80,8 @@ function App() {
                <Route path="flash-sale" element={<FlashSaleTableViewComponent />} />
                <Route path="flash-sale/create" element={<CreateNewFlashSaleComponent />} />
                <Route path="flash-sale/edit/:id" element={<EditProductFlashSaleComponent />} />
+               <Route path="product-label" element={<ProductLabelTableViewComponent />} />
+               <Route path="product-label/create" element={<ProductSaleLabelComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

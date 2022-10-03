@@ -9,6 +9,7 @@ const swatchesModel = require("../model/schema/productVariationSwatchesSchema");
 const productSizeVariationModel = require("../model/schema/productSizeVariationSchema");
 const AppError = require("../helpers/appError");
 const saleModel = require("../model/schema/FlashSaleSchema");
+const productLabelModel = require("../model/schema/productLabelSchema");
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -1601,35 +1602,89 @@ const deleteFlashSaleProduct = catchAsync(async function (req, res, next) {
    }
 });
 
-/* ---------------------------------------------------------------
-const databaseConnectionFunction = catchAsync(async function (req, res, next) {
-   const { name, mongodb, password } = req.body;
-   const filePath = path.resolve(__dirname, "..", "config.json");
+const insertNewProductColorLable = catchAsync(async function (req, res, next) {
+   const { name, slug, description, color } = req.body;
 
-   if (name && mongodb && password) {
-      if (!mongodb.includes("<password>")) {
-         console.log("store the info");
-      } else {
-         const mongodbSrv = mongodb.replace("<password>", password);
+   const findLabelIsExists = await productLabelModel.findOne({ name });
 
-         const databaseConfigObject = {
-            DATABASE_NAME: name,
-            DATABASE_URL: mongodbSrv,
-            DATABASE_USER_ACCESS_PASSWORD: password,
-         };
+   if (findLabelIsExists) {
+      res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "product label is already exists",
+      });
+   }
 
-         fs.writeFile(filePath, JSON.stringify(databaseConfigObject, null, 2), (err, data) => {
-            if (err) throw err;
-            console.log(data);
-         });
-      }
+   const insertNewProductLabel = await productLabelModel({
+      name,
+      slug,
+      description,
+      colorCode: color,
+   });
+
+   const saveLabel = await insertNewProductLabel.save();
+
+   if (saveLabel) {
+      res.status(httpStatusCodes.CREATED).json({
+         success: true,
+         message: "Product label saved",
+      });
    } else {
-      return res.status(httpStatusCodes.Error).json({
-         message: "Some filed are empty. plase fill all the details.",
+      res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
       });
    }
 });
-*/
+
+const getAllProductLable = catchAsync(async function (req, res, next) {
+   const getAllLabels = await productLabelModel.find({});
+
+   if (getAllLabels) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         allLabels: getAllLabels,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
+   }
+});
+
+const deleteAllProductLabel = catchAsync(async function (req, res, next) {
+   const deleteAllLabels = await productLabelModel.deleteMany({});
+
+   if (deleteAllLabels) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "All product labels deleted",
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
+   }
+});
+
+const deleteSingleProductLabel = catchAsync(async function (req, res, next) {
+   const { id } = req.params;
+
+   if (!id) {
+      next(new AppError("Product label id is required!"));
+   }
+
+   const findProductLabeleAndDelete = await productLabelModel.deleteOne({ _id: id });
+
+   if (!!findProductLabeleAndDelete.deletedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "selected product label deleted",
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
+   }
+});
 
 module.exports = {
    uploadProductCategory,
@@ -1681,4 +1736,8 @@ module.exports = {
    getSinlgeFlashSale,
    updateSingleFlashSale,
    deleteFlashSaleProduct,
+   insertNewProductColorLable,
+   getAllProductLable,
+   deleteAllProductLabel,
+   deleteSingleProductLabel,
 };

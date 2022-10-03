@@ -16,6 +16,7 @@ import { GoVersions } from "@react-icons/all-files/go/GoVersions";
 import { GoRepoClone } from "@react-icons/all-files/go/GoRepoClone";
 import { VscTextSize } from "@react-icons/all-files/vsc/VscTextSize";
 import { GoZap } from "@react-icons/all-files/go/GoZap";
+import { MdLabelOutline } from "@react-icons/all-files/md/MdLabelOutline";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -153,6 +154,14 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<GoRepoClone />}
                   innerText={"Product variation"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<MdLabelOutline />}
+                  innerText={"Product label"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

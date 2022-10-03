@@ -59,10 +59,7 @@ export const updateProductCategory = function (data) {
 export const deleteSelectedCategory = function (data) {
    return async function (dispatch) {
       try {
-         const deleteCategory = await axios.delete(
-            `/admin/delete-selected-category/${data.name}`,
-            headers
-         );
+         const deleteCategory = await axios.delete(`/admin/delete-selected-category/${data.name}`, headers);
 
          if (deleteCategory && deleteCategory?.data) {
             dispatch({
@@ -113,10 +110,7 @@ export const fetchAllProductBrand = function (data) {
 export const deleteOneProductBrand = function (id) {
    return async function (dispatch) {
       try {
-         const deleteOneBrand = await axios.delete(
-            `/admin/delete-one-product-brand/${id}`,
-            headers
-         );
+         const deleteOneBrand = await axios.delete(`/admin/delete-one-product-brand/${id}`, headers);
 
          if (deleteOneBrand && deleteOneBrand?.data && !!deleteOneBrand?.data?.success) {
             dispatch({
@@ -139,11 +133,7 @@ export const deleteOneProductBrand = function (id) {
 export const deleteMultiSelectedProductBrand = function (data) {
    return async function (dispatch) {
       try {
-         const deleteSelected = await axios.post(
-            "/admin/delete-multi-product-brand",
-            data,
-            headers
-         );
+         const deleteSelected = await axios.post("/admin/delete-multi-product-brand", data, headers);
 
          if (deleteSelected && deleteSelected?.data && deleteSelected?.data?.success) {
             dispatch({
@@ -165,9 +155,7 @@ export const deleteMultiSelectedProductBrand = function (data) {
 export const fetchSelectedBrand = function (id) {
    return async function (dispatch) {
       try {
-         const getSelectedBrandProduct = await axios.post(
-            `/admin/get-selected-product-brand/${id}`
-         );
+         const getSelectedBrandProduct = await axios.post(`/admin/get-selected-product-brand/${id}`);
 
          if (getSelectedBrandProduct && getSelectedBrandProduct?.data) {
             dispatch({
@@ -184,11 +172,7 @@ export const fetchSelectedBrand = function (id) {
 export const editSelectedBrand = function (data) {
    return async function (dispatch) {
       try {
-         const updateSelectedBrand = await axios.patch(
-            "/admin/update-selected-product-brand",
-            data,
-            headers
-         );
+         const updateSelectedBrand = await axios.patch("/admin/update-selected-product-brand", data, headers);
 
          if (updateSelectedBrand && updateSelectedBrand?.data) {
             dispatch({
@@ -547,10 +531,7 @@ export const removeAllProductSwatches = function () {
 export const fetchSingleProductColorSwatches = function (id) {
    return async function (dispatch) {
       try {
-         const singleSwatches = await axios.get(
-            `/admin/get-single-product-swatches/${id}`,
-            headers
-         );
+         const singleSwatches = await axios.get(`/admin/get-single-product-swatches/${id}`, headers);
 
          if (singleSwatches && singleSwatches?.data) {
             dispatch({
@@ -567,11 +548,7 @@ export const fetchSingleProductColorSwatches = function (id) {
 export const editSingleProductSwatches = function (data) {
    return async function (dispatch) {
       try {
-         const editSwatches = await axios.patch(
-            "/admin/edit-single-product-swatches",
-            data,
-            headers
-         );
+         const editSwatches = await axios.patch("/admin/edit-single-product-swatches", data, headers);
 
          if (editSwatches && editSwatches?.data) {
             dispatch({
@@ -588,16 +565,9 @@ export const editSingleProductSwatches = function (data) {
 export const removeSelectedProductSwatches = function (id) {
    return async function (dispatch) {
       try {
-         const deleteSelectedSwatches = await axios.delete(
-            `/admin/delete-selected-product-swatches/${id}`,
-            headers
-         );
+         const deleteSelectedSwatches = await axios.delete(`/admin/delete-selected-product-swatches/${id}`, headers);
 
-         if (
-            deleteSelectedSwatches &&
-            deleteSelectedSwatches?.data &&
-            deleteSelectedSwatches?.data?.success
-         ) {
+         if (deleteSelectedSwatches && deleteSelectedSwatches?.data && deleteSelectedSwatches?.data?.success) {
             dispatch({
                type: ACTION_TYPE.DELETE_SELECTED_PRODUCT_SWATCHES,
                payload: id,
@@ -612,11 +582,7 @@ export const removeSelectedProductSwatches = function (id) {
 export const updateNewSizeVariation = function (data) {
    return async function (dispatch) {
       try {
-         const insertProductSizeVarient = await axios.post(
-            "/admin/insert-new-product-size-variation",
-            data,
-            headers
-         );
+         const insertProductSizeVarient = await axios.post("/admin/insert-new-product-size-variation", data, headers);
 
          if (insertProductSizeVarient && insertProductSizeVarient?.data) {
             dispatch({
@@ -650,10 +616,7 @@ export const getAllProductSizeVariations = function () {
 export const removeSingleSizeVariations = function (id) {
    return async function (dispatch) {
       try {
-         const removeSelectedSize = await axios.delete(
-            `/admin/remove-single-product-size-variation/${id}`,
-            headers
-         );
+         const removeSelectedSize = await axios.delete(`/admin/remove-single-product-size-variation/${id}`, headers);
 
          if (removeSelectedSize && removeSelectedSize?.data && removeSelectedSize?.data.success) {
             dispatch({
@@ -670,16 +633,9 @@ export const removeSingleSizeVariations = function (id) {
 export const removeAllProductSizeVaration = function () {
    return async function (dispatch) {
       try {
-         const removeAllSizeVariation = await axios.delete(
-            "/admin/delete-all-size-varaiton",
-            headers
-         );
+         const removeAllSizeVariation = await axios.delete("/admin/delete-all-size-varaiton", headers);
 
-         if (
-            removeAllSizeVariation &&
-            removeAllSizeVariation?.data &&
-            removeAllSizeVariation?.data.success
-         ) {
+         if (removeAllSizeVariation && removeAllSizeVariation?.data && removeAllSizeVariation?.data.success) {
             dispatch({
                type: ACTION_TYPE.RMEOVE_ALL_PRODUCT_SIZE_VARIATION,
             });
@@ -693,10 +649,7 @@ export const removeAllProductSizeVaration = function () {
 export const getSingleProductSizeVations = function (id) {
    return async function (dispatch) {
       try {
-         const getSingleSizeVar = await axios.get(
-            `/admin/get-single-size-variation/${id}`,
-            headers
-         );
+         const getSingleSizeVar = await axios.get(`/admin/get-single-size-variation/${id}`, headers);
 
          if (getSingleSizeVar && getSingleSizeVar?.data) {
             dispatch({
@@ -730,11 +683,7 @@ export const editProductSizeVariations = function (data) {
 export const insertProductSubVariation = function (data) {
    return async function (dispatch) {
       try {
-         const insertVariation = await axios.post(
-            "/admin/insert-new-product-variation",
-            data,
-            headers
-         );
+         const insertVariation = await axios.post("/admin/insert-new-product-variation", data, headers);
 
          if (insertVariation && insertVariation?.data && insertVariation?.data.success) {
             dispatch({
@@ -813,11 +762,7 @@ export const delteSingleSubVariatoion = function (data) {
 export const insertNewProductFlashSale = function (data) {
    return async function (dispatch) {
       try {
-         const saleResponse = await axios.post(
-            "/admin/insert-new-product-flash-sale",
-            data,
-            headers
-         );
+         const saleResponse = await axios.post("/admin/insert-new-product-flash-sale", data, headers);
 
          if (saleResponse && saleResponse?.data) {
             dispatch({
@@ -869,10 +814,7 @@ export const deleteAllFlashSales = function () {
 export const deleteSingleFlashSale = function (id) {
    return async function (dispatch) {
       try {
-         const deleteSingleSale = await axios.delete(
-            `/admin/delete-single-flash-sale/${id}`,
-            headers
-         );
+         const deleteSingleSale = await axios.delete(`/admin/delete-single-flash-sale/${id}`, headers);
 
          if (deleteSingleSale && deleteSingleSale?.data && deleteSingleSale?.data?.success) {
             dispatch({
@@ -944,15 +886,70 @@ export const removeFlashSaleProducts = function (id, parentSaleId) {
    };
 };
 
-export const databaseConenctionFn = function(data) {
-   return async function(dispatch) {
+export const insertNewProductColorLable = function (data) {
+   return async function (dispatch) {
       try {
-         const storeDatabaseConnectioninfomation = await axios.post('/admin/database-connection-info', data, headers);
+         const insertNewColor = await axios.post("/admin/insert-new-product-label", data, headers);
 
-         console.log(storeDatabaseConnectioninfomation)
-
-      }catch(err) {
-         console.log(err)
+         if (insertNewColor && insertNewColor?.data) {
+            dispatch({
+               type: ACTION_TYPE.INSERT_NEW_PRODUCT_COLOR_LABEL,
+               payload: insertNewColor && insertNewColor?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
       }
-   }
-}
+   };
+};
+
+export const getAllProductLable = function () {
+   return async function (dispatch) {
+      try {
+         const getAllLabels = await axios.get("/admin/get-all-product-label", headers);
+
+         if (getAllLabels && getAllLabels?.data && getAllLabels?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.GET_ALL_PRODUCT_LABEL,
+               payload: getAllLabels && getAllLabels?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deletAllProductLabel = function () {
+   return async function (dispatch) {
+      try {
+         const deleteAllLabels = await axios.delete("/admin/delete-all-lables", headers);
+
+         if (deleteAllLabels && deleteAllLabels?.data && deleteAllLabels?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_ALL_PRODUCTS_LABELS,
+               payload: deleteAllLabels && deleteAllLabels?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteSingleProductlabel = function (id) {
+   return async function (dispatch) {
+      try {
+         const deleteSingleLable = await axios.delete(`/admin/delete-single-product-label/${id}`, headers);
+
+         if (deleteSingleLable && deleteSingleLable?.data && deleteSingleLable?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.DELETE_SINGLE_PRODUCT_LABEL,
+               payload: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

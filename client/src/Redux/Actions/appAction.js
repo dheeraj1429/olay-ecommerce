@@ -376,3 +376,17 @@ export const removeUpdateFlashSaleInfo = function (data) {
       payload: data,
    };
 };
+
+export const labelLoading = function (data) {
+   return {
+      type: ACTION_TYPE.INSERT_NEW_PRODUCT_COLOR_LABEL_LOADING,
+      payload: data,
+   };
+};
+
+export const removerProductLabelInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVER_INSERT_PRODUCT_LABEL_INFO,
+      payload: data,
+   };
+};

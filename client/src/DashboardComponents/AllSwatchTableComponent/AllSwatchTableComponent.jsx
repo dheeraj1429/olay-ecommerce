@@ -5,10 +5,14 @@ import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
 import { VscClose } from "@react-icons/all-files/vsc/VscClose";
 import { Link } from "react-router-dom";
 import { Popconfirm } from "antd";
-import { removeSelectedProductSwatches, removeSingleSizeVariations } from "../../Redux/Actions/adminAction";
+import {
+   removeSelectedProductSwatches,
+   removeSingleSizeVariations,
+   deleteSingleProductlabel,
+} from "../../Redux/Actions/adminAction";
 import { useDispatch } from "react-redux";
 
-function AllSwatchTableComponent({ variation, row, field, color }) {
+function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
    const dispatch = useDispatch();
 
    const confirm = (id) => {
@@ -16,6 +20,8 @@ function AllSwatchTableComponent({ variation, row, field, color }) {
          dispatch(removeSelectedProductSwatches(id));
       } else if (field === "sizeVariations") {
          dispatch(removeSingleSizeVariations(id));
+      } else if (field === "allLabels") {
+         dispatch(deleteSingleProductlabel(id));
       }
    };
 
@@ -32,13 +38,21 @@ function AllSwatchTableComponent({ variation, row, field, color }) {
                   {variation[field].map((el) => (
                      <tr>
                         <td>
-                           <Link to={`/dashboard/variation-swatches/${field}/${el._id}`}>
+                           <Link
+                              to={
+                                 !dataTarget
+                                    ? `/dashboard/variation-swatches/${field}/${el._id}`
+                                    : `/dashboard/product-label/${field}/${el._id}`
+                              }
+                           >
                               <FiEdit2 />
                            </Link>
                         </td>
                         <td>
                            <Popconfirm
-                              title={`Are you sure to delete this product ${field == "allSwatches" ? "swatches" : "size"} variation`}
+                              title={`Are you sure to delete this product ${
+                                 field == "allSwatches" ? "swatches" : "size"
+                              } variation`}
                               onConfirm={() => confirm(el._id)}
                               okText="Yes"
                               cancelText="No"
@@ -86,7 +100,9 @@ function AllSwatchTableComponent({ variation, row, field, color }) {
             </tableCm.tableDiv>
          ) : (
             <div className="center_div">
-               <p>No {`${color ? "color swatches" : "size variations"}`}</p>
+               <p>
+                  No {`${color && !dataTarget ? "color swatches" : dataTarget ? "Product label" : "size variations"}`}
+               </p>
             </div>
          )}
       </tableCm.div>

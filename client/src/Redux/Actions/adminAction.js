@@ -240,10 +240,7 @@ export const uplodNewProduct = function (data) {
 export const fetchUploadProducts = function (page, docItems) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(
-            `/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`,
-            headers
-         );
+         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`, headers);
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
@@ -340,11 +337,7 @@ export const fetchSingleProduct = function (id) {
 export const editSingleProduct = function (data, id, selectedProductId) {
    return async function (dispatch) {
       try {
-         const editSingleProduct = await axios.patch(
-            `/admin/eidt-single-product/${id}?selectedProductId=${selectedProductId}`,
-            data,
-            headers
-         );
+         const editSingleProduct = await axios.patch(`/admin/eidt-single-product/${id}?selectedProductId=${selectedProductId}`, data, headers);
 
          if (editSingleProduct && editSingleProduct?.data) {
             dispatch({
@@ -702,10 +695,7 @@ export const insertProductSubVariation = function (data) {
 export const fecthSingleSubVariation = function (id, parentProductId) {
    return async function (dispatch) {
       try {
-         const singelSubVariation = await axios.get(
-            `/admin/get-single-sub-variation?subVariation=${id}&parentProductId=${parentProductId}`,
-            headers
-         );
+         const singelSubVariation = await axios.get(`/admin/get-single-sub-variation?subVariation=${id}&parentProductId=${parentProductId}`, headers);
 
          if (singelSubVariation && singelSubVariation?.data && singelSubVariation?.data.success) {
             dispatch({
@@ -870,11 +860,7 @@ export const removeFlashSaleProducts = function (id, parentSaleId) {
             headers
          );
 
-         if (
-            removeSelectedFlashSaleProduct &&
-            !!removeSelectedFlashSaleProduct?.data &&
-            !!removeSelectedFlashSaleProduct?.data.success
-         ) {
+         if (removeSelectedFlashSaleProduct && !!removeSelectedFlashSaleProduct?.data && !!removeSelectedFlashSaleProduct?.data.success) {
             dispatch({
                type: ACTION_TYPE.REMOVE_FLASH_SALE_PRODUCTS,
                payload: id,
@@ -946,6 +932,40 @@ export const deleteSingleProductlabel = function (id) {
             dispatch({
                type: ACTION_TYPE.DELETE_SINGLE_PRODUCT_LABEL,
                payload: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getSingleProductLabel = function (id) {
+   return async function (dispatch) {
+      try {
+         const getSingleLabel = await axios.get(`/admin/get-single-product-label/${id}`, headers);
+
+         if (getSingleLabel && getSingleLabel?.data && getSingleLabel?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.GET_SINGLE_PRODUCT_LABEL,
+               payload: getSingleLabel && getSingleLabel?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const updateProductLabel = function (data) {
+   return async function (dispatch) {
+      try {
+         const updateLabel = await axios.patch("/admin/update-product-label", data, headers);
+
+         if (updateLabel && updateLabel?.data && updateLabel?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.UPDATE_PRODUCT_LABEL,
+               payload: updateLabel && updateLabel?.data,
             });
          }
       } catch (err) {

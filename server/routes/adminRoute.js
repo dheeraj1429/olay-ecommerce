@@ -38,6 +38,7 @@ route.get("/get-single-sub-variation", adminController.getSingelSubProductVariat
 route.get("/get-all-sales", adminController.getAllFlashSales);
 route.get("/get-sinlge-flash-sale/:id", adminController.getSinlgeFlashSale);
 route.get("/get-all-product-label", adminController.getAllProductLable);
+route.get("/get-single-product-label/:id", adminController.getSingleProductLabel);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
@@ -65,6 +66,7 @@ route.patch("/edit-single-product-swatches", adminController.editSingleProductSw
 route.patch("/edit-size-variation", adminController.editSingleSizeVariation);
 route.patch("/update-single-sub-varitions", upload, adminController.updateSingleSubVariation);
 route.patch("/update-single-flash-sale", adminController.updateSingleFlashSale);
+route.patch("/update-product-label", adminController.updateProductLabel);
 // ---------------------------------------------------------------------------------------
 
 // Apis => DELETE

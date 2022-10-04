@@ -2,12 +2,7 @@ import React, { useEffect } from "react";
 import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
 import ProductSectionFeatureComponent from "../ProductSectionFeatureComponent/ProductSectionFeatureComponent";
 import * as table from "./ProductSwatchesTableComponent.style";
-import {
-   getproductSwatches,
-   removeAllProductSwatches,
-   getAllProductLable,
-   deletAllProductLabel,
-} from "../../Redux/Actions/adminAction";
+import { getproductSwatches, removeAllProductSwatches, getAllProductLable, deletAllProductLabel } from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import { FcAlphabeticalSortingAz } from "@react-icons/all-files/fc/FcAlphabeticalSortingAz";
 import { FcAlphabeticalSortingZa } from "@react-icons/all-files/fc/FcAlphabeticalSortingZa";

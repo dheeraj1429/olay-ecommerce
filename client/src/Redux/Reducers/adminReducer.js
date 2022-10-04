@@ -71,6 +71,9 @@ const INITAL_STATE = {
    newLabelInfo: null,
    newLabelInfoLoading: false,
    allProductLabel: null,
+   singleProductLabel: null,
+   updateProductLabelInfo: null,
+   updateProductLabelLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -904,7 +907,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
       case ACTION_TYPE.REMOVER_INSERT_PRODUCT_LABEL_INFO:
          return {
             ...state,
-            newLabelInfo: false,
+            newLabelInfo: action.payload,
+            updateProductLabelInfo: action.payload,
+            singleProductLabel: action.payload,
          };
 
       case ACTION_TYPE.GET_ALL_PRODUCT_LABEL:
@@ -931,6 +936,31 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.allProductLabel,
                allLabels: state.allProductLabel.allLabels.filter((el) => el._id !== action.payload),
             },
+         };
+
+      case ACTION_TYPE.GET_SINGLE_PRODUCT_LABEL:
+         return {
+            ...state,
+            singleProductLabel: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVER_INSERT_PRODUCT_LABEL_INFO:
+         return {
+            ...state,
+            singleProductLabel: action.payload,
+         };
+
+      case ACTION_TYPE.UPDATE_PRODUCT_LABEL_LOADING:
+         return {
+            ...state,
+            updateProductLabelLoading: action.payload,
+         };
+
+      case ACTION_TYPE.UPDATE_PRODUCT_LABEL:
+         return {
+            ...state,
+            updateProductLabelInfo: action.payload,
+            updateProductLabelLoading: false,
          };
 
       default:

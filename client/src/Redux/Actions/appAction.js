@@ -390,3 +390,10 @@ export const removerProductLabelInfo = function (data) {
       payload: data,
    };
 };
+
+export const productUploadLabelLoading = function (data) {
+   return {
+      type: ACTION_TYPE.UPDATE_PRODUCT_LABEL_LOADING,
+      payload: data,
+   };
+};

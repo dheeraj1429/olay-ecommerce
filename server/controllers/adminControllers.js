@@ -1,3 +1,5 @@
+// https://groceryuae.com/admin
+
 const productModel = require("../model/schema/productSchema");
 const categoryModel = require("../model/schema/productCategorySchema");
 const productBrandModel = require("../model/schema/productBrandSchema");
@@ -600,10 +602,7 @@ const changeCollectionDataPosition = async function (field, productId, collectio
       });
 
       if (!checkIsProductAlreadyExists) {
-         const findBrandProductAndInsertId = await collection.updateOne(
-            { _id: field },
-            { $push: { products: { productId: productId } } }
-         );
+         const findBrandProductAndInsertId = await collection.updateOne({ _id: field }, { $push: { products: { productId: productId } } });
 
          if (!!findBrandProductAndInsertId.modifiedCount) {
             await collection.updateOne({ _id: prevId }, { $pull: { products: { productId: productId } } });
@@ -1234,10 +1233,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
              */
             await imageCompress(imagePath, 150, "productImagesCompress", originalname);
 
-            insertNewSubProductVariation = await productModel.updateOne(
-               { _id: selectedProductId },
-               { $push: { variations: updatedFildes } }
-            );
+            insertNewSubProductVariation = await productModel.updateOne({ _id: selectedProductId }, { $push: { variations: updatedFildes } });
 
             sendClientResponse(res, insertNewSubProductVariation);
          } else {
@@ -1246,10 +1242,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
              */
             updatedFildes.variationImage = productModel.productImage;
 
-            insertNewSubProductVariation = await productModel.updateOne(
-               { _id: selectedProductId },
-               { $push: { variations: updatedFildes } }
-            );
+            insertNewSubProductVariation = await productModel.updateOne({ _id: selectedProductId }, { $push: { variations: updatedFildes } });
 
             sendClientResponse(res, insertNewSubProductVariation);
          }
@@ -1513,9 +1506,7 @@ const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
       next(new AppError("Flash sale id is required!"));
    }
 
-   const findSinlgeFlashSale = await saleModel
-      .findOne({ _id: id })
-      .populate("products.productId", { name: 1, productImage: 1 });
+   const findSinlgeFlashSale = await saleModel.findOne({ _id: id }).populate("products.productId", { name: 1, productImage: 1 });
 
    if (findSinlgeFlashSale) {
       return res.status(httpStatusCodes.OK).json({
@@ -1686,6 +1677,59 @@ const deleteSingleProductLabel = catchAsync(async function (req, res, next) {
    }
 });
 
+const getSingleProductLabel = catchAsync(async function (req, res, next) {
+   const { id } = req.params;
+
+   if (!id) {
+      next(new AppError("Product label id is required"));
+   }
+
+   const findSelectedProductlabel = await productLabelModel.findOne({ _id: id });
+
+   if (findSelectedProductlabel) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         label: findSelectedProductlabel,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         message: "Internal server error",
+      });
+   }
+});
+
+const updateProductLabel = catchAsync(async function (req, res, next) {
+   const { name, slug, id, description, color } = req.body;
+
+   if (!id) {
+      next(new AppError("Update product label id is required!"));
+   }
+
+   const findProductLabelAndUpdate = await productLabelModel.updateOne(
+      { _id: id },
+      {
+         $set: {
+            name,
+            slug,
+            description,
+            colorCode: color,
+         },
+      }
+   );
+
+   if (!!findProductLabelAndUpdate.modifiedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "Product label updated",
+      });
+   } else {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "Product label already updated",
+      });
+   }
+});
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -1740,4 +1784,6 @@ module.exports = {
    getAllProductLable,
    deleteAllProductLabel,
    deleteSingleProductLabel,
+   getSingleProductLabel,
+   updateProductLabel,
 };

@@ -5,11 +5,7 @@ import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
 import { VscClose } from "@react-icons/all-files/vsc/VscClose";
 import { Link } from "react-router-dom";
 import { Popconfirm } from "antd";
-import {
-   removeSelectedProductSwatches,
-   removeSingleSizeVariations,
-   deleteSingleProductlabel,
-} from "../../Redux/Actions/adminAction";
+import { removeSelectedProductSwatches, removeSingleSizeVariations, deleteSingleProductlabel } from "../../Redux/Actions/adminAction";
 import { useDispatch } from "react-redux";
 
 function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
@@ -38,20 +34,14 @@ function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
                   {variation[field].map((el) => (
                      <tr>
                         <td>
-                           <Link
-                              to={
-                                 !dataTarget
-                                    ? `/dashboard/variation-swatches/${field}/${el._id}`
-                                    : `/dashboard/product-label/${field}/${el._id}`
-                              }
-                           >
+                           <Link to={`/dashboard/${field}/${el._id}`}>
                               <FiEdit2 />
                            </Link>
                         </td>
                         <td>
                            <Popconfirm
                               title={`Are you sure to delete this product ${
-                                 field == "allSwatches" ? "swatches" : "size"
+                                 field == "allSwatches" ? "swatches" : field === "allLabels" ? "sale" : "size"
                               } variation`}
                               onConfirm={() => confirm(el._id)}
                               okText="Yes"
@@ -100,9 +90,7 @@ function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
             </tableCm.tableDiv>
          ) : (
             <div className="center_div">
-               <p>
-                  No {`${color && !dataTarget ? "color swatches" : dataTarget ? "Product label" : "size variations"}`}
-               </p>
+               <p>No {`${color && !dataTarget ? "color swatches" : dataTarget ? "Product label" : "size variations"}`}</p>
             </div>
          )}
       </tableCm.div>

@@ -31,6 +31,8 @@ import EditProductFlashSaleComponent from "./DashboardComponents/EditProductFlas
 import ProductSaleLabelComponent from "./DashboardComponents/ProductSaleLabelComponent/ProductSaleLabelComponent";
 import ProductLabelTableViewComponent from "./DashboardComponents/ProductLabelTableViewComponent/ProductLabelTableViewComponent";
 import EditProductLabelComponent from "./DashboardComponents/EditProductLabelComponent/EditProductLabelComponent";
+import ExportCsvComponent from "./DashboardComponents/ExportCsvComponent/ExportCsvComponent";
+import ExportHistoryComponent from "./DashboardComponents/ExportHistoryComponent/ExportHistoryComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -81,6 +83,8 @@ function App() {
                <Route path="product-label" element={<ProductLabelTableViewComponent />} />
                <Route path="product-label/create" element={<ProductSaleLabelComponent />} />
                <Route path="allLabels/:id" element={<EditProductLabelComponent />} />
+               <Route path="export-product" element={<ExportCsvComponent />} />
+               <Route path="export-history" element={<ExportHistoryComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

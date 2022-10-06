@@ -1,6 +1,7 @@
 import { ACTION_TYPE } from "../ActionTypes/actionType";
 import axios from "axios";
 import { headers } from "./headers";
+import FileDownload from "js-file-download";
 
 export const uploadProductCategory = function (data) {
    return async function (dispatch) {
@@ -966,6 +967,43 @@ export const updateProductLabel = function (data) {
             dispatch({
                type: ACTION_TYPE.UPDATE_PRODUCT_LABEL,
                payload: updateLabel && updateLabel?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const exportProductCsv = function () {
+   return async function (dispatch) {
+      try {
+         const exportProduct = await axios.post(
+            "/admin/tools/export/products",
+            {
+               responseType: "blob",
+            },
+            headers
+         );
+
+         if (exportProduct && exportProduct?.data) {
+            FileDownload(exportProduct?.data, "product.csv");
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getAllExportInfo = function () {
+   return async function (dispatch) {
+      try {
+         const getAllExports = await axios.get("/admin/tools/get-all-exports", headers);
+
+         if (getAllExports && getAllExports?.data && getAllExports?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.GET_ALL_EXPORT_INFO,
+               payload: getAllExports && getAllExports?.data,
             });
          }
       } catch (err) {

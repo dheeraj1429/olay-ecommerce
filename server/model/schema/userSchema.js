@@ -10,6 +10,13 @@ const userSchema = new mongoose.Schema({
    isAdmin: { type: String, default: "user" },
    tokens: [{ token: { type: String, required: [true, "user token is required"] } }],
    userProfileImage: { type: String, default: "defaultUser.jpeg" },
+   exportsHistory: [
+      {
+         historyType: { type: String, required: [true, "type is required"] },
+         date: { type: Date, default: Date.now },
+         fileName: { type: String, required: [true, "export file name is required"] },
+      },
+   ],
 });
 
 userSchema.methods.genrateUserToken = async function () {

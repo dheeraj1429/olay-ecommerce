@@ -9,12 +9,14 @@ const path = require("path");
 const cors = require("cors");
 const numCPUs = require("node:os").cpus().length;
 const cluster = require("node:cluster");
+const cookieParser = require("cookie-parser");
 
 // database connection
 const databaseConnectionFunction = require("./model/db/db");
 
 // routes files
 const adminRoute = require("./routes/adminRoute");
+const adminToolsRoute = require("./routes/adminToolsRoute");
 const authRoute = require("./routes/authRoute");
 
 // middlewares
@@ -22,6 +24,7 @@ app.use(cors("*"));
 app.options("*", cors());
 app.use(helmat());
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "upload")));
 app.use(express.static(path.join(__dirname, "build")));
@@ -29,6 +32,7 @@ app.use(logger());
 
 // routes
 app.use("/admin", adminRoute);
+app.use("/admin/tools", adminToolsRoute);
 app.use("/auth", authRoute);
 
 // server the build file.
@@ -69,16 +73,3 @@ if (cluster.isPrimary) {
 
    console.log(`Woker ${process.pid} is running`);
 }
-
-// fs.readFile(path.join(__dirname, "config.json"), "utf-8", (err, data) => {
-//    if (err) throw err;
-//    const configObject = JSON.parse(data);
-//    const { DATABASE_NAME, DATABASE_URL, DATABASE_USER_ACCESS_PASSWORD } = configObject;
-
-//    if (!!DATABASE_NAME && !!DATABASE_URL && !!DATABASE_USER_ACCESS_PASSWORD) {
-//       /**
-//        * one the user fill the all details then check the database is connection is stable or not.
-//        */
-//       databaseConnectionFunction();
-//    }
-// });

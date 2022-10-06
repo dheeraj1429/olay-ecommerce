@@ -4,10 +4,10 @@ export const div = styled.div`
    width: 100%;
    padding: 0.5rem 1rem;
    border-radius: 8px;
-   max-height: ${(props) => (!props.ShowDrop ? "38px" : "500px")};
+   max-height: ${(props) => (!props.ShowDrop ? "38px" : "410px")};
    position: relative;
    margin: 0.2rem 0;
-   /* border: 1px solid transparent; */
+   /* border: 1px solid var(--smooth-light-color); */
    transition: all 0.3s ease-out;
    overflow: hidden;
 

@@ -74,6 +74,8 @@ const INITAL_STATE = {
    singleProductLabel: null,
    updateProductLabelInfo: null,
    updateProductLabelLoading: false,
+   adminExportHistory: null,
+   adminExportHistoryLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -307,6 +309,14 @@ const adminReducer = function (state = INITAL_STATE, action) {
                allSales: {
                   ...state.allSales,
                   sales: CampareFunction(action.payload.filter, state.allSales, "sales"),
+               },
+            };
+         } else if (action.payload.filde === "allLabels") {
+            return {
+               ...state,
+               allProductLabel: {
+                  ...state.allProductLabel,
+                  allLabels: CampareFunction(action.payload.filter, state.allProductLabel, "allLabels"),
                },
             };
          }
@@ -854,6 +864,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                   statusInfo: action.payload.sale.statusInfo,
                   _id: action.payload.sale._id,
                   dateOfend: action.payload.sale.dateOfend,
+                  label: action.payload?.sale?.label ? action.payload.sale.label : null,
                },
             },
             selectedFlashSaleProducts: checkFlashSaleExists(),
@@ -961,6 +972,19 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             updateProductLabelInfo: action.payload,
             updateProductLabelLoading: false,
+         };
+
+      case ACTION_TYPE.GET_ALL_EXPORT_INFO:
+         return {
+            ...state,
+            adminExportHistory: action.payload,
+            adminExportHistoryLoading: false,
+         };
+
+      case ACTION_TYPE.GET_ALL_EXPORT_INFO_LOADING:
+         return {
+            ...state,
+            adminExportHistoryLoading: action.payload,
          };
 
       default:

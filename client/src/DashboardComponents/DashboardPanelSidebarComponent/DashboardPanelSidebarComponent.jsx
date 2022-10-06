@@ -1,14 +1,12 @@
 import React, { useState, useLayoutEffect, useCallback, useEffect } from "react";
 import * as sidebar from "./DashboardPanelSidebarComponent.style";
 import DashboardNavigationComponent from "../DashboardNavigationComponent/DashboardNavigationComponent";
-import { AiOutlineBars } from "@react-icons/all-files/ai/AiOutlineBars";
 import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 import { useLocation } from "react-router";
 import DashboardSidebarCardComponent from "../DashboardSidebarCardComponent/DashboardSidebarCardComponent";
 import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppingCart";
 import { VscHome } from "@react-icons/all-files/vsc/VscHome";
-import { FcHome } from "@react-icons/all-files/fc/FcHome";
 import { BsPhone } from "@react-icons/all-files/bs/BsPhone";
 import { GoGitBranch } from "@react-icons/all-files/go/GoGitBranch";
 import { AiOutlineLaptop } from "@react-icons/all-files/ai/AiOutlineLaptop";
@@ -17,6 +15,11 @@ import { GoRepoClone } from "@react-icons/all-files/go/GoRepoClone";
 import { VscTextSize } from "@react-icons/all-files/vsc/VscTextSize";
 import { GoZap } from "@react-icons/all-files/go/GoZap";
 import { MdLabelOutline } from "@react-icons/all-files/md/MdLabelOutline";
+import { GoTools } from "@react-icons/all-files/go/GoTools";
+import { SiWebmoney } from "@react-icons/all-files/si/SiWebmoney";
+import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
+import { AiOutlineExport } from "@react-icons/all-files/ai/AiOutlineExport";
+import { VscHistory } from "@react-icons/all-files/vsc/VscHistory";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -82,8 +85,8 @@ function DashboardPanelSidebarComponent() {
                isShow={SmSidebar}
             >
                <DashboardNavigationComponent
-                  icon={<FcHome />}
-                  innerText={"Home"}
+                  icon={<SiWebmoney />}
+                  innerText={"Website"}
                   activeBar={true}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
@@ -162,6 +165,39 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<MdLabelOutline />}
                   innerText={"Product label"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+            </DashboardSidebarCardComponent>
+            <DashboardSidebarCardComponent
+               heading={"Tools"}
+               icon={<GoTools />}
+               onClick={dashboardActiveHandler}
+               show={DashboardCard}
+               showSub={ShowSubItems}
+               isShow={SmSidebar}
+            >
+               <DashboardNavigationComponent
+                  icon={<FaFileImport />}
+                  innerText={"Import product"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<AiOutlineExport />}
+                  innerText={"Export product"}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<VscHistory />}
+                  innerText={"Export history"}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

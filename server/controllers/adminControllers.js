@@ -175,6 +175,7 @@ const insertNewProductBrand = catchAsync(async function (req, res, next) {
     * @fileIsBrandIsExits first find the brand is already exists or not if the brand is already exists then return the flag || store the information into the database
     * @file { object } if there is new file then we want to store othre information into the database
     */
+
    // TODO: check the brand is exists or not
    const fileIsBrandIsExits = await productBrandModel.findOne({ name });
 
@@ -231,7 +232,9 @@ const getAllProductBrand = catchAsync(async function (req, res, next, perItems =
     * @totalProductBrandSize how many document we have in a database.
     */
    const BRAND_LIMIT = perItems ? perItems : 2;
+
    const page = req.query.page || 0;
+
    await fetchLimitDocument(productBrandModel, page, res, httpStatusCodes, BRAND_LIMIT, "brands");
 });
 
@@ -316,6 +319,7 @@ const updateFildes = async function (id, updateObject, res) {
          $set: updateObject,
       }
    );
+
    if (!!updateInfo.modifiedCount) {
       return res.status(httpStatusCodes.OK).json({
          success: true,
@@ -449,6 +453,7 @@ const uploadNewProduct = catchAsync(async function (req, res, next) {
     * when user upload new product with selected category and selected barnd then product id store into the product category collection and alost the product brand collection.
     * @productObject { copy all the client send data }
     */
+
    const productObject = { ...req.body };
    // productObject.tags = JSON.parse(productObject.tags);
 
@@ -466,6 +471,7 @@ const uploadNewProduct = catchAsync(async function (req, res, next) {
       /**
        * @originalname if the admin want the upload the image then we want to store the image information into the database
        */
+
       if (req.files && !!req.files.length) {
          const originalname = req.files[0].originalname;
          const imagePath = req.files[0].path;
@@ -1419,7 +1425,7 @@ const storeSaleInfo = async function (data, response) {
 };
 
 const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
-   const { name, statusInfo } = req.body;
+   const { name, statusInfo, label } = req.body;
 
    const findIsSaleExists = await saleModel.findOne({ name });
 
@@ -1445,7 +1451,10 @@ const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
          data.products = convertObjectDataIntoArray(req.body.selectedProduct);
 
          await storeSaleInfo(data, res);
-      } else {
+      } else if (name && !label) {
+         await storeSaleInfo(data, res);
+      } else if (name && label) {
+         data.label = label;
          await storeSaleInfo(data, res);
       }
    }
@@ -1549,7 +1558,7 @@ const updateSingleFlashSale = catchAsync(async function (req, res, next) {
       next(new AppError("Flash sale id is required for update the sub variaitons products data"));
    }
 
-   const { statusInfo, name, dateOfend } = req.body;
+   const { statusInfo, name, dateOfend, label } = req.body;
 
    const data = {
       name,
@@ -1557,11 +1566,17 @@ const updateSingleFlashSale = catchAsync(async function (req, res, next) {
       dateOfend: !!dateOfend ? dateOfend : "",
    };
 
-   if (req.body?.selectedProduct) {
+   if (req.body?.selectedProduct && label) {
+      data.label = label;
       data.products = convertObjectDataIntoArray(req.body.selectedProduct);
-
       await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
-   } else {
+   } else if (!label && req.body?.selectedProduct) {
+      data.products = convertObjectDataIntoArray(req.body.selectedProduct);
+      await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
+   } else if (!label && name) {
+      await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
+   } else if (label && name) {
+      data.label = label;
       await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
    }
 });

@@ -397,3 +397,10 @@ export const productUploadLabelLoading = function (data) {
       payload: data,
    };
 };
+
+export const exportHistoryLoading = function (data) {
+   return {
+      type: ACTION_TYPE.GET_ALL_EXPORT_INFO_LOADING,
+      payload: data,
+   };
+};

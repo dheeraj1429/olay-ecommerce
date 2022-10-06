@@ -5,6 +5,7 @@ const saleScheam = new mongoose.Schema({
    statusInfo: { type: String, default: "Draft" },
    createdAt: { type: Date, default: Date.now },
    dateOfend: { type: Date },
+   label: { type: mongoose.Types.ObjectId, ref: "productLabel" },
    products: [
       {
          productId: { type: mongoose.Types.ObjectId, ref: "product" },

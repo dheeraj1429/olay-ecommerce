@@ -17,7 +17,7 @@ import SaleSelectedProductComponent from "../SaleSelectedProductComponent/SaleSe
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { MenuItem } from "@mui/material";
 import { message } from "antd";
-import { insertNewProductFlashSale, updateSingleFlashSale } from "../../Redux/Actions/adminAction";
+import { getAllProductLable, insertNewProductFlashSale, updateSingleFlashSale } from "../../Redux/Actions/adminAction";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -34,22 +34,26 @@ function CreateNewFlashSaleComponent({ param }) {
       name: "",
       statusInfo: "",
       dateOfend: "",
+      label: "",
    });
 
    const productRef = useRef();
    const dispatch = useDispatch();
    const showFlashSaleComponent = useSelector((state) => state.admin.showFlashSaleComponent);
    const selectedFlashSaleProducts = useSelector((state) => state.admin.selectedFlashSaleProducts);
-   const storeSelectedProductSaleLoading = useSelector(
-      (state) => state.admin.storeSelectedProductSaleLoading
-   );
+   const storeSelectedProductSaleLoading = useSelector((state) => state.admin.storeSelectedProductSaleLoading);
    const storeSelectedProductSale = useSelector((state) => state.admin.storeSelectedProductSale);
    const singleFlashSale = useSelector((state) => state.admin.singleFlashSale);
    const updateFlashSaleLoading = useSelector((state) => state.admin.updateFlashSaleLoading);
    const updateFlashSale = useSelector((state) => state.admin.updateFlashSale);
+   const allProductLabel = useSelector((state) => state.admin.allProductLabel);
 
    const DataChangeHandler = (newValue) => {
       setSaleInfo({ ...SaleInfo, dateOfend: newValue.$d });
+   };
+
+   const selecteLabelHandler = function (event) {
+      setSaleInfo({ ...SaleInfo, label: event.target.value });
    };
 
    const ChangeHandler = function (e, id = undefined) {
@@ -136,6 +140,7 @@ function CreateNewFlashSaleComponent({ param }) {
             flashSaleId: singleFlashSale.sale._id,
             dateOfend: singleFlashSale.sale.dateOfend,
             selectedProduct: dataConvertObject,
+            label: singleFlashSale?.sale?.label ? singleFlashSale.sale.label : "",
          });
       }
    }, [singleFlashSale, selectedFlashSaleProducts]);
@@ -153,6 +158,8 @@ function CreateNewFlashSaleComponent({ param }) {
    }, []);
 
    useEffect(() => {
+      dispatch(getAllProductLable());
+
       return () => {
          dispatch(removeSingleFlashSaleData());
       };
@@ -232,12 +239,7 @@ function CreateNewFlashSaleComponent({ param }) {
                         <p>Selected products :</p>
                         {!!selectedFlashSaleProducts.length
                            ? selectedFlashSaleProducts.map((el) => (
-                                <SaleSelectedProductComponent
-                                   onChange={ChangeHandler}
-                                   key={el.id}
-                                   state={SaleInfo}
-                                   data={el}
-                                />
+                                <SaleSelectedProductComponent onChange={ChangeHandler} key={el.id} state={SaleInfo} data={el} />
                              ))
                            : null}
                      </sale.selectedBrands>
@@ -257,9 +259,8 @@ function CreateNewFlashSaleComponent({ param }) {
                      id="outlined-select-currency"
                      onChange={handleChange}
                      select
-                     label="Select"
+                     label="Select status"
                      value={SaleInfo.statusInfo}
-                     helperText="Please select your status"
                      name="statusInfo"
                   >
                      {STATUS.map((option) => (
@@ -268,6 +269,24 @@ function CreateNewFlashSaleComponent({ param }) {
                         </MenuItem>
                      ))}
                   </TextField>
+
+                  {!!allProductLabel && allProductLabel.success && !!allProductLabel.allLabels.length ? (
+                     <TextField
+                        id="outlined-select-currency"
+                        select
+                        label="Select label"
+                        value={SaleInfo.label}
+                        onChange={selecteLabelHandler}
+                        helperText="Please select your currency"
+                     >
+                        {allProductLabel.allLabels.map((option) => (
+                           <MenuItem key={option._id} value={option._id}>
+                              {option.name}
+                           </MenuItem>
+                        ))}
+                     </TextField>
+                  ) : null}
+
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                      <DesktopDatePicker
                         disablePast

@@ -1,5 +1,7 @@
 const path = require("path");
 const sharp = require("sharp");
+const jwt = require("jsonwebtoken");
+const JWT_TOKEN = process.env.JWT_TOKEN;
 
 const imageCompress = async function (imagePath, imageQulity, folder, originalname) {
    /**
@@ -79,4 +81,17 @@ const convertObjectDataIntoArray = function (selectedProduct) {
    return selectedProductAr;
 };
 
-module.exports = { imageCompress, catchAsync, fetchLimitDocument, convertObjectDataIntoArray };
+const tokenVarifyFunction = function (cookie) {
+   const { token } = cookie.user;
+   const tokenVarify = jwt.verify(token, JWT_TOKEN);
+   const { _id, isAdmin } = tokenVarify;
+   return { _id, isAdmin };
+};
+
+module.exports = {
+   imageCompress,
+   catchAsync,
+   fetchLimitDocument,
+   convertObjectDataIntoArray,
+   tokenVarifyFunction,
+};

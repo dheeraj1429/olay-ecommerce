@@ -6,8 +6,7 @@ const path = require("path");
 const AppError = require("../helpers/appError");
 const userModel = require("../model/schema/userSchema");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
-const jwt = require("jsonwebtoken");
-const JWT_TOKEN = process.env.JWT_TOKEN;
+const { tokenVarifyFunction } = require("../helpers/helpers");
 
 const getAllProductCsv = catchAsync(async function (req, res, next) {
    /**
@@ -21,10 +20,7 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
    const cookie = req.cookies;
 
    if (!!cookie && cookie.user && cookie.user.token) {
-      const { token } = cookie.user;
-
-      const tokenVarify = jwt.verify(token, JWT_TOKEN);
-      const { _id, isAdmin } = tokenVarify;
+      const { _id, isAdmin } = tokenVarifyFunction(cookie);
 
       if (isAdmin !== "admin") {
          return res.status(httpStatusCodes.OK).json({
@@ -79,6 +75,7 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
                      exportsHistory: {
                         historyType: "product history",
                         fileName: fileName,
+                        exportProducts: findProduct.length,
                      },
                   },
                }
@@ -102,9 +99,7 @@ const getAllExportInfo = catchAsync(async function (req, res, next) {
    const cookie = req.cookies;
 
    if (cookie && cookie?.user && cookie?.user.token) {
-      const { token } = cookie.user;
-      const tokenVarify = jwt.verify(token, JWT_TOKEN);
-      const { _id, isAdmin } = tokenVarify;
+      const { _id, isAdmin } = tokenVarifyFunction(cookie);
 
       if (isAdmin === "admin") {
          const findAdminUser = await userModel.findOne({ _id });
@@ -127,7 +122,44 @@ const getAllExportInfo = catchAsync(async function (req, res, next) {
    }
 });
 
+const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
+   const { id, fileName } = req.params;
+
+   if (!id) {
+      next(new AppError("History id is reuqired"));
+   }
+
+   const cookie = req.cookies;
+   const filePath = path.join(__dirname, "..", "exportData", "Products", fileName);
+
+   if (!!cookie && cookie.user && cookie.user.token) {
+      const { _id } = tokenVarifyFunction(cookie);
+
+      const findUserAndRemoveSingleHistory = await userModel.updateOne(
+         { _id },
+         { $pull: { exportsHistory: { _id: id } } }
+      );
+
+      if (
+         findUserAndRemoveSingleHistory.acknowledged &&
+         !!findUserAndRemoveSingleHistory.modifiedCount
+      ) {
+         fs.unlink(filePath, function (err) {
+            if (err) {
+               console.log(err);
+            }
+
+            res.status(httpStatusCodes.OK).json({
+               success: true,
+               message: "history deleted",
+            });
+         });
+      }
+   }
+});
+
 module.exports = {
    getAllProductCsv,
    getAllExportInfo,
+   deleteSingleProductHistory,
 };

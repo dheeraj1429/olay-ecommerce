@@ -404,3 +404,10 @@ export const exportHistoryLoading = function (data) {
       payload: data,
    };
 };
+
+export const exportLoadingFn = function (data) {
+   return {
+      type: ACTION_TYPE.EXPORT_LOADING,
+      payload: data,
+   };
+};

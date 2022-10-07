@@ -8,4 +8,7 @@ route.get("/get-all-exports", adminToolsControllers.getAllExportInfo);
 // API => POST
 route.post("/export/products", adminToolsControllers.getAllProductCsv);
 
+// API => DELETE
+route.delete("/delete-single-product-history/:id/:fileName", adminToolsControllers.deleteSingleProductHistory);
+
 module.exports = route;

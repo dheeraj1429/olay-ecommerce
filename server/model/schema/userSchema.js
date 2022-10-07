@@ -15,16 +15,14 @@ const userSchema = new mongoose.Schema({
          historyType: { type: String, required: [true, "type is required"] },
          date: { type: Date, default: Date.now },
          fileName: { type: String, required: [true, "export file name is required"] },
+         exportProducts: { type: Number },
       },
    ],
 });
 
 userSchema.methods.genrateUserToken = async function () {
    try {
-      const token = await jwt.sign(
-         { _id: this.id.toString(), name: this.name, email: this.email, isAdmin: this.isAdmin },
-         JWT_TOKEN
-      );
+      const token = await jwt.sign({ _id: this.id.toString(), name: this.name, email: this.email, isAdmin: this.isAdmin }, JWT_TOKEN);
       this.tokens = this.tokens.concat({ token });
       this.save();
       return token;

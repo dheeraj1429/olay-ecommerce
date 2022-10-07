@@ -1114,3 +1114,38 @@ export const deleteSingleProductHistory = function (id, fileName) {
       }
    };
 };
+
+export const downloadPrevHistoryFiles = function (fileName) {
+   return async function (dispatch) {
+      try {
+         const download = await axios.get(
+            `/admin/tools/download-prev-history?fileName=${fileName}`,
+            headers
+         );
+
+         if (download && download?.data) {
+            console.log(download.data);
+            FileDownload(download?.data, `${fileName}`);
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const sendHistoryFileWithEmail = function (data) {
+   return async function (dispatch) {
+      try {
+         const sendEmail = await axios.post("/admin/tools/send-history-with-email", data, headers);
+
+         if (sendEmail && sendEmail?.data && sendEmail?.data?.success) {
+            dispatch({
+               type: ACTION_TYPE.SEND_MAIL,
+               payload: sendEmail && sendEmail?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

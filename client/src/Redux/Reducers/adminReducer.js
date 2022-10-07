@@ -77,6 +77,9 @@ const INITAL_STATE = {
    adminExportHistory: null,
    adminExportHistoryLoading: false,
    exportLoading: false,
+   hideEmailBox: false,
+   sendMailLoading: false,
+   mailInfo: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -1035,6 +1038,32 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             exportLoading: action.payload,
+         };
+
+      case ACTION_TYPE.HIDE_EMAIL_BOX:
+         return {
+            ...state,
+            hideEmailBox: action.payload,
+         };
+
+      case ACTION_TYPE.SEND_MAIL_LOADING:
+         return {
+            ...state,
+            sendMailLoading: action.payload,
+         };
+
+      case ACTION_TYPE.SEND_MAIL:
+         return {
+            ...state,
+            mailInfo: action.payload,
+            sendMailLoading: false,
+         };
+
+      case ACTION_TYPE.REMOVE_MAIL_INFO:
+         return {
+            ...state,
+            mailInfo: action.payload,
+            sendMailLoading: false,
          };
 
       default:

@@ -17,7 +17,11 @@ import SaleSelectedProductComponent from "../SaleSelectedProductComponent/SaleSe
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { MenuItem } from "@mui/material";
 import { message } from "antd";
-import { getAllProductLable, insertNewProductFlashSale, updateSingleFlashSale } from "../../Redux/Actions/adminAction";
+import {
+   getAllProductLable,
+   insertNewProductFlashSale,
+   updateSingleFlashSale,
+} from "../../Redux/Actions/adminAction";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -39,14 +43,17 @@ function CreateNewFlashSaleComponent({ param }) {
 
    const productRef = useRef();
    const dispatch = useDispatch();
-   const showFlashSaleComponent = useSelector((state) => state.admin.showFlashSaleComponent);
-   const selectedFlashSaleProducts = useSelector((state) => state.admin.selectedFlashSaleProducts);
-   const storeSelectedProductSaleLoading = useSelector((state) => state.admin.storeSelectedProductSaleLoading);
-   const storeSelectedProductSale = useSelector((state) => state.admin.storeSelectedProductSale);
-   const singleFlashSale = useSelector((state) => state.admin.singleFlashSale);
-   const updateFlashSaleLoading = useSelector((state) => state.admin.updateFlashSaleLoading);
-   const updateFlashSale = useSelector((state) => state.admin.updateFlashSale);
-   const allProductLabel = useSelector((state) => state.admin.allProductLabel);
+
+   const {
+      showFlashSaleComponent,
+      selectedFlashSaleProducts,
+      storeSelectedProductSaleLoading,
+      storeSelectedProductSale,
+      singleFlashSale,
+      updateFlashSaleLoading,
+      updateFlashSale,
+      allProductLabel,
+   } = useSelector((state) => state.admin);
 
    const DataChangeHandler = (newValue) => {
       setSaleInfo({ ...SaleInfo, dateOfend: newValue.$d });
@@ -239,7 +246,12 @@ function CreateNewFlashSaleComponent({ param }) {
                         <p>Selected products :</p>
                         {!!selectedFlashSaleProducts.length
                            ? selectedFlashSaleProducts.map((el) => (
-                                <SaleSelectedProductComponent onChange={ChangeHandler} key={el.id} state={SaleInfo} data={el} />
+                                <SaleSelectedProductComponent
+                                   onChange={ChangeHandler}
+                                   key={el.id}
+                                   state={SaleInfo}
+                                   data={el}
+                                />
                              ))
                            : null}
                      </sale.selectedBrands>
@@ -270,7 +282,9 @@ function CreateNewFlashSaleComponent({ param }) {
                      ))}
                   </TextField>
 
-                  {!!allProductLabel && allProductLabel.success && !!allProductLabel.allLabels.length ? (
+                  {!!allProductLabel &&
+                  allProductLabel.success &&
+                  !!allProductLabel.allLabels.length ? (
                      <TextField
                         id="outlined-select-currency"
                         select

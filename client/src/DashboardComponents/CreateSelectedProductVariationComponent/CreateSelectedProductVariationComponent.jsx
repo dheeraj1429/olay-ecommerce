@@ -57,15 +57,17 @@ function CreateSelectedProductVariationComponent() {
    const location = useLocation();
    const navigation = useNavigate();
 
-   const allProductSwatches = useSelector((state) => state.admin.allProductSwatches);
-   const allSizeVariations = useSelector((state) => state.admin.allSizeVariations);
-   const productSubVariationLoading = useSelector((state) => state.admin.productSubVariationLoading);
-   const productSubVariationInfo = useSelector((state) => state.admin.productSubVariationInfo);
-   const fetchSingleSubVarition = useSelector((state) => state.admin.fetchSingleSubVarition);
-   const editProductSingleVariationLoading = useSelector((state) => state.admin.editProductSingleVariationLoading);
-   const updateSingleSubVariation = useSelector((state) => state.admin.updateSingleSubVariation);
-   const deleteSubVaritionInfo = useSelector((state) => state.admin.deleteSubVaritionInfo);
-   const deleteSubVaritionLoading = useSelector((state) => state.admin.deleteSubVaritionLoading);
+   const {
+      allProductSwatches,
+      allSizeVariations,
+      productSubVariationLoading,
+      productSubVariationInfo,
+      fetchSingleSubVarition,
+      editProductSingleVariationLoading,
+      updateSingleSubVariation,
+      deleteSubVaritionInfo,
+      deleteSubVaritionLoading,
+   } = useSelector((state) => state.admin);
 
    const info = (msg) => {
       message.info(msg);
@@ -141,7 +143,10 @@ function CreateSelectedProductVariationComponent() {
    const updateHandler = function () {
       const { parentProductId } = getIdFunction();
 
-      const formData = createFormData(fetchSingleSubVarition.subVariation?.variations[0]._id, parentProductId);
+      const formData = createFormData(
+         fetchSingleSubVarition.subVariation?.variations[0]._id,
+         parentProductId
+      );
 
       dispatch(loadingUpdateSubVariation(true));
       dispatch(updateSubVarition(formData));
@@ -155,8 +160,6 @@ function CreateSelectedProductVariationComponent() {
 
    useEffect(() => {
       const { secondLast, parentProductId, last } = getIdFunction();
-
-      console.log(parentProductId);
 
       if (secondLast === "editSub") {
          dispatch(fecthSingleSubVariation(last, parentProductId));
@@ -182,7 +185,11 @@ function CreateSelectedProductVariationComponent() {
    }, [productSubVariationInfo]);
 
    useEffect(() => {
-      if (!!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation) {
+      if (
+         !!fetchSingleSubVarition &&
+         fetchSingleSubVarition?.success &&
+         fetchSingleSubVarition?.subVariation
+      ) {
          let subVariation = fetchSingleSubVarition.subVariation?.variations[0];
 
          setVariationInfo({
@@ -227,7 +234,9 @@ function CreateSelectedProductVariationComponent() {
          <variation.spaceDiv>
             <HeadingComponent
                Heading={
-                  !!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation
+                  !!fetchSingleSubVarition &&
+                  fetchSingleSubVarition?.success &&
+                  fetchSingleSubVarition?.subVariation
                      ? "Edit Product sub varition"
                      : "Create product variations"
                }
@@ -316,7 +325,9 @@ function CreateSelectedProductVariationComponent() {
                               value={VariationInfo.size}
                               onChange={changeHandler}
                            >
-                              {!!allSizeVariations && allSizeVariations.success && allSizeVariations?.sizeVariations
+                              {!!allSizeVariations &&
+                              allSizeVariations.success &&
+                              allSizeVariations?.sizeVariations
                                  ? allSizeVariations.sizeVariations.map((option) => (
                                       <MenuItem key={option._id} value={option._id}>
                                          {option.name}
@@ -336,7 +347,9 @@ function CreateSelectedProductVariationComponent() {
                               value={VariationInfo.colorSwatches}
                               onChange={changeHandler}
                            >
-                              {!!allProductSwatches && allProductSwatches.success && allProductSwatches?.allSwatches
+                              {!!allProductSwatches &&
+                              allProductSwatches.success &&
+                              allProductSwatches?.allSwatches
                                  ? allProductSwatches.allSwatches.map((option) => (
                                       <MenuItem key={option._id} value={option._id}>
                                          <variation.flexSpace className="flex_items">
@@ -415,7 +428,9 @@ function CreateSelectedProductVariationComponent() {
                      />
                      <HeadingComponent cl="sm_heading" Heading={"Product variations image"} />
                      <ProductUploadImageComponent
-                        selectedPrevImage={!!VariationInfo?.variationImage ? VariationInfo?.variationImage : null}
+                        selectedPrevImage={
+                           !!VariationInfo?.variationImage ? VariationInfo?.variationImage : null
+                        }
                         filde="productImages"
                         onChange={ImageGrabHandler}
                         name="variationImage"

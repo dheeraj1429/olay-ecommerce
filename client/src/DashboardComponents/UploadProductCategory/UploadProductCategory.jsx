@@ -8,7 +8,11 @@ import CustombuttonComponent from "../../Components/CustombuttonComponent/Custom
 import { message } from "antd";
 import { uploadProductCategory } from "../../Redux/Actions/adminAction";
 import { useSelector, useDispatch } from "react-redux";
-import { productCategoryLoadingFn, removeCategoryInfo, insertNewCategory } from "../../Redux/Actions/appAction";
+import {
+   productCategoryLoadingFn,
+   removeCategoryInfo,
+   insertNewCategory,
+} from "../../Redux/Actions/appAction";
 import ProductCategorysComponent from "../ProductCategorysComponent/ProductCategorysComponent";
 import EditProductCategoryComponent from "../EditProductCategoryComponent/EditProductCategoryComponent";
 
@@ -28,9 +32,9 @@ function UploadProductCategory() {
       setCategoryInfo({ ...CategoryInfo, [name]: value });
    };
 
-   const productCategory = useSelector((state) => state.admin.productCategory);
-   const productCategoryLoading = useSelector((state) => state.admin.productCategoryLoading);
-   const editCategory = useSelector((state) => state.admin.editCategory);
+   const { productCategory, productCategoryLoading, editCategory } = useSelector(
+      (state) => state.admin
+   );
 
    const info = (mes) => {
       message.info(mes);
@@ -60,7 +64,13 @@ function UploadProductCategory() {
          });
          const { categoryName, categoryDescription } = CategoryInfo;
          dispatch(removeCategoryInfo(null));
-         dispatch(insertNewCategory({ name: categoryName, description: categoryDescription, products: [] }));
+         dispatch(
+            insertNewCategory({
+               name: categoryName,
+               description: categoryDescription,
+               products: [],
+            })
+         );
       } else if (!!productCategory && !productCategory.success) {
          info(productCategory.message);
          dispatch(removeCategoryInfo(null));

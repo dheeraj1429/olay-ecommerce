@@ -7,6 +7,7 @@ const AppError = require("../helpers/appError");
 const userModel = require("../model/schema/userSchema");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
 const { tokenVarifyFunction } = require("../helpers/helpers");
+const nodemailer = require("nodemailer");
 
 const getAllProductCsv = catchAsync(async function (req, res, next) {
    /**
@@ -98,6 +99,10 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
 const getAllExportInfo = catchAsync(async function (req, res, next) {
    const cookie = req.cookies;
 
+   /**
+    * @findAdminUser find the cookie login user and check is admin or not.
+    * @return data
+    */
    if (cookie && cookie?.user && cookie?.user.token) {
       const { _id, isAdmin } = tokenVarifyFunction(cookie);
 
@@ -129,6 +134,12 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
       next(new AppError("History id is reuqired"));
    }
 
+   /**
+    * @cookie check the user is login or not if there is not user then send back the response
+    * @filePath find the file which we want to remove from the database or the folder.
+    * Once admin is remove the files from the database history. we also remove the files from the folders.
+    * @return flag flig successfully removed from database or the folders
+    */
    const cookie = req.cookies;
    const filePath = path.join(__dirname, "..", "exportData", "Products", fileName);
 
@@ -158,8 +169,68 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
    }
 });
 
+const downloadPrevHistoryFiles = catchAsync(async function (req, res, next) {
+   const { fileName } = req.query;
+
+   if (!fileName) {
+      next(new AppError("History filename is required"));
+   }
+   const filePath = path.join(__dirname, "..", "exportData", "Products", fileName);
+   res.download(path.join(filePath), (err) => {
+      if (err) console.log(err);
+   });
+});
+
+const sendHistoryFileWithEmail = catchAsync(async function (req, res, next) {
+   const { email, file } = req.body;
+
+   if (email && file) {
+      /**
+       * @filePath for check the file is exists or not if the file is exists then send the file into the selected mail.
+       * @mail mail config object.
+       * @mailOptions send mail config object.
+       * @return send back response.
+       */
+      const filePath = path.join(__dirname, "..", "exportData", "Products", file);
+      const mail = nodemailer.createTransport({
+         service: "gmail",
+         auth: {
+            user: process.env.EMAIL,
+            pass: process.env.APPPASSWORD,
+         },
+      });
+
+      const mailOptions = {
+         from: process.env.EMAIL,
+         to: email,
+         subject: "Received files history",
+         attachments: [
+            {
+               fileName: file,
+               path: filePath,
+            },
+         ],
+      };
+
+      mail.sendMail(mailOptions, function (error, info) {
+         if (error) next(new AppError(error));
+
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: info.response,
+         });
+      });
+   } else {
+      return res.status(httpStatusCodes.OK).json({
+         message: "please fill all fileds",
+      });
+   }
+});
+
 module.exports = {
    getAllProductCsv,
    getAllExportInfo,
    deleteSingleProductHistory,
+   downloadPrevHistoryFiles,
+   sendHistoryFileWithEmail,
 };

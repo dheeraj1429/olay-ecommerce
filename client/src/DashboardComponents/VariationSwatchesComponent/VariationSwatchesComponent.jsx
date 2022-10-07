@@ -46,21 +46,23 @@ function VariationSwatchesComponent({ editId, variation, edit, label, editLabel 
    const [ColorPickerInfo, setColorPickerInfo] = useColor("hex", "#121212");
    const { id } = useParams();
 
-   const productSwatchesLoading = useSelector((state) => state.admin.productSwatchesLoading);
-   const productSwatches = useSelector((state) => state.admin.productSwatches);
-   const singleProductSwatches = useSelector((state) => state.admin.singleProductSwatches);
-   const editProductSwatchesLoading = useSelector((state) => state.admin.editProductSwatchesLoading);
-   const editProductSwatches = useSelector((state) => state.admin.editProductSwatches);
-   const productSizeVariationLoading = useSelector((state) => state.admin.productSizeVariationLoading);
-   const productSizeVariationInfo = useSelector((state) => state.admin.productSizeVariationInfo);
-   const editSizeVariationLoading = useSelector((state) => state.admin.editSizeVariationLoading);
-   const singleSizeVariation = useSelector((state) => state.admin.singleSizeVariation);
-   const editSizeVariationInfo = useSelector((state) => state.admin.editSizeVariationInfo);
-   const newLabelInfoLoading = useSelector((state) => state.admin.newLabelInfoLoading);
-   const newLabelInfo = useSelector((state) => state.admin.newLabelInfo);
-   const singleProductLabel = useSelector((state) => state.admin.singleProductLabel);
-   const updateProductLabelInfo = useSelector((state) => state.admin.updateProductLabelInfo);
-   const updateProductLabelLoading = useSelector((state) => state.admin.updateProductLabelLoading);
+   const {
+      productSwatchesLoading,
+      productSwatches,
+      singleProductSwatches,
+      editProductSwatchesLoading,
+      editProductSwatches,
+      productSizeVariationLoading,
+      productSizeVariationInfo,
+      editSizeVariationLoading,
+      singleSizeVariation,
+      editSizeVariationInfo,
+      newLabelInfoLoading,
+      newLabelInfo,
+      singleProductLabel,
+      updateProductLabelInfo,
+      updateProductLabelLoading,
+   } = useSelector((state) => state.admin);
 
    const info = (msg) => {
       message.info(msg);
@@ -247,8 +249,9 @@ function VariationSwatchesComponent({ editId, variation, edit, label, editLabel 
 
             {variation ? null : (
                <p>
-                  <strong>Note:</strong> Deleting a term will remove if from all products and variations to which it has been assigned. Recreating a
-                  term will not automatically assign to back to products
+                  <strong>Note:</strong> Deleting a term will remove if from all products and
+                  variations to which it has been assigned. Recreating a term will not automatically
+                  assign to back to products
                </p>
             )}
 
@@ -313,8 +316,18 @@ function VariationSwatchesComponent({ editId, variation, edit, label, editLabel 
                               }}
                            />
                            <div ref={pickerRef} className="color-picker">
-                              <color.AciverBackgrond className="bd_" ref={(el) => (backgroundRef.current = el)}>
-                                 <ColorPicker width={300} height={200} color={ColorPickerInfo} onChange={setColorPickerInfo} hideHSV dark />
+                              <color.AciverBackgrond
+                                 className="bd_"
+                                 ref={(el) => (backgroundRef.current = el)}
+                              >
+                                 <ColorPicker
+                                    width={300}
+                                    height={200}
+                                    color={ColorPickerInfo}
+                                    onChange={setColorPickerInfo}
+                                    hideHSV
+                                    dark
+                                 />
                               </color.AciverBackgrond>
                            </div>
                         </color.colorBox>

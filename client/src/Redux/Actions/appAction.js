@@ -411,3 +411,24 @@ export const exportLoadingFn = function (data) {
       payload: data,
    };
 };
+
+export const hideEmailBoxFn = function (data) {
+   return {
+      type: ACTION_TYPE.HIDE_EMAIL_BOX,
+      payload: data,
+   };
+};
+
+export const sendMailLoadingFn = function (data) {
+   return {
+      type: ACTION_TYPE.SEND_MAIL_LOADING,
+      payload: data,
+   };
+};
+
+export const removerMailInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_MAIL_INFO,
+      payload: data,
+   };
+};

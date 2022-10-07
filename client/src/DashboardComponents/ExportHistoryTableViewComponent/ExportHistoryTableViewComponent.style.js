@@ -34,6 +34,24 @@ export const div = styled.div`
       cursor: pointer;
       margin-right: 1rem;
       background-color: var(--smooth-light-color);
+      position: relative;
+
+      &:hover span {
+         visibility: visible;
+      }
+
+      span {
+         visibility: hidden;
+         width: 120px;
+         background-color: var(--spec-static-overlay-background-solid);
+         color: #fff;
+         text-align: center;
+         border-radius: 6px;
+         padding: 5px 0;
+         top: -50px;
+         position: absolute;
+         z-index: 1;
+      }
    }
 
    .flex_div {

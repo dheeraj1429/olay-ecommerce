@@ -58,12 +58,15 @@ function UploadProductComponent() {
    });
    const [Tags, setTags] = useState([]);
    const param = useParams();
+
    const dispatch = useDispatch();
-   const uploadProduct = useSelector((state) => state.admin.uploadProduct);
-   const uploadProductLoading = useSelector((state) => state.admin.uploadProductLoading);
-   const productEditLoading = useSelector((state) => state.admin.productEditLoading);
-   const singleProductFetch = useSelector((state) => state.admin.singleProductFetch);
-   const productEditInfo = useSelector((state) => state.admin.productEditInfo);
+   const {
+      uploadProduct,
+      uploadProductLoading,
+      productEditLoading,
+      singleProductFetch,
+      productEditInfo,
+   } = useSelector((state) => state.admin);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;

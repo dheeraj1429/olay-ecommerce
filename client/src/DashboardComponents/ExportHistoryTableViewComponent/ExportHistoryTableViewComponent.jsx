@@ -1,10 +1,18 @@
 import React, { useEffect } from "react";
 import * as history from "./ExportHistoryTableViewComponent.style";
-import { getAllExportInfo, deleteSingleProductHistory } from "../../Redux/Actions/adminAction";
+import {
+   getAllExportInfo,
+   deleteSingleProductHistory,
+   downloadPrevHistoryFiles,
+} from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
 import { FcDownload } from "@react-icons/all-files/fc/FcDownload";
 import { FcFullTrash } from "@react-icons/all-files/fc/FcFullTrash";
+import dayjs from "dayjs";
+import { FcVoicemail } from "@react-icons/all-files/fc/FcVoicemail";
+import EmailInfoComponent from "../EmailInfoComponent/EmailInfoComponent";
+import { hideEmailBoxFn } from "../../Redux/Actions/appAction";
 
 const row = [
    { value: "Date", key: 1 },
@@ -17,10 +25,18 @@ const row = [
 
 function ExportHistoryTableViewComponent() {
    const dispatch = useDispatch();
-   const { adminExportHistory } = useSelector((state) => state.admin);
+   const { adminExportHistory, hideEmailBox } = useSelector((state) => state.admin);
 
    const deleteHandler = function (id, fileName) {
       dispatch(deleteSingleProductHistory(id, fileName));
+   };
+
+   const downloadHistoryHandler = function (fileName) {
+      dispatch(downloadPrevHistoryFiles(fileName));
+   };
+
+   const showAndHideEmailBox = function (el) {
+      dispatch(hideEmailBoxFn({ show: true, file: el.fileName }));
    };
 
    useEffect(() => {
@@ -29,6 +45,7 @@ function ExportHistoryTableViewComponent() {
 
    return (
       <>
+         <EmailInfoComponent show={hideEmailBox.show} />
          {!!adminExportHistory &&
          adminExportHistory.success &&
          !!adminExportHistory?.history?.exportsHistory.length ? (
@@ -42,21 +59,30 @@ function ExportHistoryTableViewComponent() {
 
                   {adminExportHistory.history.exportsHistory.map((el) => (
                      <tr key={el._id}>
-                        <td>{el.date}</td>
+                        <td>{dayjs(el.date).format("DD/MMMMM/YYYY - h:m:s")}</td>
                         <td>{el.fileName}</td>
                         <td>{el._id}</td>
                         <td>{el.historyType}</td>
                         <td>{el.exportProducts}</td>
                         <td>
                            <div className="flex_div">
-                              <div className="icons_div">
+                              <div
+                                 className="icons_div"
+                                 onClick={() => downloadHistoryHandler(el.fileName)}
+                              >
                                  <FcDownload />
+                                 <span>Download History</span>
                               </div>
                               <div
                                  className="icons_div"
                                  onClick={() => deleteHandler(el._id, el.fileName)}
                               >
                                  <FcFullTrash />
+                                 <span>Delete history</span>
+                              </div>
+                              <div className="icons_div" onClick={() => showAndHideEmailBox(el)}>
+                                 <FcVoicemail />
+                                 <span>Send to email</span>
                               </div>
                            </div>
                         </td>

@@ -15,10 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import { brandLoading, removeBrandInfo } from "../../Redux/Actions/appAction";
-import {
-   editSelectedBrandLoading,
-   removeEditBrandInfo,
-} from "../../Redux/Actions/appAction";
+import { editSelectedBrandLoading, removeEditBrandInfo } from "../../Redux/Actions/appAction";
 
 const key = "updatable";
 
@@ -41,11 +38,11 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
    });
 
    const [Clear, setClear] = useState(false);
+
    const dispatch = useDispatch();
-   const brandInsertLoading = useSelector((state) => state.admin.brandInsertLoading);
-   const selectedBrandLoading = useSelector((state) => state.admin.selectedBrandLoading);
-   const brandInsert = useSelector((state) => state.admin.brandInsert);
-   const selectedBrandEdit = useSelector((state) => state.admin.selectedBrandEdit);
+   const { brandInsertLoading, selectedBrandLoading, brandInsert, selectedBrandEdit } = useSelector(
+      (state) => state.admin.brandInsertLoading
+   );
 
    const ChangeHandler = function (e) {
       const name = e.target.name;

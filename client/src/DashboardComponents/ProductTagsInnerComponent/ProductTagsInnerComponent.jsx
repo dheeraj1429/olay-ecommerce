@@ -32,13 +32,13 @@ function ProductTagsInnerComponent() {
 
    const dispatch = useDispatch();
    const params = useParams();
-   const insertNewProductTag = useSelector((state) => state.admin.insertNewProductTag);
-   const productTagLoding = useSelector((state) => state.admin.productTagLoding);
-   const selectedProductTag = useSelector((state) => state.admin.selectedProductTag);
-   const updateProductTagLoading = useSelector(
-      (state) => state.admin.updateProductTagLoading
-   );
-   const editProductEdit = useSelector((state) => state.admin.editProductEdit);
+   const {
+      insertNewProductTag,
+      productTagLoding,
+      selectedProductTag,
+      updateProductTagLoading,
+      editProductEdit,
+   } = useSelector((state) => state.admin);
 
    const changeHandler = function (e) {
       const name = e.target.name;

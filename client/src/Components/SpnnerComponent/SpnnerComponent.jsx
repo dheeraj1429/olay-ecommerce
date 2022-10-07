@@ -1,10 +1,10 @@
 import React from "react";
 import * as spnner from "./SpnnerComponent.style";
 
-function SpnnerComponent() {
+function SpnnerComponent({ blackSpenner }) {
    return (
       <spnner.div>
-         <img src="/images/spneer.svg" />
+         {blackSpenner ? <img src="/images/spneer2.svg" /> : <img src="/images/spneer.svg" />}
       </spnner.div>
    );
 }

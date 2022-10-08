@@ -33,6 +33,7 @@ import ProductLabelTableViewComponent from "./DashboardComponents/ProductLabelTa
 import EditProductLabelComponent from "./DashboardComponents/EditProductLabelComponent/EditProductLabelComponent";
 import ExportCsvComponent from "./DashboardComponents/ExportCsvComponent/ExportCsvComponent";
 import ExportHistoryComponent from "./DashboardComponents/ExportHistoryComponent/ExportHistoryComponent";
+import ImportCsvFileComponent from "./DashboardComponents/ImportCsvFileComponent/ImportCsvFileComponent";
 
 // pages
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -72,22 +73,10 @@ function App() {
                <Route path="variation-swatches/create" element={<VariationSwatchesComponent />} />
                <Route path="allSwatches/:id" element={<EditProductSwatchesComponent />} />
                <Route path="product-variation" element={<ProductVariationCreatorComponent />} />
-               <Route
-                  path="product/create-variations/:id"
-                  element={<CreateSelectedProductVariationComponent />}
-               />
-               <Route
-                  path="/dashboard/product/sub-variations/:id/editSub/:id"
-                  element={<CreateSelectedProductVariationComponent />}
-               />
-               <Route
-                  path="product-size-variation"
-                  element={<ProductSizeVariationTableComponent />}
-               />
-               <Route
-                  path="product-size-variation/create"
-                  element={<ProductSizeVariationComponent />}
-               />
+               <Route path="product/create-variations/:id" element={<CreateSelectedProductVariationComponent />} />
+               <Route path="/dashboard/product/sub-variations/:id/editSub/:id" element={<CreateSelectedProductVariationComponent />} />
+               <Route path="product-size-variation" element={<ProductSizeVariationTableComponent />} />
+               <Route path="product-size-variation/create" element={<ProductSizeVariationComponent />} />
                <Route path="sizeVariations/:id" element={<ProductSizeVariationEditComponent />} />
                <Route path="flash-sale" element={<FlashSaleTableViewComponent />} />
                <Route path="flash-sale/create" element={<CreateNewFlashSaleComponent />} />
@@ -97,6 +86,7 @@ function App() {
                <Route path="allLabels/:id" element={<EditProductLabelComponent />} />
                <Route path="export-product" element={<ExportCsvComponent />} />
                <Route path="export-history" element={<ExportHistoryComponent />} />
+               <Route path="import-product" element={<ImportCsvFileComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

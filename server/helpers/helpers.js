@@ -82,10 +82,25 @@ const convertObjectDataIntoArray = function (selectedProduct) {
 };
 
 const tokenVarifyFunction = function (cookie) {
+   /**
+    * @token use login and sign in token to varify the use is valid or not.
+    * @tokenVarify varifying the user.
+    * @tokenVarify return object if the user is valid.
+    * @_id @isAdmin values which is grab from the token varification.
+    * @return @_id @isAdmin
+    */
    const { token } = cookie.user;
    const tokenVarify = jwt.verify(token, JWT_TOKEN);
    const { _id, isAdmin } = tokenVarify;
    return { _id, isAdmin };
+};
+
+const productExportFolderPath = function (fileName) {
+   /**
+    * @folderPath .. => one folder up level , datafiles/exportsData/products/filename
+    */
+   const folderPath = path.join(__dirname, "..", "dataFiles", "exportData", "Products", fileName);
+   return folderPath;
 };
 
 module.exports = {
@@ -94,4 +109,5 @@ module.exports = {
    fetchLimitDocument,
    convertObjectDataIntoArray,
    tokenVarifyFunction,
+   productExportFolderPath,
 };

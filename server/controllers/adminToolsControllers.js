@@ -6,8 +6,10 @@ const path = require("path");
 const AppError = require("../helpers/appError");
 const userModel = require("../model/schema/userSchema");
 const httpStatusCodes = require("../helpers/httpStatusCodes");
-const { tokenVarifyFunction } = require("../helpers/helpers");
+const { tokenVarifyFunction, productExportFolderPath, imageCompress } = require("../helpers/helpers");
 const nodemailer = require("nodemailer");
+const csv = require("csvtojson");
+const fetch = require("node-fetch");
 
 const getAllProductCsv = catchAsync(async function (req, res, next) {
    /**
@@ -61,7 +63,7 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
        */
       const uniqueID = Date.now().toString(36) + Math.random().toString(36).split(".").join("");
       const fileName = `products${uniqueID}.csv`;
-      const folderPath = path.join(__dirname, "..", "exportData", "Products", fileName);
+      const folderPath = productExportFolderPath(fileName);
 
       fs.writeFile(folderPath, csv, function (err, data) {
          if (err) {
@@ -141,7 +143,7 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
     * @return flag flig successfully removed from database or the folders
     */
    const cookie = req.cookies;
-   const filePath = path.join(__dirname, "..", "exportData", "Products", fileName);
+   const filePath = productExportFolderPath(fileName);
 
    if (!!cookie && cookie.user && cookie.user.token) {
       const { _id } = tokenVarifyFunction(cookie);
@@ -151,10 +153,7 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
          { $pull: { exportsHistory: { _id: id } } }
       );
 
-      if (
-         findUserAndRemoveSingleHistory.acknowledged &&
-         !!findUserAndRemoveSingleHistory.modifiedCount
-      ) {
+      if (findUserAndRemoveSingleHistory.acknowledged && !!findUserAndRemoveSingleHistory.modifiedCount) {
          fs.unlink(filePath, function (err) {
             if (err) {
                console.log(err);
@@ -175,7 +174,8 @@ const downloadPrevHistoryFiles = catchAsync(async function (req, res, next) {
    if (!fileName) {
       next(new AppError("History filename is required"));
    }
-   const filePath = path.join(__dirname, "..", "exportData", "Products", fileName);
+   const filePath = productExportFolderPath(fileName);
+
    res.download(path.join(filePath), (err) => {
       if (err) console.log(err);
    });
@@ -191,7 +191,7 @@ const sendHistoryFileWithEmail = catchAsync(async function (req, res, next) {
        * @mailOptions send mail config object.
        * @return send back response.
        */
-      const filePath = path.join(__dirname, "..", "exportData", "Products", file);
+      const filePath = productExportFolderPath(file);
       const mail = nodemailer.createTransport({
          service: "gmail",
          auth: {
@@ -227,10 +227,130 @@ const sendHistoryFileWithEmail = catchAsync(async function (req, res, next) {
    }
 });
 
+const downloadCsvTemplate = catchAsync(async function (req, res, next) {
+   const filePath = productExportFolderPath("template.csv");
+   if (filePath) {
+      res.download(path.join(filePath), (err) => {
+         if (err) console.log(err);
+      });
+   } else {
+      next(new AppError("File not found"));
+   }
+});
+
+const deleteObjectKey = function (csvToJsonData, key) {
+   if (!csvToJsonData[key]) {
+      delete csvToJsonData[key];
+   }
+};
+
+const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
+   const file = req.files[0];
+   const skipDocuments = [];
+   const insertDocuments = [];
+
+   if (!file) {
+      next(new AppError("Import csv file is required!"));
+   }
+
+   const originalname = file.originalname;
+   const filePath = path.join(__dirname, "..", "dataFiles", "importData", "Products", originalname);
+
+   /**
+    * upload the csv file into the backend foleds.
+    * then convert the csv into the json formate.
+    */
+   const csvToJsonData = await csv().fromFile(filePath);
+
+   /**
+    * check the products is already exists or not. if the products data is exists then skip into the next product data.
+    */
+
+   for (let i = 0; i < csvToJsonData.length; i++) {
+      const productName = csvToJsonData[i].name;
+
+      const productIsExits = await productModel.findOne({ name: productName });
+
+      if (!productIsExits) {
+         if (!csvToJsonData[i].category) {
+            deleteObjectKey(csvToJsonData[i], "category");
+         }
+
+         if (!csvToJsonData[i].brand) {
+            deleteObjectKey(csvToJsonData[i], "brand");
+         }
+
+         if (!csvToJsonData[i].variations) {
+            deleteObjectKey(csvToJsonData[i], "variations");
+         }
+
+         if (!csvToJsonData[i].createdAt) {
+            deleteObjectKey(csvToJsonData[i], "createdAt");
+         }
+
+         if (!!csvToJsonData[i]?.productImage) {
+            /**
+             * if the image filed is not empty then.
+             * first download the image from the google.
+             * store the downloded file into the images downloaded folder.
+             * then compress the image file and the save imagefile name into the database document.
+             * grab the last name of the image and insert into the database product document.
+             */
+            const productImage = csvToJsonData[i].productImage;
+            const imageNameAr = productImage.split("/");
+            const imageName = imageNameAr[imageNameAr.length - 1];
+
+            /**
+             * first check the image is already exists or not. if the image the exists then skip the download
+             * section.
+             */
+            const imagePath = path.join(__dirname, "..", "upload", "productImages", imageName);
+
+            fs.exists(imagePath, (exists) => {
+               if (exists) {
+                  console.log("file exists");
+               } else {
+                  const response = fetch(productImage).then((resp) => resp.buffer());
+                  response.then((data) => {
+                     fs.writeFile(imagePath, data, async (err) => {
+                        if (err) {
+                           next(new AppError(err));
+                        }
+
+                        await imageCompress(imagePath, 130, "productImagesCompress", imageName);
+                     });
+                  });
+               }
+            });
+
+            csvToJsonData[i].productImage = imageName;
+         }
+
+         const insertData = await productModel(csvToJsonData[i]).save();
+
+         if (insertData) {
+            insertDocuments.push({ _id: insertData._id, name: insertData.name });
+         }
+      } else {
+         skipDocuments.push({ _id: productIsExits._id, name: productName });
+      }
+   }
+
+   return res.status(httpStatusCodes.OK).json({
+      success: true,
+      insertInfo: {
+         skipDocuments,
+         insertDocuments,
+      },
+   });
+});
+
 module.exports = {
    getAllProductCsv,
    getAllExportInfo,
    deleteSingleProductHistory,
    downloadPrevHistoryFiles,
    sendHistoryFileWithEmail,
+   downloadCsvTemplate,
+   ImportCsvFileComponent,
 };

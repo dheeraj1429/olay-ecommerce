@@ -432,3 +432,10 @@ export const removerMailInfo = function (data) {
       payload: data,
    };
 };
+
+export const downloadTemplateLoadingFunction = function (data) {
+   return {
+      type: ACTION_TYPE.DOWNLOAD_CSV_IMPORT_TEMPLATE_LOADING,
+      payload: data,
+   };
+};

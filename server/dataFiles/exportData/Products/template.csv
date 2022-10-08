@@ -1,0 +1,22 @@
+name,price,salePrice,discription,category,stockStatus,weight,length,wide,height,productImage,suggestedAge,brand,createdAt,productStatusInfo
+{ Product name },{Product price},{Product sale price},{product discription},"{ use json to create product category }
+
+Ex: - 
+
+{ “name”: “category name”, “description”: “product category description” }","{ Out of stock }
+{ On backorder }",{ Product weight },{ Product length },{ Product wide },{ Product height },{ Product image url } ,"{ product suggested age }
+
+Ex : -
+
+10 – 20,
+30 – 50,","{ Product brand use json to import product brands }
+
+Ex :-
+
+{ “name”: “product brand name”, “description”: “product brands description”, “website”: “product brand website url”, “order”: “Number / product brand in stock / otherwise leave it”, “brandStatusInfo”: “Published / Draft / Pending ”, “brandIcon”: “product brand image url”, SEO Title: “product brand seo title”, SEO Description: “product brand seo description” }
+
+For example - 
+
+{""name"":""apple"",""description"":""apple brands "",""website"":""https://www.apple.com/in/"",""order"":"""",""brandStatusInfo"":""Published"",""brandIcon"":""cover-evolution-of-apple-logo.jpg"",""SEOTitle"":"""",""SEODescription"":""""}",{ not required },"{ product status }
+
+“Published / Draft / Pending” "

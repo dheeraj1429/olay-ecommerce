@@ -241,7 +241,10 @@ export const uplodNewProduct = function (data) {
 export const fetchUploadProducts = function (page, docItems) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`, headers);
+         const fetchProducts = await axios.get(
+            `/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`,
+            headers
+         );
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
@@ -338,7 +341,11 @@ export const fetchSingleProduct = function (id) {
 export const editSingleProduct = function (data, id, selectedProductId) {
    return async function (dispatch) {
       try {
-         const editSingleProduct = await axios.patch(`/admin/eidt-single-product/${id}?selectedProductId=${selectedProductId}`, data, headers);
+         const editSingleProduct = await axios.patch(
+            `/admin/eidt-single-product/${id}?selectedProductId=${selectedProductId}`,
+            data,
+            headers
+         );
 
          if (editSingleProduct && editSingleProduct?.data) {
             dispatch({
@@ -696,7 +703,10 @@ export const insertProductSubVariation = function (data) {
 export const fecthSingleSubVariation = function (id, parentProductId) {
    return async function (dispatch) {
       try {
-         const singelSubVariation = await axios.get(`/admin/get-single-sub-variation?subVariation=${id}&parentProductId=${parentProductId}`, headers);
+         const singelSubVariation = await axios.get(
+            `/admin/get-single-sub-variation?subVariation=${id}&parentProductId=${parentProductId}`,
+            headers
+         );
 
          if (singelSubVariation && singelSubVariation?.data && singelSubVariation?.data.success) {
             dispatch({
@@ -861,7 +871,11 @@ export const removeFlashSaleProducts = function (id, parentSaleId) {
             headers
          );
 
-         if (removeSelectedFlashSaleProduct && !!removeSelectedFlashSaleProduct?.data && !!removeSelectedFlashSaleProduct?.data.success) {
+         if (
+            removeSelectedFlashSaleProduct &&
+            !!removeSelectedFlashSaleProduct?.data &&
+            !!removeSelectedFlashSaleProduct?.data.success
+         ) {
             dispatch({
                type: ACTION_TYPE.REMOVE_FLASH_SALE_PRODUCTS,
                payload: id,
@@ -1019,7 +1033,10 @@ export const getAllExportInfo = function () {
 export const deleteSingleProductHistory = function (id, fileName) {
    return async function (dispatch) {
       try {
-         const deleteProductHistory = await axios.delete(`/admin/tools/delete-single-product-history/${id}/${fileName}`, headers);
+         const deleteProductHistory = await axios.delete(
+            `/admin/tools/delete-single-product-history/${id}/${fileName}`,
+            headers
+         );
 
          if (deleteProductHistory && deleteProductHistory?.data && deleteProductHistory?.data?.success) {
             dispatch({
@@ -1086,7 +1103,12 @@ export const importCsvFile = function (data) {
       try {
          const importData = await axios.post("/admin/tools/import-csv-data", data, headers);
 
-         console.log(importData);
+         if (importData && importData?.data && importData?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.IMPORT_CSV_INFO,
+               payload: importData && importData?.data,
+            });
+         }
       } catch (err) {
          console.log(err);
       }

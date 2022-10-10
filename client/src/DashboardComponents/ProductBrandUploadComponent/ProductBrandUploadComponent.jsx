@@ -7,11 +7,7 @@ import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent
 import { MenuItem } from "@mui/material";
 import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import {
-   insertNewProductBrand,
-   fetchSelectedBrand,
-   editSelectedBrand,
-} from "../../Redux/Actions/adminAction";
+import { insertNewProductBrand, fetchSelectedBrand, editSelectedBrand } from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 import { brandLoading, removeBrandInfo } from "../../Redux/Actions/appAction";
@@ -41,7 +37,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
 
    const dispatch = useDispatch();
    const { brandInsertLoading, selectedBrandLoading, brandInsert, selectedBrandEdit } = useSelector(
-      (state) => state.admin.brandInsertLoading
+      (state) => state.admin
    );
 
    const ChangeHandler = function (e) {
@@ -305,11 +301,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
                               btnCl={"category_upload"}
                               isLoading={brandInsertLoading}
                            />
-                           <CustombuttonComponent
-                              onClick={ClearInfoHandler}
-                              innerText={"Clear"}
-                              btnCl={"Delete_btn"}
-                           />
+                           <CustombuttonComponent onClick={ClearInfoHandler} innerText={"Clear"} btnCl={"Delete_btn"} />
                         </>
                      )}
                   </brand.half>

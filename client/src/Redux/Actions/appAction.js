@@ -439,3 +439,10 @@ export const downloadTemplateLoadingFunction = function (data) {
       payload: data,
    };
 };
+
+export const insertCsvLoading = function (data) {
+   return {
+      type: ACTION_TYPE.IMPORT_CSV_LOADING,
+      payload: data,
+   };
+};

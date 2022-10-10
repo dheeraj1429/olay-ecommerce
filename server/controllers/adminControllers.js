@@ -503,7 +503,7 @@ const fetchUploadProducts = catchAsync(async function (req, res, next) {
    /**
     * @DOCUMENT_LIMIT how to document we want the send back to the client
     */
-   const DOCUMENT_LIMIT = 6;
+   const DOCUMENT_LIMIT = 10;
 
    await fetchLimitDocument(productModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, "products");
 });
@@ -608,7 +608,10 @@ const changeCollectionDataPosition = async function (field, productId, collectio
       });
 
       if (!checkIsProductAlreadyExists) {
-         const findBrandProductAndInsertId = await collection.updateOne({ _id: field }, { $push: { products: { productId: productId } } });
+         const findBrandProductAndInsertId = await collection.updateOne(
+            { _id: field },
+            { $push: { products: { productId: productId } } }
+         );
 
          if (!!findBrandProductAndInsertId.modifiedCount) {
             await collection.updateOne({ _id: prevId }, { $pull: { products: { productId: productId } } });
@@ -1239,7 +1242,10 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
              */
             await imageCompress(imagePath, 150, "productImagesCompress", originalname);
 
-            insertNewSubProductVariation = await productModel.updateOne({ _id: selectedProductId }, { $push: { variations: updatedFildes } });
+            insertNewSubProductVariation = await productModel.updateOne(
+               { _id: selectedProductId },
+               { $push: { variations: updatedFildes } }
+            );
 
             sendClientResponse(res, insertNewSubProductVariation);
          } else {
@@ -1248,7 +1254,10 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
              */
             updatedFildes.variationImage = productModel.productImage;
 
-            insertNewSubProductVariation = await productModel.updateOne({ _id: selectedProductId }, { $push: { variations: updatedFildes } });
+            insertNewSubProductVariation = await productModel.updateOne(
+               { _id: selectedProductId },
+               { $push: { variations: updatedFildes } }
+            );
 
             sendClientResponse(res, insertNewSubProductVariation);
          }
@@ -1465,7 +1474,7 @@ const getAllFlashSales = catchAsync(async function (req, res, next) {
 
    if (!page) next(new AppError("flash sale page number is required!"));
 
-   const DOCUMENT_LIMIT = 3;
+   const DOCUMENT_LIMIT = 10;
 
    await fetchLimitDocument(saleModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, "sales", {
       products: 0,
@@ -1515,7 +1524,9 @@ const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
       next(new AppError("Flash sale id is required!"));
    }
 
-   const findSinlgeFlashSale = await saleModel.findOne({ _id: id }).populate("products.productId", { name: 1, productImage: 1 });
+   const findSinlgeFlashSale = await saleModel
+      .findOne({ _id: id })
+      .populate("products.productId", { name: 1, productImage: 1 });
 
    if (findSinlgeFlashSale) {
       return res.status(httpStatusCodes.OK).json({

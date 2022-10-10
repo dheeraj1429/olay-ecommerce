@@ -4,7 +4,7 @@ import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavba
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { downloadCsvTemplate, importCsvFile } from "../../Redux/Actions/adminAction";
-import { downloadTemplateLoadingFunction } from "../../Redux/Actions/appAction";
+import { downloadTemplateLoadingFunction, insertCsvLoading } from "../../Redux/Actions/appAction";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 
@@ -14,7 +14,8 @@ function ImportCsvFileComponent() {
    });
 
    const dispatch = useDispatch();
-   const { downloadTemplateLoading } = useSelector((state) => state.admin);
+   // [-]
+   const { downloadTemplateLoading, importCsvLoading, importCsvInfo } = useSelector((state) => state.admin);
 
    const downloadTemplate = function () {
       dispatch(downloadCsvTemplate());
@@ -32,6 +33,7 @@ function ImportCsvFileComponent() {
          const formData = new FormData();
          formData.append("importProductCsv", csv);
          dispatch(importCsvFile(formData));
+         dispatch(insertCsvLoading(true));
       } else {
          message.info("please choose the file first");
       }
@@ -43,13 +45,23 @@ function ImportCsvFileComponent() {
          <styles.spaceDiv>
             <HeadingComponent
                Heading={"Import product csv"}
-               subHeading={`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.`}
+               subHeading={`Lorem Ipsum is simply dummy text of \n
+               the printing and typesetting industry. Lorem Ipsum \n
+               has been the industry's standard dummy text ever since \n
+               the 1500s, when an unknown printer took a galley of type \n
+               and scrambled it to make a type specimen book. It has \n
+               survived not only five centuries, but also the leap into electronic typesetting.`}
             />
             <div className="fileUpload_div">
                <input type={"file"} onChange={CSVFileHandler} />
             </div>
             <styles.flexDiv>
-               <CustombuttonComponent onClick={importHandler} innerText={"start Import"} btnCl={"category_upload"} />
+               <CustombuttonComponent
+                  isLoading={importCsvLoading}
+                  onClick={importHandler}
+                  innerText={"start Import"}
+                  btnCl={"category_upload"}
+               />
                <div className="margin">
                   <CustombuttonComponent
                      isLoading={downloadTemplateLoading}

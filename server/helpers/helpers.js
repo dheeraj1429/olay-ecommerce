@@ -2,6 +2,9 @@ const path = require("path");
 const sharp = require("sharp");
 const jwt = require("jsonwebtoken");
 const JWT_TOKEN = process.env.JWT_TOKEN;
+const fs = require("fs");
+const fetch = require("node-fetch");
+const productModel = require("../model/schema/productSchema");
 
 const imageCompress = async function (imagePath, imageQulity, folder, originalname) {
    /**
@@ -49,11 +52,22 @@ const fetchLimitDocument = async function (
     * @filed send back object filed name.
     * @item projection object
     */
-   const documents = await collection.countDocuments({});
-   const findData = await collection
-      .find({}, item ? item : null)
-      .limit(DOCUMENT_LIMIT)
-      .skip(page * DOCUMENT_LIMIT);
+   let documents, findData;
+   if (collection === productModel) {
+      documents = await collection.countDocuments({});
+      findData = await collection
+         .find({}, item ? item : null)
+         .populate("brand")
+         .populate("category")
+         .limit(DOCUMENT_LIMIT)
+         .skip(page * DOCUMENT_LIMIT);
+   } else {
+      documents = await collection.countDocuments({});
+      findData = await collection
+         .find({}, item ? item : null)
+         .limit(DOCUMENT_LIMIT)
+         .skip(page * DOCUMENT_LIMIT);
+   }
 
    if (filed) {
       return res.status(httpStatusCodes.OK).json({
@@ -103,6 +117,43 @@ const productExportFolderPath = function (fileName) {
    return folderPath;
 };
 
+const downloadImageFromWeb = async function (url, imagePath, compressImageFolderPath, imageName) {
+   try {
+      /**
+       * @url url which is used for the download images from the web.
+       * @imagePath full path name of the image is exits.
+       * @imageName original image.
+       * grab the image url from the csv json object.
+       * covert url into the array, ['https', 'www.com', 'imagename.jpg']
+       * get the last value from the array for store the original name of the image.
+       * check the image is already exits or not. if the image already exits then no need to download again.
+       * if there is no image exists then download the image from the web.
+       * @return object
+       */
+
+      fs.exists(imagePath, (exists) => {
+         if (exists) {
+            console.log("file exists");
+         } else {
+            const response = fetch(url).then((resp) => resp.buffer());
+            response.then((data) => {
+               fs.writeFile(imagePath, data, async (err) => {
+                  if (err) {
+                     next(new AppError(err));
+                  }
+
+                  await imageCompress(imagePath, 130, compressImageFolderPath, imageName);
+               });
+            });
+         }
+      });
+
+      return { imageName };
+   } catch (err) {
+      console.log(err);
+   }
+};
+
 module.exports = {
    imageCompress,
    catchAsync,
@@ -110,4 +161,5 @@ module.exports = {
    convertObjectDataIntoArray,
    tokenVarifyFunction,
    productExportFolderPath,
+   downloadImageFromWeb,
 };

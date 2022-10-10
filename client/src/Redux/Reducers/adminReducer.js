@@ -81,6 +81,8 @@ const INITAL_STATE = {
    sendMailLoading: false,
    mailInfo: null,
    downloadTemplateLoading: false,
+   importCsvLoading: false,
+   importCsvInfo: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -999,7 +1001,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.adminExportHistory,
                history: {
                   ...state.adminExportHistory.history,
-                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter((el) => el._id !== action.payload),
+                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter(
+                     (el) => el._id !== action.payload
+                  ),
                },
             },
          };
@@ -1046,6 +1050,19 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             downloadTemplateLoading: action.payload,
+         };
+
+      case ACTION_TYPE.IMPORT_CSV_INFO:
+         return {
+            ...state,
+            importCsvLoading: false,
+            importCsvInfo: action.payload,
+         };
+
+      case ACTION_TYPE.IMPORT_CSV_LOADING:
+         return {
+            ...state,
+            importCsvLoading: action.payload,
          };
 
       default:

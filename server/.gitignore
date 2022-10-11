@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-.env
+# .env
 /build
-config.js
-/adminConfig
+# config.js
+# /adminConfig

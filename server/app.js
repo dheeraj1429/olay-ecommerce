@@ -71,5 +71,5 @@ if (cluster.isPrimary) {
       });
    });
 
-   console.log(`Woker ${process.pid} is running`);
+   console.log(`Woker ${process.pid} is running`); 
 }

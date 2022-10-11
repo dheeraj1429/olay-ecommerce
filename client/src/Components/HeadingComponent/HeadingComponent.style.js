@@ -5,7 +5,6 @@ export const div = styled.div`
       font-size: 30px;
       font-weight: 300;
       margin-bottom: 1rem;
-      color: var(--smooth-light-heading-color);
    }
 
    p {

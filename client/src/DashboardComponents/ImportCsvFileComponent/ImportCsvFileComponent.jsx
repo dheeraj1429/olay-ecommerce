@@ -16,9 +16,7 @@ function ImportCsvFileComponent() {
    });
 
    const dispatch = useDispatch();
-   const { downloadTemplateLoading, importCsvLoading, importCsvInfo, showProductUploadInfoComponent } = useSelector(
-      (state) => state.admin
-   );
+   const { downloadTemplateLoading, importCsvLoading, importCsvInfo, showProductUploadInfoComponent } = useSelector((state) => state.admin);
 
    const downloadTemplate = function () {
       dispatch(downloadCsvTemplate());
@@ -72,26 +70,18 @@ function ImportCsvFileComponent() {
                <input type={"file"} onChange={CSVFileHandler} />
             </div>
             <styles.flexDiv>
-               <CustombuttonComponent
-                  isLoading={importCsvLoading}
-                  onClick={importHandler}
-                  innerText={"start Import"}
-                  btnCl={"category_upload"}
-               />
+               <CustombuttonComponent isLoading={importCsvLoading} onClick={importHandler} innerText={"start Import"} btnCl={"category_upload"} />
                <div className="margin">
-                  <CustombuttonComponent
-                     isLoading={downloadTemplateLoading}
-                     onClick={downloadTemplate}
-                     innerText={"Download CSV template"}
-                     btnCl={"category_upload"}
-                  />
+                  <CustombuttonComponent isLoading={downloadTemplateLoading} onClick={downloadTemplate} innerText={"Download CSV template"} btnCl={"category_upload"} />
                </div>
-               <div className="question_icons">
-                  <div className="info_div">
-                     <p>More infomation</p>
+               {!!importCsvInfo && importCsvInfo.success ? (
+                  <div className="question_icons">
+                     <div className="info_div">
+                        <p>More infomation</p>
+                     </div>
+                     <AiFillQuestionCircle onClick={showProductUploadInfo} />
                   </div>
-                  <AiFillQuestionCircle onClick={showProductUploadInfo} />
-               </div>
+               ) : null}
             </styles.flexDiv>
          </styles.spaceDiv>
       </styles.div>

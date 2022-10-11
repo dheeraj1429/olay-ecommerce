@@ -23,6 +23,7 @@ export const innerDiv = styled.div`
    position: relative;
    transform: ${(props) => (props.show ? "scale(1)" : "scale(.6)")};
    transition: all 0.3s ease;
+   padding: 1rem;
 
    .close_icons {
       position: absolute;

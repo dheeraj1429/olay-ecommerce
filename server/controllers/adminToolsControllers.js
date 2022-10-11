@@ -1,4 +1,4 @@
-const { catchAsync, downloadImageFromWeb } = require("../helpers/helpers");
+const { catchAsync, downloadImageFromWeb, numberConvert } = require("../helpers/helpers");
 const fs = require("fs");
 const { parse } = require("json2csv");
 const productModel = require("../model/schema/productSchema");
@@ -33,10 +33,7 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
          });
       }
 
-      const findProduct = await productModel
-         .find({})
-         .populate("category", { _id: 0, products: 0, __v: 0 })
-         .populate("brand", { _id: 0, products: 0, __v: 0 });
+      const findProduct = await productModel.find({}).populate("category", { _id: 0, products: 0, __v: 0 }).populate("brand", { _id: 0, products: 0, __v: 0 });
 
       const fields = [
          "name",
@@ -156,10 +153,7 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
    if (!!cookie && cookie.user && cookie.user.token) {
       const { _id } = tokenVarifyFunction(cookie);
 
-      const findUserAndRemoveSingleHistory = await userModel.updateOne(
-         { _id },
-         { $pull: { exportsHistory: { _id: id } } }
-      );
+      const findUserAndRemoveSingleHistory = await userModel.updateOne({ _id }, { $pull: { exportsHistory: { _id: id } } });
 
       if (findUserAndRemoveSingleHistory.acknowledged && !!findUserAndRemoveSingleHistory.modifiedCount) {
          fs.unlink(filePath, function (err) {
@@ -285,8 +279,8 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
    const categoryinserted = [];
    const categorySkiped = [];
 
-   let brand_id = new mongoose.Types.ObjectId();
-   let category_id = new mongoose.Types.ObjectId();
+   // track the brand and the category id which document is inserted into the database.
+   let brand_id, category_id;
 
    if (!file) {
       next(new AppError("Import csv file is required!"));
@@ -304,7 +298,7 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
    for (let i = 0; i < csvToJsonData.length; i++) {
       const productName = csvToJsonData[i].name;
 
-      if (csvToJsonData[i].brand.name) {
+      if (csvToJsonData[i]?.brand?.name) {
          const brandIsExists = await productBrandModel.findOne({ name: csvToJsonData[i].brand.name });
 
          if (!brandIsExists) {
@@ -318,14 +312,11 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
             }
 
             const brandObjectInfo = {
-               _id: brand_id,
                name: csvToJsonData[i].brand.name,
                description: csvToJsonData[i].brand.description,
                website: csvToJsonData[i].brand.website,
                order: !!csvToJsonData[i].brand?.order ? csvToJsonData[i].brand.order : 0,
-               brandStatusInfo: !!csvToJsonData[i].brand.brandStatusInfo
-                  ? csvToJsonData[i].brand.brandStatusInfo
-                  : "Draft",
+               brandStatusInfo: !!csvToJsonData[i].brand.brandStatusInfo ? csvToJsonData[i].brand.brandStatusInfo : "Draft",
                brandIcon: csvToJsonData[i].brand.brandIcon,
                SEOTitle: csvToJsonData[i].brand.SEOTitle,
                SEODescription: csvToJsonData[i].brand.SEODescription,
@@ -334,6 +325,7 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
             const insertProductBrand = await productBrandModel(brandObjectInfo).save();
 
             if (insertProductBrand) {
+               brand_id = insertProductBrand._id;
                brandsInserted.push({ name: insertProductBrand.name, _id: insertProductBrand._id });
             }
          } else {
@@ -342,12 +334,11 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
          }
       }
 
-      if (csvToJsonData[i].category.name) {
+      if (csvToJsonData[i]?.category?.name) {
          const categoryIsExists = await categoryModel.findOne({ name: csvToJsonData[i].category.name });
 
          if (!categoryIsExists) {
             const categoryObjectInfo = {
-               _id: category_id,
                name: csvToJsonData[i].category.name,
                description: csvToJsonData[i].category.description,
             };
@@ -355,6 +346,7 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
             const insertCategory = await categoryModel(categoryObjectInfo).save();
 
             if (insertCategory) {
+               category_id = insertCategory._id;
                categoryinserted.push({ name: insertCategory.name, _id: insertCategory._id });
             }
          } else {
@@ -399,8 +391,8 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
             // insert product info.
             const productInfoObject = {
                name: csvToJsonData[i].name,
-               price: csvToJsonData[i].price,
-               salePrice: csvToJsonData[i].salePrice,
+               price: numberConvert(csvToJsonData[i].price),
+               salePrice: numberConvert(csvToJsonData[i].salePrice),
                discription: csvToJsonData[i].discription,
                stockStatus: csvToJsonData[i].stockStatus,
                weight: !!csvToJsonData[i].weight ? csvToJsonData[i].weight : 0,

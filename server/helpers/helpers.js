@@ -15,10 +15,7 @@ const imageCompress = async function (imagePath, imageQulity, folder, originalna
     * grab all the information and then compress the image.
     */
 
-   await sharp(imagePath)
-      .resize(imageQulity, imageQulity)
-      .jpeg({ quality: 100 })
-      .toFile(path.join(__dirname, "..", "upload", folder, originalname));
+   await sharp(imagePath).resize(imageQulity, imageQulity).jpeg({ quality: 100 }).toFile(path.join(__dirname, "..", "upload", folder, originalname));
 };
 
 const catchAsync = (fn) => {
@@ -34,15 +31,7 @@ const catchAsync = (fn) => {
    };
 };
 
-const fetchLimitDocument = async function (
-   collection,
-   page,
-   res,
-   httpStatusCodes,
-   DOCUMENT_LIMIT,
-   filed,
-   item = undefined
-) {
+const fetchLimitDocument = async function (collection, page, res, httpStatusCodes, DOCUMENT_LIMIT, filed, item = undefined) {
    /**
     * @collection which mongodb collections db we want to update and get back the infomations.
     * @page numbers of the documents. for making the pagination effect.
@@ -154,6 +143,11 @@ const downloadImageFromWeb = async function (url, imagePath, compressImageFolder
    }
 };
 
+const numberConvert = function (string) {
+   const number = string.replaceAll(",", "");
+   return +number;
+};
+
 module.exports = {
    imageCompress,
    catchAsync,
@@ -162,4 +156,5 @@ module.exports = {
    tokenVarifyFunction,
    productExportFolderPath,
    downloadImageFromWeb,
+   numberConvert,
 };

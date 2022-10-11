@@ -4,6 +4,7 @@ import * as styled from "./UploadCsvProductsInfomationComponent.style";
 import { VscClose } from "@react-icons/all-files/vsc/VscClose";
 import { showProductInfoCom } from "../../Redux/Actions/appAction";
 import { useDispatch } from "react-redux";
+import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 
 function UploadCsvProductsInfomationComponent({ show }) {
    const dispatch = useDispatch();
@@ -18,6 +19,8 @@ function UploadCsvProductsInfomationComponent({ show }) {
             <div className="close_icons">
                <VscClose onClick={hideInfoComponent} />
             </div>
+
+            <HeadingComponent Heading={"CSV products infomations"} dark={true} />
          </styled.innerDiv>
       </styled.mainDiv>,
       document.getElementById("productCsvInfo")

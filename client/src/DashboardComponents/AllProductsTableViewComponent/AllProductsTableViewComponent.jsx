@@ -17,8 +17,8 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
    const location = useLocation();
    const dispatch = useDispatch();
 
-   const confirm = (id) => {
-      dispatch(deleteOneProduct(id));
+   const confirm = (id, categoryId, brandId) => {
+      dispatch(deleteOneProduct(id, categoryId, brandId));
    };
 
    const onChange = (e, elm) => {
@@ -44,7 +44,12 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
                   </Link>
                </inner.td>
                <inner.td>
-                  <Popconfirm title="Are you sure to delete this product?" onConfirm={() => confirm(el._id)} okText="Yes" cancelText="No">
+                  <Popconfirm
+                     title="Are you sure to delete this product?"
+                     onConfirm={() => confirm(el._id, el?.category?._id, el?.brand?._id)}
+                     okText="Yes"
+                     cancelText="No"
+                  >
                      <VscClose />
                   </Popconfirm>
                </inner.td>
@@ -93,10 +98,16 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
                </inner.td>
             </Link>
          }
-         <inner.td>{el?.name ? el.name.slice(0, 40) : el?.variationName ? el.variationName.slice(0, 40) : null}</inner.td>
+         <inner.td>
+            {el?.name ? el.name.slice(0, 40) : el?.variationName ? el.variationName.slice(0, 40) : null}
+         </inner.td>
          <inner.td>{el?.price ? el.price : el?.regularPrice ? el?.regularPrice : null}</inner.td>
          <inner.td>
-            {el?.salePrice && !!el.salePrice ? <div className="Sale">{el.salePrice}</div> : <div className="no_sale">No Sale</div>}
+            {el?.salePrice && !!el.salePrice ? (
+               <div className="Sale">{el.salePrice}</div>
+            ) : (
+               <div className="no_sale">No Sale</div>
+            )}
          </inner.td>
          <inner.td></inner.td>
          <inner.td>

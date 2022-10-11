@@ -83,6 +83,7 @@ const INITAL_STATE = {
    downloadTemplateLoading: false,
    importCsvLoading: false,
    importCsvInfo: null,
+   showProductUploadInfoComponent: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -1063,6 +1064,12 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             importCsvLoading: action.payload,
+         };
+
+      case ACTION_TYPE.SHOW_PRODUCT_UPLOAD_INFO_COMPONENT:
+         return {
+            ...state,
+            showProductUploadInfoComponent: action.payload,
          };
 
       default:

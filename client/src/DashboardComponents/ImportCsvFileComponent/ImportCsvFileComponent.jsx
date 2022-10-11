@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as styles from "./ImportCsvFileComponent.style";
 import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
 import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
 import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 import { downloadCsvTemplate, importCsvFile } from "../../Redux/Actions/adminAction";
-import { downloadTemplateLoadingFunction, insertCsvLoading } from "../../Redux/Actions/appAction";
+import { downloadTemplateLoadingFunction, insertCsvLoading, showProductInfoCom } from "../../Redux/Actions/appAction";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
+import { AiFillQuestionCircle } from "@react-icons/all-files/ai/AiFillQuestionCircle";
+import UploadCsvProductsInfomationComponent from "../UploadCsvProductsInfomationComponent/UploadCsvProductsInfomationComponent";
 
 function ImportCsvFileComponent() {
    const [CSVFile, setCSVFile] = useState({
@@ -14,8 +16,9 @@ function ImportCsvFileComponent() {
    });
 
    const dispatch = useDispatch();
-   // [-]
-   const { downloadTemplateLoading, importCsvLoading, importCsvInfo } = useSelector((state) => state.admin);
+   const { downloadTemplateLoading, importCsvLoading, importCsvInfo, showProductUploadInfoComponent } = useSelector(
+      (state) => state.admin
+   );
 
    const downloadTemplate = function () {
       dispatch(downloadCsvTemplate());
@@ -39,8 +42,21 @@ function ImportCsvFileComponent() {
       }
    };
 
+   const showProductUploadInfo = function () {
+      dispatch(showProductInfoCom(true));
+   };
+
+   useEffect(() => {
+      if (!!importCsvInfo && importCsvInfo.success) {
+         message.success("product uploded successfully");
+      } else if (!!importCsvInfo && !importCsvInfo.success) {
+         message.info("something worng!");
+      }
+   }, [importCsvInfo]);
+
    return (
       <styles.div>
+         <UploadCsvProductsInfomationComponent show={showProductUploadInfoComponent} />
          <DashboardNavbarComponent />
          <styles.spaceDiv>
             <HeadingComponent
@@ -69,6 +85,12 @@ function ImportCsvFileComponent() {
                      innerText={"Download CSV template"}
                      btnCl={"category_upload"}
                   />
+               </div>
+               <div className="question_icons">
+                  <div className="info_div">
+                     <p>More infomation</p>
+                  </div>
+                  <AiFillQuestionCircle onClick={showProductUploadInfo} />
                </div>
             </styles.flexDiv>
          </styles.spaceDiv>

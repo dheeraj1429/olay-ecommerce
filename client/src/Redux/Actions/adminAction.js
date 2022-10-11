@@ -298,10 +298,13 @@ export const deleteSelectedproducts = function (data) {
    };
 };
 
-export const deleteOneProduct = function (id) {
+export const deleteOneProduct = function (id, categoryId, brandId) {
    return async function (dispatch) {
       try {
-         const deleteOneProducts = await axios.delete(`/admin/delete-one-product/${id}`, Headers);
+         const deleteOneProducts = await axios.delete(
+            `/admin/delete-one-product?id=${id}&categoryId=${categoryId}&brandId=${brandId}`,
+            Headers
+         );
 
          if (deleteOneProducts && deleteOneProducts?.data && deleteOneProducts?.data?.success) {
             dispatch({

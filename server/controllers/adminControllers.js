@@ -548,18 +548,34 @@ const deleteSelectedProducts = catchAsync(async function (req, res, next) {
    }
 });
 
+const removeIdsFromDocuments = async function (collection, collecitonId, productId) {
+   /**
+    * once admin just delete the products we also make sure to delete the products from category
+    * or the product brands collections.
+    */
+   await collection.updateOne({ _id: collecitonId }, { $pull: { products: { productId: productId } } });
+};
+
 /**
  * @deleteOneProduct delete one selected products from the database
  * @return if the products is successfully deleted ten send back the true response || send false response.
  */
 const deleteOneProduct = catchAsync(async function (req, res, next) {
-   const id = req.params.id;
+   const { id, categoryId, brandId } = req.query;
 
    if (!id) {
       return res.status(httpStatusCodes.OK).json({
          success: false,
          message: "product id is required!",
       });
+   }
+
+   if (id && categoryId !== "undefined") {
+      await removeIdsFromDocuments(categoryModel, categoryId, id);
+   }
+
+   if (id && brandId !== "undefined") {
+      await removeIdsFromDocuments(productBrandModel, brandId, id);
    }
 
    const deleteProduct = await productModel.deleteOne({ _id: id });
@@ -627,7 +643,8 @@ const editSingleProduct = catchAsync(async function (req, res, next) {
    const file = req.files[0];
 
    /**
-    * if the user remove remove the selected barnd or selected category then remove the product id from the brand and also from the category.
+    * if the user remove remove the selected barnd or selected category then remove the product id
+    * from the brand and also from the category.
     */
    const { selectedProductId } = req.query;
 
@@ -649,8 +666,8 @@ const editSingleProduct = catchAsync(async function (req, res, next) {
     *
     * if the admin update the product and change the category and the brand fileds. we want to first grab
     * the prev id and keep tracking to which id or which collections data has alrady.
-    * if we grab the id and the prve collections id. first we need to store the id into the new collection
-    * and push the id into the new collections document and store.
+    * We want to grab the id and the prve collections id. first we need to store the id into the new
+    * collection and push the id into the new collections document and store.
     *
     * and then remove the id -> product id from the prev colletions. because we don't want to store product
     * into the multipal collecitons.
@@ -703,6 +720,7 @@ const editSingleProduct = catchAsync(async function (req, res, next) {
       });
    }
 });
+
 /**
  * @insertNewProductTag insert new tags into the database if the tag is not exists. the product tag is already exists then return the response to the client.
  */

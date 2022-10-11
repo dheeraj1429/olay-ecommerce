@@ -74,7 +74,7 @@ route.delete("/delete-selected-category/:id", adminController.deleteSelectedCate
 route.delete("/delete-one-product-brand/:id", adminController.deleteOneProductBrand);
 route.delete("/delete-all-products-brand", adminController.deleteAllProductBrand);
 route.delete("/delete-all-products", adminController.deleteAllProducts);
-route.delete("/delete-one-product/:id", adminController.deleteOneProduct);
+route.delete("/delete-one-product", adminController.deleteOneProduct);
 route.delete("/delete-all-products-tags", adminController.deleteAllProductTags);
 route.delete("/delete-single-product-tags/:id", adminController.deleteSelectedTag);
 route.delete("/remove-all-color-swatches", adminController.removeAllProductsSwatches);

@@ -446,3 +446,10 @@ export const insertCsvLoading = function (data) {
       payload: data,
    };
 };
+
+export const showProductInfoCom = function (data) {
+   return {
+      type: ACTION_TYPE.SHOW_PRODUCT_UPLOAD_INFO_COMPONENT,
+      payload: data,
+   };
+};

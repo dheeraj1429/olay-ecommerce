@@ -16,10 +16,10 @@ import { VscTextSize } from "@react-icons/all-files/vsc/VscTextSize";
 import { GoZap } from "@react-icons/all-files/go/GoZap";
 import { MdLabelOutline } from "@react-icons/all-files/md/MdLabelOutline";
 import { GoTools } from "@react-icons/all-files/go/GoTools";
-import { SiWebmoney } from "@react-icons/all-files/si/SiWebmoney";
 import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
 import { AiOutlineExport } from "@react-icons/all-files/ai/AiOutlineExport";
 import { VscHistory } from "@react-icons/all-files/vsc/VscHistory";
+import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
@@ -85,8 +85,8 @@ function DashboardPanelSidebarComponent() {
                isShow={SmSidebar}
             >
                <DashboardNavigationComponent
-                  icon={<SiWebmoney />}
-                  innerText={"Website"}
+                  icon={<AiOutlineHome />}
+                  innerText={"Dashboard"}
                   activeBar={true}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}

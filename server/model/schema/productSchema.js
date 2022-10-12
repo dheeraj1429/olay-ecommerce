@@ -19,7 +19,10 @@ const productSchema = new mongoose.Schema({
    tags: [{ _id: { type: mongoose.Types.ObjectId, ref: "tag" } }],
    variations: [
       {
-         variationName: { type: String, required: [true, "product sub variation name is reuqired"] },
+         variationName: {
+            type: String,
+            required: [true, "product sub variation name is reuqired"],
+         },
          sku: { type: String },
          regularPrice: { type: Number },
          salePrice: { type: Number },

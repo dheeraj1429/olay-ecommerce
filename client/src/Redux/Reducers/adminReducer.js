@@ -84,6 +84,8 @@ const INITAL_STATE = {
    importCsvLoading: false,
    importCsvInfo: null,
    showProductUploadInfoComponent: false,
+   productGenralReport: null,
+   productGenralReportLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -168,7 +170,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
          };
 
       case ACTION_TYPE.DELETE_SELECTED_CATEGORY:
-         const filterCategory = state.productAllCategory.allCategory.filter((el) => el._id !== action.payload);
+         const filterCategory = state.productAllCategory.allCategory.filter(
+            (el) => el._id !== action.payload
+         );
          return {
             ...state,
             productAllCategory: {
@@ -216,7 +220,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                return {
                   ...state.productBrands,
                   totalDocuments: state.productBrands.totalDocuments - 1,
-                  brands: state.productBrands.brands.filter((el) => el._id !== action.selectedBrandId),
+                  brands: state.productBrands.brands.filter(
+                     (el) => el._id !== action.selectedBrandId
+                  ),
                };
             } else return state.productBrands;
          };
@@ -235,7 +241,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                productBrands: {
                   ...state.productBrands,
-                  brands: state.productBrands.brands.filter((el) => (el._id = !setPayload.has(el._id))),
+                  brands: state.productBrands.brands.filter(
+                     (el) => (el._id = !setPayload.has(el._id))
+                  ),
                },
             };
          } else {
@@ -300,7 +308,11 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allProductSwatches: {
                   ...state.allProductSwatches,
-                  allSwatches: CampareFunction(action.payload.filter, state.allProductSwatches, "allSwatches"),
+                  allSwatches: CampareFunction(
+                     action.payload.filter,
+                     state.allProductSwatches,
+                     "allSwatches"
+                  ),
                },
             };
          } else if (action.payload.filde === "sizeVariations") {
@@ -308,7 +320,11 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allSizeVariations: {
                   ...state.allSizeVariations,
-                  sizeVariations: CampareFunction(action.payload.filter, state.allSizeVariations, "sizeVariations"),
+                  sizeVariations: CampareFunction(
+                     action.payload.filter,
+                     state.allSizeVariations,
+                     "sizeVariations"
+                  ),
                },
             };
          } else if (action.payload.filde === "sales") {
@@ -324,7 +340,11 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allProductLabel: {
                   ...state.allProductLabel,
-                  allLabels: CampareFunction(action.payload.filter, state.allProductLabel, "allLabels"),
+                  allLabels: CampareFunction(
+                     action.payload.filter,
+                     state.allProductLabel,
+                     "allLabels"
+                  ),
                },
             };
          }
@@ -428,7 +448,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state,
                allProducts: {
                   ...state.allProducts,
-                  products: state.allProducts.products.filter((el) => (el._id = !setPayload.has(el._id))),
+                  products: state.allProducts.products.filter(
+                     (el) => (el._id = !setPayload.has(el._id))
+                  ),
                },
             };
          } else {
@@ -632,7 +654,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             allProductSwatches: {
                ...state.allProductSwatches,
-               allSwatches: state.allProductSwatches.allSwatches.filter((el) => el._id !== action.payload),
+               allSwatches: state.allProductSwatches.allSwatches.filter(
+                  (el) => el._id !== action.payload
+               ),
             },
          };
 
@@ -666,7 +690,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             allSizeVariations: {
                ...state.allSizeVariations,
-               sizeVariations: state.allSizeVariations.sizeVariations.filter((el) => el._id !== action.payload),
+               sizeVariations: state.allSizeVariations.sizeVariations.filter(
+                  (el) => el._id !== action.payload
+               ),
             },
          };
 
@@ -786,7 +812,10 @@ const adminReducer = function (state = INITAL_STATE, action) {
 
          return {
             ...state,
-            selectedFlashSaleProducts: checkProductIsExists(state.selectedFlashSaleProducts, action.payload),
+            selectedFlashSaleProducts: checkProductIsExists(
+               state.selectedFlashSaleProducts,
+               action.payload
+            ),
          };
 
       case ACTION_TYPE.SHOW_FETCH_SALE_COLLECTION_COMPONENT:
@@ -907,7 +936,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
       case ACTION_TYPE.REMOVE_FLASH_SALE_PRODUCTS:
          return {
             ...state,
-            selectedFlashSaleProducts: state.selectedFlashSaleProducts.filter((el) => el.id !== action.payload),
+            selectedFlashSaleProducts: state.selectedFlashSaleProducts.filter(
+               (el) => el.id !== action.payload
+            ),
          };
 
       case ACTION_TYPE.INSERT_NEW_PRODUCT_COLOR_LABEL:
@@ -1070,6 +1101,20 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             showProductUploadInfoComponent: action.payload,
+         };
+
+      case ACTION_TYPE.PRODUCT_GET_GENRNAL_REPORT:
+         return {
+            ...state,
+            productGenralReport: action.payload,
+            productGenralReportLoading: false,
+         };
+
+      case ACTION_TYPE.PRODUCT_GET_GENRNAL_REPORT_LOADING:
+         return {
+            ...state,
+            productGenralReportLoading: action.payload,
+            productGenralReport: null,
          };
 
       default:

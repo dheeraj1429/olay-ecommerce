@@ -73,10 +73,22 @@ function App() {
                <Route path="variation-swatches/create" element={<VariationSwatchesComponent />} />
                <Route path="allSwatches/:id" element={<EditProductSwatchesComponent />} />
                <Route path="product-variation" element={<ProductVariationCreatorComponent />} />
-               <Route path="product/create-variations/:id" element={<CreateSelectedProductVariationComponent />} />
-               <Route path="/dashboard/product/sub-variations/:id/editSub/:id" element={<CreateSelectedProductVariationComponent />} />
-               <Route path="product-size-variation" element={<ProductSizeVariationTableComponent />} />
-               <Route path="product-size-variation/create" element={<ProductSizeVariationComponent />} />
+               <Route
+                  path="product/create-variations/:id"
+                  element={<CreateSelectedProductVariationComponent />}
+               />
+               <Route
+                  path="/dashboard/product/sub-variations/:id/editSub/:id"
+                  element={<CreateSelectedProductVariationComponent />}
+               />
+               <Route
+                  path="product-size-variation"
+                  element={<ProductSizeVariationTableComponent />}
+               />
+               <Route
+                  path="product-size-variation/create"
+                  element={<ProductSizeVariationComponent />}
+               />
                <Route path="sizeVariations/:id" element={<ProductSizeVariationEditComponent />} />
                <Route path="flash-sale" element={<FlashSaleTableViewComponent />} />
                <Route path="flash-sale/create" element={<CreateNewFlashSaleComponent />} />

@@ -132,6 +132,9 @@ const getAllExportInfo = catchAsync(async function (req, res, next) {
          });
       }
    }
+   return res.status(httpStatusCodes.OK).json({
+      success: false,
+   });
 });
 
 const deleteSingleProductHistory = catchAsync(async function (req, res, next) {

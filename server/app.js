@@ -18,6 +18,7 @@ const databaseConnectionFunction = require("./model/db/db");
 const adminRoute = require("./routes/adminRoute");
 const adminToolsRoute = require("./routes/adminToolsRoute");
 const authRoute = require("./routes/authRoute");
+const indexRoute = require("./routes/indexRoute");
 
 // middlewares
 app.use(cors("*"));
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, "build")));
 app.use(logger());
 
 // routes
+app.use("/index", indexRoute);
 app.use("/admin", adminRoute);
 app.use("/admin/tools", adminToolsRoute);
 app.use("/auth", authRoute);
@@ -71,5 +73,5 @@ if (cluster.isPrimary) {
       });
    });
 
-   console.log(`Woker ${process.pid} is running`); 
+   console.log(`Woker ${process.pid} is running`);
 }

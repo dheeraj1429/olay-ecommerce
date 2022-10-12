@@ -326,7 +326,10 @@ const updateFildes = async function (id, updateObject, res) {
          message: "Product brand information updated",
       });
    } else {
-      erroResponse(res);
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: "Not updated please selecte valid files and fill all the required fileds",
+      });
    }
 };
 
@@ -600,11 +603,7 @@ const fetchSingleProduct = catchAsync(async function (req, res, next) {
       });
    }
 
-   const findSingleProduct = await productModel
-      .findOne({ _id: id })
-      .populate("category", { name: 1 })
-      .populate("brand", { name: 1 })
-      .populate("tags._id", { name: 1 });
+   const findSingleProduct = await productModel.findOne({ _id: id }).populate("category", { name: 1 }).populate("brand", { name: 1 }).populate("tags._id", { name: 1 });
 
    if (findSingleProduct) {
       return res.status(httpStatusCodes.OK).json({
@@ -624,10 +623,7 @@ const changeCollectionDataPosition = async function (field, productId, collectio
       });
 
       if (!checkIsProductAlreadyExists) {
-         const findBrandProductAndInsertId = await collection.updateOne(
-            { _id: field },
-            { $push: { products: { productId: productId } } }
-         );
+         const findBrandProductAndInsertId = await collection.updateOne({ _id: field }, { $push: { products: { productId: productId } } });
 
          if (!!findBrandProductAndInsertId.modifiedCount) {
             await collection.updateOne({ _id: prevId }, { $pull: { products: { productId: productId } } });
@@ -1260,10 +1256,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
              */
             await imageCompress(imagePath, 150, "productImagesCompress", originalname);
 
-            insertNewSubProductVariation = await productModel.updateOne(
-               { _id: selectedProductId },
-               { $push: { variations: updatedFildes } }
-            );
+            insertNewSubProductVariation = await productModel.updateOne({ _id: selectedProductId }, { $push: { variations: updatedFildes } });
 
             sendClientResponse(res, insertNewSubProductVariation);
          } else {
@@ -1272,10 +1265,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
              */
             updatedFildes.variationImage = productModel.productImage;
 
-            insertNewSubProductVariation = await productModel.updateOne(
-               { _id: selectedProductId },
-               { $push: { variations: updatedFildes } }
-            );
+            insertNewSubProductVariation = await productModel.updateOne({ _id: selectedProductId }, { $push: { variations: updatedFildes } });
 
             sendClientResponse(res, insertNewSubProductVariation);
          }
@@ -1542,9 +1532,7 @@ const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
       next(new AppError("Flash sale id is required!"));
    }
 
-   const findSinlgeFlashSale = await saleModel
-      .findOne({ _id: id })
-      .populate("products.productId", { name: 1, productImage: 1 });
+   const findSinlgeFlashSale = await saleModel.findOne({ _id: id }).populate("products.productId", { name: 1, productImage: 1 });
 
    if (findSinlgeFlashSale) {
       return res.status(httpStatusCodes.OK).json({

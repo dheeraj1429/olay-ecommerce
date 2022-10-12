@@ -453,3 +453,10 @@ export const showProductInfoCom = function (data) {
       payload: data,
    };
 };
+
+export const productReportLoading = function (data) {
+   return {
+      type: ACTION_TYPE.PRODUCT_GET_GENRNAL_REPORT_LOADING,
+      payload: data,
+   };
+};

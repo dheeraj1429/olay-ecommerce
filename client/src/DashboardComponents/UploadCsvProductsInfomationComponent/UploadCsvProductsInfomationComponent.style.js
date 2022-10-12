@@ -24,6 +24,7 @@ export const innerDiv = styled.div`
    transform: ${(props) => (props.show ? "scale(1)" : "scale(.6)")};
    transition: all 0.3s ease;
    padding: 1rem;
+   overflow-x: hidden;
 
    .close_icons {
       position: absolute;
@@ -35,4 +36,8 @@ export const innerDiv = styled.div`
          font-size: 20px;
       }
    }
+`;
+
+export const spaceDiv = styled.div`
+   padding: 0 1rem;
 `;

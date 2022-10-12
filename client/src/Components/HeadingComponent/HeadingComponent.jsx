@@ -23,4 +23,4 @@ function HeadingComponent({ Heading, subHeading, cl, dark }) {
    );
 }
 
-export default HeadingComponent;
+export default React.memo(HeadingComponent);

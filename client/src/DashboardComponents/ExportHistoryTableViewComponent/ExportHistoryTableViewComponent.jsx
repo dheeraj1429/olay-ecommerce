@@ -1,10 +1,6 @@
 import React, { useEffect } from "react";
 import * as history from "./ExportHistoryTableViewComponent.style";
-import {
-   getAllExportInfo,
-   deleteSingleProductHistory,
-   downloadPrevHistoryFiles,
-} from "../../Redux/Actions/adminAction";
+import { getAllExportInfo, deleteSingleProductHistory, downloadPrevHistoryFiles } from "../../Redux/Actions/adminAction";
 import { useDispatch, useSelector } from "react-redux";
 import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
 import { FcDownload } from "@react-icons/all-files/fc/FcDownload";
@@ -13,7 +9,6 @@ import dayjs from "dayjs";
 import { FcVoicemail } from "@react-icons/all-files/fc/FcVoicemail";
 import EmailInfoComponent from "../EmailInfoComponent/EmailInfoComponent";
 import { hideEmailBoxFn } from "../../Redux/Actions/appAction";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
 
 const row = [
    { value: "Date", key: 1 },
@@ -47,9 +42,7 @@ function ExportHistoryTableViewComponent() {
    return (
       <>
          <EmailInfoComponent show={hideEmailBox.show} />
-         {!!adminExportHistory &&
-         adminExportHistory.success &&
-         !!adminExportHistory?.history?.exportsHistory.length ? (
+         {!!adminExportHistory && adminExportHistory.success && !!adminExportHistory?.history?.exportsHistory.length ? (
             <history.div>
                <table>
                   <tr>
@@ -67,17 +60,11 @@ function ExportHistoryTableViewComponent() {
                         <td>{el.exportProducts}</td>
                         <td>
                            <div className="flex_div">
-                              <div
-                                 className="icons_div"
-                                 onClick={() => downloadHistoryHandler(el.fileName)}
-                              >
+                              <div className="icons_div" onClick={() => downloadHistoryHandler(el.fileName)}>
                                  <FcDownload />
                                  <span>Download History</span>
                               </div>
-                              <div
-                                 className="icons_div"
-                                 onClick={() => deleteHandler(el._id, el.fileName)}
-                              >
+                              <div className="icons_div" onClick={() => deleteHandler(el._id, el.fileName)}>
                                  <FcFullTrash />
                                  <span>Delete history</span>
                               </div>

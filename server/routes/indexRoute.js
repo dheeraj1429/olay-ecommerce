@@ -1,9 +1,10 @@
-const express = require("express");
+const express = require('express');
 const route = express.Router();
-const indexController = require("../controllers/indexControllers");
+const indexController = require('../controllers/indexControllers');
 
 // API => GET
-route.get("/get-product-genral-report", indexController.getProductGenralReport);
-route.get("/get-top-flash-sale-products", indexController.getTopFlashSalePRoducts);
+route.get('/get-product-genral-report', indexController.getProductGenralReport);
+route.get('/get-top-flash-sale-products', indexController.getTopFlashSaleProducts);
+route.get('/get-signin-users', indexController.getAllSignInUsers);
 
 module.exports = route;

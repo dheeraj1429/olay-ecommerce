@@ -1,13 +1,19 @@
-import React from "react";
-import * as DsHome from "./DashboardHomeComponent.style";
-import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
-import GenralProductUploadResultComponent from "../GenralProductUploadResultComponent/GenralProductUploadResultComponent";
-import { useSelector } from "react-redux";
-import DashboardBannerComponent from "../DashboardBannerComponent/DashboardBannerComponent";
-import TopFlashSaleProductsComponent from "../TopFlashSaleProductsComponent/TopFlashSaleProductsComponent";
+import React, { useEffect } from 'react';
+import * as DsHome from './DashboardHomeComponent.style';
+import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
+import GenralProductUploadResultComponent from '../GenralProductUploadResultComponent/GenralProductUploadResultComponent';
+import { useSelector, useDispatch } from 'react-redux';
+import DashboardBannerComponent from '../DashboardBannerComponent/DashboardBannerComponent';
+import TotalCustomersComponent from '../TotalCustomersComponent/TotalCustomersComponent';
+import { getAllSignInUsers } from '../../Redux/Actions/adminAction';
 
 function DashboardHomeComponent() {
+   const dispatch = useDispatch();
    const { auth } = useSelector((state) => state.auth);
+
+   useEffect(() => {
+      dispatch(getAllSignInUsers());
+   }, []);
 
    return (
       <DsHome.div>
@@ -16,11 +22,13 @@ function DashboardHomeComponent() {
             {!!auth && auth?.success && auth?.userObject ? (
                <DashboardBannerComponent
                   Heading={`Welcome Back ${auth.userObject.name}`}
-                  subHeading={"Try to avoid your laptop after 09 pm"}
+                  subHeading={'Try to avoid your laptop after 09 pm'}
                />
             ) : null}
-            <GenralProductUploadResultComponent />
-            <TopFlashSaleProductsComponent />
+            <DsHome.flexDiv>
+               <GenralProductUploadResultComponent />
+               <TotalCustomersComponent heading={'Total Customers'} />
+            </DsHome.flexDiv>
          </DsHome.spaceDiv>
       </DsHome.div>
    );

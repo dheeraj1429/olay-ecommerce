@@ -1,33 +1,34 @@
-import React, { useState, useLayoutEffect, useCallback, useEffect } from "react";
-import * as sidebar from "./DashboardPanelSidebarComponent.style";
-import DashboardNavigationComponent from "../DashboardNavigationComponent/DashboardNavigationComponent";
-import { useNavigate } from "react-router";
-import { useCookies } from "react-cookie";
-import { useLocation } from "react-router";
-import DashboardSidebarCardComponent from "../DashboardSidebarCardComponent/DashboardSidebarCardComponent";
-import { AiOutlineShoppingCart } from "@react-icons/all-files/ai/AiOutlineShoppingCart";
-import { VscHome } from "@react-icons/all-files/vsc/VscHome";
-import { BsPhone } from "@react-icons/all-files/bs/BsPhone";
-import { GoGitBranch } from "@react-icons/all-files/go/GoGitBranch";
-import { AiOutlineLaptop } from "@react-icons/all-files/ai/AiOutlineLaptop";
-import { GoVersions } from "@react-icons/all-files/go/GoVersions";
-import { GoRepoClone } from "@react-icons/all-files/go/GoRepoClone";
-import { VscTextSize } from "@react-icons/all-files/vsc/VscTextSize";
-import { GoZap } from "@react-icons/all-files/go/GoZap";
-import { MdLabelOutline } from "@react-icons/all-files/md/MdLabelOutline";
-import { GoTools } from "@react-icons/all-files/go/GoTools";
-import { FaFileImport } from "@react-icons/all-files/fa/FaFileImport";
-import { AiOutlineExport } from "@react-icons/all-files/ai/AiOutlineExport";
-import { VscHistory } from "@react-icons/all-files/vsc/VscHistory";
-import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
+import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
+import * as sidebar from './DashboardPanelSidebarComponent.style';
+import DashboardNavigationComponent from '../DashboardNavigationComponent/DashboardNavigationComponent';
+import { useNavigate } from 'react-router';
+import { useCookies } from 'react-cookie';
+import { useLocation } from 'react-router';
+import DashboardSidebarCardComponent from '../DashboardSidebarCardComponent/DashboardSidebarCardComponent';
+import { AiOutlineShoppingCart } from '@react-icons/all-files/ai/AiOutlineShoppingCart';
+import { VscHome } from '@react-icons/all-files/vsc/VscHome';
+import { BsPhone } from '@react-icons/all-files/bs/BsPhone';
+import { GoGitBranch } from '@react-icons/all-files/go/GoGitBranch';
+import { AiOutlineLaptop } from '@react-icons/all-files/ai/AiOutlineLaptop';
+import { GoVersions } from '@react-icons/all-files/go/GoVersions';
+import { GoRepoClone } from '@react-icons/all-files/go/GoRepoClone';
+import { VscTextSize } from '@react-icons/all-files/vsc/VscTextSize';
+import { GoZap } from '@react-icons/all-files/go/GoZap';
+import { MdLabelOutline } from '@react-icons/all-files/md/MdLabelOutline';
+import { GoTools } from '@react-icons/all-files/go/GoTools';
+import { FaFileImport } from '@react-icons/all-files/fa/FaFileImport';
+import { AiOutlineExport } from '@react-icons/all-files/ai/AiOutlineExport';
+import { VscHistory } from '@react-icons/all-files/vsc/VscHistory';
+import { AiOutlineHome } from '@react-icons/all-files/ai/AiOutlineHome';
+import { AiOutlineInfo } from '@react-icons/all-files/ai/AiOutlineInfo';
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
-   const [Active, setActive] = useState("Home");
-   const [DashboardCard, setDashboardCard] = useState("");
+   const [Active, setActive] = useState('Dashboard');
+   const [DashboardCard, setDashboardCard] = useState('');
    const [ShowSubItems, setShowSubItems] = useState(false);
    const navigation = useNavigate();
-   const [cookie] = useCookies(["user"]);
+   const [cookie] = useCookies(['user']);
    const location = useLocation();
 
    const SmSidebarHandler = useCallback(
@@ -55,29 +56,26 @@ function DashboardPanelSidebarComponent() {
       if (!!cookie && cookie.user) {
          return;
       } else {
-         navigation("/admin/sign-in");
+         navigation('/admin/sign-in');
       }
    }, [cookie]);
 
    useEffect(() => {
-      const splitPath = location.pathname.split("/");
-      const [first, ...second] = splitPath[splitPath.length - 1].split("-");
+      const splitPath = location.pathname.split('/');
+      const [first, ...second] = splitPath[splitPath.length - 1].split('-');
       const firstCaps = first.slice(0, 1).toUpperCase() + first.slice(1).toLowerCase();
-      const result = [firstCaps, ...second].join(" ");
-      if (result === "Dashboard") {
-         setActive("Home");
-      } else {
+      const result = [firstCaps, ...second].join(' ');
+      if (result !== 'Dashboard') {
          setActive(result);
       }
    }, [location.pathname]);
 
    return (
       <sidebar.div SmSidebar={SmSidebar ? SmSidebar : null}>
-         {/* <AiOutlineBars onClick={SmSidebarHandler} className="Margin_elm" /> */}
          <h1>Dashboard</h1>
          <div className="sidebar_fix_container">
             <DashboardSidebarCardComponent
-               heading={"Home"}
+               heading={'Home'}
                icon={<VscHome />}
                onClick={dashboardActiveHandler}
                show={DashboardCard}
@@ -86,7 +84,7 @@ function DashboardPanelSidebarComponent() {
             >
                <DashboardNavigationComponent
                   icon={<AiOutlineHome />}
-                  innerText={"Dashboard"}
+                  innerText={'Dashboard'}
                   activeBar={true}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
@@ -96,7 +94,7 @@ function DashboardPanelSidebarComponent() {
             </DashboardSidebarCardComponent>
 
             <DashboardSidebarCardComponent
-               heading={"Ecommerce"}
+               heading={'Ecommerce'}
                icon={<AiOutlineShoppingCart />}
                onClick={dashboardActiveHandler}
                show={DashboardCard}
@@ -105,7 +103,7 @@ function DashboardPanelSidebarComponent() {
             >
                <DashboardNavigationComponent
                   icon={<BsPhone />}
-                  innerText={"All products"}
+                  innerText={'All products'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -113,7 +111,7 @@ function DashboardPanelSidebarComponent() {
                />
                <DashboardNavigationComponent
                   icon={<GoGitBranch />}
-                  innerText={"Product category"}
+                  innerText={'Product category'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -122,7 +120,7 @@ function DashboardPanelSidebarComponent() {
 
                <DashboardNavigationComponent
                   icon={<AiOutlineLaptop />}
-                  innerText={"Product brands"}
+                  innerText={'Product brands'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -131,7 +129,7 @@ function DashboardPanelSidebarComponent() {
 
                <DashboardNavigationComponent
                   icon={<GoZap />}
-                  innerText={"Flash sale"}
+                  innerText={'Flash sale'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -140,7 +138,7 @@ function DashboardPanelSidebarComponent() {
 
                <DashboardNavigationComponent
                   icon={<GoVersions />}
-                  innerText={"Variation swatches"}
+                  innerText={'Variation swatches'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -148,7 +146,7 @@ function DashboardPanelSidebarComponent() {
                />
                <DashboardNavigationComponent
                   icon={<VscTextSize />}
-                  innerText={"Product size variation"}
+                  innerText={'Product size variation'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -156,7 +154,7 @@ function DashboardPanelSidebarComponent() {
                />
                <DashboardNavigationComponent
                   icon={<GoRepoClone />}
-                  innerText={"Product variation"}
+                  innerText={'Product variation'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -164,7 +162,15 @@ function DashboardPanelSidebarComponent() {
                />
                <DashboardNavigationComponent
                   icon={<MdLabelOutline />}
-                  innerText={"Product label"}
+                  innerText={'Product label'}
+                  isShow={SmSidebar}
+                  onClick={ActiveHandler}
+                  Active={Active}
+                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<AiOutlineInfo />}
+                  innerText={'Information'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -172,7 +178,7 @@ function DashboardPanelSidebarComponent() {
                />
             </DashboardSidebarCardComponent>
             <DashboardSidebarCardComponent
-               heading={"Tools"}
+               heading={'Tools'}
                icon={<GoTools />}
                onClick={dashboardActiveHandler}
                show={DashboardCard}
@@ -181,7 +187,7 @@ function DashboardPanelSidebarComponent() {
             >
                <DashboardNavigationComponent
                   icon={<FaFileImport />}
-                  innerText={"Import product"}
+                  innerText={'Import product'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -189,7 +195,7 @@ function DashboardPanelSidebarComponent() {
                />
                <DashboardNavigationComponent
                   icon={<AiOutlineExport />}
-                  innerText={"Export product"}
+                  innerText={'Export product'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
@@ -197,7 +203,7 @@ function DashboardPanelSidebarComponent() {
                />
                <DashboardNavigationComponent
                   icon={<VscHistory />}
-                  innerText={"Export history"}
+                  innerText={'Export history'}
                   isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}

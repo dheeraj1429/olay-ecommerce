@@ -1,45 +1,45 @@
-require("dotenv").config();
-const express = require("express");
+require('dotenv').config();
+const express = require('express');
 const app = express();
-const http = require("http").createServer(app);
-const helmat = require("helmet");
-const logger = require("morgan");
+const http = require('http').createServer(app);
+const helmat = require('helmet');
+const logger = require('morgan');
 const port = process.env.PORT || 8000;
-const path = require("path");
-const cors = require("cors");
-const numCPUs = require("node:os").cpus().length;
-const cluster = require("node:cluster");
-const cookieParser = require("cookie-parser");
+const path = require('path');
+const cors = require('cors');
+const numCPUs = require('node:os').cpus().length;
+const cluster = require('node:cluster');
+const cookieParser = require('cookie-parser');
 
 // database connection
-const databaseConnectionFunction = require("./model/db/db");
+const databaseConnectionFunction = require('./model/db/db');
 
 // routes files
-const adminRoute = require("./routes/adminRoute");
-const adminToolsRoute = require("./routes/adminToolsRoute");
-const authRoute = require("./routes/authRoute");
-const indexRoute = require("./routes/indexRoute");
+const adminRoute = require('./routes/adminRoute');
+const adminToolsRoute = require('./routes/adminToolsRoute');
+const authRoute = require('./routes/authRoute');
+const indexRoute = require('./routes/indexRoute');
 
 // middlewares
-app.use(cors("*"));
-app.options("*", cors());
+app.use(cors('*'));
+app.options('*', cors());
 app.use(helmat());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "upload")));
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, 'upload')));
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(logger());
 
 // routes
-app.use("/index", indexRoute);
-app.use("/admin", adminRoute);
-app.use("/admin/tools", adminToolsRoute);
-app.use("/auth", authRoute);
+app.use('/index', indexRoute);
+app.use('/admin', adminRoute);
+app.use('/admin/tools', adminToolsRoute);
+app.use('/auth', authRoute);
 
 // server the build file.
-app.all("*", (req, res) => {
-   res.sendFile(path.join(__dirname, "build", "index.html"));
+app.all('*', (req, res) => {
+   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 // catch the error.
@@ -47,7 +47,7 @@ app.use((err, req, res, next) => {
    console.log(err.stack);
 
    err.statusCode = err.statusCode || 500;
-   err.status = err.status || "error";
+   err.status = err.status || 'error';
 
    res.status(err.statusCode).json({
       status: err.status,
@@ -62,7 +62,7 @@ if (cluster.isPrimary) {
       cluster.fork();
    }
 
-   cluster.on("exit", (Worker, code, signal) => {
+   cluster.on('exit', (Worker, code, signal) => {
       console.log(`Worker ${Worker.process.pid} died`);
    });
 } else {

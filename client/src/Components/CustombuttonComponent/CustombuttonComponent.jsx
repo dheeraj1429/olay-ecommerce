@@ -1,6 +1,6 @@
-import React from "react";
-import * as btn from "./CustombuttonComponent.style";
-import HocSpnnerComponent from "../HocSpnnerComponent/HocSpnnerComponent";
+import React from 'react';
+import * as btn from './CustombuttonComponent.style';
+import HocSpnnerComponent from '../HocSpnnerComponent/HocSpnnerComponent';
 
 function CustombuttonComponent({ children, innerText, btnCl, onClick }) {
    return (

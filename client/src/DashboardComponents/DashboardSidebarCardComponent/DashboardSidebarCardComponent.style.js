@@ -1,10 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const div = styled.div`
    width: 100%;
    padding: 0.5rem 1rem;
    border-radius: 8px;
-   max-height: ${(props) => (!props.ShowDrop ? "38px" : "410px")};
+   max-height: ${(props) => (!props.ShowDrop ? '38px' : '500px')};
    position: relative;
    margin: 0.2rem 0;
    /* border: 1px solid var(--smooth-light-color); */

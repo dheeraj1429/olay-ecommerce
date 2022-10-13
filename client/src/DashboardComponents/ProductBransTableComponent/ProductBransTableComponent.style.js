@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const div = styled.div`
    table {
@@ -21,22 +21,6 @@ export const div = styled.div`
             height: 100%;
             background-color: var(--main-cl);
          }
-      }
-   }
-
-   table tr {
-      text-align: left;
-
-      th {
-         font-size: 13px;
-         color: var(--smooth-light-color);
-         font-weight: 400;
-         padding: 0.8rem;
-      }
-
-      td {
-         padding: 0.8rem;
-         color: var(--smooth-light-color);
       }
    }
 `;

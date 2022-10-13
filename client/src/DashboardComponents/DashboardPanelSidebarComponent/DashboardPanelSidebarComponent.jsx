@@ -23,7 +23,7 @@ import { AiOutlineHome } from "@react-icons/all-files/ai/AiOutlineHome";
 
 function DashboardPanelSidebarComponent() {
    const [SmSidebar, setSmSidebar] = useState(false);
-   const [Active, setActive] = useState("Home");
+   const [Active, setActive] = useState("Dashboard");
    const [DashboardCard, setDashboardCard] = useState("");
    const [ShowSubItems, setShowSubItems] = useState(false);
    const navigation = useNavigate();
@@ -65,7 +65,7 @@ function DashboardPanelSidebarComponent() {
       const firstCaps = first.slice(0, 1).toUpperCase() + first.slice(1).toLowerCase();
       const result = [firstCaps, ...second].join(" ");
       if (result === "Dashboard") {
-         setActive("Home");
+         setActive("Dashboard");
       } else {
          setActive(result);
       }

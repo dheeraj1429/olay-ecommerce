@@ -87,6 +87,9 @@ const INITAL_STATE = {
    productGenralReport: null,
    productGenralReportLoading: false,
    totalSignInUserReport: null,
+   shopSettingRespose: null,
+   shopSettingLoading: false,
+   shopInformation: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -1005,7 +1008,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.adminExportHistory,
                history: {
                   ...state.adminExportHistory.history,
-                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter((el) => el._id !== action.payload),
+                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter(
+                     (el) => el._id !== action.payload
+                  ),
                },
             },
          };
@@ -1091,6 +1096,33 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             totalSignInUserReport: action.payload,
+         };
+
+      case ACTION_TYPE.SHOP_INFORMATION:
+         return {
+            ...state,
+            shopSettingRespose: action.payload,
+            shopSettingLoading: false,
+         };
+
+      case ACTION_TYPE.SHOP_INFORMATION_LOADING:
+         return {
+            ...state,
+            shopSettingLoading: action.payload,
+            shopSettingRespose: null,
+         };
+
+      case ACTION_TYPE.GET_SHOP_INFORMATION:
+         return {
+            ...state,
+            shopInformation: action.payload,
+         };
+
+      case ACTION_TYPE.UPDATE_SHOP_INFOMATION:
+         return {
+            ...state,
+            shopSettingRespose: action.payload,
+            shopSettingLoading: false,
          };
 
       default:

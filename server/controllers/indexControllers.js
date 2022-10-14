@@ -35,9 +35,6 @@ const getProductGenralReport = catchAsync(async function (req, res, next) {
    }
 });
 
-// [-]
-const getTopFlashSaleProducts = catchAsync(async function (req, res, next) {});
-
 const getAllSignInUsers = catchAsync(async function (req, res, next) {
    const genrateUserReport = await groupDataFunction(userModel, 'TotalUserSignIn');
 
@@ -56,6 +53,5 @@ const getAllSignInUsers = catchAsync(async function (req, res, next) {
 
 module.exports = {
    getProductGenralReport,
-   getTopFlashSaleProducts,
    getAllSignInUsers,
 };

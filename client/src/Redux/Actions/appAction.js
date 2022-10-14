@@ -1,4 +1,4 @@
-import { ACTION_TYPE } from "../ActionTypes/actionType";
+import { ACTION_TYPE } from '../ActionTypes/actionType';
 
 export const setLoginUser = function (data) {
    return {
@@ -457,6 +457,13 @@ export const showProductInfoCom = function (data) {
 export const productReportLoading = function (data) {
    return {
       type: ACTION_TYPE.PRODUCT_GET_GENRNAL_REPORT_LOADING,
+      payload: data,
+   };
+};
+
+export const shopInformatonLoading = function (data) {
+   return {
+      type: ACTION_TYPE.SHOP_INFORMATION_LOADING,
       payload: data,
    };
 };

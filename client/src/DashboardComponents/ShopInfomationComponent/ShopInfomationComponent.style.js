@@ -45,4 +45,13 @@ export const flexDiv = styled.div`
 export const halfDiv = styled.div`
    width: 50%;
    padding-right: 0.5rem;
+
+   .css-wb57ya-MuiFormControl-root-MuiTextField-root .css-1q60rmi-MuiAutocomplete-endAdornment {
+      width: auto !important;
+   }
+`;
+
+export const smDiv = styled.div`
+   width: 50% !important;
+   padding-right: 0.5rem;
 `;

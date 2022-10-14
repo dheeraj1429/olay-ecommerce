@@ -27,4 +27,15 @@ const tableTrAr = [
    { value: 'Remove', key: 7 },
 ];
 
-export { UnitOfHeigthAr, UnitOfWeight, ThousandsSeparator, tableTrAr };
+const positionData = [
+   {
+      value: 'Before number',
+      label: 'Before number',
+   },
+   {
+      value: 'After number',
+      label: 'After number',
+   },
+];
+
+export { UnitOfHeigthAr, UnitOfWeight, ThousandsSeparator, tableTrAr, positionData };

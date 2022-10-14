@@ -241,7 +241,10 @@ export const uplodNewProduct = function (data) {
 export const fetchUploadProducts = function (page, docItems) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`, headers);
+         const fetchProducts = await axios.get(
+            `/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`,
+            headers
+         );
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
@@ -1035,7 +1038,10 @@ export const getAllExportInfo = function () {
 export const deleteSingleProductHistory = function (id, fileName) {
    return async function (dispatch) {
       try {
-         const deleteProductHistory = await axios.delete(`/admin/tools/delete-single-product-history/${id}/${fileName}`, headers);
+         const deleteProductHistory = await axios.delete(
+            `/admin/tools/delete-single-product-history/${id}/${fileName}`,
+            headers
+         );
 
          if (deleteProductHistory && deleteProductHistory?.data && deleteProductHistory?.data?.success) {
             dispatch({
@@ -1131,19 +1137,6 @@ export const getProductGenralReport = function () {
    };
 };
 
-// [-] this function is not used.
-export const getTopFlashSaleProducts = function () {
-   return async function (dispatch) {
-      try {
-         const topFlashSaleProducts = await axios.get('/index/get-top-flash-sale-products', headers);
-
-         console.log(topFlashSaleProducts);
-      } catch (err) {
-         console.log(err);
-      }
-   };
-};
-
 export const getAllSignInUsers = function () {
    return async function (dispatch) {
       try {
@@ -1153,6 +1146,57 @@ export const getAllSignInUsers = function () {
             dispatch({
                type: ACTION_TYPE.GET_ALL_SIGNIN_USERS,
                payload: getUsers && getUsers?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const ShopSetting = function (data) {
+   return async function (dispatch) {
+      try {
+         const shopSettingReponse = await axios.post('/admin/shop-setting', data, headers);
+
+         if (shopSettingReponse && shopSettingReponse?.data) {
+            dispatch({
+               type: ACTION_TYPE.SHOP_INFORMATION,
+               payload: shopSettingReponse && shopSettingReponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getShopInfromation = function () {
+   return async function (dispatch) {
+      try {
+         const getShopInfo = await axios.get('/admin/get-shop-info', headers);
+
+         if (getShopInfo && getShopInfo?.data && getShopInfo?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.GET_SHOP_INFORMATION,
+               payload: getShopInfo && getShopInfo?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const updateShopInformation = function (data) {
+   return async function (dispatch) {
+      try {
+         const updateShopInfo = await axios.patch('/admin/update-shop-info', data, headers);
+
+         if (updateShopInfo && updateShopInfo?.data && updateShopInfo?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.UPDATE_SHOP_INFOMATION,
+               payload: updateShopInfo && updateShopInfo?.data,
             });
          }
       } catch (err) {

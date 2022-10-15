@@ -20,4 +20,20 @@ export const div = styled.div`
          font-size: 20px;
       }
    }
+
+   .Close {
+      padding: 0.2rem 2rem;
+      width: max-content;
+      border-radius: 5px;
+      background-color: var(--spec-brand-link-text);
+      color: var(--main-cl);
+   }
+
+   .Open {
+      padding: 0.2rem 2rem;
+      width: max-content;
+      border-radius: 5px;
+      background-color: var(--google-button-cl);
+      color: var(--main-cl);
+   }
 `;

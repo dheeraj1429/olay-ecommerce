@@ -877,6 +877,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                   name: action.payload.sale.name,
                   statusInfo: action.payload.sale.statusInfo,
                   _id: action.payload.sale._id,
+                  dateOfStart: action.payload.sale.dateOfStart,
+                  dateOfStartTime: action.payload.sale.dateOfStartTime,
+                  dateOfEndTime: action.payload.sale.dateOfEndTime,
                   dateOfend: action.payload.sale.dateOfend,
                   label: action.payload?.sale?.label ? action.payload.sale.label : null,
                },
@@ -1123,6 +1126,12 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             shopSettingRespose: action.payload,
             shopSettingLoading: false,
+         };
+
+      case ACTION_TYPE.REMOVE_FLASH_SALE_SELECTED_PRODUCTS:
+         return {
+            ...state,
+            selectedFlashSaleProducts: state.selectedFlashSaleProducts.filter((el) => el.id !== action.payload),
          };
 
       default:

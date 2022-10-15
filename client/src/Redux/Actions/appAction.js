@@ -467,3 +467,10 @@ export const shopInformatonLoading = function (data) {
       payload: data,
    };
 };
+
+export const removeFlashSaleSelectedProducts = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_FLASH_SALE_SELECTED_PRODUCTS,
+      payload: data,
+   };
+};

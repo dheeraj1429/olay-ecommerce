@@ -1,10 +1,10 @@
-const path = require("path");
-const sharp = require("sharp");
-const jwt = require("jsonwebtoken");
+const path = require('path');
+const sharp = require('sharp');
+const jwt = require('jsonwebtoken');
 const JWT_TOKEN = process.env.JWT_TOKEN;
-const fs = require("fs");
-const fetch = require("node-fetch");
-const productModel = require("../model/schema/productSchema");
+const fs = require('fs');
+const fetch = require('node-fetch');
+const productModel = require('../model/schema/productSchema');
 
 const imageCompress = async function (imagePath, imageQulity, folder, originalname) {
    /**
@@ -15,7 +15,10 @@ const imageCompress = async function (imagePath, imageQulity, folder, originalna
     * grab all the information and then compress the image.
     */
 
-   await sharp(imagePath).resize(imageQulity, imageQulity).jpeg({ quality: 100 }).toFile(path.join(__dirname, "..", "upload", folder, originalname));
+   await sharp(imagePath)
+      .resize(imageQulity, imageQulity)
+      .jpeg({ quality: 100 })
+      .toFile(path.join(__dirname, '..', 'upload', folder, originalname));
 };
 
 const catchAsync = (fn) => {
@@ -31,7 +34,15 @@ const catchAsync = (fn) => {
    };
 };
 
-const fetchLimitDocument = async function (collection, page, res, httpStatusCodes, DOCUMENT_LIMIT, filed, item = undefined) {
+const fetchLimitDocument = async function (
+   collection,
+   page,
+   res,
+   httpStatusCodes,
+   DOCUMENT_LIMIT,
+   filed,
+   item = undefined
+) {
    /**
     * @collection which mongodb collections db we want to update and get back the infomations.
     * @page numbers of the documents. for making the pagination effect.
@@ -46,8 +57,8 @@ const fetchLimitDocument = async function (collection, page, res, httpStatusCode
       documents = await collection.countDocuments({});
       findData = await collection
          .find({}, item ? item : null)
-         .populate("brand")
-         .populate("category")
+         .populate('brand')
+         .populate('category')
          .limit(DOCUMENT_LIMIT)
          .skip(page * DOCUMENT_LIMIT);
    } else {
@@ -66,7 +77,7 @@ const fetchLimitDocument = async function (collection, page, res, httpStatusCode
          [`${filed}`]: findData,
       });
    } else {
-      throw new Error("somting worng with fetching document");
+      throw new Error('somting worng with fetching document');
    }
 };
 
@@ -102,7 +113,7 @@ const productExportFolderPath = function (fileName) {
    /**
     * @folderPath .. => one folder up level , datafiles/exportsData/products/filename
     */
-   const folderPath = path.join(__dirname, "..", "dataFiles", "exportData", "Products", fileName);
+   const folderPath = path.join(__dirname, '..', 'dataFiles', 'exportData', 'Products', fileName);
    return folderPath;
 };
 
@@ -122,7 +133,7 @@ const downloadImageFromWeb = async function (url, imagePath, compressImageFolder
 
       fs.exists(imagePath, (exists) => {
          if (exists) {
-            console.log("file exists");
+            console.log('file exists');
          } else {
             const response = fetch(url).then((resp) => resp.buffer());
             response.then((data) => {
@@ -144,8 +155,13 @@ const downloadImageFromWeb = async function (url, imagePath, compressImageFolder
 };
 
 const numberConvert = function (string) {
-   const number = string.replaceAll(",", "");
+   const number = string.replaceAll(',', '');
    return +number;
+};
+
+const convertFormateDate = function (date) {
+   const splitDateAr = parseInt(date.getTime().toString().slice(0, -3));
+   return splitDateAr;
 };
 
 module.exports = {
@@ -157,4 +173,5 @@ module.exports = {
    productExportFolderPath,
    downloadImageFromWeb,
    numberConvert,
+   convertFormateDate,
 };

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import * as sale from "./CreateNewFlashSaleComponent.style";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import FetchListComponent from "../FetchListComponent/FetchListComponent";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect, useRef } from 'react';
+import * as sale from './CreateNewFlashSaleComponent.style';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import HeadingComponent from '../../Components/HeadingComponent/HeadingComponent';
+import FetchListComponent from '../FetchListComponent/FetchListComponent';
+import { useSelector, useDispatch } from 'react-redux';
 import {
    removeSingleFlashSaleData,
    removeUpdateFlashSaleInfo,
@@ -12,33 +12,32 @@ import {
    insertNewSaleCollectionLodingFn,
    removeFlashSaleInfo,
    loadingUpdateSingleFlashSale,
-} from "../../Redux/Actions/appAction";
-import SaleSelectedProductComponent from "../SaleSelectedProductComponent/SaleSelectedProductComponent";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { MenuItem } from "@mui/material";
-import { message } from "antd";
-import {
-   getAllProductLable,
-   insertNewProductFlashSale,
-   updateSingleFlashSale,
-} from "../../Redux/Actions/adminAction";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useLayoutEffect } from "react";
+} from '../../Redux/Actions/appAction';
+import SaleSelectedProductComponent from '../SaleSelectedProductComponent/SaleSelectedProductComponent';
+import CustombuttonComponent from '../../Components/CustombuttonComponent/CustombuttonComponent';
+import { MenuItem } from '@mui/material';
+import { message } from 'antd';
+import { getAllProductLable, insertNewProductFlashSale, updateSingleFlashSale } from '../../Redux/Actions/adminAction';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 const STATUS = [
-   { value: "Published", label: "Published" },
-   { value: "Draft", label: "Draft" },
-   { value: "Pending", label: "Pending" },
+   { value: 'Published', label: 'Published' },
+   { value: 'Draft', label: 'Draft' },
+   { value: 'Pending', label: 'Pending' },
 ];
 
 function CreateNewFlashSaleComponent({ param }) {
    const [SaleInfo, setSaleInfo] = useState({
-      name: "",
-      statusInfo: "",
-      dateOfend: "",
-      label: "",
+      name: '',
+      statusInfo: '',
+      dateOfStart: '',
+      dateOfStartTime: '',
+      dateOfend: '',
+      dateOfEndTime: '',
+      label: '',
    });
 
    const productRef = useRef();
@@ -55,8 +54,8 @@ function CreateNewFlashSaleComponent({ param }) {
       allProductLabel,
    } = useSelector((state) => state.admin);
 
-   const DataChangeHandler = (newValue) => {
-      setSaleInfo({ ...SaleInfo, dateOfend: newValue.$d });
+   const DataChangeHandler = (newValue, filed) => {
+      setSaleInfo({ ...SaleInfo, [filed]: newValue.$d });
    };
 
    const selecteLabelHandler = function (event) {
@@ -83,6 +82,14 @@ function CreateNewFlashSaleComponent({ param }) {
       }
    };
 
+   const removeStateHandler = function (id) {
+      for (let item in SaleInfo.selectedProduct) {
+         if (id === item) {
+            delete SaleInfo.selectedProduct[item];
+         }
+      }
+   };
+
    const handleChange = (event) => {
       setSaleInfo({ ...SaleInfo, statusInfo: event.target.value });
    };
@@ -102,22 +109,27 @@ function CreateNewFlashSaleComponent({ param }) {
          ...SaleInfo,
          selectedProduct: {
             ...SaleInfo.selectedProduct,
-            [data]: { salePrice: "", quntity: "" },
+            [data]: { salePrice: '', quntity: '' },
          },
       });
    };
 
    const SendHandler = function () {
       if (SaleInfo.name) {
-         if (!param) {
-            dispatch(insertNewProductFlashSale(SaleInfo));
-            dispatch(insertNewSaleCollectionLodingFn(true));
+         if (!!SaleInfo.dateOfStart && !!SaleInfo.dateOfStartTime && !!SaleInfo.dateOfend && !!SaleInfo.dateOfEndTime) {
+            if (!param) {
+               console.log(SaleInfo);
+               dispatch(insertNewProductFlashSale(SaleInfo));
+               dispatch(insertNewSaleCollectionLodingFn(true));
+            } else {
+               dispatch(updateSingleFlashSale(SaleInfo));
+               dispatch(loadingUpdateSingleFlashSale(true));
+            }
          } else {
-            dispatch(updateSingleFlashSale(SaleInfo));
-            dispatch(loadingUpdateSingleFlashSale(true));
+            message.info('all date fileds are required!');
          }
       } else {
-         info("Sale name is required");
+         info('Sale name is required');
       }
    };
 
@@ -145,24 +157,22 @@ function CreateNewFlashSaleComponent({ param }) {
             name: singleFlashSale.sale.name,
             statusInfo: singleFlashSale.sale.statusInfo,
             flashSaleId: singleFlashSale.sale._id,
+            dateOfStart: singleFlashSale.sale.dateOfStart,
+            dateOfStartTime: singleFlashSale.sale.dateOfStartTime,
             dateOfend: singleFlashSale.sale.dateOfend,
+            dateOfEndTime: singleFlashSale.sale.dateOfEndTime,
             selectedProduct: dataConvertObject,
-            label: singleFlashSale?.sale?.label ? singleFlashSale.sale.label : "",
+            label: singleFlashSale?.sale?.label ? singleFlashSale.sale.label : '',
          });
       }
    }, [singleFlashSale, selectedFlashSaleProducts]);
 
    useEffect(() => {
       if (!!updateFlashSale) {
-         info(updateFlashSale.message);
+         message.success(updateFlashSale.message);
          dispatch(removeUpdateFlashSaleInfo(null));
       }
    }, [updateFlashSale]);
-
-   useLayoutEffect(() => {
-      const currentData = Date.$d;
-      setSaleInfo({ ...SaleInfo, dateOfend: currentData });
-   }, []);
 
    useEffect(() => {
       dispatch(getAllProductLable());
@@ -175,7 +185,7 @@ function CreateNewFlashSaleComponent({ param }) {
    return (
       <sale.container>
          <HeadingComponent
-            Heading={param ? "Edit product flash sale" : "Product flash sale"}
+            Heading={param ? 'Edit product flash sale' : 'Product flash sale'}
             subHeading={`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,`}
          />
          <div className="flexDiv">
@@ -183,7 +193,7 @@ function CreateNewFlashSaleComponent({ param }) {
                <Box
                   component="form"
                   sx={{
-                     "& > :not(style)": { my: 1, width: "100%" },
+                     '& > :not(style)': { my: 1, width: '100%' },
                   }}
                   noValidate
                   autoComplete="off"
@@ -191,7 +201,7 @@ function CreateNewFlashSaleComponent({ param }) {
                   <TextField
                      id="outlined-basic"
                      onChange={ChangeHandler}
-                     type={"text"}
+                     type={'text'}
                      value={SaleInfo.name}
                      name="name"
                      label="Name"
@@ -207,11 +217,11 @@ function CreateNewFlashSaleComponent({ param }) {
                      showFlashSaleComponent
                         ? {
                              opacity: 1,
-                             visibility: "visible",
+                             visibility: 'visible',
                           }
                         : {
                              opacity: 0,
-                             visibility: "hidden",
+                             visibility: 'hidden',
                           }
                   }
                ></div>
@@ -220,7 +230,7 @@ function CreateNewFlashSaleComponent({ param }) {
                   <Box
                      component="form"
                      sx={{
-                        "& > :not(style)": { my: 1, width: "100%" },
+                        '& > :not(style)': { my: 1, width: '100%' },
                      }}
                      noValidate
                      autoComplete="off"
@@ -229,7 +239,7 @@ function CreateNewFlashSaleComponent({ param }) {
                         id="outlined-basic"
                         onClick={showProductHandlers}
                         name="Products"
-                        type={"search"}
+                        type={'search'}
                         label="Products"
                         variant="outlined"
                      />
@@ -247,6 +257,7 @@ function CreateNewFlashSaleComponent({ param }) {
                         {!!selectedFlashSaleProducts.length
                            ? selectedFlashSaleProducts.map((el) => (
                                 <SaleSelectedProductComponent
+                                   callBack={removeStateHandler}
                                    onChange={ChangeHandler}
                                    key={el.id}
                                    state={SaleInfo}
@@ -262,7 +273,7 @@ function CreateNewFlashSaleComponent({ param }) {
                <Box
                   component="form"
                   sx={{
-                     "& > :not(style)": { my: 1, width: "100%" },
+                     '& > :not(style)': { my: 1, width: '100%' },
                   }}
                   noValidate
                   autoComplete="off"
@@ -282,9 +293,7 @@ function CreateNewFlashSaleComponent({ param }) {
                      ))}
                   </TextField>
 
-                  {!!allProductLabel &&
-                  allProductLabel.success &&
-                  !!allProductLabel.allLabels.length ? (
+                  {!!allProductLabel && allProductLabel.success && !!allProductLabel.allLabels.length ? (
                      <TextField
                         id="outlined-select-currency"
                         select
@@ -304,10 +313,37 @@ function CreateNewFlashSaleComponent({ param }) {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                      <DesktopDatePicker
                         disablePast
+                        label="Start date of sale"
+                        inputFormat="MM/DD/YYYY"
+                        value={SaleInfo.dateOfStart}
+                        onChange={(newValue) => DataChangeHandler(newValue, 'dateOfStart')}
+                        renderInput={(params) => <TextField {...params} />}
+                     />
+                  </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                     <TimePicker
+                        label="Flash sale start time"
+                        value={SaleInfo.dateOfStartTime}
+                        onChange={(newValue) => DataChangeHandler(newValue, 'dateOfStartTime')}
+                        renderInput={(params) => <TextField {...params} />}
+                     />
+                  </LocalizationProvider>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                     <DesktopDatePicker
+                        disablePast
                         label="Last date of sale"
                         inputFormat="MM/DD/YYYY"
                         value={SaleInfo.dateOfend}
-                        onChange={DataChangeHandler}
+                        onChange={(newValue) => DataChangeHandler(newValue, 'dateOfend')}
+                        renderInput={(params) => <TextField {...params} />}
+                     />
+                  </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                     <TimePicker
+                        label="Flash sale end time"
+                        value={SaleInfo.dateOfEndTime}
+                        onChange={(newValue) => DataChangeHandler(newValue, 'dateOfEndTime')}
                         renderInput={(params) => <TextField {...params} />}
                      />
                   </LocalizationProvider>
@@ -315,9 +351,9 @@ function CreateNewFlashSaleComponent({ param }) {
 
                <CustombuttonComponent
                   onClick={SendHandler}
-                  isLoading={param ? updateFlashSaleLoading : storeSelectedProductSaleLoading}
-                  innerText={param ? "Update" : "Save"}
-                  btnCl={"category_upload"}
+                  // isLoading={param ? updateFlashSaleLoading : storeSelectedProductSaleLoading}
+                  innerText={param ? 'Update' : 'Save'}
+                  btnCl={'category_upload'}
                />
             </div>
          </div>

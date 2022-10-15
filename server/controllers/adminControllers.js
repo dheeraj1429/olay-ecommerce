@@ -5,7 +5,13 @@ const categoryModel = require('../model/schema/productCategorySchema');
 const productBrandModel = require('../model/schema/productBrandSchema');
 const productsTagsModel = require('../model/schema/productsTagsSchema');
 const { erroResponse } = require('./errorResponse');
-const { imageCompress, catchAsync, fetchLimitDocument, convertObjectDataIntoArray } = require('../helpers/helpers');
+const {
+   imageCompress,
+   catchAsync,
+   fetchLimitDocument,
+   convertObjectDataIntoArray,
+   convertFormateDate,
+} = require('../helpers/helpers');
 const httpStatusCodes = require('../helpers/httpStatusCodes');
 const swatchesModel = require('../model/schema/productVariationSwatchesSchema');
 const productSizeVariationModel = require('../model/schema/productSizeVariationSchema');
@@ -13,6 +19,7 @@ const AppError = require('../helpers/appError');
 const saleModel = require('../model/schema/FlashSaleSchema');
 const productLabelModel = require('../model/schema/productLabelSchema');
 const shopModel = require('../model/schema/ShopInfoSchema');
+const nodeCron = require('node-cron');
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -1434,13 +1441,61 @@ const deleteSingleSubVariation = catchAsync(async function (req, res, next) {
    }
 });
 
+const saleTrackFunction = function (document) {
+   /**
+    * @startTimeWithDate sale start time.
+    * @endTimeWithDate sale end time.
+    * @convertFormateDate conver the date into the miliseconds.
+    * first check the sale time is less then current time or not.
+    * if the sale time is less then so then start sale.
+    * @return if the sale end then exit the function.
+    */
+
+   const { startTimeWithDate, endTimeWithDate, _id } = document;
+
+   const startSaleDate = convertFormateDate(startTimeWithDate);
+   const endSaleDate = convertFormateDate(endTimeWithDate);
+   let currentDate = convertFormateDate(new Date());
+
+   if (currentDate > startSaleDate) {
+      saleModel
+         .updateOne({ _id }, { $set: { sale: 'Open' } })
+         .then((res) => console.log(`${res} sale is started already`));
+   }
+
+   const timer = setInterval(() => {
+      currentDate = convertFormateDate(new Date());
+
+      if (currentDate <= endSaleDate) {
+         if (currentDate === startSaleDate) {
+            saleModel.updateOne({ _id }, { $set: { sale: 'Open' } }).then((res) => console.log(res));
+         }
+
+         if (currentDate === endSaleDate) {
+            saleModel.updateOne({ _id }, { $set: { sale: 'Close' } }).then((res) => console.log(res));
+            clearInterval(timer);
+         }
+      }
+   }, 1000);
+};
+
 // store the flash sale data into the database and the send back to reponse.
 const storeSaleInfo = async function (data, response) {
    try {
       let insertNewSale = await saleModel(data);
       let saleSave = await insertNewSale.save();
 
+      /**
+       * when the doc is inserted then run the timer. to keep track the sale start date or the end date.
+       * grab the id of the inserted doc then find first the inserted doc.
+       * if there is no doc then throw the error.
+       * if the start time and the server time is equl then start the sale and update the field sale =  open,
+       * if the sale end time or the server time is euql then end the sale, update the field sale = closed;
+       * once sale is start then run the timer if the sale is end the close the timer or exit the function.
+       */
+
       if (saleSave) {
+         saleTrackFunction(saleSave);
          return response.status(httpStatusCodes.CREATED).json({
             success: true,
             message: 'new sale saved',
@@ -1455,14 +1510,39 @@ const storeSaleInfo = async function (data, response) {
    }
 };
 
+const replaceAndGroupDate = function (time, endDate) {
+   const tm = time.split(' ')[4];
+   const endDateWithTime = endDate.replace('00:00:00', tm);
+   return endDateWithTime;
+};
+
 const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
-   const { name, statusInfo, label } = req.body;
+   const { name, statusInfo, label, dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime } = req.body;
 
    const findIsSaleExists = await saleModel.findOne({ name });
+
+   /**
+    * Convert all date into string date
+    * @startTimeWithDate start date where we want to start the flash sale.
+    * @endTimeWithDate end date with time.
+    */
+   const startDate = new Date(dateOfStart).toString();
+   const startDateTime = new Date(dateOfStartTime).toString();
+   const endDate = new Date(dateOfend).toString();
+   const endDateTime = new Date(dateOfEndTime).toString();
+
+   const startTimeWithDate = replaceAndGroupDate(startDateTime, startDate);
+   const endTimeWithDate = replaceAndGroupDate(endDateTime, endDate);
 
    const data = {
       name,
       statusInfo,
+      dateOfStart,
+      dateOfStartTime,
+      dateOfend,
+      dateOfEndTime,
+      startTimeWithDate,
+      endTimeWithDate,
    };
 
    if (findIsSaleExists) {
@@ -1591,12 +1671,15 @@ const updateSingleFlashSale = catchAsync(async function (req, res, next) {
       next(new AppError('Flash sale id is required for update the sub variaitons products data'));
    }
 
-   const { statusInfo, name, dateOfend, label } = req.body;
+   const { statusInfo, name, dateOfend, label, dateOfStart, dateOfStartTime, dateOfEndTime } = req.body;
 
    const data = {
       name,
       statusInfo,
-      dateOfend: !!dateOfend ? dateOfend : '',
+      dateOfend,
+      dateOfend,
+      dateOfStartTime,
+      dateOfEndTime,
    };
 
    if (req.body?.selectedProduct && label) {

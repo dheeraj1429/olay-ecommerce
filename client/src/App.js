@@ -35,6 +35,7 @@ import ExportCsvComponent from './DashboardComponents/ExportCsvComponent/ExportC
 import ExportHistoryComponent from './DashboardComponents/ExportHistoryComponent/ExportHistoryComponent';
 import ImportCsvFileComponent from './DashboardComponents/ImportCsvFileComponent/ImportCsvFileComponent';
 import ShopInfomationComponent from './DashboardComponents/ShopInfomationComponent/ShopInfomationComponent';
+import CreateStoreComponent from './DashboardComponents/CreateStoreComponent/CreateStoreComponent';
 
 // pages
 import Dashboard from './Pages/Dashboard/Dashboard';
@@ -91,6 +92,7 @@ function App() {
                <Route path="export-product" element={<ExportCsvComponent />} />
                <Route path="export-history" element={<ExportHistoryComponent />} />
                <Route path="import-product" element={<ImportCsvFileComponent />} />
+               <Route path="store-locators" element={<CreateStoreComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

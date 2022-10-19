@@ -474,3 +474,38 @@ export const removeFlashSaleSelectedProducts = function (data) {
       payload: data,
    };
 };
+
+export const storeShowHideHandler = function (data) {
+   return {
+      type: ACTION_TYPE.SHOW_CREATE_STORE_INFO_COMPONENT,
+      payload: data,
+   };
+};
+
+export const shopInfomationStoreLoading = function (data) {
+   return {
+      type: ACTION_TYPE.STORE_SHOP_LOCATIOON_LOADING,
+      payload: data,
+   };
+};
+
+export const selectedShopInfoHandler = function (data) {
+   return {
+      type: ACTION_TYPE.SELECTED_SHOP_INFO,
+      payload: data,
+   };
+};
+
+export const RemoveSelectedShopInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVE_SELECTED_SHOP_INFO,
+      payload: data,
+   };
+};
+
+export const removeUpdateShopInfo = function (data) {
+   return {
+      type: ACTION_TYPE.REMOVER_UPDATE_SHOP_INFO,
+      payload: data,
+   };
+};

@@ -21,35 +21,22 @@ import { AiOutlineExport } from '@react-icons/all-files/ai/AiOutlineExport';
 import { VscHistory } from '@react-icons/all-files/vsc/VscHistory';
 import { AiOutlineHome } from '@react-icons/all-files/ai/AiOutlineHome';
 import { AiOutlineInfo } from '@react-icons/all-files/ai/AiOutlineInfo';
+import { VscLocation } from '@react-icons/all-files/vsc/VscLocation';
 
 function DashboardPanelSidebarComponent() {
-   const [SmSidebar, setSmSidebar] = useState(false);
    const [Active, setActive] = useState('Dashboard');
    const [DashboardCard, setDashboardCard] = useState('');
-   const [ShowSubItems, setShowSubItems] = useState(false);
    const navigation = useNavigate();
    const [cookie] = useCookies(['user']);
    const location = useLocation();
-
-   const SmSidebarHandler = useCallback(
-      function () {
-         setSmSidebar(!SmSidebar);
-      },
-      [SmSidebar]
-   );
 
    const ActiveHandler = function (e) {
       const target = e.currentTarget.id;
       setActive(target);
    };
 
-   const HideSubControllerFunction = function (e) {
-      setShowSubItems(false);
-   };
-
    const dashboardActiveHandler = function (e) {
       setDashboardCard(e.currentTarget.id);
-      setShowSubItems(true);
    };
 
    useLayoutEffect(() => {
@@ -71,7 +58,7 @@ function DashboardPanelSidebarComponent() {
    }, [location.pathname]);
 
    return (
-      <sidebar.div SmSidebar={SmSidebar ? SmSidebar : null}>
+      <sidebar.div>
          <h1>Dashboard</h1>
          <div className="sidebar_fix_container">
             <DashboardSidebarCardComponent
@@ -79,17 +66,13 @@ function DashboardPanelSidebarComponent() {
                icon={<VscHome />}
                onClick={dashboardActiveHandler}
                show={DashboardCard}
-               showSub={ShowSubItems}
-               isShow={SmSidebar}
             >
                <DashboardNavigationComponent
                   icon={<AiOutlineHome />}
                   innerText={'Dashboard'}
                   activeBar={true}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
             </DashboardSidebarCardComponent>
 
@@ -98,83 +81,69 @@ function DashboardPanelSidebarComponent() {
                icon={<AiOutlineShoppingCart />}
                onClick={dashboardActiveHandler}
                show={DashboardCard}
-               showSub={ShowSubItems}
-               isShow={SmSidebar}
             >
                <DashboardNavigationComponent
                   icon={<BsPhone />}
                   innerText={'All products'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
                   icon={<GoGitBranch />}
                   innerText={'Product category'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
 
                <DashboardNavigationComponent
                   icon={<AiOutlineLaptop />}
                   innerText={'Product brands'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
 
                <DashboardNavigationComponent
                   icon={<GoZap />}
                   innerText={'Flash sale'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
 
                <DashboardNavigationComponent
                   icon={<GoVersions />}
                   innerText={'Variation swatches'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
                   icon={<VscTextSize />}
                   innerText={'Product size variation'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
                   icon={<GoRepoClone />}
                   innerText={'Product variation'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
                   icon={<MdLabelOutline />}
                   innerText={'Product label'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
                   icon={<AiOutlineInfo />}
                   innerText={'Information'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
+               />
+               <DashboardNavigationComponent
+                  icon={<VscLocation />}
+                  innerText={'Store locators'}
+                  onClick={ActiveHandler}
+                  Active={Active}
                />
             </DashboardSidebarCardComponent>
             <DashboardSidebarCardComponent
@@ -182,32 +151,24 @@ function DashboardPanelSidebarComponent() {
                icon={<GoTools />}
                onClick={dashboardActiveHandler}
                show={DashboardCard}
-               showSub={ShowSubItems}
-               isShow={SmSidebar}
             >
                <DashboardNavigationComponent
                   icon={<FaFileImport />}
                   innerText={'Import product'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
                   icon={<AiOutlineExport />}
                   innerText={'Export product'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
                <DashboardNavigationComponent
                   icon={<VscHistory />}
                   innerText={'Export history'}
-                  isShow={SmSidebar}
                   onClick={ActiveHandler}
                   Active={Active}
-                  HideHandler={HideSubControllerFunction}
                />
             </DashboardSidebarCardComponent>
          </div>

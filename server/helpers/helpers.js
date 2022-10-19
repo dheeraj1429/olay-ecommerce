@@ -159,7 +159,43 @@ const numberConvert = function (string) {
    return +number;
 };
 
+const replaceAndGroupDate = function (time, endDate) {
+   /**
+    * @tm convert the time with array and selected sapcific elem from the array.
+    * @endDateWithTime replace h-m-s time with selected date.
+    * @return replace time.
+    */
+   const tm = time.split(' ')[4];
+   const endDateWithTime = endDate.replace('00:00:00', tm);
+   return endDateWithTime;
+};
+
+const dataConvertor = function (dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime) {
+   /**
+    * @startDate start sale date d-y-m.
+    * @startDateTime start date time h-m-s
+    * @endDate end flash sale date.
+    * @endDateTime end flash sale date time.
+    * @startTimeWithDate reaplce start date with time.
+    * @endTimeWithDate replace end date with time.
+    * @return { startTimeWithDate, endTimeWithDate }
+    */
+   const startDate = new Date(dateOfStart).toString();
+   const startDateTime = new Date(dateOfStartTime).toString();
+   const endDate = new Date(dateOfend).toString();
+   const endDateTime = new Date(dateOfEndTime).toString();
+
+   const startTimeWithDate = replaceAndGroupDate(startDateTime, startDate);
+   const endTimeWithDate = replaceAndGroupDate(endDateTime, endDate);
+
+   return { startTimeWithDate, endTimeWithDate };
+};
+
 const convertFormateDate = function (date) {
+   /**
+    * @splitDateAr covenrt date into the miliseconds first then remove the last 3 digits from the miliseconds and then convert str into the int.
+    * @replace replaced miliseconds date.
+    */
    const splitDateAr = parseInt(date.getTime().toString().slice(0, -3));
    return splitDateAr;
 };
@@ -174,4 +210,5 @@ module.exports = {
    downloadImageFromWeb,
    numberConvert,
    convertFormateDate,
+   dataConvertor,
 };

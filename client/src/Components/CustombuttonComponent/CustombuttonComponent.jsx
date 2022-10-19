@@ -12,4 +12,4 @@ function CustombuttonComponent({ children, innerText, btnCl, onClick }) {
    );
 }
 
-export default HocSpnnerComponent(CustombuttonComponent);
+export default HocSpnnerComponent(React.memo(CustombuttonComponent));

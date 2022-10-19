@@ -1,24 +1,24 @@
-import React, { useEffect } from "react";
-import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import * as tableView from "./FlashSaleTableComponent.style";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllFlashSales, deleteAllFlashSales } from "../../Redux/Actions/adminAction";
-import TableFooterComponent from "../TableFooterComponent/TableFooterComponent";
-import ProductSectionFeatureComponent from "../ProductSectionFeatureComponent/ProductSectionFeatureComponent";
-import { FcAlphabeticalSortingAz } from "@react-icons/all-files/fc/FcAlphabeticalSortingAz";
-import { FcAlphabeticalSortingZa } from "@react-icons/all-files/fc/FcAlphabeticalSortingZa";
-import { FcOk } from "@react-icons/all-files/fc/FcOk";
-import { FcIcons8Cup } from "@react-icons/all-files/fc/FcIcons8Cup";
-import FlashSaleInnerTableComponent from "../FlashSaleInnerTableComponent/FlashSaleInnerTableComponent";
+import React, { useEffect } from 'react';
+import HeadingComponent from '../../Components/HeadingComponent/HeadingComponent';
+import * as tableView from './FlashSaleTableComponent.style';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllFlashSales, deleteAllFlashSales } from '../../Redux/Actions/adminAction';
+import TableFooterComponent from '../TableFooterComponent/TableFooterComponent';
+import ProductSectionFeatureComponent from '../ProductSectionFeatureComponent/ProductSectionFeatureComponent';
+import { FcAlphabeticalSortingAz } from '@react-icons/all-files/fc/FcAlphabeticalSortingAz';
+import { FcAlphabeticalSortingZa } from '@react-icons/all-files/fc/FcAlphabeticalSortingZa';
+import { FcOk } from '@react-icons/all-files/fc/FcOk';
+import { FcIcons8Cup } from '@react-icons/all-files/fc/FcIcons8Cup';
+import FlashSaleInnerTableComponent from '../FlashSaleInnerTableComponent/FlashSaleInnerTableComponent';
 
-const link = "/dashboard/flash-sale/create";
+const link = '/dashboard/flash-sale/create';
 
 const items = [
-   { value: "", Option: "None" },
-   { value: "Sort A - Z", Option: "Sort A - Z", icon: <FcAlphabeticalSortingAz /> },
-   { value: "Sort Z - A", Option: "Sort Z - A", icon: <FcAlphabeticalSortingZa /> },
-   { value: "Published", Option: "Published", icon: <FcOk /> },
-   { value: "Delete all", Option: "Delete all", icon: <FcIcons8Cup /> },
+   { value: '', Option: 'None' },
+   { value: 'Sort A - Z', Option: 'Sort A - Z', icon: <FcAlphabeticalSortingAz /> },
+   { value: 'Sort Z - A', Option: 'Sort Z - A', icon: <FcAlphabeticalSortingZa /> },
+   { value: 'Published', Option: 'Published', icon: <FcOk /> },
+   { value: 'Delete all', Option: 'Delete all', icon: <FcIcons8Cup /> },
 ];
 
 function FlashSaleTableComponent() {
@@ -27,6 +27,8 @@ function FlashSaleTableComponent() {
    const allSales = useSelector((state) => state.admin.allSales);
    const allSaleLoading = useSelector((state) => state.admin.allSaleLoading);
 
+   console.log(allSales);
+
    useEffect(() => {
       dispatch(getAllFlashSales(0));
    }, []);
@@ -34,14 +36,29 @@ function FlashSaleTableComponent() {
    return (
       <tableView.div>
          <HeadingComponent
-            Heading={"Flash Sales"}
+            Heading={'Flash Sales'}
             subHeading={`Save Huge With Latest Flash Sales | \n
              Today's Best Deals & Offers On Mobiles, Fashion, \n
              Electronics, Hotels, Flights & Bus Ticket Bookings.`}
          />
-         <ProductSectionFeatureComponent state={allSales} pageLink={link} field={"sales"} items={items} action={deleteAllFlashSales} />
-         <FlashSaleInnerTableComponent isLoading={allSaleLoading} />
-         <TableFooterComponent state={allSales} action={"sales"} />
+
+         {!!allSales && allSales.success && allSales.sales.length ? (
+            <>
+               <ProductSectionFeatureComponent
+                  state={allSales}
+                  pageLink={link}
+                  field={'sales'}
+                  items={items}
+                  action={deleteAllFlashSales}
+               />
+               <FlashSaleInnerTableComponent isLoading={allSaleLoading} />
+               <TableFooterComponent state={allSales} action={'sales'} />
+            </>
+         ) : (
+            <div className="center_heading">
+               <p>No Sales</p>
+            </div>
+         )}
       </tableView.div>
    );
 }

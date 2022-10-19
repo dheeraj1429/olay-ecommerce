@@ -69,7 +69,7 @@ if (cluster.isPrimary) {
    databaseConnectionFunction(() => {
       // server
       http.listen(port, () => {
-         console.log(`server is running port ${port}`);
+         console.log(`server running on port http://localhost:${port}`);
       });
    });
 

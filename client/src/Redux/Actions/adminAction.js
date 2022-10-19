@@ -1204,3 +1204,62 @@ export const updateShopInformation = function (data) {
       }
    };
 };
+
+export const storeLocationData = function (data) {
+   return async function (dispatch) {
+      try {
+         const locationData = await axios.post('/admin/store-shop-loaction', data, headers);
+
+         if (locationData && locationData?.data) {
+            dispatch({
+               type: ACTION_TYPE.STORE_SHOP_LOCATIOON,
+               payload: locationData && locationData?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getAllShopInfomation = function () {
+   return async function (dispatch) {
+      try {
+         const getShopData = await axios.get('/admin/get-all-shop-location-data', headers);
+
+         if (getShopData && getShopData?.data && getShopData?.data.success) {
+            dispatch({
+               type: ACTION_TYPE.GET_ALL_SHOP_LOCATIOON_DATA,
+               payload: getShopData && getShopData?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const UpdateStoreShopInformation = function (data) {
+   return async function (dispatch) {
+      try {
+         const updateInfo = await axios.patch('/admin/update-shop-information', data, headers);
+
+         if (updateInfo && updateInfo?.data) {
+            if (updateInfo?.data.success) {
+               dispatch({
+                  type: ACTION_TYPE.UPDATE_SHOP_INFORMATION,
+                  payload: updateInfo && updateInfo?.data,
+                  updatedData: data,
+               });
+            } else {
+               dispatch({
+                  type: ACTION_TYPE.UPDATE_SHOP_INFORMATION,
+                  payload: updateInfo && updateInfo?.data,
+               });
+            }
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

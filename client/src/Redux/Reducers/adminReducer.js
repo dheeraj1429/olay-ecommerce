@@ -90,6 +90,12 @@ const INITAL_STATE = {
    shopSettingRespose: null,
    shopSettingLoading: false,
    shopInformation: null,
+   showCreateStoreInfomationComponent: false,
+   shopInformationStore: null,
+   shopInformationStoreLoading: false,
+   allShops: null,
+   selectedShopInfo: null,
+   updateShopInformation: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -1132,6 +1138,76 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             selectedFlashSaleProducts: state.selectedFlashSaleProducts.filter((el) => el.id !== action.payload),
+         };
+
+      case ACTION_TYPE.SHOW_CREATE_STORE_INFO_COMPONENT:
+         return {
+            ...state,
+            showCreateStoreInfomationComponent: action.payload,
+         };
+
+      case ACTION_TYPE.STORE_SHOP_LOCATIOON:
+         return {
+            ...state,
+            shopInformationStore: action.payload,
+            shopInformationStoreLoading: false,
+            allShops: {
+               ...state.allShops,
+               allShops: state.allShops.allShops.concat(action.payload.insertedData),
+            },
+            showCreateStoreInfomationComponent: false,
+         };
+
+      case ACTION_TYPE.STORE_SHOP_LOCATIOON_LOADING:
+         return {
+            ...state,
+            shopInformationStoreLoading: action.payload,
+            shopInformationStore: null,
+         };
+
+      case ACTION_TYPE.GET_ALL_SHOP_LOCATIOON_DATA:
+         return {
+            ...state,
+            allShops: action.payload,
+         };
+
+      case ACTION_TYPE.SELECTED_SHOP_INFO:
+         return {
+            ...state,
+            selectedShopInfo: action.payload,
+         };
+
+      case ACTION_TYPE.REMOVE_SELECTED_SHOP_INFO:
+         return {
+            ...state,
+            selectedShopInfo: action.payload,
+         };
+
+      case ACTION_TYPE.UPDATE_SHOP_INFORMATION:
+         if (action.payload.success) {
+            return {
+               ...state,
+               updateShopInformation: action.payload,
+               shopInformationStoreLoading: false,
+               allShops: {
+                  ...state.allShops,
+                  allShops: state.allShops.allShops.map((el) =>
+                     el._id === action.updatedData._id ? (el = action.updatedData) : el
+                  ),
+               },
+            };
+         } else {
+            return {
+               ...state,
+               updateShopInformation: action.payload,
+               shopInformationStoreLoading: false,
+            };
+         }
+
+      case ACTION_TYPE.REMOVER_UPDATE_SHOP_INFO:
+         return {
+            ...state,
+            updateShopInformation: action.payload,
          };
 
       default:

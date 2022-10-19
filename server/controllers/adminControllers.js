@@ -5,21 +5,14 @@ const categoryModel = require('../model/schema/productCategorySchema');
 const productBrandModel = require('../model/schema/productBrandSchema');
 const productsTagsModel = require('../model/schema/productsTagsSchema');
 const { erroResponse } = require('./errorResponse');
-const {
-   imageCompress,
-   catchAsync,
-   fetchLimitDocument,
-   convertObjectDataIntoArray,
-   convertFormateDate,
-} = require('../helpers/helpers');
+const { imageCompress, catchAsync, fetchLimitDocument } = require('../helpers/helpers');
 const httpStatusCodes = require('../helpers/httpStatusCodes');
 const swatchesModel = require('../model/schema/productVariationSwatchesSchema');
 const productSizeVariationModel = require('../model/schema/productSizeVariationSchema');
 const AppError = require('../helpers/appError');
-const saleModel = require('../model/schema/FlashSaleSchema');
 const productLabelModel = require('../model/schema/productLabelSchema');
-const shopModel = require('../model/schema/ShopInfoSchema');
-const nodeCron = require('node-cron');
+const shopModel = require('../model/schema/shopInfoSchema');
+const shopLoactionModel = require('../model/schema/storeLocationSchema');
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -1441,289 +1434,6 @@ const deleteSingleSubVariation = catchAsync(async function (req, res, next) {
    }
 });
 
-const saleTrackFunction = function (document) {
-   /**
-    * @startTimeWithDate sale start time.
-    * @endTimeWithDate sale end time.
-    * @convertFormateDate conver the date into the miliseconds.
-    * first check the sale time is less then current time or not.
-    * if the sale time is less then so then start sale.
-    * @return if the sale end then exit the function.
-    */
-
-   const { startTimeWithDate, endTimeWithDate, _id } = document;
-
-   const startSaleDate = convertFormateDate(startTimeWithDate);
-   const endSaleDate = convertFormateDate(endTimeWithDate);
-   let currentDate = convertFormateDate(new Date());
-
-   if (currentDate > startSaleDate) {
-      saleModel
-         .updateOne({ _id }, { $set: { sale: 'Open' } })
-         .then((res) => console.log(`${res} sale is started already`));
-   }
-
-   const timer = setInterval(() => {
-      currentDate = convertFormateDate(new Date());
-
-      if (currentDate <= endSaleDate) {
-         if (currentDate === startSaleDate) {
-            saleModel.updateOne({ _id }, { $set: { sale: 'Open' } }).then((res) => console.log(res));
-         }
-
-         if (currentDate === endSaleDate) {
-            saleModel.updateOne({ _id }, { $set: { sale: 'Close' } }).then((res) => console.log(res));
-            clearInterval(timer);
-         }
-      }
-   }, 1000);
-};
-
-// store the flash sale data into the database and the send back to reponse.
-const storeSaleInfo = async function (data, response) {
-   try {
-      let insertNewSale = await saleModel(data);
-      let saleSave = await insertNewSale.save();
-
-      /**
-       * when the doc is inserted then run the timer. to keep track the sale start date or the end date.
-       * grab the id of the inserted doc then find first the inserted doc.
-       * if there is no doc then throw the error.
-       * if the start time and the server time is equl then start the sale and update the field sale =  open,
-       * if the sale end time or the server time is euql then end the sale, update the field sale = closed;
-       * once sale is start then run the timer if the sale is end the close the timer or exit the function.
-       */
-
-      if (saleSave) {
-         saleTrackFunction(saleSave);
-         return response.status(httpStatusCodes.CREATED).json({
-            success: true,
-            message: 'new sale saved',
-         });
-      } else {
-         return response.status(httpStatusCodes.INTERNAL_SERVER).json({
-            message: 'Internal server error',
-         });
-      }
-   } catch (err) {
-      console.log(err);
-   }
-};
-
-const replaceAndGroupDate = function (time, endDate) {
-   const tm = time.split(' ')[4];
-   const endDateWithTime = endDate.replace('00:00:00', tm);
-   return endDateWithTime;
-};
-
-const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
-   const { name, statusInfo, label, dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime } = req.body;
-
-   const findIsSaleExists = await saleModel.findOne({ name });
-
-   /**
-    * Convert all date into string date
-    * @startTimeWithDate start date where we want to start the flash sale.
-    * @endTimeWithDate end date with time.
-    */
-   const startDate = new Date(dateOfStart).toString();
-   const startDateTime = new Date(dateOfStartTime).toString();
-   const endDate = new Date(dateOfend).toString();
-   const endDateTime = new Date(dateOfEndTime).toString();
-
-   const startTimeWithDate = replaceAndGroupDate(startDateTime, startDate);
-   const endTimeWithDate = replaceAndGroupDate(endDateTime, endDate);
-
-   const data = {
-      name,
-      statusInfo,
-      dateOfStart,
-      dateOfStartTime,
-      dateOfend,
-      dateOfEndTime,
-      startTimeWithDate,
-      endTimeWithDate,
-   };
-
-   if (findIsSaleExists) {
-      return res.status(httpStatusCodes.OK).json({
-         success: true,
-         message: 'Sale is alrady exists',
-      });
-   } else {
-      if (req.body?.selectedProduct) {
-         /**
-          * store the name or the status info the database.
-          * for the sub selected product. first loop over the the object to get the access the object
-          * key and values and then selcted the each sub object key and values then then push inside
-          * the sale model.
-          */
-
-         data.products = convertObjectDataIntoArray(req.body.selectedProduct);
-
-         await storeSaleInfo(data, res);
-      } else if (name && !label) {
-         await storeSaleInfo(data, res);
-      } else if (name && label) {
-         data.label = label;
-         await storeSaleInfo(data, res);
-      }
-   }
-});
-
-const getAllFlashSales = catchAsync(async function (req, res, next) {
-   const page = req.query.page;
-
-   if (!page) next(new AppError('flash sale page number is required!'));
-
-   const DOCUMENT_LIMIT = 10;
-
-   await fetchLimitDocument(saleModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, 'sales', {
-      products: 0,
-   });
-});
-
-const deleteAllFlashSales = catchAsync(async function (req, res, next) {
-   const deleteAllSales = await saleModel.deleteMany({});
-
-   if (!!deleteAllSales.deletedCount) {
-      return res.status(httpStatusCodes.OK).json({
-         success: true,
-         message: 'All Flash sales deleted',
-      });
-   } else {
-      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
-         message: 'Internal server error',
-      });
-   }
-});
-
-const deleteSingleFlashSale = catchAsync(async function (req, res, next) {
-   const id = req.params.id;
-
-   if (!id) {
-      next(new AppError('flash sale id is required!'));
-   }
-
-   const findFlashSaleAndDelete = await saleModel.deleteOne({ _id: id });
-
-   if (!!findFlashSaleAndDelete.deletedCount) {
-      return res.status(httpStatusCodes.OK).json({
-         success: true,
-         message: 'Flash sales deleted',
-      });
-   } else {
-      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
-         message: 'Internal server error',
-      });
-   }
-});
-
-const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
-   const id = req.params.id;
-
-   if (!id) {
-      next(new AppError('Flash sale id is required!'));
-   }
-
-   const findSinlgeFlashSale = await saleModel
-      .findOne({ _id: id })
-      .populate('products.productId', { name: 1, productImage: 1 });
-
-   if (findSinlgeFlashSale) {
-      return res.status(httpStatusCodes.OK).json({
-         success: true,
-         sale: findSinlgeFlashSale,
-      });
-   } else {
-      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
-         message: 'Internal server error',
-      });
-   }
-});
-
-const updateFlashSaleInfo = async function (colleciton, flashSaleId, data, res) {
-   try {
-      const findAndUpdateFlashSaleDetails = await colleciton.updateOne({ _id: flashSaleId }, { $set: data });
-
-      if (findAndUpdateFlashSaleDetails.acknowledged && !!findAndUpdateFlashSaleDetails.modifiedCount) {
-         return res.status(httpStatusCodes.OK).json({
-            success: true,
-            message: 'Flash sale updated',
-         });
-      } else if (findAndUpdateFlashSaleDetails.acknowledged && !findAndUpdateFlashSaleDetails.modifiedCount) {
-         return res.status(httpStatusCodes.OK).json({
-            success: true,
-            message: 'Flash sale alrady updated',
-         });
-      } else {
-         next(new AppError("Can't update the flash sale document"));
-      }
-   } catch (err) {
-      console.log(err);
-   }
-};
-
-const updateSingleFlashSale = catchAsync(async function (req, res, next) {
-   const { flashSaleId } = req.body;
-
-   if (!flashSaleId) {
-      next(new AppError('Flash sale id is required for update the sub variaitons products data'));
-   }
-
-   const { statusInfo, name, dateOfend, label, dateOfStart, dateOfStartTime, dateOfEndTime } = req.body;
-
-   const data = {
-      name,
-      statusInfo,
-      dateOfend,
-      dateOfend,
-      dateOfStartTime,
-      dateOfEndTime,
-   };
-
-   if (req.body?.selectedProduct && label) {
-      data.label = label;
-      data.products = convertObjectDataIntoArray(req.body.selectedProduct);
-      await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
-   } else if (!label && req.body?.selectedProduct) {
-      data.products = convertObjectDataIntoArray(req.body.selectedProduct);
-      await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
-   } else if (!label && name) {
-      await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
-   } else if (label && name) {
-      data.label = label;
-      await updateFlashSaleInfo(saleModel, flashSaleId, data, res);
-   }
-});
-
-const deleteFlashSaleProduct = catchAsync(async function (req, res, next) {
-   const { productId, parentSaleId } = req.query;
-
-   if (!productId) next(new AppError('Flash sale product id is required!'));
-   if (!parentSaleId) next(new AppError('Flash sale id is required!'));
-
-   const findFlashProductAndRemove = await saleModel.updateOne(
-      { _id: parentSaleId },
-      {
-         $pull: {
-            products: { productId: productId },
-         },
-      }
-   );
-
-   if (!!findFlashProductAndRemove.modifiedCount) {
-      return res.status(httpStatusCodes.OK).json({
-         success: true,
-         message: 'Flash sale product removed',
-      });
-   } else {
-      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
-         message: 'Internal server error',
-      });
-   }
-});
-
 const insertNewProductColorLable = catchAsync(async function (req, res, next) {
    const { name, slug, description, color } = req.body;
 
@@ -1794,7 +1504,9 @@ const deleteSingleProductLabel = catchAsync(async function (req, res, next) {
       next(new AppError('Product label id is required!'));
    }
 
-   const findProductLabeleAndDelete = await productLabelModel.deleteOne({ _id: id });
+   const findProductLabeleAndDelete = await productLabelModel.deleteOne({
+      _id: id,
+   });
 
    if (!!findProductLabeleAndDelete.deletedCount) {
       return res.status(httpStatusCodes.OK).json({
@@ -1815,7 +1527,9 @@ const getSingleProductLabel = catchAsync(async function (req, res, next) {
       next(new AppError('Product label id is required'));
    }
 
-   const findSelectedProductlabel = await productLabelModel.findOne({ _id: id });
+   const findSelectedProductlabel = await productLabelModel.findOne({
+      _id: id,
+   });
 
    if (findSelectedProductlabel) {
       return res.status(httpStatusCodes.OK).json({
@@ -1939,6 +1653,84 @@ const updateShopInformation = catchAsync(async function (req, res, next) {
    }
 });
 
+const storeShopLocationInfo = catchAsync(async function (req, res, next) {
+   const { name } = req.body;
+   const findShopInfo = await shopLoactionModel.findOne({ name });
+
+   if (findShopInfo) {
+      return res.status(httpStatusCodes.OK).json({
+         success: false,
+         message: 'shop infomation is already stored',
+      });
+   } else {
+      const shopInfoObject = Object.assign(req.body);
+      const storeShopInfo = await shopLoactionModel(shopInfoObject).save();
+
+      if (storeShopInfo) {
+         return res.status(httpStatusCodes.CREATED).json({
+            success: true,
+            message: 'Shop information saved',
+            insertedData: storeShopInfo,
+         });
+      } else {
+         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            success: false,
+            message: 'Internal server error',
+         });
+      }
+   }
+});
+
+const getAllShopInfomation = catchAsync(async function (req, res, next) {
+   const findAllShopDocuments = await shopLoactionModel.find({});
+   if (findAllShopDocuments) {
+      return res.status(httpStatusCodes.CREATED).json({
+         success: true,
+         allShops: findAllShopDocuments,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'Internal server error',
+      });
+   }
+});
+
+const UpdateStoreShopInformation = catchAsync(async function (req, res, next) {
+   const { _id } = req.body;
+
+   if (!_id) {
+      next(new AppError('shop information document id is required'));
+   }
+
+   const findShopDocumentAndUpdate = await shopLoactionModel.update(
+      { _id },
+      {
+         $set: {
+            name: req.body.name,
+            phone: req.body.phone,
+            email: req.body.email,
+            address: req.body.address,
+            state: req.body.state,
+            city: req.body.city,
+            country: req.body.country,
+         },
+      }
+   );
+
+   if (!!findShopDocumentAndUpdate.modifiedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: 'shop infomation updated successfully',
+      });
+   } else {
+      return res.status(httpStatusCodes.OK).json({
+         success: false,
+         message: 'shop infomation already up to date',
+      });
+   }
+});
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -1982,13 +1774,6 @@ module.exports = {
    getSingelSubProductVariation,
    updateSingleSubVariation,
    deleteSingleSubVariation,
-   insertNewProductFlashSale,
-   getAllFlashSales,
-   deleteAllFlashSales,
-   deleteSingleFlashSale,
-   getSinlgeFlashSale,
-   updateSingleFlashSale,
-   deleteFlashSaleProduct,
    insertNewProductColorLable,
    getAllProductLable,
    deleteAllProductLabel,
@@ -1998,4 +1783,7 @@ module.exports = {
    ShopSetting,
    getShopInfo,
    updateShopInformation,
+   storeShopLocationInfo,
+   getAllShopInfomation,
+   UpdateStoreShopInformation,
 };

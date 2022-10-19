@@ -4,6 +4,14 @@ export const div = styled.div`
    overflow-x: auto;
    width: 100%;
 
+   table {
+      width: 1400px;
+   }
+
+   p {
+      margin: 0;
+   }
+
    svg {
       cursor: pointer;
    }

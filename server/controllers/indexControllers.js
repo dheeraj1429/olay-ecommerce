@@ -1,9 +1,7 @@
 const { catchAsync } = require('../helpers/helpers');
 const productModel = require('../model/schema/productSchema');
 const httpStatusCodes = require('../helpers/httpStatusCodes');
-const categoryModel = require('../model/schema/productCategorySchema');
-const saleModel = require('../model/schema/FlashSaleSchema');
-const userModel = require('../model/schema/userSchema');
+const userModel = require('../model/schema/authSchema');
 
 const groupDataFunction = async function (collection, field) {
    const genrateReport = await collection.aggregate([

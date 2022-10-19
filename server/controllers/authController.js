@@ -1,5 +1,5 @@
-const userModel = require("../model/schema/userSchema");
-const bcryptjs = require("bcryptjs");
+const userModel = require('../model/schema/authSchema');
+const bcryptjs = require('bcryptjs');
 
 // admin login
 const adminSignIn = async function (req, res, next) {
@@ -16,7 +16,7 @@ const adminSignIn = async function (req, res, next) {
       if (!userIsExists) {
          return res.status(200).json({
             success: false,
-            message: "User is not exists",
+            message: 'User is not exists',
          });
       }
 
@@ -39,7 +39,7 @@ const adminSignIn = async function (req, res, next) {
          };
 
          // set the user info into the cookie
-         res.cookie("user", userObject);
+         res.cookie('user', userObject);
 
          return res.status(201).json({
             success: true,
@@ -48,7 +48,7 @@ const adminSignIn = async function (req, res, next) {
       } else {
          return res.status(200).json({
             success: false,
-            message: "User account password is not match",
+            message: 'User account password is not match',
          });
       }
    } catch (err) {

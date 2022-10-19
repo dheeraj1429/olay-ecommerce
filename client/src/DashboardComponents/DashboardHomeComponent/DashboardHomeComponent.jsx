@@ -29,6 +29,7 @@ function DashboardHomeComponent() {
                <GenralProductUploadResultComponent />
                <TotalCustomersComponent heading={'Total Customers'} />
             </DsHome.flexDiv>
+            <DsHome.flexDiv></DsHome.flexDiv>
          </DsHome.spaceDiv>
       </DsHome.div>
    );

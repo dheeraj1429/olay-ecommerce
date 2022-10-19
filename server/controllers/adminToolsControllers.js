@@ -1,17 +1,17 @@
-const { catchAsync, downloadImageFromWeb, numberConvert } = require("../helpers/helpers");
-const fs = require("fs");
-const { parse } = require("json2csv");
-const productModel = require("../model/schema/productSchema");
-const path = require("path");
-const AppError = require("../helpers/appError");
-const userModel = require("../model/schema/userSchema");
-const categoryModel = require("../model/schema/productCategorySchema");
-const httpStatusCodes = require("../helpers/httpStatusCodes");
-const { tokenVarifyFunction, productExportFolderPath } = require("../helpers/helpers");
-const nodemailer = require("nodemailer");
-const csv = require("csvtojson");
-const productBrandModel = require("../model/schema/productBrandSchema");
-const mongoose = require("mongoose");
+const { catchAsync, downloadImageFromWeb, numberConvert } = require('../helpers/helpers');
+const fs = require('fs');
+const { parse } = require('json2csv');
+const productModel = require('../model/schema/productSchema');
+const path = require('path');
+const AppError = require('../helpers/appError');
+const userModel = require('../model/schema/authSchema');
+const categoryModel = require('../model/schema/productCategorySchema');
+const httpStatusCodes = require('../helpers/httpStatusCodes');
+const { tokenVarifyFunction, productExportFolderPath } = require('../helpers/helpers');
+const nodemailer = require('nodemailer');
+const csv = require('csvtojson');
+const productBrandModel = require('../model/schema/productBrandSchema');
+const mongoose = require('mongoose');
 
 const getAllProductCsv = catchAsync(async function (req, res, next) {
    /**
@@ -27,38 +27,41 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
    if (!!cookie && cookie.user && cookie.user.token) {
       const { _id, isAdmin } = tokenVarifyFunction(cookie);
 
-      if (isAdmin !== "admin") {
+      if (isAdmin !== 'admin') {
          return res.status(httpStatusCodes.OK).json({
-            message: "This feature is not working for the user is only made for the admin.",
+            message: 'This feature is not working for the user is only made for the admin.',
          });
       }
 
-      const findProduct = await productModel.find({}).populate("category", { _id: 0, products: 0, __v: 0 }).populate("brand", { _id: 0, products: 0, __v: 0 });
+      const findProduct = await productModel
+         .find({})
+         .populate('category', { _id: 0, products: 0, __v: 0 })
+         .populate('brand', { _id: 0, products: 0, __v: 0 });
 
       const fields = [
-         "name",
-         "price",
-         "salePrice",
-         "discription",
-         "category.name",
-         "category.description",
-         "stockStatus",
-         "weight",
-         "length",
-         "wide",
-         "height",
-         "productImage",
-         "suggestedAge",
-         "brand.name",
-         "brand.description",
-         "brand.website",
-         "brand.order",
-         "brand.brandStatusInfo",
-         "brand.brandIcon",
-         "brand.SEOTitle",
-         "brand.SEODescription",
-         "createdAt",
-         "productStatusInfo",
+         'name',
+         'price',
+         'salePrice',
+         'discription',
+         'category.name',
+         'category.description',
+         'stockStatus',
+         'weight',
+         'length',
+         'wide',
+         'height',
+         'productImage',
+         'suggestedAge',
+         'brand.name',
+         'brand.description',
+         'brand.website',
+         'brand.order',
+         'brand.brandStatusInfo',
+         'brand.brandIcon',
+         'brand.SEOTitle',
+         'brand.SEODescription',
+         'createdAt',
+         'productStatusInfo',
       ];
 
       const opts = { fields };
@@ -66,7 +69,7 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
       /**
        * @uniqueID for the export file unique name.
        */
-      const uniqueID = Date.now().toString(36) + Math.random().toString(36).split(".").join("");
+      const uniqueID = Date.now().toString(36) + Math.random().toString(36).split('.').join('');
       const fileName = `products${uniqueID}.csv`;
       const folderPath = productExportFolderPath(fileName);
 
@@ -81,7 +84,7 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
                {
                   $push: {
                      exportsHistory: {
-                        historyType: "product history",
+                        historyType: 'product history',
                         fileName: fileName,
                         exportProducts: findProduct.length,
                      },
@@ -98,7 +101,7 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
       });
    } else {
       res.status(httpStatusCodes.OK).json({
-         message: "Login user is reuqired",
+         message: 'Login user is reuqired',
       });
    }
 });
@@ -113,7 +116,7 @@ const getAllExportInfo = catchAsync(async function (req, res, next) {
    if (cookie && cookie?.user && cookie?.user.token) {
       const { _id, isAdmin } = tokenVarifyFunction(cookie);
 
-      if (isAdmin === "admin") {
+      if (isAdmin === 'admin') {
          const findAdminUser = await userModel.findOne({ _id });
 
          const responseData = {
@@ -122,7 +125,7 @@ const getAllExportInfo = catchAsync(async function (req, res, next) {
 
          if (!findAdminUser) {
             return res.status(httpStatusCodes.OK).json({
-               message: "No admin user found!",
+               message: 'No admin user found!',
             });
          }
 
@@ -141,7 +144,7 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
    const { id, fileName } = req.params;
 
    if (!id) {
-      next(new AppError("History id is reuqired"));
+      next(new AppError('History id is reuqired'));
    }
 
    /**
@@ -156,7 +159,10 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
    if (!!cookie && cookie.user && cookie.user.token) {
       const { _id } = tokenVarifyFunction(cookie);
 
-      const findUserAndRemoveSingleHistory = await userModel.updateOne({ _id }, { $pull: { exportsHistory: { _id: id } } });
+      const findUserAndRemoveSingleHistory = await userModel.updateOne(
+         { _id },
+         { $pull: { exportsHistory: { _id: id } } }
+      );
 
       if (findUserAndRemoveSingleHistory.acknowledged && !!findUserAndRemoveSingleHistory.modifiedCount) {
          fs.unlink(filePath, function (err) {
@@ -166,7 +172,7 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
 
             res.status(httpStatusCodes.OK).json({
                success: true,
-               message: "history deleted",
+               message: 'history deleted',
             });
          });
       }
@@ -177,7 +183,7 @@ const downloadPrevHistoryFiles = catchAsync(async function (req, res, next) {
    const { fileName } = req.query;
 
    if (!fileName) {
-      next(new AppError("History filename is required"));
+      next(new AppError('History filename is required'));
    }
    const filePath = productExportFolderPath(fileName);
 
@@ -198,7 +204,7 @@ const sendHistoryFileWithEmail = catchAsync(async function (req, res, next) {
        */
       const filePath = productExportFolderPath(file);
       const mail = nodemailer.createTransport({
-         service: "gmail",
+         service: 'gmail',
          auth: {
             user: process.env.EMAIL,
             pass: process.env.APPPASSWORD,
@@ -208,7 +214,7 @@ const sendHistoryFileWithEmail = catchAsync(async function (req, res, next) {
       const mailOptions = {
          from: process.env.EMAIL,
          to: email,
-         subject: "Received files history",
+         subject: 'Received files history',
          attachments: [
             {
                fileName: file,
@@ -227,19 +233,19 @@ const sendHistoryFileWithEmail = catchAsync(async function (req, res, next) {
       });
    } else {
       return res.status(httpStatusCodes.OK).json({
-         message: "please fill all fileds",
+         message: 'please fill all fileds',
       });
    }
 });
 
 const downloadCsvTemplate = catchAsync(async function (req, res, next) {
-   const filePath = productExportFolderPath("template.csv");
+   const filePath = productExportFolderPath('template.csv');
    if (filePath) {
       res.download(path.join(filePath), (err) => {
          if (err) console.log(err);
       });
    } else {
-      next(new AppError("File not found"));
+      next(new AppError('File not found'));
    }
 });
 
@@ -249,7 +255,7 @@ const convertUrlToName = function (url) {
     * grab the last index of the array
     * @return imageName from the function.
     */
-   const imageNameAr = url.split("/");
+   const imageNameAr = url.split('/');
    const imageName = imageNameAr[imageNameAr.length - 1];
    return imageName;
 };
@@ -258,7 +264,7 @@ const insertProductIdIntoTheCollections = async function (collection, collection
    try {
       const checkIsProductAlreadyExists = await collection.findOne({
          _id: collectionId,
-         "products.productId": product_id,
+         'products.productId': product_id,
       });
 
       if (!checkIsProductAlreadyExists) {
@@ -286,11 +292,11 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
    let brand_id, category_id;
 
    if (!file) {
-      next(new AppError("Import csv file is required!"));
+      next(new AppError('Import csv file is required!'));
    }
 
    const originalname = file.originalname;
-   const filePath = path.join(__dirname, "..", "dataFiles", "importData", "Products", originalname);
+   const filePath = path.join(__dirname, '..', 'dataFiles', 'importData', 'Products', originalname);
 
    /**
     * upload the csv file into the backend foleds.
@@ -309,8 +315,8 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
 
             if (!!brandIconUrl) {
                const imageName = convertUrlToName(brandIconUrl);
-               const imagePath = path.join(__dirname, "..", "upload", "brandImages", imageName);
-               await downloadImageFromWeb(brandIconUrl, imagePath, "brandImagesCompress", imageName);
+               const imagePath = path.join(__dirname, '..', 'upload', 'brandImages', imageName);
+               await downloadImageFromWeb(brandIconUrl, imagePath, 'brandImagesCompress', imageName);
                csvToJsonData[i].brand.brandIcon = imageName;
             }
 
@@ -319,7 +325,9 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
                description: csvToJsonData[i].brand.description,
                website: csvToJsonData[i].brand.website,
                order: !!csvToJsonData[i].brand?.order ? csvToJsonData[i].brand.order : 0,
-               brandStatusInfo: !!csvToJsonData[i].brand.brandStatusInfo ? csvToJsonData[i].brand.brandStatusInfo : "Draft",
+               brandStatusInfo: !!csvToJsonData[i].brand.brandStatusInfo
+                  ? csvToJsonData[i].brand.brandStatusInfo
+                  : 'Draft',
                brandIcon: csvToJsonData[i].brand.brandIcon,
                SEOTitle: csvToJsonData[i].brand.SEOTitle,
                SEODescription: csvToJsonData[i].brand.SEODescription,
@@ -374,8 +382,8 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
              */
             if (!!url) {
                const imageName = convertUrlToName(url);
-               const imagePath = path.join(__dirname, "..", "upload", "productImages", imageName);
-               await downloadImageFromWeb(url, imagePath, "productImagesCompress", imageName);
+               const imagePath = path.join(__dirname, '..', 'upload', 'productImages', imageName);
+               await downloadImageFromWeb(url, imagePath, 'productImagesCompress', imageName);
                csvToJsonData[i].productImage = imageName;
             }
 
@@ -404,7 +412,7 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
                height: !!csvToJsonData[i].height ? csvToJsonData[i].height : 0,
                productImage: csvToJsonData[i].productImage,
                suggestedAge: csvToJsonData[i].suggestedAge,
-               productStatusInfo: !!csvToJsonData[i].productStatusInfo ? csvToJsonData[i].productStatusInfo : "Draft",
+               productStatusInfo: !!csvToJsonData[i].productStatusInfo ? csvToJsonData[i].productStatusInfo : 'Draft',
             };
 
             if (csvToJsonData[i].brand.name) {

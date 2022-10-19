@@ -1,7 +1,7 @@
-import React from "react";
-import * as dashboard from "./DashboardPanle.style";
-import DashboardPanelSidebarComponent from "../../DashboardComponents/DashboardPanelSidebarComponent/DashboardPanelSidebarComponent";
-import { Outlet } from "react-router";
+import React from 'react';
+import * as dashboard from './DashboardPanle.style';
+import DashboardPanelSidebarComponent from '../../DashboardComponents/DashboardPanelSidebarComponent/DashboardPanelSidebarComponent';
+import { Outlet } from 'react-router';
 
 function DashboardPanel() {
    return (

@@ -1,8 +1,8 @@
-import React from "react";
-import * as nav from "./DashboardNavbarComponent.style";
-import { BsSearch } from "@react-icons/all-files/bs/BsSearch";
-import { RiBarChartLine } from "@react-icons/all-files/ri/RiBarChartLine";
-import DashboardUserProfileComponent from "../DashboardUserProfileComponent/DashboardUserProfileComponent";
+import React from 'react';
+import * as nav from './DashboardNavbarComponent.style';
+import { BsSearch } from '@react-icons/all-files/bs/BsSearch';
+import { RiBarChartLine } from '@react-icons/all-files/ri/RiBarChartLine';
+import DashboardUserProfileComponent from '../DashboardUserProfileComponent/DashboardUserProfileComponent';
 
 function DashboardNavbarComponent() {
    return (
@@ -27,4 +27,4 @@ function DashboardNavbarComponent() {
    );
 }
 
-export default DashboardNavbarComponent;
+export default React.memo(DashboardNavbarComponent);

@@ -15,6 +15,8 @@ const row = [
    { elm: 'name', value: 'name' },
    { elm: 'createdAt', value: 'createdAt' },
    { elm: 'statusInfo', value: 'statusInfo' },
+   { elm: 'Sale start date', value: 'Sale start date' },
+   { elm: 'Sale end date', value: 'Sale end date' },
    { elm: 'sale', value: 'sale' },
 ];
 
@@ -25,6 +27,12 @@ function FlashSaleInnerTableComponent() {
    const confirm = (id) => {
       dispatch(deleteSingleFlashSale(id));
    };
+
+   function dataConvert(el, field) {
+      const startDate = String(new Date(el[field]));
+      const splitDate = startDate.split(' ').slice(0, 5).join(' ');
+      return <p>{`${splitDate}`}</p>;
+   }
 
    return (
       <innerTable.div>
@@ -74,8 +82,10 @@ function FlashSaleInnerTableComponent() {
                                 </global.mainDiv>
                              )}
                           </td>
+                          <td>{dataConvert(el, 'startTimeWithDate')}</td>
+                          <td>{dataConvert(el, 'endTimeWithDate')}</td>
                           <td>
-                           <div className={el.sale}>{el.sale}</div>
+                             <div className={el.sale}>{el.sale}</div>
                           </td>
                        </tr>
                     ))

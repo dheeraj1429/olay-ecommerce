@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const main = styled.li`
    a {
@@ -30,7 +30,7 @@ export const div = styled.div`
    padding: 0.3rem 0.8rem;
    border-radius: 10px;
    cursor: pointer;
-   background-color: ${(props) => (props.activeBar ? "var(--main-cl) !important" : null)};
+   background-color: ${(props) => (props.activeBar ? 'var(--main-cl) !important' : null)};
    /* background-color: var(--spec-white-color); */
    transition: all 0.3s ease;
 
@@ -49,7 +49,7 @@ export const iconDiv = styled.div`
    width: 30px;
    display: flex;
    align-items: center;
-   justify-content: ${(props) => (props.isShow ? "center" : null)};
+   justify-content: center;
    transition: all 0.3s ease;
 `;
 

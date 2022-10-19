@@ -1,7 +1,7 @@
-import React from "react";
-import * as sale from "./FlashSaleTableViewComponent.style";
-import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
-import FlashSaleTableComponent from "../FlashSaleTableComponent/FlashSaleTableComponent";
+import React from 'react';
+import * as sale from './FlashSaleTableViewComponent.style';
+import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
+import FlashSaleTableComponent from '../FlashSaleTableComponent/FlashSaleTableComponent';
 
 function FlashSaleTableViewComponent() {
    return (

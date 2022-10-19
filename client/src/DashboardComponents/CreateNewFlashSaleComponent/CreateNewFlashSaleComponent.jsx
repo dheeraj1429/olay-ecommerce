@@ -118,7 +118,6 @@ function CreateNewFlashSaleComponent({ param }) {
       if (SaleInfo.name) {
          if (!!SaleInfo.dateOfStart && !!SaleInfo.dateOfStartTime && !!SaleInfo.dateOfend && !!SaleInfo.dateOfEndTime) {
             if (!param) {
-               console.log(SaleInfo);
                dispatch(insertNewProductFlashSale(SaleInfo));
                dispatch(insertNewSaleCollectionLodingFn(true));
             } else {
@@ -351,7 +350,7 @@ function CreateNewFlashSaleComponent({ param }) {
 
                <CustombuttonComponent
                   onClick={SendHandler}
-                  // isLoading={param ? updateFlashSaleLoading : storeSelectedProductSaleLoading}
+                  isLoading={param ? updateFlashSaleLoading : storeSelectedProductSaleLoading}
                   innerText={param ? 'Update' : 'Save'}
                   btnCl={'category_upload'}
                />

@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
-import * as table from "./ProductBransTableComponent.style";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProductBrand } from "../../Redux/Actions/adminAction";
-import ProductBrandsTableInnerComponent from "../ProductBrandsTableInnerComponent/ProductBrandsTableInnerComponent";
-import { selectedItemLimit, removeSelectedItems } from "../../Redux/Actions/appAction";
+import React, { useEffect } from 'react';
+import * as table from './ProductBransTableComponent.style';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllProductBrand } from '../../Redux/Actions/adminAction';
+import ProductBrandsTableInnerComponent from '../ProductBrandsTableInnerComponent/ProductBrandsTableInnerComponent';
+import { selectedItemLimit, removeSelectedItems } from '../../Redux/Actions/adminAppAction';
 
 const row = [
-   { elm: "all", value: "All" },
-   { elm: "edit", value: "Edit" },
-   { elm: "brandIcon", value: "Icon" },
-   { elm: "Name", value: "Name" },
-   { elm: "Description", value: "Description" },
-   { elm: "Website", value: "Website" },
-   { elm: "Order", value: "Order" },
-   { elm: "BrandStatusInfo", value: "Brand status" },
+   { elm: 'all', value: 'All' },
+   { elm: 'edit', value: 'Edit' },
+   { elm: 'brandIcon', value: 'Icon' },
+   { elm: 'Name', value: 'Name' },
+   { elm: 'Description', value: 'Description' },
+   { elm: 'Website', value: 'Website' },
+   { elm: 'Order', value: 'Order' },
+   { elm: 'BrandStatusInfo', value: 'Brand status' },
 ];
 
 function ProductBransTableComponent() {

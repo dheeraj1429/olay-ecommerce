@@ -1,44 +1,39 @@
-import React, { useState, useEffect } from "react";
-import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import * as tags from "./ProductTagsInnerComponent.style";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { message } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { saveNewTag } from "../../Redux/Actions/adminAction";
+import React, { useState, useEffect } from 'react';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
+import * as tags from './ProductTagsInnerComponent.style';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import { message } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveNewTag } from '../../Redux/Actions/adminAction';
 import {
    removeProductTagInfo,
    productTagLoading,
    editProductTagLoading,
    removeUpdateTagInfo,
-} from "../../Redux/Actions/appAction";
-import { useParams } from "react-router";
-import { fetchSelectedProductTag, editProductTag } from "../../Redux/Actions/adminAction";
+} from '../../Redux/Actions/adminAppAction';
+import { useParams } from 'react-router';
+import { fetchSelectedProductTag, editProductTag } from '../../Redux/Actions/adminAction';
 
 const currencies = [
-   { value: "Pending", label: "Pending" },
-   { value: "Published", label: "Published" },
-   { value: "Draft", label: "Draft" },
+   { value: 'Pending', label: 'Pending' },
+   { value: 'Published', label: 'Published' },
+   { value: 'Draft', label: 'Draft' },
 ];
 
 function ProductTagsInnerComponent() {
    const [ProductTags, setProductTags] = useState({
-      name: "",
-      description: "",
-      status: "Draft",
+      name: '',
+      description: '',
+      status: 'Draft',
    });
 
    const dispatch = useDispatch();
    const params = useParams();
-   const {
-      insertNewProductTag,
-      productTagLoding,
-      selectedProductTag,
-      updateProductTagLoading,
-      editProductEdit,
-   } = useSelector((state) => state.admin);
+   const { insertNewProductTag, productTagLoding, selectedProductTag, updateProductTagLoading, editProductEdit } =
+      useSelector((state) => state.admin);
 
    const changeHandler = function (e) {
       const name = e.target.name;
@@ -58,18 +53,18 @@ function ProductTagsInnerComponent() {
             dispatch(saveNewTag({ name, description, status }));
             dispatch(productTagLoading(true));
          } else {
-            info("Product tag name is required");
+            info('Product tag name is required');
          }
       } else {
-         info("Please fill required filde");
+         info('Please fill required filde');
       }
    };
 
    const ClearHandler = function () {
       setProductTags({
-         name: "",
-         description: "",
-         status: "Draft",
+         name: '',
+         description: '',
+         status: 'Draft',
       });
    };
 
@@ -89,7 +84,7 @@ function ProductTagsInnerComponent() {
          );
          dispatch(editProductTagLoading(true));
       } else {
-         info("Fields values is not changed");
+         info('Fields values is not changed');
       }
    };
 
@@ -125,14 +120,12 @@ function ProductTagsInnerComponent() {
 
    return (
       <tags.div>
-         <HeadingComponent
-            Heading={!!selectedProductTag && params?.id ? "Edit tag" : "Product Tags"}
-         />
+         <HeadingComponent Heading={!!selectedProductTag && params?.id ? 'Edit tag' : 'Product Tags'} />
          <tags.spaceDiv>
             <Box
                component="form"
                sx={{
-                  "& > :not(style)": { my: 1, width: "100%" },
+                  '& > :not(style)': { my: 1, width: '100%' },
                }}
                noValidate
                autoComplete="off"
@@ -174,27 +167,23 @@ function ProductTagsInnerComponent() {
 
             {!!selectedProductTag && params?.id ? (
                <CustombuttonComponent
-                  innerText={"Update"}
+                  innerText={'Update'}
                   onClick={updateHandler}
-                  btnCl={"category_upload"}
+                  btnCl={'category_upload'}
                   isLoading={updateProductTagLoading}
                />
             ) : (
                <tags.flex>
                   <div className="pd">
                      <CustombuttonComponent
-                        innerText={"Save"}
+                        innerText={'Save'}
                         onClick={SendHandler}
-                        btnCl={"category_upload"}
+                        btnCl={'category_upload'}
                         isLoading={productTagLoding}
                      />
                   </div>
                   <div className="pd">
-                     <CustombuttonComponent
-                        innerText={"Clear"}
-                        onClick={ClearHandler}
-                        btnCl={"clear_btn"}
-                     />
+                     <CustombuttonComponent innerText={'Clear'} onClick={ClearHandler} btnCl={'clear_btn'} />
                   </div>
                </tags.flex>
             )}

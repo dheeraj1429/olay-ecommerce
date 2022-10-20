@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as sale from './CreateNewFlashSaleComponent.style';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import HeadingComponent from '../../Components/HeadingComponent/HeadingComponent';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
 import FetchListComponent from '../FetchListComponent/FetchListComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -12,9 +12,9 @@ import {
    insertNewSaleCollectionLodingFn,
    removeFlashSaleInfo,
    loadingUpdateSingleFlashSale,
-} from '../../Redux/Actions/appAction';
+} from '../../Redux/Actions/adminAppAction';
 import SaleSelectedProductComponent from '../SaleSelectedProductComponent/SaleSelectedProductComponent';
-import CustombuttonComponent from '../../Components/CustombuttonComponent/CustombuttonComponent';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import { MenuItem } from '@mui/material';
 import { message } from 'antd';
 import { getAllProductLable, insertNewProductFlashSale, updateSingleFlashSale } from '../../Redux/Actions/adminAction';

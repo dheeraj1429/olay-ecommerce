@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { FcDoNotInsert } from "@react-icons/all-files/fc/FcDoNotInsert";
-import { GrFormNextLink } from "@react-icons/all-files/gr/GrFormNextLink";
-import { GrFormPreviousLink } from "@react-icons/all-files/gr/GrFormPreviousLink";
-import { Popconfirm } from "antd";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import * as table from "./TableFooterComponent.style";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { FcDoNotInsert } from '@react-icons/all-files/fc/FcDoNotInsert';
+import { GrFormNextLink } from '@react-icons/all-files/gr/GrFormNextLink';
+import { GrFormPreviousLink } from '@react-icons/all-files/gr/GrFormPreviousLink';
+import { Popconfirm } from 'antd';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import * as table from './TableFooterComponent.style';
+import { useSelector, useDispatch } from 'react-redux';
 import {
    fetchAllProductBrand,
    deleteMultiSelectedProductBrand,
@@ -13,15 +13,15 @@ import {
    fetchUploadProducts,
    getProductTags,
    getAllFlashSales,
-} from "../../Redux/Actions/adminAction";
+} from '../../Redux/Actions/adminAction';
 import {
    fetchBrandProductLoading,
    removeAllSelectedItems,
    fetchLoadingProducts,
    productTagsFetchLoading,
    getAllFlashSalesLoading,
-} from "../../Redux/Actions/appAction";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+} from '../../Redux/Actions/adminAppAction';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 function TableFooterComponent({ action, state }) {
    const selectedItems = useSelector((state) => state.admin.selectedItems);
@@ -31,13 +31,13 @@ function TableFooterComponent({ action, state }) {
    const ChnageNext = function () {
       if (Limit >= 0 && Limit < state.totalPages) {
          setLimit((prev) => prev + 1);
-         if (action === "brands") {
+         if (action === 'brands') {
             dispatch(fetchBrandProductLoading(true));
-         } else if (action === "products") {
+         } else if (action === 'products') {
             dispatch(fetchLoadingProducts(true));
-         } else if (action === "tags") {
+         } else if (action === 'tags') {
             dispatch(productTagsFetchLoading(true));
-         } else if (action === "sales") {
+         } else if (action === 'sales') {
             dispatch(getAllFlashSalesLoading(true));
          }
       }
@@ -46,35 +46,35 @@ function TableFooterComponent({ action, state }) {
    const ChangePrev = function () {
       setLimit((prev) => prev - 1);
       if (Limit > 0) {
-         if (action === "brands") {
+         if (action === 'brands') {
             dispatch(fetchBrandProductLoading(true));
-         } else if (action === "products") {
+         } else if (action === 'products') {
             dispatch(fetchLoadingProducts(true));
-         } else if (action === "tags") {
+         } else if (action === 'tags') {
             dispatch(productTagsFetchLoading(true));
-         } else if (action === "sales") {
+         } else if (action === 'sales') {
             dispatch(getAllFlashSalesLoading(true));
          }
       }
    };
 
    const confirm = function () {
-      if (action === "brands") {
+      if (action === 'brands') {
          dispatch(deleteMultiSelectedProductBrand(selectedItems));
-      } else if (action === "products") {
+      } else if (action === 'products') {
          dispatch(deleteSelectedproducts(selectedItems));
       }
       dispatch(removeAllSelectedItems([]));
    };
 
    useEffect(() => {
-      if (action === "brands") {
+      if (action === 'brands') {
          dispatch(fetchAllProductBrand(Limit));
-      } else if (action === "products") {
+      } else if (action === 'products') {
          dispatch(fetchUploadProducts(Limit));
-      } else if (action === "tags") {
+      } else if (action === 'tags') {
          dispatch(getProductTags(Limit));
-      } else if (action === "sales") {
+      } else if (action === 'sales') {
          dispatch(getAllFlashSales(Limit));
       }
    }, [Limit]);
@@ -97,12 +97,12 @@ function TableFooterComponent({ action, state }) {
                            icon={
                               <QuestionCircleOutlined
                                  style={{
-                                    color: "red",
+                                    color: 'red',
                                  }}
                               />
                            }
                         >
-                           <CustombuttonComponent btnCl={"pagination_btn"}>
+                           <CustombuttonComponent btnCl={'pagination_btn'}>
                               <FcDoNotInsert />
                            </CustombuttonComponent>
                         </Popconfirm>
@@ -111,11 +111,17 @@ function TableFooterComponent({ action, state }) {
                </div>
                <div>
                   <table.flexDiv>
-                     <CustombuttonComponent btnCl={Limit <= 0 ? "PrevDisable_btn" : "pagination_btn"} onClick={ChangePrev}>
+                     <CustombuttonComponent
+                        btnCl={Limit <= 0 ? 'PrevDisable_btn' : 'pagination_btn'}
+                        onClick={ChangePrev}
+                     >
                         <GrFormPreviousLink />
                      </CustombuttonComponent>
 
-                     <CustombuttonComponent btnCl={Limit >= state.totalPages ? "PrevDisable_btn" : "pagination_btn"} onClick={ChnageNext}>
+                     <CustombuttonComponent
+                        btnCl={Limit >= state.totalPages ? 'PrevDisable_btn' : 'pagination_btn'}
+                        onClick={ChnageNext}
+                     >
                         <GrFormNextLink />
                      </CustombuttonComponent>
                   </table.flexDiv>

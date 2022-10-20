@@ -8,7 +8,7 @@ import { Popconfirm } from 'antd';
 import { removeFlashSaleProducts } from '../../Redux/Actions/adminAction';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { removeFlashSaleSelectedProducts } from '../../Redux/Actions/appAction';
+import { removeFlashSaleSelectedProducts } from '../../Redux/Actions/adminAppAction';
 
 function SaleSelectedProductComponent({ data, onChange, state, callBack }) {
    const dispatch = useDispatch();

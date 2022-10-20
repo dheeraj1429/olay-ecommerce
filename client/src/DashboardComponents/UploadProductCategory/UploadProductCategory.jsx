@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from "react";
-import * as category from "./UploadProductCategory.style";
-import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
-import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { message } from "antd";
-import { uploadProductCategory } from "../../Redux/Actions/adminAction";
-import { useSelector, useDispatch } from "react-redux";
-import {
-   productCategoryLoadingFn,
-   removeCategoryInfo,
-   insertNewCategory,
-} from "../../Redux/Actions/appAction";
-import ProductCategorysComponent from "../ProductCategorysComponent/ProductCategorysComponent";
-import EditProductCategoryComponent from "../EditProductCategoryComponent/EditProductCategoryComponent";
+import React, { useState, useEffect } from 'react';
+import * as category from './UploadProductCategory.style';
+import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import { message } from 'antd';
+import { uploadProductCategory } from '../../Redux/Actions/adminAction';
+import { useSelector, useDispatch } from 'react-redux';
+import { productCategoryLoadingFn, removeCategoryInfo, insertNewCategory } from '../../Redux/Actions/adminAppAction';
+import ProductCategorysComponent from '../ProductCategorysComponent/ProductCategorysComponent';
+import EditProductCategoryComponent from '../EditProductCategoryComponent/EditProductCategoryComponent';
 
-const key = "updatable";
+const key = 'updatable';
 
 function UploadProductCategory() {
    const [CategoryInfo, setCategoryInfo] = useState({
-      categoryName: "",
-      categoryDescription: "",
+      categoryName: '',
+      categoryDescription: '',
    });
    const dispatch = useDispatch();
 
@@ -32,9 +28,7 @@ function UploadProductCategory() {
       setCategoryInfo({ ...CategoryInfo, [name]: value });
    };
 
-   const { productCategory, productCategoryLoading, editCategory } = useSelector(
-      (state) => state.admin
-   );
+   const { productCategory, productCategoryLoading, editCategory } = useSelector((state) => state.admin);
 
    const info = (mes) => {
       message.info(mes);
@@ -47,11 +41,11 @@ function UploadProductCategory() {
          dispatch(uploadProductCategory({ categoryName, categoryDescription }));
          dispatch(productCategoryLoadingFn(true));
          message.loading({
-            content: "Loading...",
+            content: 'Loading...',
             key,
          });
       } else {
-         info("Please fill the form");
+         info('Please fill the form');
       }
    };
 
@@ -83,7 +77,7 @@ function UploadProductCategory() {
          <DashboardNavbarComponent />
          <category.innerDiv>
             <HeadingComponent
-               Heading={"Product Category"}
+               Heading={'Product Category'}
                subHeading={`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.`}
             />
 
@@ -95,7 +89,7 @@ function UploadProductCategory() {
                   <Box
                      component="form"
                      sx={{
-                        "& > :not(style)": { mb: 2, width: "100%" },
+                        '& > :not(style)': { mb: 2, width: '100%' },
                      }}
                      noValidate
                      autoComplete="off"
@@ -119,8 +113,8 @@ function UploadProductCategory() {
                      />
                   </Box>
                   <CustombuttonComponent
-                     innerText={"Save"}
-                     btnCl={"category_upload"}
+                     innerText={'Save'}
+                     btnCl={'category_upload'}
                      onClick={UploadHandler}
                      isLoading={productCategoryLoading}
                   />

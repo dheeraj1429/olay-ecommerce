@@ -1,6 +1,6 @@
-import { ACTION_TYPE } from '../ActionTypes/actionType';
+import { ADMIN_ACTION_TYPES } from '../ActionTypes/adminActionType';
 import axios from 'axios';
-import { headers } from './headers';
+import { headers } from '../../headers';
 import FileDownload from 'js-file-download';
 
 export const uploadProductCategory = function (data) {
@@ -10,7 +10,7 @@ export const uploadProductCategory = function (data) {
 
          if (productCategory && productCategory?.data) {
             dispatch({
-               type: ACTION_TYPE.PRODUCT_CATEGORY_INSERT,
+               type: ADMIN_ACTION_TYPES.PRODUCT_CATEGORY_INSERT,
                payload: productCategory && productCategory.data,
             });
          }
@@ -27,7 +27,7 @@ export const fetchProductsCategorys = function () {
 
          if (categorys && categorys?.data) {
             dispatch({
-               type: ACTION_TYPE.FETCH_PRODUCTS_CATEGORYS,
+               type: ADMIN_ACTION_TYPES.FETCH_PRODUCTS_CATEGORYS,
                payload: categorys && categorys?.data,
             });
          }
@@ -44,7 +44,7 @@ export const updateProductCategory = function (data) {
 
          if (updateCategory && updateCategory?.data && updateCategory?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.CATEGORY_UPDATE,
+               type: ADMIN_ACTION_TYPES.CATEGORY_UPDATE,
                payload: updateCategory && updateCategory?.data,
                targetId: data.categoryId,
                categoryName: data.name,
@@ -64,7 +64,7 @@ export const deleteSelectedCategory = function (data) {
 
          if (deleteCategory && deleteCategory?.data) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SELECTED_CATEGORY,
+               type: ADMIN_ACTION_TYPES.DELETE_SELECTED_CATEGORY,
                payload: data.id,
             });
          }
@@ -81,7 +81,7 @@ export const insertNewProductBrand = function (data) {
 
          if (brandProduct && brandProduct?.data) {
             dispatch({
-               type: ACTION_TYPE.INSERT_NEW_PRODUCT_BRAND,
+               type: ADMIN_ACTION_TYPES.INSERT_NEW_PRODUCT_BRAND,
                payload: brandProduct && brandProduct?.data,
             });
          }
@@ -98,7 +98,7 @@ export const fetchAllProductBrand = function (data) {
 
          if (fetchBrands && fetchBrands?.data) {
             dispatch({
-               type: ACTION_TYPE.FETCH_ALL_PRODUCT_BRAND,
+               type: ADMIN_ACTION_TYPES.FETCH_ALL_PRODUCT_BRAND,
                payload: fetchBrands && fetchBrands?.data,
             });
          }
@@ -115,13 +115,13 @@ export const deleteOneProductBrand = function (id) {
 
          if (deleteOneBrand && deleteOneBrand?.data && !!deleteOneBrand?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_ONE_PRODUCT_BRAND,
+               type: ADMIN_ACTION_TYPES.DELETE_ONE_PRODUCT_BRAND,
                payload: deleteOneBrand && deleteOneBrand?.data,
                selectedBrandId: id,
             });
          } else {
             dispatch({
-               type: ACTION_TYPE.DELETE_ONE_PRODUCT_BRAND,
+               type: ADMIN_ACTION_TYPES.DELETE_ONE_PRODUCT_BRAND,
                payload: deleteOneBrand && deleteOneBrand?.data,
             });
          }
@@ -138,12 +138,12 @@ export const deleteMultiSelectedProductBrand = function (data) {
 
          if (deleteSelected && deleteSelected?.data && deleteSelected?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SELECTED_BRAND_PRODUCT,
+               type: ADMIN_ACTION_TYPES.DELETE_SELECTED_BRAND_PRODUCT,
                payload: data,
             });
          } else {
             dispatch({
-               type: ACTION_TYPE.DELETE_SELECTED_BRAND_PRODUCT,
+               type: ADMIN_ACTION_TYPES.DELETE_SELECTED_BRAND_PRODUCT,
                message: deleteSelected && deleteSelected?.data,
             });
          }
@@ -160,7 +160,7 @@ export const fetchSelectedBrand = function (id) {
 
          if (getSelectedBrandProduct && getSelectedBrandProduct?.data) {
             dispatch({
-               type: ACTION_TYPE.FETCH_SELECTED_BRAND_PRODUCT,
+               type: ADMIN_ACTION_TYPES.FETCH_SELECTED_BRAND_PRODUCT,
                payload: getSelectedBrandProduct && getSelectedBrandProduct?.data,
             });
          }
@@ -177,7 +177,7 @@ export const editSelectedBrand = function (data) {
 
          if (updateSelectedBrand && updateSelectedBrand?.data) {
             dispatch({
-               type: ACTION_TYPE.EDIT_SELECTED_PRODUCT_BRAND,
+               type: ADMIN_ACTION_TYPES.EDIT_SELECTED_PRODUCT_BRAND,
                payload: updateSelectedBrand && updateSelectedBrand?.data,
             });
          }
@@ -194,7 +194,7 @@ export const deleteAllBrand = function () {
 
          if (deleteAllBrands && deleteAllBrands?.data && deleteAllBrands?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELTE_ALL_BRAND,
+               type: ADMIN_ACTION_TYPES.DELTE_ALL_BRAND,
                payload: deleteAllBrands && deleteAllBrands?.data,
             });
          }
@@ -211,7 +211,7 @@ export const fetchProductBrandItemsInfo = function () {
 
          if (brandInfo && brandInfo?.data && brandInfo?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.FETCH_PRODUCTS_BRADN_INFO,
+               type: ADMIN_ACTION_TYPES.FETCH_PRODUCTS_BRADN_INFO,
                payload: brandInfo && brandInfo?.data,
             });
          }
@@ -228,7 +228,7 @@ export const uplodNewProduct = function (data) {
 
          if (uploadProduct && uploadProduct?.data) {
             dispatch({
-               type: ACTION_TYPE.UPLOAD_NEW_PRODUCT,
+               type: ADMIN_ACTION_TYPES.UPLOAD_NEW_PRODUCT,
                payload: uploadProduct && uploadProduct?.data,
             });
          }
@@ -248,7 +248,7 @@ export const fetchUploadProducts = function (page, docItems) {
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
-               type: ACTION_TYPE.FETCH_UPLODED_PRODUCTS,
+               type: ADMIN_ACTION_TYPES.FETCH_UPLODED_PRODUCTS,
                payload: fetchProducts && fetchProducts?.data,
             });
          }
@@ -265,7 +265,7 @@ export const deleteAllProducts = function () {
 
          if (deleteProducts && deleteProducts?.data) {
             dispatch({
-               type: ACTION_TYPE.DELETE_ALL_PRODUCTS,
+               type: ADMIN_ACTION_TYPES.DELETE_ALL_PRODUCTS,
                payload: deleteProducts && deleteProducts?.data,
             });
          }
@@ -282,13 +282,13 @@ export const deleteSelectedproducts = function (data) {
 
          if (deleteProducts && deleteProducts?.data && deleteProducts?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SELECTED_PRODUCTS,
+               type: ADMIN_ACTION_TYPES.DELETE_SELECTED_PRODUCTS,
                payload: deleteProducts && deleteProducts?.data,
                productsId: data,
             });
          } else if (deleteProducts && deleteProducts?.data) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SELECTED_PRODUCTS,
+               type: ADMIN_ACTION_TYPES.DELETE_SELECTED_PRODUCTS,
                payload: deleteProducts && deleteProducts?.data,
             });
          }
@@ -308,13 +308,13 @@ export const deleteOneProduct = function (id, categoryId, brandId) {
 
          if (deleteOneProducts && deleteOneProducts?.data && deleteOneProducts?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_ONE_PRODUCTS,
+               type: ADMIN_ACTION_TYPES.DELETE_ONE_PRODUCTS,
                payload: deleteOneProducts && deleteOneProducts?.data,
                productsId: id,
             });
          } else {
             dispatch({
-               type: ACTION_TYPE.DELETE_ONE_PRODUCTS,
+               type: ADMIN_ACTION_TYPES.DELETE_ONE_PRODUCTS,
                payload: deleteOneProducts && deleteOneProducts?.data,
             });
          }
@@ -331,7 +331,7 @@ export const fetchSingleProduct = function (id) {
 
          if (singleProduct && singleProduct?.data) {
             dispatch({
-               type: ACTION_TYPE.FETCH_SINGLE_PRODUCT,
+               type: ADMIN_ACTION_TYPES.FETCH_SINGLE_PRODUCT,
                payload: singleProduct && singleProduct?.data,
             });
          }
@@ -352,7 +352,7 @@ export const editSingleProduct = function (data, id, selectedProductId) {
 
          if (editSingleProduct && editSingleProduct?.data) {
             dispatch({
-               type: ACTION_TYPE.EDIT_SINGLE_PRODUCT,
+               type: ADMIN_ACTION_TYPES.EDIT_SINGLE_PRODUCT,
                payload: editSingleProduct && editSingleProduct?.data,
             });
          }
@@ -369,7 +369,7 @@ export const saveNewTag = function (data) {
 
          if (insetTag && insetTag?.data) {
             dispatch({
-               type: ACTION_TYPE.INSERT_NEW_PRODUCT_TAG,
+               type: ADMIN_ACTION_TYPES.INSERT_NEW_PRODUCT_TAG,
                payload: insetTag && insetTag?.data,
             });
          }
@@ -386,7 +386,7 @@ export const getProductTags = function (page) {
 
          if (getTags && getTags?.data && getTags?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.GET_ALL_PRODUCTS_TAGS,
+               type: ADMIN_ACTION_TYPES.GET_ALL_PRODUCTS_TAGS,
                payload: getTags && getTags?.data,
             });
          }
@@ -403,7 +403,7 @@ export const deleteAllTags = function (data) {
 
          if (deleteTags && deleteTags?.data && !!deleteTags?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_ALL_TAGS,
+               type: ADMIN_ACTION_TYPES.DELETE_ALL_TAGS,
                payload: deleteTags && !!deleteAllTags?.data,
             });
          }
@@ -420,7 +420,7 @@ export const deleteSelectedProductTag = function (id) {
 
          if (deleteTag && deleteTag?.data && deleteTag?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SELECTED_PRODUCT_TAG,
+               type: ADMIN_ACTION_TYPES.DELETE_SELECTED_PRODUCT_TAG,
                payload: id,
             });
          }
@@ -437,7 +437,7 @@ export const fetchSelectedProductTag = function (id) {
 
          if (selectedTag && selectedTag?.data) {
             dispatch({
-               type: ACTION_TYPE.FETCH_SELECTED_PRODUCT_TAG,
+               type: ADMIN_ACTION_TYPES.FETCH_SELECTED_PRODUCT_TAG,
                payload: selectedTag && selectedTag?.data,
             });
          }
@@ -454,7 +454,7 @@ export const editProductTag = function (data) {
 
          if (edit && edit?.data) {
             dispatch({
-               type: ACTION_TYPE.EDIT_PRODUCT_TAG,
+               type: ADMIN_ACTION_TYPES.EDIT_PRODUCT_TAG,
                payload: edit && edit?.data,
             });
          }
@@ -471,7 +471,7 @@ export const fetchAllProductTags = function () {
 
          if (allTags && allTags?.data) {
             dispatch({
-               type: ACTION_TYPE.FETCH_ALL_PRODUCT_TAGS,
+               type: ADMIN_ACTION_TYPES.FETCH_ALL_PRODUCT_TAGS,
                payload: allTags && allTags?.data,
             });
          }
@@ -488,7 +488,7 @@ export const storeProductSwatches = function (data) {
 
          if (storeInfo && storeInfo?.data) {
             dispatch({
-               type: ACTION_TYPE.STORE_PRODUCT_SWATCHES,
+               type: ADMIN_ACTION_TYPES.STORE_PRODUCT_SWATCHES,
                payload: storeInfo && storeInfo?.data,
             });
          }
@@ -505,7 +505,7 @@ export const getproductSwatches = function () {
 
          if (productSwatches && productSwatches?.data) {
             dispatch({
-               type: ACTION_TYPE.GET_PRODUCT_SWATCHES,
+               type: ADMIN_ACTION_TYPES.GET_PRODUCT_SWATCHES,
                payload: productSwatches && productSwatches?.data,
             });
          }
@@ -522,7 +522,7 @@ export const removeAllProductSwatches = function () {
 
          if (removeSwatches && removeSwatches?.data.success) {
             dispatch({
-               type: ACTION_TYPE.REMOVER_ALL_PRODUCT_SWATCHES,
+               type: ADMIN_ACTION_TYPES.REMOVER_ALL_PRODUCT_SWATCHES,
                payload: removeSwatches && removeSwatches?.data,
             });
          }
@@ -539,7 +539,7 @@ export const fetchSingleProductColorSwatches = function (id) {
 
          if (singleSwatches && singleSwatches?.data) {
             dispatch({
-               type: ACTION_TYPE.FETCH_SINGLE_PRODUCT_SWATCHES,
+               type: ADMIN_ACTION_TYPES.FETCH_SINGLE_PRODUCT_SWATCHES,
                payload: singleSwatches && singleSwatches?.data,
             });
          }
@@ -556,7 +556,7 @@ export const editSingleProductSwatches = function (data) {
 
          if (editSwatches && editSwatches?.data) {
             dispatch({
-               type: ACTION_TYPE.EDIT_SINGLE_PRODUCT_SWATCHES,
+               type: ADMIN_ACTION_TYPES.EDIT_SINGLE_PRODUCT_SWATCHES,
                payload: editSwatches && editSwatches?.data,
             });
          }
@@ -573,7 +573,7 @@ export const removeSelectedProductSwatches = function (id) {
 
          if (deleteSelectedSwatches && deleteSelectedSwatches?.data && deleteSelectedSwatches?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SELECTED_PRODUCT_SWATCHES,
+               type: ADMIN_ACTION_TYPES.DELETE_SELECTED_PRODUCT_SWATCHES,
                payload: id,
             });
          }
@@ -590,7 +590,7 @@ export const updateNewSizeVariation = function (data) {
 
          if (insertProductSizeVarient && insertProductSizeVarient?.data) {
             dispatch({
-               type: ACTION_TYPE.UPLOD_PRODUCT_SIZE_VARIATION,
+               type: ADMIN_ACTION_TYPES.UPLOD_PRODUCT_SIZE_VARIATION,
                payload: insertProductSizeVarient && insertProductSizeVarient?.data,
             });
          }
@@ -607,7 +607,7 @@ export const getAllProductSizeVariations = function () {
 
          if (sizeVariations && sizeVariations?.data) {
             dispatch({
-               type: ACTION_TYPE.GET_ALL_PRODUCTS_SIZE_VARIATIONS,
+               type: ADMIN_ACTION_TYPES.GET_ALL_PRODUCTS_SIZE_VARIATIONS,
                payload: sizeVariations && sizeVariations?.data,
             });
          }
@@ -624,7 +624,7 @@ export const removeSingleSizeVariations = function (id) {
 
          if (removeSelectedSize && removeSelectedSize?.data && removeSelectedSize?.data.success) {
             dispatch({
-               type: ACTION_TYPE.REMOVE_SINGLE_SIZE_VARIATION,
+               type: ADMIN_ACTION_TYPES.REMOVE_SINGLE_SIZE_VARIATION,
                payload: id,
             });
          }
@@ -641,7 +641,7 @@ export const removeAllProductSizeVaration = function () {
 
          if (removeAllSizeVariation && removeAllSizeVariation?.data && removeAllSizeVariation?.data.success) {
             dispatch({
-               type: ACTION_TYPE.RMEOVE_ALL_PRODUCT_SIZE_VARIATION,
+               type: ADMIN_ACTION_TYPES.RMEOVE_ALL_PRODUCT_SIZE_VARIATION,
             });
          }
       } catch (err) {
@@ -657,7 +657,7 @@ export const getSingleProductSizeVations = function (id) {
 
          if (getSingleSizeVar && getSingleSizeVar?.data) {
             dispatch({
-               type: ACTION_TYPE.GET_SINGLE_PRODUCT_SIZE_VARIATION,
+               type: ADMIN_ACTION_TYPES.GET_SINGLE_PRODUCT_SIZE_VARIATION,
                payload: getSingleSizeVar && getSingleSizeVar?.data,
             });
          }
@@ -674,7 +674,7 @@ export const editProductSizeVariations = function (data) {
 
          if (editSizeVariations && editSizeVariations?.data) {
             dispatch({
-               type: ACTION_TYPE.EDIT_PRODUCT_SIZE_VARIATION,
+               type: ADMIN_ACTION_TYPES.EDIT_PRODUCT_SIZE_VARIATION,
                payload: editSizeVariations && editSizeVariations?.data,
             });
          }
@@ -691,7 +691,7 @@ export const insertProductSubVariation = function (data) {
 
          if (insertVariation && insertVariation?.data && insertVariation?.data.success) {
             dispatch({
-               type: ACTION_TYPE.INSERT_PRODUCT_SUB_VARIATION,
+               type: ADMIN_ACTION_TYPES.INSERT_PRODUCT_SUB_VARIATION,
                payload: insertVariation && insertVariation?.data,
             });
          } else {
@@ -713,7 +713,7 @@ export const fecthSingleSubVariation = function (id, parentProductId) {
 
          if (singelSubVariation && singelSubVariation?.data && singelSubVariation?.data.success) {
             dispatch({
-               type: ACTION_TYPE.FETCH_SINGLE_SUBVARIATION,
+               type: ADMIN_ACTION_TYPES.FETCH_SINGLE_SUBVARIATION,
                payload: singelSubVariation && singelSubVariation?.data,
             });
          }
@@ -730,7 +730,7 @@ export const updateSubVarition = function (data) {
 
          if (updatedData && updatedData?.data && updatedData?.data.success) {
             dispatch({
-               type: ACTION_TYPE.UPDATE_SINGLE_SUB_VARIATION,
+               type: ADMIN_ACTION_TYPES.UPDATE_SINGLE_SUB_VARIATION,
                payload: updatedData && updatedData?.data,
             });
          } else {
@@ -753,7 +753,7 @@ export const delteSingleSubVariatoion = function (data) {
 
          if (deleteSingleVariation && deleteSingleVariation?.data) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SINGLE_SUB_VARIATION,
+               type: ADMIN_ACTION_TYPES.DELETE_SINGLE_SUB_VARIATION,
                payload: deleteSingleVariation && deleteSingleVariation?.data,
             });
          }
@@ -770,7 +770,7 @@ export const insertNewProductFlashSale = function (data) {
 
          if (saleResponse && saleResponse?.data) {
             dispatch({
-               type: ACTION_TYPE.INSERT_FLASHSALE_COLLECTIONS,
+               type: ADMIN_ACTION_TYPES.INSERT_FLASHSALE_COLLECTIONS,
                payload: saleResponse && saleResponse?.data,
             });
          }
@@ -787,7 +787,7 @@ export const getAllFlashSales = function (page) {
 
          if (getAllSales && getAllSales?.data) {
             dispatch({
-               type: ACTION_TYPE.GET_ALL_FLASH_SALE,
+               type: ADMIN_ACTION_TYPES.GET_ALL_FLASH_SALE,
                payload: getAllSales && getAllSales?.data,
             });
          }
@@ -804,7 +804,7 @@ export const deleteAllFlashSales = function () {
 
          if (deleteAllSales && deleteAllSales?.data.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_ALL_FLASH_SALE,
+               type: ADMIN_ACTION_TYPES.DELETE_ALL_FLASH_SALE,
             });
          } else {
             console.log(deleteAllSales?.data);
@@ -822,7 +822,7 @@ export const deleteSingleFlashSale = function (id) {
 
          if (deleteSingleSale && deleteSingleSale?.data && deleteSingleSale?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELTE_SINGLE_SALE,
+               type: ADMIN_ACTION_TYPES.DELTE_SINGLE_SALE,
                payload: id,
             });
          }
@@ -839,7 +839,7 @@ export const getSinlgeFlashSale = function (id) {
 
          if (singleSale && singleSale?.data && singleSale?.data.success) {
             dispatch({
-               type: ACTION_TYPE.FETCH_SINGLE_FLASH_SALE,
+               type: ADMIN_ACTION_TYPES.FETCH_SINGLE_FLASH_SALE,
                payload: singleSale && singleSale?.data,
             });
          }
@@ -856,7 +856,7 @@ export const updateSingleFlashSale = function (data) {
 
          if (updateSale && updateSale?.data && updateSale?.data.success) {
             dispatch({
-               type: ACTION_TYPE.UPDATE_SINGLE_FLASH_SALE,
+               type: ADMIN_ACTION_TYPES.UPDATE_SINGLE_FLASH_SALE,
                payload: updateSale && updateSale?.data,
             });
          }
@@ -880,7 +880,7 @@ export const removeFlashSaleProducts = function (id, parentSaleId) {
             !!removeSelectedFlashSaleProduct?.data.success
          ) {
             dispatch({
-               type: ACTION_TYPE.REMOVE_FLASH_SALE_PRODUCTS,
+               type: ADMIN_ACTION_TYPES.REMOVE_FLASH_SALE_PRODUCTS,
                payload: id,
             });
          }
@@ -897,7 +897,7 @@ export const insertNewProductColorLable = function (data) {
 
          if (insertNewColor && insertNewColor?.data) {
             dispatch({
-               type: ACTION_TYPE.INSERT_NEW_PRODUCT_COLOR_LABEL,
+               type: ADMIN_ACTION_TYPES.INSERT_NEW_PRODUCT_COLOR_LABEL,
                payload: insertNewColor && insertNewColor?.data,
             });
          }
@@ -914,7 +914,7 @@ export const getAllProductLable = function () {
 
          if (getAllLabels && getAllLabels?.data && getAllLabels?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.GET_ALL_PRODUCT_LABEL,
+               type: ADMIN_ACTION_TYPES.GET_ALL_PRODUCT_LABEL,
                payload: getAllLabels && getAllLabels?.data,
             });
          }
@@ -931,7 +931,7 @@ export const deletAllProductLabel = function () {
 
          if (deleteAllLabels && deleteAllLabels?.data && deleteAllLabels?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_ALL_PRODUCTS_LABELS,
+               type: ADMIN_ACTION_TYPES.DELETE_ALL_PRODUCTS_LABELS,
                payload: deleteAllLabels && deleteAllLabels?.data,
             });
          }
@@ -948,7 +948,7 @@ export const deleteSingleProductlabel = function (id) {
 
          if (deleteSingleLable && deleteSingleLable?.data && deleteSingleLable?.data.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SINGLE_PRODUCT_LABEL,
+               type: ADMIN_ACTION_TYPES.DELETE_SINGLE_PRODUCT_LABEL,
                payload: id,
             });
          }
@@ -965,7 +965,7 @@ export const getSingleProductLabel = function (id) {
 
          if (getSingleLabel && getSingleLabel?.data && getSingleLabel?.data.success) {
             dispatch({
-               type: ACTION_TYPE.GET_SINGLE_PRODUCT_LABEL,
+               type: ADMIN_ACTION_TYPES.GET_SINGLE_PRODUCT_LABEL,
                payload: getSingleLabel && getSingleLabel?.data,
             });
          }
@@ -982,7 +982,7 @@ export const updateProductLabel = function (data) {
 
          if (updateLabel && updateLabel?.data && updateLabel?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.UPDATE_PRODUCT_LABEL,
+               type: ADMIN_ACTION_TYPES.UPDATE_PRODUCT_LABEL,
                payload: updateLabel && updateLabel?.data,
             });
          }
@@ -1006,7 +1006,7 @@ export const exportProductCsv = function () {
          if (exportProduct && exportProduct?.data) {
             FileDownload(exportProduct?.data, 'product.csv');
             dispatch({
-               type: ACTION_TYPE.EXPORT_LOADING,
+               type: ADMIN_ACTION_TYPES.EXPORT_LOADING,
                payload: false,
             });
          }
@@ -1025,7 +1025,7 @@ export const getAllExportInfo = function () {
 
          if (getAllExports && getAllExports?.data && getAllExports?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.GET_ALL_EXPORT_INFO,
+               type: ADMIN_ACTION_TYPES.GET_ALL_EXPORT_INFO,
                payload: getAllExports && getAllExports?.data,
             });
          }
@@ -1045,7 +1045,7 @@ export const deleteSingleProductHistory = function (id, fileName) {
 
          if (deleteProductHistory && deleteProductHistory?.data && deleteProductHistory?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.DELETE_SINGLE_EXPORT_PRODUCT_HISTORY,
+               type: ADMIN_ACTION_TYPES.DELETE_SINGLE_EXPORT_PRODUCT_HISTORY,
                payload: id,
             });
          }
@@ -1076,7 +1076,7 @@ export const sendHistoryFileWithEmail = function (data) {
 
          if (sendEmail && sendEmail?.data && sendEmail?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.SEND_MAIL,
+               type: ADMIN_ACTION_TYPES.SEND_MAIL,
                payload: sendEmail && sendEmail?.data,
             });
          }
@@ -1094,7 +1094,7 @@ export const downloadCsvTemplate = function () {
          if (downloadTemplate && downloadTemplate?.data) {
             FileDownload(downloadTemplate?.data, 'template.csv');
             dispatch({
-               type: ACTION_TYPE.DOWNLOAD_CSV_IMPORT_TEMPLATE,
+               type: ADMIN_ACTION_TYPES.DOWNLOAD_CSV_IMPORT_TEMPLATE,
             });
          }
       } catch (err) {
@@ -1110,7 +1110,7 @@ export const importCsvFile = function (data) {
 
          if (importData && importData?.data && importData?.data.success) {
             dispatch({
-               type: ACTION_TYPE.IMPORT_CSV_INFO,
+               type: ADMIN_ACTION_TYPES.IMPORT_CSV_INFO,
                payload: importData && importData?.data,
             });
          }
@@ -1127,7 +1127,7 @@ export const getProductGenralReport = function () {
 
          if (getReport && getReport?.data && getReport?.data.success) {
             dispatch({
-               type: ACTION_TYPE.PRODUCT_GET_GENRNAL_REPORT,
+               type: ADMIN_ACTION_TYPES.PRODUCT_GET_GENRNAL_REPORT,
                payload: getReport && getReport?.data,
             });
          }
@@ -1144,7 +1144,7 @@ export const getAllSignInUsers = function () {
 
          if (getUsers && getUsers?.data && getUsers?.data?.success) {
             dispatch({
-               type: ACTION_TYPE.GET_ALL_SIGNIN_USERS,
+               type: ADMIN_ACTION_TYPES.GET_ALL_SIGNIN_USERS,
                payload: getUsers && getUsers?.data,
             });
          }
@@ -1161,7 +1161,7 @@ export const ShopSetting = function (data) {
 
          if (shopSettingReponse && shopSettingReponse?.data) {
             dispatch({
-               type: ACTION_TYPE.SHOP_INFORMATION,
+               type: ADMIN_ACTION_TYPES.SHOP_INFORMATION,
                payload: shopSettingReponse && shopSettingReponse?.data,
             });
          }
@@ -1178,7 +1178,7 @@ export const getShopInfromation = function () {
 
          if (getShopInfo && getShopInfo?.data && getShopInfo?.data.success) {
             dispatch({
-               type: ACTION_TYPE.GET_SHOP_INFORMATION,
+               type: ADMIN_ACTION_TYPES.GET_SHOP_INFORMATION,
                payload: getShopInfo && getShopInfo?.data,
             });
          }
@@ -1195,7 +1195,7 @@ export const updateShopInformation = function (data) {
 
          if (updateShopInfo && updateShopInfo?.data && updateShopInfo?.data.success) {
             dispatch({
-               type: ACTION_TYPE.UPDATE_SHOP_INFOMATION,
+               type: ADMIN_ACTION_TYPES.UPDATE_SHOP_INFOMATION,
                payload: updateShopInfo && updateShopInfo?.data,
             });
          }
@@ -1212,7 +1212,7 @@ export const storeLocationData = function (data) {
 
          if (locationData && locationData?.data) {
             dispatch({
-               type: ACTION_TYPE.STORE_SHOP_LOCATIOON,
+               type: ADMIN_ACTION_TYPES.STORE_SHOP_LOCATIOON,
                payload: locationData && locationData?.data,
             });
          }
@@ -1229,7 +1229,7 @@ export const getAllShopInfomation = function () {
 
          if (getShopData && getShopData?.data && getShopData?.data.success) {
             dispatch({
-               type: ACTION_TYPE.GET_ALL_SHOP_LOCATIOON_DATA,
+               type: ADMIN_ACTION_TYPES.GET_ALL_SHOP_LOCATIOON_DATA,
                payload: getShopData && getShopData?.data,
             });
          }
@@ -1247,13 +1247,13 @@ export const UpdateStoreShopInformation = function (data) {
          if (updateInfo && updateInfo?.data) {
             if (updateInfo?.data.success) {
                dispatch({
-                  type: ACTION_TYPE.UPDATE_SHOP_INFORMATION,
+                  type: ADMIN_ACTION_TYPES.UPDATE_SHOP_INFORMATION,
                   payload: updateInfo && updateInfo?.data,
                   updatedData: data,
                });
             } else {
                dispatch({
-                  type: ACTION_TYPE.UPDATE_SHOP_INFORMATION,
+                  type: ADMIN_ACTION_TYPES.UPDATE_SHOP_INFORMATION,
                   payload: updateInfo && updateInfo?.data,
                });
             }

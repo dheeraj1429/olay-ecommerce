@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import * as variation from "./CreateSelectedProductVariationComponent.style";
-import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
-import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import { Box, TextField } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import React, { useState, useEffect } from 'react';
+import * as variation from './CreateSelectedProductVariationComponent.style';
+import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
+import { Box, TextField } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import ProductUploadImageComponent from '../ProductUploadImageComponent/ProductUploadImageComponent';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 import {
    getAllProductSizeVariations,
    getproductSwatches,
@@ -15,8 +15,8 @@ import {
    fecthSingleSubVariation,
    updateSubVarition,
    delteSingleSubVariatoion,
-} from "../../Redux/Actions/adminAction";
-import { FaCircle } from "@react-icons/all-files/fa/FaCircle";
+} from '../../Redux/Actions/adminAction';
+import { FaCircle } from '@react-icons/all-files/fa/FaCircle';
 import {
    insertNewSubVationLoading,
    removeProductSubInfo,
@@ -25,31 +25,31 @@ import {
    removeProductSubVaritionInfo,
    deleteSubVaritionLoadingFn,
    removeDeleteSubVariationInfo,
-} from "../../Redux/Actions/appAction";
-import { useLocation } from "react-router";
-import { message, Popconfirm } from "antd";
-import { useNavigate } from "react-router";
+} from '../../Redux/Actions/adminAppAction';
+import { useLocation } from 'react-router';
+import { message, Popconfirm } from 'antd';
+import { useNavigate } from 'react-router';
 
 const stock = [
-   { value: "in stock", label: "in stock" },
-   { value: "out of stock", label: "out of stock" },
+   { value: 'in stock', label: 'in stock' },
+   { value: 'out of stock', label: 'out of stock' },
 ];
 
 function CreateSelectedProductVariationComponent() {
    const [VariationInfo, setVariationInfo] = useState({
-      name: "",
-      sku: "",
-      regularPrice: "",
-      salePrice: "",
-      stokeStatus: "",
-      description: "",
-      variationImage: "",
-      colorSwatches: "",
-      weight: "",
-      length: "",
-      wide: "",
-      height: "",
-      size: "",
+      name: '',
+      sku: '',
+      regularPrice: '',
+      salePrice: '',
+      stokeStatus: '',
+      description: '',
+      variationImage: '',
+      colorSwatches: '',
+      weight: '',
+      length: '',
+      wide: '',
+      height: '',
+      size: '',
    });
 
    const params = useParams();
@@ -86,27 +86,27 @@ function CreateSelectedProductVariationComponent() {
 
    const createFormData = function (id = undefined, parentTargetProduct = undefined) {
       const formData = new FormData();
-      formData.append("selectedProductId", params.id);
-      formData.append("variationName", VariationInfo.name);
-      formData.append("sku", VariationInfo.sku);
-      formData.append("regularPrice", VariationInfo.regularPrice);
-      formData.append("salePrice", VariationInfo.salePrice);
-      formData.append("stokeStatus", VariationInfo.stokeStatus);
-      formData.append("description", VariationInfo.description);
-      formData.append("variationImage", VariationInfo.variationImage);
-      formData.append("colorSwatches", VariationInfo.colorSwatches);
-      formData.append("weight", VariationInfo.weight);
-      formData.append("length", VariationInfo.length);
-      formData.append("wide", VariationInfo.wide);
-      formData.append("height", VariationInfo.height);
-      formData.append("size", VariationInfo.size);
+      formData.append('selectedProductId', params.id);
+      formData.append('variationName', VariationInfo.name);
+      formData.append('sku', VariationInfo.sku);
+      formData.append('regularPrice', VariationInfo.regularPrice);
+      formData.append('salePrice', VariationInfo.salePrice);
+      formData.append('stokeStatus', VariationInfo.stokeStatus);
+      formData.append('description', VariationInfo.description);
+      formData.append('variationImage', VariationInfo.variationImage);
+      formData.append('colorSwatches', VariationInfo.colorSwatches);
+      formData.append('weight', VariationInfo.weight);
+      formData.append('length', VariationInfo.length);
+      formData.append('wide', VariationInfo.wide);
+      formData.append('height', VariationInfo.height);
+      formData.append('size', VariationInfo.size);
 
       if (!!id) {
-         formData.append("subVaritionId", id);
+         formData.append('subVaritionId', id);
       }
 
       if (!!parentTargetProduct) {
-         formData.append("parentProductId", parentTargetProduct);
+         formData.append('parentProductId', parentTargetProduct);
       }
 
       return formData;
@@ -119,15 +119,15 @@ function CreateSelectedProductVariationComponent() {
             dispatch(insertProductSubVariation(formData));
             dispatch(insertNewSubVationLoading(true));
          } else {
-            info("Product also required color and size varition.");
+            info('Product also required color and size varition.');
          }
       } else {
-         info("Product variation name is required!");
+         info('Product variation name is required!');
       }
    };
 
    const getIdFunction = function () {
-      const locationAr = location.pathname.split("/");
+      const locationAr = location.pathname.split('/');
 
       let secondLast = locationAr[locationAr.length - 2],
          parentProductId = locationAr[4],
@@ -143,10 +143,7 @@ function CreateSelectedProductVariationComponent() {
    const updateHandler = function () {
       const { parentProductId } = getIdFunction();
 
-      const formData = createFormData(
-         fetchSingleSubVarition.subVariation?.variations[0]._id,
-         parentProductId
-      );
+      const formData = createFormData(fetchSingleSubVarition.subVariation?.variations[0]._id, parentProductId);
 
       dispatch(loadingUpdateSubVariation(true));
       dispatch(updateSubVarition(formData));
@@ -161,7 +158,7 @@ function CreateSelectedProductVariationComponent() {
    useEffect(() => {
       const { secondLast, parentProductId, last } = getIdFunction();
 
-      if (secondLast === "editSub") {
+      if (secondLast === 'editSub') {
          dispatch(fecthSingleSubVariation(last, parentProductId));
       }
 
@@ -171,7 +168,7 @@ function CreateSelectedProductVariationComponent() {
       return () => {
          dispatch(removeProductSubInfo(null));
 
-         if (secondLast === "editSub") {
+         if (secondLast === 'editSub') {
             dispatch(removeSubVaritionInfo(null));
             dispatch(removeProductSubVaritionInfo(null));
          }
@@ -185,27 +182,23 @@ function CreateSelectedProductVariationComponent() {
    }, [productSubVariationInfo]);
 
    useEffect(() => {
-      if (
-         !!fetchSingleSubVarition &&
-         fetchSingleSubVarition?.success &&
-         fetchSingleSubVarition?.subVariation
-      ) {
+      if (!!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation) {
          let subVariation = fetchSingleSubVarition.subVariation?.variations[0];
 
          setVariationInfo({
             name: subVariation.variationName,
             sku: subVariation.sku,
-            regularPrice: !!subVariation.regularPrice ? subVariation.regularPrice : "",
-            salePrice: !!subVariation?.salePrice ? subVariation.salePrice : "",
+            regularPrice: !!subVariation.regularPrice ? subVariation.regularPrice : '',
+            salePrice: !!subVariation?.salePrice ? subVariation.salePrice : '',
             stokeStatus: subVariation?.stokeStatus,
             description: subVariation?.description,
             variationImage: subVariation.variationImage,
             colorSwatches: subVariation?.colorSwatches?._id,
-            weight: subVariation?.weight ? subVariation.weight : "",
-            length: subVariation?.length ? subVariation.length : "",
-            wide: subVariation?.wide ? subVariation.wide : "",
-            height: subVariation?.height ? subVariation.height : "",
-            size: subVariation?.size ? subVariation?.size._id : "",
+            weight: subVariation?.weight ? subVariation.weight : '',
+            length: subVariation?.length ? subVariation.length : '',
+            wide: subVariation?.wide ? subVariation.wide : '',
+            height: subVariation?.height ? subVariation.height : '',
+            size: subVariation?.size ? subVariation?.size._id : '',
          });
       }
    }, [fetchSingleSubVarition]);
@@ -221,7 +214,7 @@ function CreateSelectedProductVariationComponent() {
          info(deleteSubVaritionInfo.message);
 
          if (deleteSubVaritionInfo.success) {
-            navigation("/dashboard/product-variation");
+            navigation('/dashboard/product-variation');
             dispatch(removeDeleteSubVariationInfo(true));
          }
       }
@@ -234,11 +227,9 @@ function CreateSelectedProductVariationComponent() {
          <variation.spaceDiv>
             <HeadingComponent
                Heading={
-                  !!fetchSingleSubVarition &&
-                  fetchSingleSubVarition?.success &&
-                  fetchSingleSubVarition?.subVariation
-                     ? "Edit Product sub varition"
-                     : "Create product variations"
+                  !!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation
+                     ? 'Edit Product sub varition'
+                     : 'Create product variations'
                }
                subHeading={`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.`}
             />
@@ -248,7 +239,7 @@ function CreateSelectedProductVariationComponent() {
                   <Box
                      component="form"
                      sx={{
-                        "& > :not(style)": { my: 1, width: "100%" },
+                        '& > :not(style)': { my: 1, width: '100%' },
                      }}
                      noValidate
                      autoComplete="off"
@@ -257,7 +248,7 @@ function CreateSelectedProductVariationComponent() {
                         id="outlined-basic"
                         label="Variation name"
                         variant="outlined"
-                        type={"text"}
+                        type={'text'}
                         name="name"
                         value={VariationInfo.name}
                         onChange={changeHandler}
@@ -267,7 +258,7 @@ function CreateSelectedProductVariationComponent() {
                         id="outlined-basic"
                         label="SKU"
                         variant="outlined"
-                        type={"text"}
+                        type={'text'}
                         name="sku"
                         value={VariationInfo.sku}
                         onChange={changeHandler}
@@ -278,7 +269,7 @@ function CreateSelectedProductVariationComponent() {
                               id="outlined-basic"
                               label="Regular Price"
                               variant="outlined"
-                              type={"number"}
+                              type={'number'}
                               name="regularPrice"
                               value={VariationInfo.regularPrice}
                               onChange={changeHandler}
@@ -289,7 +280,7 @@ function CreateSelectedProductVariationComponent() {
                               id="outlined-basic"
                               label="Sale Price"
                               variant="outlined"
-                              type={"number"}
+                              type={'number'}
                               name="salePrice"
                               value={VariationInfo.salePrice}
                               onChange={changeHandler}
@@ -325,9 +316,7 @@ function CreateSelectedProductVariationComponent() {
                               value={VariationInfo.size}
                               onChange={changeHandler}
                            >
-                              {!!allSizeVariations &&
-                              allSizeVariations.success &&
-                              allSizeVariations?.sizeVariations
+                              {!!allSizeVariations && allSizeVariations.success && allSizeVariations?.sizeVariations
                                  ? allSizeVariations.sizeVariations.map((option) => (
                                       <MenuItem key={option._id} value={option._id}>
                                          {option.name}
@@ -347,9 +336,7 @@ function CreateSelectedProductVariationComponent() {
                               value={VariationInfo.colorSwatches}
                               onChange={changeHandler}
                            >
-                              {!!allProductSwatches &&
-                              allProductSwatches.success &&
-                              allProductSwatches?.allSwatches
+                              {!!allProductSwatches && allProductSwatches.success && allProductSwatches?.allSwatches
                                  ? allProductSwatches.allSwatches.map((option) => (
                                       <MenuItem key={option._id} value={option._id}>
                                          <variation.flexSpace className="flex_items">
@@ -373,7 +360,7 @@ function CreateSelectedProductVariationComponent() {
                               id="outlined-basic"
                               label="Product weight"
                               variant="outlined"
-                              type={"number"}
+                              type={'number'}
                               name="weight"
                               value={VariationInfo.weight}
                               onChange={changeHandler}
@@ -384,7 +371,7 @@ function CreateSelectedProductVariationComponent() {
                               id="outlined-basic"
                               label="Product length"
                               variant="outlined"
-                              type={"number"}
+                              type={'number'}
                               name="length"
                               value={VariationInfo.length}
                               onChange={changeHandler}
@@ -397,7 +384,7 @@ function CreateSelectedProductVariationComponent() {
                               id="outlined-basic"
                               label="Product wide"
                               variant="outlined"
-                              type={"number"}
+                              type={'number'}
                               name="wide"
                               value={VariationInfo.wide}
                               onChange={changeHandler}
@@ -408,7 +395,7 @@ function CreateSelectedProductVariationComponent() {
                               id="outlined-basic"
                               label="Product height"
                               variant="outlined"
-                              type={"number"}
+                              type={'number'}
                               name="height"
                               value={VariationInfo.height}
                               onChange={changeHandler}
@@ -426,11 +413,9 @@ function CreateSelectedProductVariationComponent() {
                         value={VariationInfo.description}
                         onChange={changeHandler}
                      />
-                     <HeadingComponent cl="sm_heading" Heading={"Product variations image"} />
+                     <HeadingComponent cl="sm_heading" Heading={'Product variations image'} />
                      <ProductUploadImageComponent
-                        selectedPrevImage={
-                           !!VariationInfo?.variationImage ? VariationInfo?.variationImage : null
-                        }
+                        selectedPrevImage={!!VariationInfo?.variationImage ? VariationInfo?.variationImage : null}
                         filde="productImages"
                         onChange={ImageGrabHandler}
                         name="variationImage"
@@ -441,8 +426,8 @@ function CreateSelectedProductVariationComponent() {
                   fetchSingleSubVarition?.subVariation ? (
                      <variation.flex>
                         <CustombuttonComponent
-                           innerText={"Update"}
-                           btnCl={"category_upload"}
+                           innerText={'Update'}
+                           btnCl={'category_upload'}
                            onClick={updateHandler}
                            isLoading={editProductSingleVariationLoading}
                         />
@@ -454,16 +439,16 @@ function CreateSelectedProductVariationComponent() {
                            cancelText="No"
                         >
                            <CustombuttonComponent
-                              innerText={"Delete"}
-                              btnCl={"Delete_btn"}
+                              innerText={'Delete'}
+                              btnCl={'Delete_btn'}
                               isLoading={deleteSubVaritionLoading}
                            />
                         </Popconfirm>
                      </variation.flex>
                   ) : (
                      <CustombuttonComponent
-                        innerText={"Save"}
-                        btnCl={"category_upload"}
+                        innerText={'Save'}
+                        btnCl={'category_upload'}
                         onClick={SaveVariationHandler}
                         isLoading={productSubVariationLoading}
                      />

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import * as signIn from "./DashboardSingInComponent.styl";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import { useDispatch, useSelector } from "react-redux";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { adminSignIn } from "../../Redux/Actions/authAction";
-import { userLoginLoging } from "../../Redux/Actions/appAction";
+import React, { useState, useEffect } from 'react';
+import * as signIn from './DashboardSingInComponent.styl';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import { useDispatch, useSelector } from 'react-redux';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import { userLoginIn } from '../../Redux/Actions/authAction';
+import { userLoginLoging } from '../../Redux/Actions/authAppAction';
 
 function DashboardSingInComponent() {
    const [SignInDetails, setSignInDetails] = useState({
-      email: "",
-      password: "",
+      email: '',
+      password: '',
    });
    const [Error, setError] = useState(null);
    const dispatch = useDispatch();
@@ -28,10 +28,10 @@ function DashboardSingInComponent() {
       const { email, password } = SignInDetails;
 
       if (email && password) {
-         dispatch(adminSignIn({ email, password }));
+         dispatch(userLoginIn({ email, password }));
          dispatch(userLoginLoging(true));
       } else {
-         setError("Please fill all fileds*");
+         setError('Please fill all fileds*');
       }
    };
 
@@ -53,7 +53,7 @@ function DashboardSingInComponent() {
          <Box
             component="form"
             sx={{
-               "& > :not(style)": { my: 1, width: "100%" },
+               '& > :not(style)': { my: 1, width: '100%' },
             }}
             noValidate
             autoComplete="off"
@@ -61,7 +61,7 @@ function DashboardSingInComponent() {
             <TextField
                id="outlined-basic"
                label="Email"
-               type={"email"}
+               type={'email'}
                name="email"
                value={SignInDetails.email}
                variant="outlined"
@@ -70,7 +70,7 @@ function DashboardSingInComponent() {
             <TextField
                id="outlined-basic"
                label="Password"
-               type={"password"}
+               type={'password'}
                name="password"
                value={SignInDetails.password}
                variant="outlined"
@@ -83,11 +83,7 @@ function DashboardSingInComponent() {
                <img src="/images/spneer.svg" />
             </div>
          ) : (
-            <CustombuttonComponent
-               onClick={SendData}
-               innerText={"Sign In"}
-               btnCl={"admin-signin"}
-            />
+            <CustombuttonComponent onClick={SendData} innerText={'Sign In'} btnCl={'admin-signin'} />
          )}
       </signIn.div>
    );

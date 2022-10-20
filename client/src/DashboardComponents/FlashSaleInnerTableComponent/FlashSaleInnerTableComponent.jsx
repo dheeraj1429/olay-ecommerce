@@ -6,7 +6,7 @@ import { VscClose } from '@react-icons/all-files/vsc/VscClose';
 import * as global from '../../Global.style';
 import { Popconfirm } from 'antd';
 import { deleteSingleFlashSale } from '../../Redux/Actions/adminAction';
-import HocSpnnerComponent from '../../Components/HocSpnnerComponent/HocSpnnerComponent';
+import HocSpnnerComponent from '../../HelperComponents/HocSpnnerComponent/HocSpnnerComponent';
 import { Link } from 'react-router-dom';
 
 const row = [

@@ -1,22 +1,26 @@
-import React from "react";
-import * as tableCm from "./AllSwatchTableComponent.style";
-import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
-import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
-import { VscClose } from "@react-icons/all-files/vsc/VscClose";
-import { Link } from "react-router-dom";
-import { Popconfirm } from "antd";
-import { removeSelectedProductSwatches, removeSingleSizeVariations, deleteSingleProductlabel } from "../../Redux/Actions/adminAction";
-import { useDispatch } from "react-redux";
+import React from 'react';
+import * as tableCm from './AllSwatchTableComponent.style';
+import HocSpnnerComponent from '../../HelperComponents/HocSpnnerComponent/HocSpnnerComponent';
+import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2';
+import { VscClose } from '@react-icons/all-files/vsc/VscClose';
+import { Link } from 'react-router-dom';
+import { Popconfirm } from 'antd';
+import {
+   removeSelectedProductSwatches,
+   removeSingleSizeVariations,
+   deleteSingleProductlabel,
+} from '../../Redux/Actions/adminAction';
+import { useDispatch } from 'react-redux';
 
 function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
    const dispatch = useDispatch();
 
    const confirm = (id) => {
-      if (field === "allSwatches") {
+      if (field === 'allSwatches') {
          dispatch(removeSelectedProductSwatches(id));
-      } else if (field === "sizeVariations") {
+      } else if (field === 'sizeVariations') {
          dispatch(removeSingleSizeVariations(id));
-      } else if (field === "allLabels") {
+      } else if (field === 'allLabels') {
          dispatch(deleteSingleProductlabel(id));
       }
    };
@@ -41,7 +45,7 @@ function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
                         <td>
                            <Popconfirm
                               title={`Are you sure to delete this product ${
-                                 field == "allSwatches" ? "swatches" : field === "allLabels" ? "sale" : "size"
+                                 field == 'allSwatches' ? 'swatches' : field === 'allLabels' ? 'sale' : 'size'
                               } variation`}
                               onConfirm={() => confirm(el._id)}
                               okText="Yes"
@@ -63,12 +67,12 @@ function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
                         {color ? null : (
                            <td
                               style={{
-                                 width: "3%",
+                                 width: '3%',
                               }}
                            >
                               {el?.createdAt
                                  ? (function () {
-                                      const date = String(new Date(el.createdAt)).split("GMT")[0];
+                                      const date = String(new Date(el.createdAt)).split('GMT')[0];
                                       return <p>{`${date}`}</p>;
                                    })()
                                  : null}
@@ -90,7 +94,9 @@ function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
             </tableCm.tableDiv>
          ) : (
             <div className="center_div">
-               <p>No {`${color && !dataTarget ? "color swatches" : dataTarget ? "Product label" : "size variations"}`}</p>
+               <p>
+                  No {`${color && !dataTarget ? 'color swatches' : dataTarget ? 'Product label' : 'size variations'}`}
+               </p>
             </div>
          )}
       </tableCm.div>

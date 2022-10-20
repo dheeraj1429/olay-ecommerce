@@ -1,12 +1,12 @@
-import React from "react";
-import * as table from "./AllProductsTagTableInnerComponent.style";
-import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
-import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
-import { VscClose } from "@react-icons/all-files/vsc/VscClose";
-import { Popconfirm } from "antd";
-import { deleteSelectedProductTag } from "../../Redux/Actions/adminAction";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import React from 'react';
+import * as table from './AllProductsTagTableInnerComponent.style';
+import HocSpnnerComponent from '../../HelperComponents/HocSpnnerComponent/HocSpnnerComponent';
+import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2';
+import { VscClose } from '@react-icons/all-files/vsc/VscClose';
+import { Popconfirm } from 'antd';
+import { deleteSelectedProductTag } from '../../Redux/Actions/adminAction';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 function AllProductsTagTableInnerComponent({ allProductsTags }) {
    const dispatch = useDispatch();

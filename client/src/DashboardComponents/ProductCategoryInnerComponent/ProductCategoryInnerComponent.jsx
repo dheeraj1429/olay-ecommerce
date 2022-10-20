@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import * as inner from "./ProductCategoryInnerComponent.style";
-import { Popconfirm } from "antd";
-import { useDispatch } from "react-redux";
-import { editProductCategory, selectedCategory } from "../../Redux/Actions/appAction";
-import { FcSupport } from "@react-icons/all-files/fc/FcSupport";
-import { FcGenealogy } from "@react-icons/all-files/fc/FcGenealogy";
-import Badge from "@mui/material/Badge";
+import React, { useState } from 'react';
+import * as inner from './ProductCategoryInnerComponent.style';
+import { Popconfirm } from 'antd';
+import { useDispatch } from 'react-redux';
+import { editProductCategory, selectedCategory } from '../../Redux/Actions/adminAppAction';
+import { FcSupport } from '@react-icons/all-files/fc/FcSupport';
+import { FcGenealogy } from '@react-icons/all-files/fc/FcGenealogy';
+import Badge from '@mui/material/Badge';
 
 function ProductCategoryInnerComponent({ CategoryName, description, edit, folder, data }) {
    const [open, setOpen] = useState(false);
@@ -24,7 +24,7 @@ function ProductCategoryInnerComponent({ CategoryName, description, edit, folder
    };
 
    const handleCancel = () => {
-      console.log("Clicked cancel button");
+      console.log('Clicked cancel button');
       setOpen(false);
    };
 

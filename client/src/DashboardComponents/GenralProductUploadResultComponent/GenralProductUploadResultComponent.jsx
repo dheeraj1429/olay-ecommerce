@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import * as styled from './GenralProductUploadResultComponent.style';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductGenralReport } from '../../Redux/Actions/adminAction';
-import { productReportLoading } from '../../Redux/Actions/appAction';
+import { productReportLoading } from '../../Redux/Actions/adminAppAction';
 import ProductReportBarChartComponent from '../ProductReportBarChartComponent/ProductReportBarChartComponent';
 
 function GenralProductUploadResultComponent() {
@@ -20,7 +20,11 @@ function GenralProductUploadResultComponent() {
             isLoading={productGenralReportLoading}
             heading={"Product upload report"}
          /> */}
-         <ProductReportBarChartComponent isLoading={productGenralReportLoading} heading={'Total Products'} line={true} />
+         <ProductReportBarChartComponent
+            isLoading={productGenralReportLoading}
+            heading={'Total Products'}
+            line={true}
+         />
       </styled.div>
    );
 }

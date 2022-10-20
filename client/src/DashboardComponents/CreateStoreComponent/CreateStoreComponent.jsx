@@ -1,12 +1,12 @@
 import React from 'react';
 import * as styled from './CreateStoreComponent.style';
 import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
-import HeadingComponent from '../../Components/HeadingComponent/HeadingComponent';
-import CustombuttonComponent from '../../Components/CustombuttonComponent/CustombuttonComponent';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import ShopStoreTableComponent from '../ShopStoreTableComponent/ShopStoreTableComponent';
 import CreateStoreInfomationComponent from '../CreateStoreInfomationComponent/CreateStoreInfomationComponent';
 import { useDispatch } from 'react-redux';
-import { storeShowHideHandler } from '../../Redux/Actions/appAction';
+import { storeShowHideHandler } from '../../Redux/Actions/adminAppAction';
 
 function CreateStoreComponent() {
    const dispatch = useDispatch();

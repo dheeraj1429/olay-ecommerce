@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 * {
    margin: 0;
@@ -7,14 +7,9 @@
 }
 
 body {
-   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
-    color: var(--color-black);
+   font-family: 'Roboto', sans-serif;
    position: relative;
-}
-
-code {
-   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
-    color: var(--color-black);
+   overflow-x: hidden;
 }
 
 :root {
@@ -87,6 +82,7 @@ code {
    --smooth-light-color: #ced5db;
    --smooth-light-heading-color: #e3e7eb;
    --spec-white-color: #d0d1d3;
+   --smooth-sky-cl: #179693;
 }
 
 /* width */
@@ -149,4 +145,32 @@ table td {
    border-radius: 50%;
    box-shadow: 0 0 10px 1px var(--spec-themed-overlay-background);
    cursor: pointer;
+}
+
+.side_padding_one {
+   padding: 0 100px;
+}
+
+.side_padding_two {
+   padding: 0 150px;
+}
+
+.side_padding_three {
+   padding: 0 170px;
+}
+
+.top_padding {
+   padding: 30px 0;
+}
+
+.top_padding_one {
+   padding: 60px 0;
+}
+
+.top_padding_two {
+   padding: 80px 0;
+}
+
+a {
+   text-decoration: none;
 }

@@ -5,7 +5,15 @@ import { Link } from 'react-router-dom';
 function DashboardNavigationComponent({ icon, innerText, activeBar, onClick, Active }) {
    return (
       <Nav.main>
-         <Link to={innerText === 'Dashboard' ? `/dashboard` : innerText.toLowerCase().split(' ').join('-')}>
+         <Link
+            to={
+               innerText === 'Dashboard'
+                  ? `/dashboard`
+                  : innerText === 'Website'
+                  ? '/'
+                  : innerText.toLowerCase().split(' ').join('-')
+            }
+         >
             <Nav.div
                activeBar={Active === innerText ? true : null}
                className={Active === innerText ? 'bar-active' : null}

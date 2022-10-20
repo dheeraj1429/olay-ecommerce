@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import * as styled from './ShopInfomationComponent.style';
 import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
-import HeadingComponent from '../../Components/HeadingComponent/HeadingComponent';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { UnitOfHeigthAr, UnitOfWeight, ThousandsSeparator, positionData } from './DropDownData';
 import Box from '@mui/material/Box';
-import CustombuttonComponent from '../../Components/CustombuttonComponent/CustombuttonComponent';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import { message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getShopInfromation, ShopSetting, updateShopInformation } from '../../Redux/Actions/adminAction';
-import { shopInformatonLoading } from '../../Redux/Actions/appAction';
+import { shopInformatonLoading } from '../../Redux/Actions/adminAppAction';
 
 function ShopInfomationComponent() {
    const [ShopInfo, setShopInfo] = useState({

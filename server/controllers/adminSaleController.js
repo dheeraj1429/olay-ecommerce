@@ -36,7 +36,6 @@ const storeSaleInfo = async function (data, response) {
 
 const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
    const { name, statusInfo, label, dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime } = req.body;
-
    const findIsSaleExists = await saleModel.findOne({ name });
 
    /**
@@ -86,11 +85,8 @@ const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
 
 const getAllFlashSales = catchAsync(async function (req, res, next) {
    const page = req.query.page;
-
    if (!page) next(new AppError('flash sale page number is required!'));
-
    const DOCUMENT_LIMIT = 10;
-
    await fetchLimitDocument(saleModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, 'sales', {
       products: 0,
    });
@@ -155,10 +151,9 @@ const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
    }
 });
 
-const updateFlashSaleInfo = async function (colleciton, flashSaleId, data, res) {
+const updateFlashSaleInfo = async function (collection, flashSaleId, data, res) {
    try {
-      const findAndUpdateFlashSaleDetails = await colleciton.updateOne({ _id: flashSaleId }, { $set: data });
-
+      const findAndUpdateFlashSaleDetails = await collection.updateOne({ _id: flashSaleId }, { $set: data });
       if (findAndUpdateFlashSaleDetails.acknowledged && !!findAndUpdateFlashSaleDetails.modifiedCount) {
          return res.status(httpStatusCodes.OK).json({
             success: true,
@@ -179,13 +174,10 @@ const updateFlashSaleInfo = async function (colleciton, flashSaleId, data, res) 
 
 const updateSingleFlashSale = catchAsync(async function (req, res, next) {
    const { flashSaleId } = req.body;
-
    if (!flashSaleId) {
       next(new AppError('Flash sale id is required for update the sub variaitons products data'));
    }
-
    const { name, statusInfo, label, dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime } = req.body;
-
    const { startTimeWithDate, endTimeWithDate } = dataConvertor(dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime);
 
    const data = {

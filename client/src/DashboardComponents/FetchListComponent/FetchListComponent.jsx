@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUploadProducts } from "../../Redux/Actions/adminAction";
-import * as list from "./FetchListComponent.style";
-import backendConfigData from "../../backendConfig";
-import { showFetchSaleComponent, storeSelectedSaleProduct } from "../../Redux/Actions/appAction";
-import TableFooterComponent from "../TableFooterComponent/TableFooterComponent";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUploadProducts } from '../../Redux/Actions/adminAction';
+import * as list from './FetchListComponent.style';
+import backendConfigData from '../../backendConfig';
+import { showFetchSaleComponent, storeSelectedSaleProduct } from '../../Redux/Actions/adminAppAction';
+import TableFooterComponent from '../TableFooterComponent/TableFooterComponent';
 
 function FetchListComponent({ show, TargetHandler }) {
    const dispatch = useDispatch();
@@ -55,7 +55,7 @@ function FetchListComponent({ show, TargetHandler }) {
                   );
                })}
                <list.space>
-                  <TableFooterComponent state={allProducts} action={"products"} />
+                  <TableFooterComponent state={allProducts} action={'products'} />
                </list.space>
             </>
          ) : (

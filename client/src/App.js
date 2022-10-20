@@ -1,10 +1,12 @@
+// https://preview.themeforest.net/item/outstock-react-next-js-minimal-ecommerce-template/full_screen_preview/39081703
+
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { setLoginUser } from './Redux/Actions/appAction';
 import { useDispatch } from 'react-redux';
+import { setLoginUser } from './Redux/Actions/authAppAction';
 
-// components
+// dashboard components
 import DashboardSingInComponent from './DashboardComponents/DashboardSingInComponent/DashboardSingInComponent';
 import DashboardHomeComponent from './DashboardComponents/DashboardHomeComponent/DashboardHomeComponent';
 import UploadProductComponent from './DashboardComponents/UploadProductComponent/UploadProductComponent';
@@ -37,10 +39,17 @@ import ImportCsvFileComponent from './DashboardComponents/ImportCsvFileComponent
 import ShopInfomationComponent from './DashboardComponents/ShopInfomationComponent/ShopInfomationComponent';
 import CreateStoreComponent from './DashboardComponents/CreateStoreComponent/CreateStoreComponent';
 
-// pages
-import Dashboard from './Pages/Dashboard/Dashboard';
-import DashboardPanel from './Pages/DashboardPanel/DashboardPanel';
-import PageNotFound from './Pages/PageNotFound/PageNotFound';
+// site components
+import SignInAndLoginComponent from './Components/SignInAndLoginComponent/SignInAndLoginComponent';
+
+// dashboard pages
+import Dashboard from './DashboardPages/Dashboard/Dashboard';
+import DashboardPanel from './DashboardPages/DashboardPanel/DashboardPanel';
+import PageNotFound from './DashboardPages/PageNotFound/PageNotFound';
+
+// site pages
+import SignInAndLoginPage from './Pages/SignInAndLoginPage/SignInAndLoginPage';
+import HomePage from './Pages/HomePage/HomePage';
 
 function App() {
    const [cookie] = useCookies(['user']);
@@ -55,7 +64,12 @@ function App() {
    return (
       <div className="App">
          <Routes>
-            <Route path="/" element={<Dashboard />}>
+            <Route path="" element={<HomePage />} />
+            <Route path="auth" element={<SignInAndLoginPage />}>
+               <Route path="signin" element={<SignInAndLoginComponent />} />
+               <Route path="login" element={<SignInAndLoginComponent />} />
+            </Route>
+            <Route path="dashboard-auth" element={<Dashboard />}>
                <Route path="sign-in" element={<DashboardSingInComponent />} />
             </Route>
             <Route path="dashboard" element={<DashboardPanel />}>

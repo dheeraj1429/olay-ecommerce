@@ -1,8 +1,6 @@
-import React, { useState, useLayoutEffect, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as sidebar from './DashboardPanelSidebarComponent.style';
 import DashboardNavigationComponent from '../DashboardNavigationComponent/DashboardNavigationComponent';
-import { useNavigate } from 'react-router';
-import { useCookies } from 'react-cookie';
 import { useLocation } from 'react-router';
 import DashboardSidebarCardComponent from '../DashboardSidebarCardComponent/DashboardSidebarCardComponent';
 import { AiOutlineShoppingCart } from '@react-icons/all-files/ai/AiOutlineShoppingCart';
@@ -22,12 +20,11 @@ import { VscHistory } from '@react-icons/all-files/vsc/VscHistory';
 import { AiOutlineHome } from '@react-icons/all-files/ai/AiOutlineHome';
 import { AiOutlineInfo } from '@react-icons/all-files/ai/AiOutlineInfo';
 import { VscLocation } from '@react-icons/all-files/vsc/VscLocation';
+import { SiWebmoney } from '@react-icons/all-files/si/SiWebmoney';
 
 function DashboardPanelSidebarComponent() {
    const [Active, setActive] = useState('Dashboard');
    const [DashboardCard, setDashboardCard] = useState('');
-   const navigation = useNavigate();
-   const [cookie] = useCookies(['user']);
    const location = useLocation();
 
    const ActiveHandler = function (e) {
@@ -38,14 +35,6 @@ function DashboardPanelSidebarComponent() {
    const dashboardActiveHandler = function (e) {
       setDashboardCard(e.currentTarget.id);
    };
-
-   useLayoutEffect(() => {
-      if (!!cookie && cookie.user) {
-         return;
-      } else {
-         navigation('/admin/sign-in');
-      }
-   }, [cookie]);
 
    useEffect(() => {
       const splitPath = location.pathname.split('/');
@@ -67,6 +56,13 @@ function DashboardPanelSidebarComponent() {
                onClick={dashboardActiveHandler}
                show={DashboardCard}
             >
+               <DashboardNavigationComponent
+                  icon={<SiWebmoney />}
+                  innerText={'Website'}
+                  activeBar={true}
+                  onClick={ActiveHandler}
+                  Active={Active}
+               />
                <DashboardNavigationComponent
                   icon={<AiOutlineHome />}
                   innerText={'Dashboard'}

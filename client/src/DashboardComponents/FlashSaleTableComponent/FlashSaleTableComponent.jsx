@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import HeadingComponent from '../../Components/HeadingComponent/HeadingComponent';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
 import * as tableView from './FlashSaleTableComponent.style';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllFlashSales, deleteAllFlashSales } from '../../Redux/Actions/adminAction';
@@ -41,16 +41,16 @@ function FlashSaleTableComponent() {
              Today's Best Deals & Offers On Mobiles, Fashion, \n
              Electronics, Hotels, Flights & Bus Ticket Bookings.`}
          />
+         <ProductSectionFeatureComponent
+            state={allSales}
+            pageLink={link}
+            field={'sales'}
+            items={items}
+            action={deleteAllFlashSales}
+         />
 
          {!!allSales && allSales.success && allSales.sales.length ? (
             <>
-               <ProductSectionFeatureComponent
-                  state={allSales}
-                  pageLink={link}
-                  field={'sales'}
-                  items={items}
-                  action={deleteAllFlashSales}
-               />
                <FlashSaleInnerTableComponent isLoading={allSaleLoading} />
                <TableFooterComponent state={allSales} action={'sales'} />
             </>

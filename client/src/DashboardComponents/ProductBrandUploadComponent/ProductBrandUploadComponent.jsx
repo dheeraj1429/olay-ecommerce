@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from "react";
-import * as brand from "./ProductBrandUploadComponent.style";
-import DashboardNavbarComponent from "../DashboardNavbarComponent/DashboardNavbarComponent";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import { MenuItem } from "@mui/material";
-import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import { insertNewProductBrand, fetchSelectedBrand, editSelectedBrand } from "../../Redux/Actions/adminAction";
-import { useDispatch, useSelector } from "react-redux";
-import { message } from "antd";
-import { brandLoading, removeBrandInfo } from "../../Redux/Actions/appAction";
-import { editSelectedBrandLoading, removeEditBrandInfo } from "../../Redux/Actions/appAction";
+import React, { useState, useEffect } from 'react';
+import * as brand from './ProductBrandUploadComponent.style';
+import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
+import { MenuItem } from '@mui/material';
+import ProductUploadImageComponent from '../ProductUploadImageComponent/ProductUploadImageComponent';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import { insertNewProductBrand, fetchSelectedBrand, editSelectedBrand } from '../../Redux/Actions/adminAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { message } from 'antd';
+import { brandLoading, removeBrandInfo } from '../../Redux/Actions/adminAppAction';
+import { editSelectedBrandLoading, removeEditBrandInfo } from '../../Redux/Actions/adminAppAction';
 
-const key = "updatable";
+const key = 'updatable';
 
 const brandStatus = [
-   { value: "Published", label: "Published" },
-   { value: "Draft", label: "Draft" },
-   { value: "Pending", label: "Pending" },
+   { value: 'Published', label: 'Published' },
+   { value: 'Draft', label: 'Draft' },
+   { value: 'Pending', label: 'Pending' },
 ];
 
 function ProductBrandUploadComponent({ param, selectedBrand }) {
    const [Brand, setBrand] = useState({
-      name: "",
-      description: " ",
-      website: "",
-      order: "",
-      brandStatusInfo: "Draft",
-      brandIcon: "",
-      SEOTitle: "",
-      SEODescription: "",
+      name: '',
+      description: ' ',
+      website: '',
+      order: '',
+      brandStatusInfo: 'Draft',
+      brandIcon: '',
+      SEOTitle: '',
+      SEODescription: '',
    });
 
    const [Clear, setClear] = useState(false);
@@ -75,17 +75,17 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
 
    const createFormData = function (param) {
       const fromData = new FormData();
-      fromData.append("name", Brand.name);
-      fromData.append("description", Brand.description);
-      fromData.append("website", Brand.website);
-      fromData.append("order", Brand.order);
-      fromData.append("brandStatusInfo", Brand.brandStatusInfo);
-      fromData.append("brandIcon", Brand.brandIcon);
-      fromData.append("SEOTitle", Brand.SEOTitle);
-      fromData.append("SEODescription", Brand.SEODescription);
+      fromData.append('name', Brand.name);
+      fromData.append('description', Brand.description);
+      fromData.append('website', Brand.website);
+      fromData.append('order', Brand.order);
+      fromData.append('brandStatusInfo', Brand.brandStatusInfo);
+      fromData.append('brandIcon', Brand.brandIcon);
+      fromData.append('SEOTitle', Brand.SEOTitle);
+      fromData.append('SEODescription', Brand.SEODescription);
 
       if (param) {
-         fromData.append("id", param);
+         fromData.append('id', param);
       }
 
       return fromData;
@@ -100,7 +100,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
          dispatch(brandLoading(true));
          dispatch(insertNewProductBrand(fromData));
       } else {
-         info("Product brand name is required");
+         info('Product brand name is required');
       }
    };
 
@@ -119,20 +119,20 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
          dispatch(editSelectedBrand(fromData));
          dispatch(editSelectedBrandLoading(true));
       } else {
-         info("No fildes data change!!");
+         info('No fildes data change!!');
       }
    };
 
    const ClearInfoHandler = function () {
       setBrand({
-         name: "",
-         description: " ",
-         website: "",
-         order: "",
-         brandStatusInfo: "",
-         brandIcon: "",
-         SEOTitle: "",
-         SEODescription: "",
+         name: '',
+         description: ' ',
+         website: '',
+         order: '',
+         brandStatusInfo: '',
+         brandIcon: '',
+         SEOTitle: '',
+         SEODescription: '',
       });
 
       setClear(true);
@@ -158,14 +158,14 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
    useEffect(() => {
       if (selectedBrand && selectedBrand.success) {
          setBrand({
-            name: selectedBrand.selectedBrand.name || "",
-            description: selectedBrand.selectedBrand.description || "",
-            website: selectedBrand.selectedBrand.website || "",
-            order: selectedBrand.selectedBrand.order || "",
-            brandStatusInfo: selectedBrand.selectedBrand.brandStatusInfo || "",
-            brandIcon: selectedBrand.selectedBrand.brandIcon || "",
-            SEOTitle: selectedBrand.selectedBrand.SEOTitle || "",
-            SEODescription: selectedBrand.selectedBrand.SEODescription || "",
+            name: selectedBrand.selectedBrand.name || '',
+            description: selectedBrand.selectedBrand.description || '',
+            website: selectedBrand.selectedBrand.website || '',
+            order: selectedBrand.selectedBrand.order || '',
+            brandStatusInfo: selectedBrand.selectedBrand.brandStatusInfo || '',
+            brandIcon: selectedBrand.selectedBrand.brandIcon || '',
+            SEOTitle: selectedBrand.selectedBrand.SEOTitle || '',
+            SEODescription: selectedBrand.selectedBrand.SEODescription || '',
          });
       }
    }, [selectedBrand]);
@@ -176,7 +176,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
 
          <brand.spaceDiv>
             <HeadingComponent
-               Heading={param ? "Edit product brand" : "Create product brand"}
+               Heading={param ? 'Edit product brand' : 'Create product brand'}
                subHeading={
                   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
                }
@@ -186,7 +186,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
                   <Box
                      component="form"
                      sx={{
-                        "& > :not(style)": { my: 1, width: "100%" },
+                        '& > :not(style)': { my: 1, width: '100%' },
                      }}
                      noValidate
                      autoComplete="off"
@@ -254,7 +254,7 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
                   <Box
                      component="form"
                      sx={{
-                        "& .MuiTextField-root": { my: 1, width: "100%" },
+                        '& .MuiTextField-root': { my: 1, width: '100%' },
                      }}
                      noValidate
                      autoComplete="off"
@@ -280,16 +280,16 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
                         name="brandIcon"
                         selectedPrevImage={Brand.brandIcon}
                         onChange={ImageGrabHandler}
-                        Heading={"Product barnd image"}
+                        Heading={'Product barnd image'}
                         Clear={Clear}
-                        filde={"brandImages"}
+                        filde={'brandImages'}
                      />
                   </Box>
                   <brand.half>
                      {param ? (
                         <CustombuttonComponent
-                           innerText={"Update"}
-                           btnCl={"category_upload"}
+                           innerText={'Update'}
+                           btnCl={'category_upload'}
                            isLoading={selectedBrandLoading}
                            onClick={UpdateHandler}
                         />
@@ -297,11 +297,11 @@ function ProductBrandUploadComponent({ param, selectedBrand }) {
                         <>
                            <CustombuttonComponent
                               onClick={SendHandler}
-                              innerText={"Save"}
-                              btnCl={"category_upload"}
+                              innerText={'Save'}
+                              btnCl={'category_upload'}
                               isLoading={brandInsertLoading}
                            />
-                           <CustombuttonComponent onClick={ClearInfoHandler} innerText={"Clear"} btnCl={"Delete_btn"} />
+                           <CustombuttonComponent onClick={ClearInfoHandler} innerText={'Clear'} btnCl={'Delete_btn'} />
                         </>
                      )}
                   </brand.half>

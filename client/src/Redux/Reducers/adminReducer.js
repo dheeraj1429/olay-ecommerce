@@ -1,4 +1,4 @@
-import { ACTION_TYPE } from '../ActionTypes/actionType';
+import { ADMIN_ACTION_TYPES } from '../ActionTypes/adminActionType';
 import { CampareFunction } from '../../Filters/Filters';
 
 const INITAL_STATE = {
@@ -100,32 +100,32 @@ const INITAL_STATE = {
 
 const adminReducer = function (state = INITAL_STATE, action) {
    switch (action.type) {
-      case ACTION_TYPE.PRODUCT_CATEGORY_INSERT:
+      case ADMIN_ACTION_TYPES.PRODUCT_CATEGORY_INSERT:
          return {
             ...state,
             productCategory: action.payload,
             productCategoryLoading: false,
          };
 
-      case ACTION_TYPE.PRODUCT_CATEGORY_LOADING:
+      case ADMIN_ACTION_TYPES.PRODUCT_CATEGORY_LOADING:
          return {
             ...state,
             productCategoryLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_PRODUCT_CATEGORY_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_PRODUCT_CATEGORY_INFO:
          return {
             ...state,
             productCategory: action.payload,
          };
 
-      case ACTION_TYPE.FETCH_PRODUCTS_CATEGORYS:
+      case ADMIN_ACTION_TYPES.FETCH_PRODUCTS_CATEGORYS:
          return {
             ...state,
             productAllCategory: action.payload,
          };
 
-      case ACTION_TYPE.INSERT_NEW_CATEGORY:
+      case ADMIN_ACTION_TYPES.INSERT_NEW_CATEGORY:
          return {
             ...state,
             productAllCategory: {
@@ -134,19 +134,19 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.EDIT_CATEGORY:
+      case ADMIN_ACTION_TYPES.EDIT_CATEGORY:
          return {
             ...state,
             editCategory: action.payload,
          };
 
-      case ACTION_TYPE.SELECTED_EDIT_CATEGORY:
+      case ADMIN_ACTION_TYPES.SELECTED_EDIT_CATEGORY:
          return {
             ...state,
             selectedCategory: action.payload,
          };
 
-      case ACTION_TYPE.CATEGORY_UPDATE:
+      case ADMIN_ACTION_TYPES.CATEGORY_UPDATE:
          const findUpdateCategory = state.productAllCategory.allCategory.map((el) =>
             el._id === action.targetId
                ? {
@@ -167,19 +167,19 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.CATEGORY_UPDATE_LOADING:
+      case ADMIN_ACTION_TYPES.CATEGORY_UPDATE_LOADING:
          return {
             ...state,
             editCategoryLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_CATEGORY_INFO_UPDATE:
+      case ADMIN_ACTION_TYPES.REMOVE_CATEGORY_INFO_UPDATE:
          return {
             ...state,
             updateCategory: null,
          };
 
-      case ACTION_TYPE.DELETE_SELECTED_CATEGORY:
+      case ADMIN_ACTION_TYPES.DELETE_SELECTED_CATEGORY:
          const filterCategory = state.productAllCategory.allCategory.filter((el) => el._id !== action.payload);
          return {
             ...state,
@@ -190,39 +190,39 @@ const adminReducer = function (state = INITAL_STATE, action) {
             editCategory: false,
          };
 
-      case ACTION_TYPE.INSERT_NEW_PRODUCT_BRAND_LOADING:
+      case ADMIN_ACTION_TYPES.INSERT_NEW_PRODUCT_BRAND_LOADING:
          return {
             ...state,
             brandInsertLoading: action.payload,
          };
 
-      case ACTION_TYPE.INSERT_NEW_PRODUCT_BRAND:
+      case ADMIN_ACTION_TYPES.INSERT_NEW_PRODUCT_BRAND:
          return {
             ...state,
             brandInsert: action.payload,
             brandInsertLoading: false,
          };
 
-      case ACTION_TYPE.REMOVE_NEW_PRODUCT_BRAND_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_NEW_PRODUCT_BRAND_INFO:
          return {
             ...state,
             brandInsert: action.payload,
          };
 
-      case ACTION_TYPE.FETCH_ALL_PRODUCT_BRAND:
+      case ADMIN_ACTION_TYPES.FETCH_ALL_PRODUCT_BRAND:
          return {
             ...state,
             productBrands: action.payload,
             loadingPagination: false,
          };
 
-      case ACTION_TYPE.LOADING_BRAND_PAGINATION:
+      case ADMIN_ACTION_TYPES.LOADING_BRAND_PAGINATION:
          return {
             ...state,
             loadingPagination: action.payload,
          };
 
-      case ACTION_TYPE.DELETE_ONE_PRODUCT_BRAND:
+      case ADMIN_ACTION_TYPES.DELETE_ONE_PRODUCT_BRAND:
          const checkIsSuccess = function (status) {
             if (status.success) {
                return {
@@ -239,7 +239,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
             productBrands: checkIsSuccess(action.payload),
          };
 
-      case ACTION_TYPE.DELETE_SELECTED_BRAND_PRODUCT:
+      case ADMIN_ACTION_TYPES.DELETE_SELECTED_BRAND_PRODUCT:
          const setPayload = new Set(action.payload);
 
          if (action.payload) {
@@ -257,32 +257,32 @@ const adminReducer = function (state = INITAL_STATE, action) {
             };
          }
 
-      case ACTION_TYPE.FETCH_SELECTED_BRAND_PRODUCT:
+      case ADMIN_ACTION_TYPES.FETCH_SELECTED_BRAND_PRODUCT:
          return {
             ...state,
             selectedBrand: action.payload,
          };
 
-      case ACTION_TYPE.EDIT_SELECTED_PRODUCT_BRAND:
+      case ADMIN_ACTION_TYPES.EDIT_SELECTED_PRODUCT_BRAND:
          return {
             ...state,
             selectedBrandEdit: action.payload,
             selectedBrandLoading: false,
          };
 
-      case ACTION_TYPE.UPDATE_EDIT_PRODUCT_BRAND_LOADING:
+      case ADMIN_ACTION_TYPES.UPDATE_EDIT_PRODUCT_BRAND_LOADING:
          return {
             ...state,
             selectedBrandLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_EDIT_PRODUCT_BRAND_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_EDIT_PRODUCT_BRAND_INFO:
          return {
             ...state,
             selectedBrandEdit: action.payload,
          };
 
-      case ACTION_TYPE.BULK_ACTIONS:
+      case ADMIN_ACTION_TYPES.BULK_ACTIONS:
          if (action.payload.filde === 'brands') {
             return {
                ...state,
@@ -341,7 +341,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
             };
          }
 
-      case ACTION_TYPE.DELTE_ALL_BRAND:
+      case ADMIN_ACTION_TYPES.DELTE_ALL_BRAND:
          if (action.payload.success) {
             return {
                ...state,
@@ -354,51 +354,51 @@ const adminReducer = function (state = INITAL_STATE, action) {
             };
          }
 
-      case ACTION_TYPE.FETCH_PRODUCTS_BRADN_INFO:
+      case ADMIN_ACTION_TYPES.FETCH_PRODUCTS_BRADN_INFO:
          return {
             ...state,
             allProductBrands: action.payload,
          };
 
-      case ACTION_TYPE.UPLOAD_NEW_PRODUCT:
+      case ADMIN_ACTION_TYPES.UPLOAD_NEW_PRODUCT:
          return {
             ...state,
             uploadProduct: action.payload,
             uploadProductLoading: false,
          };
 
-      case ACTION_TYPE.UPLOAD_PRODUCT_LOADING:
+      case ADMIN_ACTION_TYPES.UPLOAD_PRODUCT_LOADING:
          return {
             ...state,
             uploadProductLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_PRODUCT_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_PRODUCT_INFO:
          return {
             ...state,
             uploadProduct: action.payload,
          };
 
-      case ACTION_TYPE.FETCH_UPLODED_PRODUCTS:
+      case ADMIN_ACTION_TYPES.FETCH_UPLODED_PRODUCTS:
          return {
             ...state,
             allProducts: action.payload,
             fetchProductsLoading: false,
          };
 
-      case ACTION_TYPE.FETCH_LOADING_PRODUCTS:
+      case ADMIN_ACTION_TYPES.FETCH_LOADING_PRODUCTS:
          return {
             ...state,
             fetchProductsLoading: action.payload,
          };
 
-      case ACTION_TYPE.SELECTED_ITEMS_LIMIT:
+      case ADMIN_ACTION_TYPES.SELECTED_ITEMS_LIMIT:
          return {
             ...state,
             selectedItems: state.selectedItems.concat(action.payload),
          };
 
-      case ACTION_TYPE.REMOVE_SELECTED_ITEMS:
+      case ADMIN_ACTION_TYPES.REMOVE_SELECTED_ITEMS:
          const checkItems = state.selectedItems.filter((el) => el !== action.payload);
 
          return {
@@ -406,13 +406,13 @@ const adminReducer = function (state = INITAL_STATE, action) {
             selectedItems: checkItems,
          };
 
-      case ACTION_TYPE.REMOVE_ALL_SELECTED_ITEMS:
+      case ADMIN_ACTION_TYPES.REMOVE_ALL_SELECTED_ITEMS:
          return {
             ...state,
             selectedItems: action.payload,
          };
 
-      case ACTION_TYPE.DELETE_ALL_PRODUCTS:
+      case ADMIN_ACTION_TYPES.DELETE_ALL_PRODUCTS:
          if (action.payload.success) {
             return {
                ...state,
@@ -426,13 +426,13 @@ const adminReducer = function (state = INITAL_STATE, action) {
             };
          }
 
-      case ACTION_TYPE.REMOVE_ALL_SELECTED_ID:
+      case ADMIN_ACTION_TYPES.REMOVE_ALL_SELECTED_ID:
          return {
             ...state,
             selectedItems: action.payload,
          };
 
-      case ACTION_TYPE.DELETE_SELECTED_PRODUCTS:
+      case ADMIN_ACTION_TYPES.DELETE_SELECTED_PRODUCTS:
          if (action?.productsId) {
             const setPayload = new Set(action.productsId);
 
@@ -450,7 +450,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
             };
          }
 
-      case ACTION_TYPE.DELETE_ONE_PRODUCTS:
+      case ADMIN_ACTION_TYPES.DELETE_ONE_PRODUCTS:
          let filterProduct;
 
          const checkIsDeleteFromDb = function (state, id) {
@@ -474,70 +474,70 @@ const adminReducer = function (state = INITAL_STATE, action) {
             };
          }
 
-      case ACTION_TYPE.FETCH_SINGLE_PRODUCT:
+      case ADMIN_ACTION_TYPES.FETCH_SINGLE_PRODUCT:
          return {
             ...state,
             singleProductFetch: action.payload,
          };
 
-      case ACTION_TYPE.EDIT_SINGLE_PRODUCT:
+      case ADMIN_ACTION_TYPES.EDIT_SINGLE_PRODUCT:
          return {
             ...state,
             productEditInfo: action.payload,
             productEditLoading: false,
          };
 
-      case ACTION_TYPE.REMOVE_PRODUCT_EDIT_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_PRODUCT_EDIT_INFO:
          return {
             ...state,
             productEditInfo: action.payload,
          };
 
-      case ACTION_TYPE.EDIT_SINGLE_PRODUCT_LOADING:
+      case ADMIN_ACTION_TYPES.EDIT_SINGLE_PRODUCT_LOADING:
          return {
             ...state,
             productEditLoading: action.payload,
          };
 
-      case ACTION_TYPE.INSERT_NEW_PRODUCT_TAG:
+      case ADMIN_ACTION_TYPES.INSERT_NEW_PRODUCT_TAG:
          return {
             ...state,
             insertNewProductTag: action.payload,
             productTagLoding: false,
          };
 
-      case ACTION_TYPE.PRODUCT_TAG_INSERT_LOADING:
+      case ADMIN_ACTION_TYPES.PRODUCT_TAG_INSERT_LOADING:
          return {
             ...state,
             productTagLoding: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_PRODUCT_TAG_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_PRODUCT_TAG_INFO:
          return {
             ...state,
             insertNewProductTag: action.payload,
          };
 
-      case ACTION_TYPE.GET_ALL_PRODUCTS_TAGS:
+      case ADMIN_ACTION_TYPES.GET_ALL_PRODUCTS_TAGS:
          return {
             ...state,
             allProductsTags: action.payload,
             fetchProductsTags: false,
          };
 
-      case ACTION_TYPE.PRODUCT_TAGS_LOADING:
+      case ADMIN_ACTION_TYPES.PRODUCT_TAGS_LOADING:
          return {
             ...state,
             fetchProductsTags: action.payload,
          };
 
-      case ACTION_TYPE.DELETE_ALL_TAGS:
+      case ADMIN_ACTION_TYPES.DELETE_ALL_TAGS:
          return {
             ...state,
             allProductsTags: { ...state.allProductsTags, tags: [] },
          };
 
-      case ACTION_TYPE.DELETE_SELECTED_PRODUCT_TAG:
+      case ADMIN_ACTION_TYPES.DELETE_SELECTED_PRODUCT_TAG:
          return {
             ...state,
             allProductsTags: {
@@ -546,64 +546,64 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.FETCH_SELECTED_PRODUCT_TAG:
+      case ADMIN_ACTION_TYPES.FETCH_SELECTED_PRODUCT_TAG:
          return {
             ...state,
             selectedProductTag: action.payload,
          };
 
-      case ACTION_TYPE.EDIT_PRODUCT_TAG:
+      case ADMIN_ACTION_TYPES.EDIT_PRODUCT_TAG:
          return {
             ...state,
             editProductEdit: action.payload,
             updateProductTagLoading: false,
          };
 
-      case ACTION_TYPE.EDIT_PRODUCT_TAG_LOADING:
+      case ADMIN_ACTION_TYPES.EDIT_PRODUCT_TAG_LOADING:
          return {
             ...state,
             updateProductTagLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_PRODUCT_TAG_EDTI_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_PRODUCT_TAG_EDTI_INFO:
          return {
             ...state,
             editProductEdit: action.payload,
          };
 
-      case ACTION_TYPE.FETCH_ALL_PRODUCT_TAGS:
+      case ADMIN_ACTION_TYPES.FETCH_ALL_PRODUCT_TAGS:
          return {
             ...state,
             allTags: action.payload,
          };
 
-      case ACTION_TYPE.STORE_PRODUCT_SWATCHES:
+      case ADMIN_ACTION_TYPES.STORE_PRODUCT_SWATCHES:
          return {
             ...state,
             productSwatches: action.payload,
             productSwatchesLoading: false,
          };
 
-      case ACTION_TYPE.STORE_PRODUCT_SWATCHES_LOADING:
+      case ADMIN_ACTION_TYPES.STORE_PRODUCT_SWATCHES_LOADING:
          return {
             ...state,
             productSwatchesLoading: action.payload,
          };
 
-      case ACTION_TYPE.PRODUCT_SWATCHES_REMOVE_INFO:
+      case ADMIN_ACTION_TYPES.PRODUCT_SWATCHES_REMOVE_INFO:
          return {
             ...state,
             productSwatches: action.payload,
          };
 
-      case ACTION_TYPE.GET_PRODUCT_SWATCHES:
+      case ADMIN_ACTION_TYPES.GET_PRODUCT_SWATCHES:
          return {
             ...state,
             allProductSwatches: action.payload,
             productSwatchesLoading: false,
          };
 
-      case ACTION_TYPE.REMOVER_ALL_PRODUCT_SWATCHES:
+      case ADMIN_ACTION_TYPES.REMOVER_ALL_PRODUCT_SWATCHES:
          if (action.payload.success) {
             return {
                ...state,
@@ -614,32 +614,32 @@ const adminReducer = function (state = INITAL_STATE, action) {
             };
          }
 
-      case ACTION_TYPE.FETCH_SINGLE_PRODUCT_SWATCHES:
+      case ADMIN_ACTION_TYPES.FETCH_SINGLE_PRODUCT_SWATCHES:
          return {
             ...state,
             singleProductSwatches: action.payload,
          };
 
-      case ACTION_TYPE.EDIT_SINGLE_PRODUCT_SWATCHES_LOADING:
+      case ADMIN_ACTION_TYPES.EDIT_SINGLE_PRODUCT_SWATCHES_LOADING:
          return {
             ...state,
             editProductSwatchesLoading: action.payload,
          };
 
-      case ACTION_TYPE.EDIT_SINGLE_PRODUCT_SWATCHES:
+      case ADMIN_ACTION_TYPES.EDIT_SINGLE_PRODUCT_SWATCHES:
          return {
             ...state,
             editProductSwatches: action.payload,
             editProductSwatchesLoading: false,
          };
 
-      case ACTION_TYPE.REMOVE_PRODUCT_UPDATE_SWATCHES_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_PRODUCT_UPDATE_SWATCHES_INFO:
          return {
             ...state,
             editProductSwatches: action.payload,
          };
 
-      case ACTION_TYPE.DELETE_SELECTED_PRODUCT_SWATCHES:
+      case ADMIN_ACTION_TYPES.DELETE_SELECTED_PRODUCT_SWATCHES:
          return {
             ...state,
             allProductSwatches: {
@@ -648,32 +648,32 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.UPLOD_PRODUCT_SIZE_VARIATION:
+      case ADMIN_ACTION_TYPES.UPLOD_PRODUCT_SIZE_VARIATION:
          return {
             ...state,
             productSizeVariationInfo: action.payload,
             productSizeVariationLoading: false,
          };
 
-      case ACTION_TYPE.UPLOD_PRODUCT_SIZE_VARIATION_LOADING:
+      case ADMIN_ACTION_TYPES.UPLOD_PRODUCT_SIZE_VARIATION_LOADING:
          return {
             ...state,
             productSizeVariationLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_UPLOD_PRODUCT_SIZE_VARIATION_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_UPLOD_PRODUCT_SIZE_VARIATION_INFO:
          return {
             ...state,
             productSizeVariationInfo: action.payload,
          };
 
-      case ACTION_TYPE.GET_ALL_PRODUCTS_SIZE_VARIATIONS:
+      case ADMIN_ACTION_TYPES.GET_ALL_PRODUCTS_SIZE_VARIATIONS:
          return {
             ...state,
             allSizeVariations: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_SINGLE_SIZE_VARIATION:
+      case ADMIN_ACTION_TYPES.REMOVE_SINGLE_SIZE_VARIATION:
          return {
             ...state,
             allSizeVariations: {
@@ -682,7 +682,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.RMEOVE_ALL_PRODUCT_SIZE_VARIATION:
+      case ADMIN_ACTION_TYPES.RMEOVE_ALL_PRODUCT_SIZE_VARIATION:
          return {
             ...state,
             allSizeVariations: {
@@ -691,101 +691,101 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.GET_SINGLE_PRODUCT_SIZE_VARIATION:
+      case ADMIN_ACTION_TYPES.GET_SINGLE_PRODUCT_SIZE_VARIATION:
          return {
             ...state,
             singleSizeVariation: action.payload,
          };
 
-      case ACTION_TYPE.EDIT_PRODUCT_SIZE_VARIATION:
+      case ADMIN_ACTION_TYPES.EDIT_PRODUCT_SIZE_VARIATION:
          return {
             ...state,
             editSizeVariationInfo: action.payload,
             editSizeVariationLoading: false,
          };
 
-      case ACTION_TYPE.EDIT_PRODUCT_SIZE_VARIATION_LOADING:
+      case ADMIN_ACTION_TYPES.EDIT_PRODUCT_SIZE_VARIATION_LOADING:
          return {
             ...state,
             editSizeVariationLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_EDIT_SIZE_VARIATION_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_EDIT_SIZE_VARIATION_INFO:
          return {
             ...state,
             editSizeVariationInfo: action.payload,
          };
 
-      case ACTION_TYPE.INSERT_PRODUCT_SUB_VARIATION_LOADING:
+      case ADMIN_ACTION_TYPES.INSERT_PRODUCT_SUB_VARIATION_LOADING:
          return {
             ...state,
             productSubVariationLoading: action.payload,
          };
 
-      case ACTION_TYPE.INSERT_PRODUCT_SUB_VARIATION:
+      case ADMIN_ACTION_TYPES.INSERT_PRODUCT_SUB_VARIATION:
          return {
             ...state,
             productSubVariationInfo: action.payload,
             productSubVariationLoading: false,
          };
 
-      case ACTION_TYPE.REMOVE_PRODUCT_SUB_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_PRODUCT_SUB_INFO:
          return {
             ...state,
             productSubVariationInfo: action.payload,
          };
 
-      case ACTION_TYPE.FETCH_SINGLE_SUBVARIATION:
+      case ADMIN_ACTION_TYPES.FETCH_SINGLE_SUBVARIATION:
          return {
             ...state,
             fetchSingleSubVarition: action.payload,
          };
 
-      case ACTION_TYPE.UPDATE_SINGLE_SUB_VARIATION:
+      case ADMIN_ACTION_TYPES.UPDATE_SINGLE_SUB_VARIATION:
          return {
             ...state,
             updateSingleSubVariation: action.payload,
             editProductSingleVariationLoading: false,
          };
 
-      case ACTION_TYPE.UPDATE_SINGLE_SUB_VARIATION_LOADING:
+      case ADMIN_ACTION_TYPES.UPDATE_SINGLE_SUB_VARIATION_LOADING:
          return {
             ...state,
             editProductSingleVariationLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_UPDATE_SINGLE_SUB_VARIATION_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_UPDATE_SINGLE_SUB_VARIATION_INFO:
          return {
             ...state,
             updateSingleSubVariation: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_SINGLE_PRODUCT_SUB_VARIATION_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_SINGLE_PRODUCT_SUB_VARIATION_INFO:
          return {
             ...state,
             fetchSingleSubVarition: action.payload,
          };
 
-      case ACTION_TYPE.DELETE_SINGLE_SUB_VARIATION:
+      case ADMIN_ACTION_TYPES.DELETE_SINGLE_SUB_VARIATION:
          return {
             ...state,
             deleteSubVaritionInfo: action.payload,
             deleteSubVaritionLoading: false,
          };
 
-      case ACTION_TYPE.DELETE_SINGLE_SUB_VARIATION_LOADING:
+      case ADMIN_ACTION_TYPES.DELETE_SINGLE_SUB_VARIATION_LOADING:
          return {
             ...state,
             deleteSubVaritionLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_DELTE_SUB_VARIATION_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_DELTE_SUB_VARIATION_INFO:
          return {
             ...state,
             deleteSubVaritionInfo: null,
          };
 
-      case ACTION_TYPE.STORE_SALE_SELECTED_PRODIUCT_INFO:
+      case ADMIN_ACTION_TYPES.STORE_SALE_SELECTED_PRODIUCT_INFO:
          const checkProductIsExists = function (state, data) {
             const check = state.find((el) => el.id === data.id);
 
@@ -801,39 +801,39 @@ const adminReducer = function (state = INITAL_STATE, action) {
             selectedFlashSaleProducts: checkProductIsExists(state.selectedFlashSaleProducts, action.payload),
          };
 
-      case ACTION_TYPE.SHOW_FETCH_SALE_COLLECTION_COMPONENT:
+      case ADMIN_ACTION_TYPES.SHOW_FETCH_SALE_COLLECTION_COMPONENT:
          return {
             ...state,
             showFlashSaleComponent: action.payload,
          };
 
-      case ACTION_TYPE.INSERT_FLASHSALE_COLLECTIONS:
+      case ADMIN_ACTION_TYPES.INSERT_FLASHSALE_COLLECTIONS:
          return {
             ...state,
             storeSelectedProductSale: action.payload,
             storeSelectedProductSaleLoading: false,
          };
 
-      case ACTION_TYPE.INSERT_FLASHSALE_COLLECTIONS_LOADING:
+      case ADMIN_ACTION_TYPES.INSERT_FLASHSALE_COLLECTIONS_LOADING:
          return {
             ...state,
             storeSelectedProductSaleLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_FLASHSALE_COLLECTIONS_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_FLASHSALE_COLLECTIONS_INFO:
          return {
             ...state,
             storeSelectedProductSale: action.payload,
          };
 
-      case ACTION_TYPE.GET_ALL_FLASH_SALE:
+      case ADMIN_ACTION_TYPES.GET_ALL_FLASH_SALE:
          return {
             ...state,
             allSales: action.payload,
             allSaleLoading: false,
          };
 
-      case ACTION_TYPE.DELETE_ALL_FLASH_SALE:
+      case ADMIN_ACTION_TYPES.DELETE_ALL_FLASH_SALE:
          return {
             ...state,
             allSales: {
@@ -842,7 +842,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.DELTE_SINGLE_SALE:
+      case ADMIN_ACTION_TYPES.DELTE_SINGLE_SALE:
          return {
             ...state,
             allSales: {
@@ -851,13 +851,13 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.GET_ALL_FLASH_SALE_LOADING:
+      case ADMIN_ACTION_TYPES.GET_ALL_FLASH_SALE_LOADING:
          return {
             ...state,
             allSaleLoading: action.payload,
          };
 
-      case ACTION_TYPE.FETCH_SINGLE_FLASH_SALE:
+      case ADMIN_ACTION_TYPES.FETCH_SINGLE_FLASH_SALE:
          const checkFlashSaleExists = function () {
             let selectedFlashSaleArray = [];
 
@@ -893,52 +893,52 @@ const adminReducer = function (state = INITAL_STATE, action) {
             selectedFlashSaleProducts: checkFlashSaleExists(),
          };
 
-      case ACTION_TYPE.REMOVE_SINGLE_FLASH_SALE:
+      case ADMIN_ACTION_TYPES.REMOVE_SINGLE_FLASH_SALE:
          return {
             ...state,
             singleFlashSale: null,
             selectedFlashSaleProducts: [],
          };
 
-      case ACTION_TYPE.UPDATE_SINGLE_FLASH_SALE:
+      case ADMIN_ACTION_TYPES.UPDATE_SINGLE_FLASH_SALE:
          return {
             ...state,
             updateFlashSale: action.payload,
             updateFlashSaleLoading: false,
          };
 
-      case ACTION_TYPE.UPDATE_SINGLE_FLASH_SALE_LOADING:
+      case ADMIN_ACTION_TYPES.UPDATE_SINGLE_FLASH_SALE_LOADING:
          return {
             ...state,
             updateFlashSaleLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_UPDATE_FLASH_SALE_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_UPDATE_FLASH_SALE_INFO:
          return {
             ...state,
             updateFlashSale: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_FLASH_SALE_PRODUCTS:
+      case ADMIN_ACTION_TYPES.REMOVE_FLASH_SALE_PRODUCTS:
          return {
             ...state,
             selectedFlashSaleProducts: state.selectedFlashSaleProducts.filter((el) => el.id !== action.payload),
          };
 
-      case ACTION_TYPE.INSERT_NEW_PRODUCT_COLOR_LABEL:
+      case ADMIN_ACTION_TYPES.INSERT_NEW_PRODUCT_COLOR_LABEL:
          return {
             ...state,
             newLabelInfo: action.payload,
             newLabelInfoLoading: false,
          };
 
-      case ACTION_TYPE.INSERT_NEW_PRODUCT_COLOR_LABEL_LOADING:
+      case ADMIN_ACTION_TYPES.INSERT_NEW_PRODUCT_COLOR_LABEL_LOADING:
          return {
             ...state,
             newLabelInfoLoading: action.payload,
          };
 
-      case ACTION_TYPE.REMOVER_INSERT_PRODUCT_LABEL_INFO:
+      case ADMIN_ACTION_TYPES.REMOVER_INSERT_PRODUCT_LABEL_INFO:
          return {
             ...state,
             newLabelInfo: action.payload,
@@ -946,13 +946,13 @@ const adminReducer = function (state = INITAL_STATE, action) {
             singleProductLabel: action.payload,
          };
 
-      case ACTION_TYPE.GET_ALL_PRODUCT_LABEL:
+      case ADMIN_ACTION_TYPES.GET_ALL_PRODUCT_LABEL:
          return {
             ...state,
             allProductLabel: action.payload,
          };
 
-      case ACTION_TYPE.DELETE_ALL_PRODUCTS_LABELS:
+      case ADMIN_ACTION_TYPES.DELETE_ALL_PRODUCTS_LABELS:
          return {
             ...state,
             allProductLabel: {
@@ -961,7 +961,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.DELETE_SINGLE_PRODUCT_LABEL:
+      case ADMIN_ACTION_TYPES.DELETE_SINGLE_PRODUCT_LABEL:
          console.log(action.payload);
 
          return {
@@ -972,45 +972,45 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.GET_SINGLE_PRODUCT_LABEL:
+      case ADMIN_ACTION_TYPES.GET_SINGLE_PRODUCT_LABEL:
          return {
             ...state,
             singleProductLabel: action.payload,
          };
 
-      case ACTION_TYPE.REMOVER_INSERT_PRODUCT_LABEL_INFO:
+      case ADMIN_ACTION_TYPES.REMOVER_INSERT_PRODUCT_LABEL_INFO:
          return {
             ...state,
             singleProductLabel: action.payload,
          };
 
-      case ACTION_TYPE.UPDATE_PRODUCT_LABEL_LOADING:
+      case ADMIN_ACTION_TYPES.UPDATE_PRODUCT_LABEL_LOADING:
          return {
             ...state,
             updateProductLabelLoading: action.payload,
          };
 
-      case ACTION_TYPE.UPDATE_PRODUCT_LABEL:
+      case ADMIN_ACTION_TYPES.UPDATE_PRODUCT_LABEL:
          return {
             ...state,
             updateProductLabelInfo: action.payload,
             updateProductLabelLoading: false,
          };
 
-      case ACTION_TYPE.GET_ALL_EXPORT_INFO:
+      case ADMIN_ACTION_TYPES.GET_ALL_EXPORT_INFO:
          return {
             ...state,
             adminExportHistory: action.payload,
             adminExportHistoryLoading: false,
          };
 
-      case ACTION_TYPE.GET_ALL_EXPORT_INFO_LOADING:
+      case ADMIN_ACTION_TYPES.GET_ALL_EXPORT_INFO_LOADING:
          return {
             ...state,
             adminExportHistoryLoading: action.payload,
          };
 
-      case ACTION_TYPE.DELETE_SINGLE_EXPORT_PRODUCT_HISTORY:
+      case ADMIN_ACTION_TYPES.DELETE_SINGLE_EXPORT_PRODUCT_HISTORY:
          return {
             ...state,
             adminExportHistory: {
@@ -1024,129 +1024,129 @@ const adminReducer = function (state = INITAL_STATE, action) {
             },
          };
 
-      case ACTION_TYPE.EXPORT_LOADING:
+      case ADMIN_ACTION_TYPES.EXPORT_LOADING:
          return {
             ...state,
             exportLoading: action.payload,
          };
 
-      case ACTION_TYPE.HIDE_EMAIL_BOX:
+      case ADMIN_ACTION_TYPES.HIDE_EMAIL_BOX:
          return {
             ...state,
             hideEmailBox: action.payload,
          };
 
-      case ACTION_TYPE.SEND_MAIL_LOADING:
+      case ADMIN_ACTION_TYPES.SEND_MAIL_LOADING:
          return {
             ...state,
             sendMailLoading: action.payload,
          };
 
-      case ACTION_TYPE.SEND_MAIL:
+      case ADMIN_ACTION_TYPES.SEND_MAIL:
          return {
             ...state,
             mailInfo: action.payload,
             sendMailLoading: false,
          };
 
-      case ACTION_TYPE.REMOVE_MAIL_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_MAIL_INFO:
          return {
             ...state,
             mailInfo: action.payload,
             sendMailLoading: false,
          };
 
-      case ACTION_TYPE.DOWNLOAD_CSV_IMPORT_TEMPLATE:
+      case ADMIN_ACTION_TYPES.DOWNLOAD_CSV_IMPORT_TEMPLATE:
          return {
             ...state,
             downloadTemplateLoading: false,
          };
 
-      case ACTION_TYPE.DOWNLOAD_CSV_IMPORT_TEMPLATE_LOADING:
+      case ADMIN_ACTION_TYPES.DOWNLOAD_CSV_IMPORT_TEMPLATE_LOADING:
          return {
             ...state,
             downloadTemplateLoading: action.payload,
          };
 
-      case ACTION_TYPE.IMPORT_CSV_INFO:
+      case ADMIN_ACTION_TYPES.IMPORT_CSV_INFO:
          return {
             ...state,
             importCsvLoading: false,
             importCsvInfo: action.payload,
          };
 
-      case ACTION_TYPE.IMPORT_CSV_LOADING:
+      case ADMIN_ACTION_TYPES.IMPORT_CSV_LOADING:
          return {
             ...state,
             importCsvLoading: action.payload,
          };
 
-      case ACTION_TYPE.SHOW_PRODUCT_UPLOAD_INFO_COMPONENT:
+      case ADMIN_ACTION_TYPES.SHOW_PRODUCT_UPLOAD_INFO_COMPONENT:
          return {
             ...state,
             showProductUploadInfoComponent: action.payload,
          };
 
-      case ACTION_TYPE.PRODUCT_GET_GENRNAL_REPORT:
+      case ADMIN_ACTION_TYPES.PRODUCT_GET_GENRNAL_REPORT:
          return {
             ...state,
             productGenralReport: action.payload,
             productGenralReportLoading: false,
          };
 
-      case ACTION_TYPE.PRODUCT_GET_GENRNAL_REPORT_LOADING:
+      case ADMIN_ACTION_TYPES.PRODUCT_GET_GENRNAL_REPORT_LOADING:
          return {
             ...state,
             productGenralReportLoading: action.payload,
             productGenralReport: null,
          };
 
-      case ACTION_TYPE.GET_ALL_SIGNIN_USERS:
+      case ADMIN_ACTION_TYPES.GET_ALL_SIGNIN_USERS:
          return {
             ...state,
             totalSignInUserReport: action.payload,
          };
 
-      case ACTION_TYPE.SHOP_INFORMATION:
+      case ADMIN_ACTION_TYPES.SHOP_INFORMATION:
          return {
             ...state,
             shopSettingRespose: action.payload,
             shopSettingLoading: false,
          };
 
-      case ACTION_TYPE.SHOP_INFORMATION_LOADING:
+      case ADMIN_ACTION_TYPES.SHOP_INFORMATION_LOADING:
          return {
             ...state,
             shopSettingLoading: action.payload,
             shopSettingRespose: null,
          };
 
-      case ACTION_TYPE.GET_SHOP_INFORMATION:
+      case ADMIN_ACTION_TYPES.GET_SHOP_INFORMATION:
          return {
             ...state,
             shopInformation: action.payload,
          };
 
-      case ACTION_TYPE.UPDATE_SHOP_INFOMATION:
+      case ADMIN_ACTION_TYPES.UPDATE_SHOP_INFOMATION:
          return {
             ...state,
             shopSettingRespose: action.payload,
             shopSettingLoading: false,
          };
 
-      case ACTION_TYPE.REMOVE_FLASH_SALE_SELECTED_PRODUCTS:
+      case ADMIN_ACTION_TYPES.REMOVE_FLASH_SALE_SELECTED_PRODUCTS:
          return {
             ...state,
             selectedFlashSaleProducts: state.selectedFlashSaleProducts.filter((el) => el.id !== action.payload),
          };
 
-      case ACTION_TYPE.SHOW_CREATE_STORE_INFO_COMPONENT:
+      case ADMIN_ACTION_TYPES.SHOW_CREATE_STORE_INFO_COMPONENT:
          return {
             ...state,
             showCreateStoreInfomationComponent: action.payload,
          };
 
-      case ACTION_TYPE.STORE_SHOP_LOCATIOON:
+      case ADMIN_ACTION_TYPES.STORE_SHOP_LOCATIOON:
          return {
             ...state,
             shopInformationStore: action.payload,
@@ -1158,32 +1158,32 @@ const adminReducer = function (state = INITAL_STATE, action) {
             showCreateStoreInfomationComponent: false,
          };
 
-      case ACTION_TYPE.STORE_SHOP_LOCATIOON_LOADING:
+      case ADMIN_ACTION_TYPES.STORE_SHOP_LOCATIOON_LOADING:
          return {
             ...state,
             shopInformationStoreLoading: action.payload,
             shopInformationStore: null,
          };
 
-      case ACTION_TYPE.GET_ALL_SHOP_LOCATIOON_DATA:
+      case ADMIN_ACTION_TYPES.GET_ALL_SHOP_LOCATIOON_DATA:
          return {
             ...state,
             allShops: action.payload,
          };
 
-      case ACTION_TYPE.SELECTED_SHOP_INFO:
+      case ADMIN_ACTION_TYPES.SELECTED_SHOP_INFO:
          return {
             ...state,
             selectedShopInfo: action.payload,
          };
 
-      case ACTION_TYPE.REMOVE_SELECTED_SHOP_INFO:
+      case ADMIN_ACTION_TYPES.REMOVE_SELECTED_SHOP_INFO:
          return {
             ...state,
             selectedShopInfo: action.payload,
          };
 
-      case ACTION_TYPE.UPDATE_SHOP_INFORMATION:
+      case ADMIN_ACTION_TYPES.UPDATE_SHOP_INFORMATION:
          if (action.payload.success) {
             return {
                ...state,
@@ -1204,7 +1204,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
             };
          }
 
-      case ACTION_TYPE.REMOVER_UPDATE_SHOP_INFO:
+      case ADMIN_ACTION_TYPES.REMOVER_UPDATE_SHOP_INFO:
          return {
             ...state,
             updateShopInformation: action.payload,

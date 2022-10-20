@@ -47,31 +47,20 @@ class Timer {
                      }
                   });
                }
-
-               console.log(
-                  `sale start now c-${currentDate} s-${this.startSaleDate} e-${this.endSaleDate} n-${this.document.name}`
-               );
             }
          });
 
-         this.refetch = schedule.scheduleJob('*/10 * * * *', async () => {
+         this.refetch = schedule.scheduleJob('*/15 * * * *', async () => {
             const { _id } = this.document;
-
-            console.log(this.startSaleDate, this.endSaleDate);
-
             const findSaleDocument = await saleModel.findOne(
                { _id: _id },
                { startTimeWithDate: 1, endTimeWithDate: 1, _id: 0 }
             );
-
             if (findSaleDocument) {
                const { startTimeWithDate, endTimeWithDate } = findSaleDocument;
                const { startSaleDate, endSaleDate } = this.timeInMiliSeconds(startTimeWithDate, endTimeWithDate);
-
                this.startSaleDate = startSaleDate;
                this.endSaleDate = endSaleDate;
-
-               console.log(this.startSaleDate, this.endSaleDate);
             }
          });
 
@@ -105,14 +94,6 @@ class Timer {
       console.log('sale id insrted time', insertSaleId);
       console.log(this, 'inserted time');
    }
-
-   // updateTimer(doc, updateSaleId) {
-   //    this.cancleTimer();
-   //    this.startTimer(doc);
-
-   //    console.log('sale id update time', updateSaleId);
-   //    console.log(this, 'updated time');
-   // }
 }
 
 module.exports = Timer;

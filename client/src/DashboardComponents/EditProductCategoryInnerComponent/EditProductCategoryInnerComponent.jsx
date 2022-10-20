@@ -1,27 +1,24 @@
-import React, { useState, useEffect } from "react";
-import * as edit from "./EditProductCategoryInnerComponent.style";
-import { IoIosClose } from "@react-icons/all-files/io/IoIosClose";
-import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
+import React, { useState, useEffect } from 'react';
+import * as edit from './EditProductCategoryInnerComponent.style';
+import { IoIosClose } from '@react-icons/all-files/io/IoIosClose';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import {
    editProductCategory,
    categoryUpdateLoading,
    removeCategoryUpdateInfo,
-} from "../../Redux/Actions/appAction";
-import { useDispatch, useSelector } from "react-redux";
-import CustombuttonComponent from "../../Components/CustombuttonComponent/CustombuttonComponent";
-import {
-   updateProductCategory,
-   deleteSelectedCategory,
-} from "../../Redux/Actions/adminAction";
-import { message } from "antd";
+} from '../../Redux/Actions/adminAppAction';
+import { useDispatch, useSelector } from 'react-redux';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import { updateProductCategory, deleteSelectedCategory } from '../../Redux/Actions/adminAction';
+import { message } from 'antd';
 
 function EditProductCategoryInnerComponent() {
    const dispatch = useDispatch();
    const [EditCategory, setEditCategory] = useState({
-      name: "",
-      description: "",
+      name: '',
+      description: '',
    });
    const ShowHandler = function () {
       dispatch(editProductCategory(false));
@@ -45,11 +42,7 @@ function EditProductCategoryInnerComponent() {
       if (!!selectedCategory) {
          setEditCategory({
             name: selectedCategory && selectedCategory?.name,
-            description:
-               (selectedCategory &&
-                  !!selectedCategory?.description &&
-                  selectedCategory?.description) ||
-               "",
+            description: (selectedCategory && !!selectedCategory?.description && selectedCategory?.description) || '',
          });
       }
 
@@ -62,17 +55,14 @@ function EditProductCategoryInnerComponent() {
    const EditHandler = function (id) {
       const { name, description } = EditCategory;
       if (!!selectedCategory) {
-         if (
-            name !== selectedCategory.name ||
-            (description !== selectedCategory?.description && description !== "")
-         ) {
+         if (name !== selectedCategory.name || (description !== selectedCategory?.description && description !== '')) {
             dispatch(updateProductCategory({ categoryId: id, name, description }));
             dispatch(categoryUpdateLoading(true));
          } else {
-            info("Older values and new values is the same. No changes!!");
+            info('Older values and new values is the same. No changes!!');
          }
       } else {
-         info("No Selected category");
+         info('No Selected category');
       }
    };
 
@@ -94,11 +84,11 @@ function EditProductCategoryInnerComponent() {
                <div className="close_btn">
                   <IoIosClose onClick={ShowHandler} />
                </div>
-               <HeadingComponent Heading={"Edit Category"} cl="sm_heading" />
+               <HeadingComponent Heading={'Edit Category'} cl="sm_heading" />
                <Box
                   component="form"
                   sx={{
-                     "& > :not(style)": { my: 1, width: "100%" },
+                     '& > :not(style)': { my: 1, width: '100%' },
                   }}
                   noValidate
                   autoComplete="off"
@@ -124,17 +114,13 @@ function EditProductCategoryInnerComponent() {
                </Box>
                <edit.flex>
                   <CustombuttonComponent
-                     innerText={"Edit Category"}
-                     btnCl={"category_upload"}
+                     innerText={'Edit Category'}
+                     btnCl={'category_upload'}
                      onClick={() => EditHandler(selectedCategory._id)}
                      isLoading={editCategoryLoading}
                   />
 
-                  <CustombuttonComponent
-                     innerText={"Delete"}
-                     btnCl={"Delete_btn"}
-                     onClick={CategoryDeleteHandler}
-                  />
+                  <CustombuttonComponent innerText={'Delete'} btnCl={'Delete_btn'} onClick={CategoryDeleteHandler} />
                </edit.flex>
             </>
          ) : null}

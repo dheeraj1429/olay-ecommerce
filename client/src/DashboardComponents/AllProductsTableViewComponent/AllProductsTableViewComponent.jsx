@@ -1,17 +1,17 @@
-import { Popconfirm } from "antd";
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { selectedItemLimit, removeSelectedItems } from "../../Redux/Actions/appAction";
-import * as inner from "./AllProductsTableViewComponent.style";
-import { useDispatch } from "react-redux";
-import { deleteOneProduct } from "../../Redux/Actions/adminAction";
-import { Checkbox } from "antd";
-import { FiEdit2 } from "@react-icons/all-files/fi/FiEdit2";
-import { VscClose } from "@react-icons/all-files/vsc/VscClose";
-import backendConfigData from "../../backendConfig";
-import { BsArrowReturnRight } from "@react-icons/all-files/bs/BsArrowReturnRight";
-import { GoPrimitiveDot } from "@react-icons/all-files/go/GoPrimitiveDot";
-import * as globalClass from "../../Global.style";
+import { Popconfirm } from 'antd';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { selectedItemLimit, removeSelectedItems } from '../../Redux/Actions/adminAppAction';
+import * as inner from './AllProductsTableViewComponent.style';
+import { useDispatch } from 'react-redux';
+import { deleteOneProduct } from '../../Redux/Actions/adminAction';
+import { Checkbox } from 'antd';
+import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2';
+import { VscClose } from '@react-icons/all-files/vsc/VscClose';
+import backendConfigData from '../../backendConfig';
+import { BsArrowReturnRight } from '@react-icons/all-files/bs/BsArrowReturnRight';
+import { GoPrimitiveDot } from '@react-icons/all-files/go/GoPrimitiveDot';
+import * as globalClass from '../../Global.style';
 
 function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
    const location = useLocation();
@@ -32,7 +32,7 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
    };
 
    return (
-      <inner.tr className={variation ? "padding_table" : null} variation={variation ? variation : null}>
+      <inner.tr className={variation ? 'padding_table' : null} variation={variation ? variation : null}>
          {variation ? null : (
             <>
                <inner.td className="checkbox">
@@ -56,10 +56,10 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
             </>
          )}
 
-         {location.pathname == "/dashboard/all-products" ? null : subVaition ? (
+         {location.pathname == '/dashboard/all-products' ? null : subVaition ? (
             <inner.td
                style={{
-                  paddingLeft: "1.5rem",
+                  paddingLeft: '1.5rem',
                }}
             >
                <div className="flex_div">
@@ -78,7 +78,7 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
          {
             <Link
                to={
-                  location.pathname === "/dashboard/all-products"
+                  location.pathname === '/dashboard/all-products'
                      ? location.pathname
                      : !subVaition
                      ? `/dashboard/product/create-variations/${el._id}`
@@ -86,7 +86,7 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
                }
             >
                <inner.td>
-                  <div className={variation ? "produvt-variation-image-div" : "product_image_prv"}>
+                  <div className={variation ? 'produvt-variation-image-div' : 'product_image_prv'}>
                      <img
                         crossOrigin="anonymous"
                         src={`${backendConfigData.URL}productImagesCompress/${
@@ -112,22 +112,22 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
          <inner.td></inner.td>
          <inner.td>
             {el?.stockStatus && el.stockStatus ? (
-               <div className={el.stockStatus.toLowerCase().split(" ").join("-")}>{el.stockStatus}</div>
+               <div className={el.stockStatus.toLowerCase().split(' ').join('-')}>{el.stockStatus}</div>
             ) : (
-               "-"
+               '-'
             )}
          </inner.td>
-         <inner.td>{el?.weight ? el.weight : "-"}</inner.td>
-         <inner.td>{el?.length ? el.length : "-"}</inner.td>
-         <inner.td>{el?.wide ? el.wide : "-"}</inner.td>
-         <inner.td>{el?.height ? el.height : "-"}</inner.td>
-         <inner.td>{el?.suggestedAge ? el.suggestedAge : "-"}</inner.td>
+         <inner.td>{el?.weight ? el.weight : '-'}</inner.td>
+         <inner.td>{el?.length ? el.length : '-'}</inner.td>
+         <inner.td>{el?.wide ? el.wide : '-'}</inner.td>
+         <inner.td>{el?.height ? el.height : '-'}</inner.td>
+         <inner.td>{el?.suggestedAge ? el.suggestedAge : '-'}</inner.td>
          <inner.td>{el?.brand ? el.brand.name : <div>-</div>}</inner.td>
          <inner.td>{el?.category ? el.category.name : <div>-</div>}</inner.td>
          <inner.td>
             {el?.createdAt
                ? (function () {
-                    const date = String(new Date(el.createdAt)).split("GMT")[0];
+                    const date = String(new Date(el.createdAt)).split('GMT')[0];
                     return <p>{`${date}`}</p>;
                  })()
                : null}

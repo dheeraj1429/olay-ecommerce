@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import HocSpnnerComponent from "../../Components/HocSpnnerComponent/HocSpnnerComponent";
-import { useDispatch } from "react-redux";
-import AllProductsTableViewComponent from "../AllProductsTableViewComponent/AllProductsTableViewComponent";
-import { removeAllSelctedIds } from "../../Redux/Actions/appAction";
+import React, { useEffect } from 'react';
+import HocSpnnerComponent from '../../HelperComponents/HocSpnnerComponent/HocSpnnerComponent';
+import { useDispatch } from 'react-redux';
+import AllProductsTableViewComponent from '../AllProductsTableViewComponent/AllProductsTableViewComponent';
+import { removeAllSelctedIds } from '../../Redux/Actions/adminAppAction';
 
 function AllProductTableInnerComponent({ allProducts, variation }) {
    const dispatch = useDispatch();

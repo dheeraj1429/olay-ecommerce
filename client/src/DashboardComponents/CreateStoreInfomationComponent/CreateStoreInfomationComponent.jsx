@@ -7,9 +7,9 @@ import {
    shopInfomationStoreLoading,
    RemoveSelectedShopInfo,
    removeUpdateShopInfo,
-} from '../../Redux/Actions/appAction';
+} from '../../Redux/Actions/adminAppAction';
 import { VscClose } from '@react-icons/all-files/vsc/VscClose';
-import CustombuttonComponent from '../../Components/CustombuttonComponent/CustombuttonComponent';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import { storeLocationData, UpdateStoreShopInformation } from '../../Redux/Actions/adminAction';
 import { message } from 'antd';
 

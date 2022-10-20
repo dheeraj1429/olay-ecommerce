@@ -1,27 +1,18 @@
-import React, { useEffect, useState } from "react";
-import * as upload from "../UploadProductComponent/UploadProductComponent.style";
-import ProductUploadImageComponent from "../ProductUploadImageComponent/ProductUploadImageComponent";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import HeadingComponent from "../../Components/HeadingComponent/HeadingComponent";
-import { useDispatch, useSelector } from "react-redux";
-import {
-   fetchAllProductTags,
-   fetchProductBrandItemsInfo,
-} from "../../Redux/Actions/adminAction";
-import { useParams } from "react-router";
-import Autocomplete from "@mui/material/Autocomplete";
+import React, { useEffect, useState } from 'react';
+import * as upload from '../UploadProductComponent/UploadProductComponent.style';
+import ProductUploadImageComponent from '../ProductUploadImageComponent/ProductUploadImageComponent';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllProductTags, fetchProductBrandItemsInfo } from '../../Redux/Actions/adminAction';
+import { useParams } from 'react-router';
+import Autocomplete from '@mui/material/Autocomplete';
 
-function ProductUploadSecondComponent({
-   sugAge,
-   state,
-   ChangeHandler,
-   ImageGrabHandler,
-   TagHandler,
-}) {
+function ProductUploadSecondComponent({ sugAge, state, ChangeHandler, ImageGrabHandler, TagHandler }) {
    const param = useParams();
-   const [Image, setImage] = useState("");
+   const [Image, setImage] = useState('');
 
    const allProductBrands = useSelector((state) => state.admin.allProductBrands);
    const singleProductFetch = useSelector((state) => state.admin.singleProductFetch);
@@ -40,7 +31,7 @@ function ProductUploadSecondComponent({
       }
 
       return () => {
-         setImage("");
+         setImage('');
       };
    }, [singleProductFetch]);
 
@@ -48,12 +39,12 @@ function ProductUploadSecondComponent({
       <div className="padding_div">
          <upload.flexDiv>
             <div>
-               <HeadingComponent cl="sm_heading" Heading={"Product Image"} />
+               <HeadingComponent cl="sm_heading" Heading={'Product Image'} />
                <ProductUploadImageComponent
-                  size={"big"}
+                  size={'big'}
                   onChange={ImageGrabHandler}
                   selectedPrevImage={Image}
-                  filde={"productImages"}
+                  filde={'productImages'}
                />
             </div>
             {/* <div>
@@ -65,7 +56,7 @@ function ProductUploadSecondComponent({
             <Box
                component="form"
                sx={{
-                  "& > :not(style)": { my: 1, width: "100%" },
+                  '& > :not(style)': { my: 1, width: '100%' },
                }}
                noValidate
                autoComplete="off"

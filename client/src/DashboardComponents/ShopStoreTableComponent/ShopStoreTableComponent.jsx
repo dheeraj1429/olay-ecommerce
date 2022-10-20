@@ -4,7 +4,7 @@ import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllShopInfomation } from '../../Redux/Actions/adminAction';
 import { Link } from 'react-router-dom';
-import { storeShowHideHandler, selectedShopInfoHandler } from '../../Redux/Actions/appAction';
+import { storeShowHideHandler, selectedShopInfoHandler } from '../../Redux/Actions/adminAppAction';
 
 const row = [
    { elm: 'name', value: 'Name' },

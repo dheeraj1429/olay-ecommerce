@@ -5,6 +5,8 @@ import { Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { setLoginUser } from './Redux/Actions/authAppAction';
+import { getTrandingProducts } from './Redux/Actions/indexActions';
+import { trandingProductsLoading } from './Redux/Actions/indexAppAction';
 
 // dashboard components
 import DashboardSingInComponent from './DashboardComponents/DashboardSingInComponent/DashboardSingInComponent';
@@ -58,6 +60,8 @@ function App() {
    useEffect(() => {
       if (cookie && cookie.user) {
          dispatch(setLoginUser(cookie.user));
+         dispatch(getTrandingProducts());
+         dispatch(trandingProductsLoading(true));
       }
    }, []);
 

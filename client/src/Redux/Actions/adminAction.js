@@ -1123,7 +1123,7 @@ export const importCsvFile = function (data) {
 export const getProductGenralReport = function () {
    return async function (dispatch) {
       try {
-         const getReport = await axios.get('/index/get-product-genral-report', headers);
+         const getReport = await axios.get('/admin/get-product-genral-report', headers);
 
          if (getReport && getReport?.data && getReport?.data.success) {
             dispatch({
@@ -1140,7 +1140,7 @@ export const getProductGenralReport = function () {
 export const getAllSignInUsers = function () {
    return async function (dispatch) {
       try {
-         const getUsers = await axios.get('/index/get-signin-users', headers);
+         const getUsers = await axios.get('/admin/get-signin-users', headers);
 
          if (getUsers && getUsers?.data && getUsers?.data?.success) {
             dispatch({

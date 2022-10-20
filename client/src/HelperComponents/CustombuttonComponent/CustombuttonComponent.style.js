@@ -90,6 +90,30 @@ export const div = styled.div`
       margin: 0 !important;
       margin-right: 0.5rem !important;
    }
+   .Discover_btn {
+      background-color: transparent;
+      padding: 0.7rem 2rem;
+      border: 2px solid var(--spec-general-background-a);
+      color: var(--spec-general-background-a);
+      transition: all 0.4s ease;
+      margin-top: 1rem;
+   }
+   .Discover_btn:hover {
+      background-color: var(--spec-general-background-a);
+      color: var(--main-cl);
+   }
+   .see_more {
+      background-color: transparent;
+      padding: 0.5rem 3rem;
+      border: 2px solid var(--spec-icon-disabled);
+      color: var(--spec-general-background-a);
+      transition: all 0.3s ease;
+   }
+   .see_more:hover {
+      background-color: var(--dark-cl);
+      color: var(--main-cl);
+      border: 2px solid transparent;
+   }
 `;
 
 export const button = styled.button`

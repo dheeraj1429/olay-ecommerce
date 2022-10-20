@@ -3,7 +3,6 @@ const route = express.Router();
 const indexController = require('../controllers/indexControllers');
 
 // API => GET
-route.get('/get-product-genral-report', indexController.getProductGenralReport);
-route.get('/get-signin-users', indexController.getAllSignInUsers);
+route.get('/get-tranding-products', indexController.getTrandingProducts);
 
 module.exports = route;

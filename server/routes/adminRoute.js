@@ -42,6 +42,9 @@ route.get('/get-all-product-label', adminController.getAllProductLable);
 route.get('/get-single-product-label/:id', adminController.getSingleProductLabel);
 route.get('/get-shop-info', adminController.getShopInfo);
 route.get('/get-all-shop-location-data', adminController.getAllShopInfomation);
+route.get('/get-signin-users', adminController.getAllSignInUsers);
+route.get('/get-product-genral-report', adminController.getProductGenralReport);
+
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST

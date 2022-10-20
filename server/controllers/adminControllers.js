@@ -13,6 +13,7 @@ const AppError = require('../helpers/appError');
 const productLabelModel = require('../model/schema/productLabelSchema');
 const shopModel = require('../model/schema/shopInfoSchema');
 const shopLoactionModel = require('../model/schema/storeLocationSchema');
+const userModel = require('../model/schema/authSchema');
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -1731,6 +1732,52 @@ const UpdateStoreShopInformation = catchAsync(async function (req, res, next) {
    }
 });
 
+const groupDataFunction = async function (collection, field) {
+   const genrateReport = await collection.aggregate([
+      {
+         $project: {
+            _id: 0,
+            created: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+         },
+      },
+      { $group: { _id: { date: '$created' }, [field]: { $sum: 1 } } },
+   ]);
+
+   return genrateReport;
+};
+
+const getAllSignInUsers = catchAsync(async function (req, res, next) {
+   const genrateUserReport = await groupDataFunction(userModel, 'TotalUserSignIn');
+
+   if (genrateUserReport) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         report: genrateUserReport,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
+});
+
+const getProductGenralReport = catchAsync(async function (req, res, next) {
+   const genrateProductReport = await groupDataFunction(productModel, 'totalProductUploded');
+
+   if (genrateProductReport) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         report: genrateProductReport,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
+});
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -1786,4 +1833,6 @@ module.exports = {
    storeShopLocationInfo,
    getAllShopInfomation,
    UpdateStoreShopInformation,
+   getAllSignInUsers,
+   getProductGenralReport,
 };

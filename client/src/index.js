@@ -9,6 +9,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import 'antd/dist/antd.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+
 import 'react-color-palette/lib/css/styles.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

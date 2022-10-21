@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { productCategoryLoadingFn, removeCategoryInfo, insertNewCategory } from '../../Redux/Actions/adminAppAction';
 import ProductCategorysComponent from '../ProductCategorysComponent/ProductCategorysComponent';
 import EditProductCategoryComponent from '../EditProductCategoryComponent/EditProductCategoryComponent';
+import ProductUploadImageComponent from '../ProductUploadImageComponent/ProductUploadImageComponent';
 
 const key = 'updatable';
 
@@ -18,8 +19,11 @@ function UploadProductCategory() {
    const [CategoryInfo, setCategoryInfo] = useState({
       categoryName: '',
       categoryDescription: '',
+      CategoryImage: '',
    });
+
    const dispatch = useDispatch();
+   const { productCategory, productCategoryLoading, editCategory } = useSelector((state) => state.admin);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -28,17 +32,29 @@ function UploadProductCategory() {
       setCategoryInfo({ ...CategoryInfo, [name]: value });
    };
 
-   const { productCategory, productCategoryLoading, editCategory } = useSelector((state) => state.admin);
-
    const info = (mes) => {
       message.info(mes);
    };
 
+   const ImageGrabHandler = function (e) {
+      const data = e.target.files[0];
+      setCategoryInfo({ ...CategoryInfo, CategoryImage: data });
+   };
+
    const UploadHandler = function () {
-      const { categoryName, categoryDescription } = CategoryInfo;
+      const { categoryName, categoryDescription, CategoryImage } = CategoryInfo;
 
       if (categoryName || categoryDescription) {
-         dispatch(uploadProductCategory({ categoryName, categoryDescription }));
+         const formData = new FormData();
+         formData.append('categoryName', categoryName);
+         formData.append('categoryDescription', categoryDescription);
+         dispatch(uploadProductCategory(formData));
+
+         if (!!CategoryImage) {
+            formData.append('CategoryImage', CategoryImage);
+            dispatch(uploadProductCategory(formData));
+         }
+
          dispatch(productCategoryLoadingFn(true));
          message.loading({
             content: 'Loading...',
@@ -111,6 +127,8 @@ function UploadProductCategory() {
                         rows={6}
                         onChange={ChangeHandler}
                      />
+
+                     <ProductUploadImageComponent selectedPrevImage={CategoryInfo.CategoryImage} onChange={ImageGrabHandler} />
                   </Box>
                   <CustombuttonComponent
                      innerText={'Save'}

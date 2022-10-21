@@ -10,6 +10,8 @@ const storage = multer.diskStorage({
       if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
          if (file.fieldname === 'productImage' || file.fieldname === 'variationImage') {
             cb(null, './upload/productImages');
+         } else if (file.fieldname === 'CategoryImage') {
+            cb(null, './upload/categoryImages');
          } else {
             cb(null, './upload/brandImages');
          }
@@ -44,12 +46,13 @@ route.get('/get-shop-info', adminController.getShopInfo);
 route.get('/get-all-shop-location-data', adminController.getAllShopInfomation);
 route.get('/get-signin-users', adminController.getAllSignInUsers);
 route.get('/get-product-genral-report', adminController.getProductGenralReport);
+route.get('/selected-product-category', adminController.getSelectedProductCategory);
 
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
 // route.post("/database-connection-info", adminController.databaseConnectionFunction);
-route.post('/upload-category', adminController.uploadProductCategory);
+route.post('/upload-category', upload, adminController.uploadProductCategory);
 route.post('/insert-new-product-brand', upload, adminController.insertNewProductBrand);
 route.post('/delete-multi-product-brand', adminController.deleteSelectedProductBrand);
 route.post('/get-selected-product-brand/:id', adminController.getSelectedBrandProduct);
@@ -66,7 +69,7 @@ route.post('/store-shop-loaction', adminController.storeShopLocationInfo);
 // ---------------------------------------------------------------------------------------
 
 // Apis => PATCH
-route.patch('/edit-product-category', adminController.editproductCategory);
+route.patch('/edit-product-category', upload, adminController.editproductCategory);
 route.patch('/update-selected-product-brand', upload, adminController.editSelectedBrand);
 route.patch('/eidt-single-product/:id', upload, adminController.editSingleProduct);
 route.patch('/update-product-tag', adminController.udpateProductTag);

@@ -3,6 +3,9 @@ import styled from 'styled-components';
 export const div = styled.div`
    width: 100%;
    padding: 2rem 0;
+   position: absolute;
+   top: 0;
+   left: 0;
 
    ul {
       display: flex;

@@ -1,4 +1,5 @@
 // https://preview.themeforest.net/item/outstock-react-next-js-minimal-ecommerce-template/full_screen_preview/39081703
+// https://preview.themeforest.net/item/martfury-multipurpose-store-shopify-theme/full_screen_preview/34866272
 
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
@@ -58,10 +59,11 @@ function App() {
    const dispatch = useDispatch();
 
    useEffect(() => {
+      dispatch(getTrandingProducts());
+      dispatch(trandingProductsLoading(true));
+
       if (cookie && cookie.user) {
          dispatch(setLoginUser(cookie.user));
-         dispatch(getTrandingProducts());
-         dispatch(trandingProductsLoading(true));
       }
    }, []);
 

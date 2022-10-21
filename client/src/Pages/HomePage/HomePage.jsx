@@ -16,13 +16,13 @@ function HomePage() {
             }
             subHeading={
                <p>
-                  As rich and unique as the coffee beans it is intended for, this little scoop will make your morning{' '}
-                  <br /> ritual a special occasion every day.
+                  As rich and unique as the coffee beans it is intended for, this little scoop will make your morning <br />{' '}
+                  ritual a special occasion every day.
                </p>
             }
          />
          <ShopHeadingComponent
-            heading={'Trending Products'}
+            heading={'Deals Of The Day'}
             subHeading={'Mirum est notare quam littera gothica quam nunc putamus parum claram!'}
          />
          <TrandingProductsComponent />

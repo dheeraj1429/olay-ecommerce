@@ -6,7 +6,7 @@ export const div = styled.div`
 
    .img_Prv_div {
       width: 100%;
-      height: 400px;
+      height: 280px;
       position: relative;
       overflow: hidden;
 
@@ -26,17 +26,57 @@ export const div = styled.div`
          background-color: var(--main-cl);
          border-radius: 50%;
          cursor: pointer;
-         transition: all 0.2s ease;
+         transition: all 0.3s ease;
          margin-bottom: 0.5rem;
+
+         .hover_hidden_div {
+            position: absolute;
+            left: -100px;
+            top: 10px;
+            width: 90px;
+            background-color: var(--extra-dark-cl);
+            text-align: center;
+            transition: all 0.3s ease;
+            transform: translateX(-10px);
+            opacity: 0;
+            visibility: hidden;
+
+            svg {
+               position: absolute;
+               right: -8px;
+               top: 4px;
+            }
+
+            p {
+               margin: 0;
+               color: var(--main-cl);
+            }
+         }
+         &:hover .hover_hidden_div {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+         }
+
+         /* 
+         &:hover {
+            transform: scale(1.1);
+         } */
 
          &:nth-child(2) {
             transform: translateY(-30px);
             visibility: hidden;
             opacity: 0;
          }
-
-         &:hover {
-            transform: scale(1.1);
+         &:nth-child(3) {
+            transform: translateY(-60px);
+            visibility: hidden;
+            opacity: 0;
+         }
+         &:nth-child(4) {
+            transform: translateY(-90px);
+            visibility: hidden;
+            opacity: 0;
          }
       }
 
@@ -56,7 +96,7 @@ export const div = styled.div`
          height: 100%;
          width: 100%;
          object-fit: contain;
-         transform: scale(1.1);
+         /* transform: scale(1.1); */
       }
 
       .options_div {
@@ -118,6 +158,16 @@ export const div = styled.div`
          visibility: visible;
          opacity: 1;
       }
+      &:hover .icons_div:nth-child(3) {
+         transform: translateY(0px);
+         visibility: visible;
+         opacity: 1;
+      }
+      &:hover .icons_div:nth-child(4) {
+         transform: translateY(0px);
+         visibility: visible;
+         opacity: 1;
+      }
    }
 
    .content_div {
@@ -139,18 +189,16 @@ export const div = styled.div`
    }
    .off {
       width: fit-content;
-      padding: 0.3rem 0.8rem;
-      z-index: 200;
-      position: relative;
-      margin-top: 0.4rem;
-      margin-left: 0.4rem;
+      margin-left: 0.6rem;
       transform: scale(0.9);
-      border-radius: 20px;
-      background-color: var(--spec-brand-link-text);
 
       p {
          margin: 0;
-         color: var(--main-cl);
+         color: var(--spec-brand-link-text);
       }
+   }
+
+   .flexContent {
+      display: flex;
    }
 `;

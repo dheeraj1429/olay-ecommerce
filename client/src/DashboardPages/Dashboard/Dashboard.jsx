@@ -5,15 +5,14 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
-   const auth = useSelector((state) => state.auth.auth);
+   const { auth } = useSelector((state) => state.auth);
    const navigation = useNavigate();
 
    useEffect(() => {
       if (!!auth && auth.success && auth.userObject.isAdmin === 'admin') {
          navigation('/dashboard');
-      } else if (!!auth && auth.success && auth.userObject.isAdmin === 'user') {
-         navigation('/');
-      } else {
+      }
+      if (!!auth && auth.success && auth.userObject.isAdmin === 'user') {
          navigation('/dashboard-auth/sign-in');
       }
    }, [auth]);

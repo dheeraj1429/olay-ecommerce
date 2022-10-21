@@ -4,29 +4,25 @@ import { IoIosClose } from '@react-icons/all-files/io/IoIosClose';
 import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import {
-   editProductCategory,
-   categoryUpdateLoading,
-   removeCategoryUpdateInfo,
-} from '../../Redux/Actions/adminAppAction';
+import { editProductCategory, categoryUpdateLoading, removeCategoryUpdateInfo } from '../../Redux/Actions/adminAppAction';
 import { useDispatch, useSelector } from 'react-redux';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import { updateProductCategory, deleteSelectedCategory } from '../../Redux/Actions/adminAction';
 import { message } from 'antd';
+import ProductUploadImageComponent from '../ProductUploadImageComponent/ProductUploadImageComponent';
 
 function EditProductCategoryInnerComponent() {
    const dispatch = useDispatch();
    const [EditCategory, setEditCategory] = useState({
       name: '',
       description: '',
+      categoryImage: '',
    });
    const ShowHandler = function () {
       dispatch(editProductCategory(false));
    };
 
-   const selectedCategory = useSelector((state) => state.admin.selectedCategory);
-   const editCategoryLoading = useSelector((state) => state.admin.editCategoryLoading);
-   const updateCategory = useSelector((state) => state.admin.updateCategory);
+   const { selectedCategory, editCategoryLoading, updateCategory } = useSelector((state) => state.admin);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -39,10 +35,13 @@ function EditProductCategoryInnerComponent() {
    };
 
    useEffect(() => {
-      if (!!selectedCategory) {
+      if (!!selectedCategory && selectedCategory.success) {
          setEditCategory({
-            name: selectedCategory && selectedCategory?.name,
-            description: (selectedCategory && !!selectedCategory?.description && selectedCategory?.description) || '',
+            name: selectedCategory && selectedCategory?.category.name,
+            description:
+               (selectedCategory && !!selectedCategory?.category.description && selectedCategory?.category.description) || '',
+            categoryImage:
+               selectedCategory && !!selectedCategory?.category.categoryImage ? selectedCategory?.category.categoryImage : '',
          });
       }
 
@@ -53,10 +52,16 @@ function EditProductCategoryInnerComponent() {
    }, [selectedCategory, updateCategory]);
 
    const EditHandler = function (id) {
-      const { name, description } = EditCategory;
+      const { name, description, categoryImage } = EditCategory;
       if (!!selectedCategory) {
          if (name !== selectedCategory.name || (description !== selectedCategory?.description && description !== '')) {
-            dispatch(updateProductCategory({ categoryId: id, name, description }));
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('CategoryImage', categoryImage);
+            formData.append('categoryId', id);
+
+            dispatch(updateProductCategory(formData));
             dispatch(categoryUpdateLoading(true));
          } else {
             info('Older values and new values is the same. No changes!!');
@@ -64,6 +69,11 @@ function EditProductCategoryInnerComponent() {
       } else {
          info('No Selected category');
       }
+   };
+
+   const ImageGrabHandler = function (e) {
+      const data = e.target.files[0];
+      setEditCategory({ ...EditCategory, categoryImage: data });
    };
 
    const CategoryDeleteHandler = function () {
@@ -111,12 +121,18 @@ function EditProductCategoryInnerComponent() {
                      onChange={ChangeHandler}
                      name="description"
                   />
+
+                  <ProductUploadImageComponent
+                     selectedPrevImage={EditCategory.categoryImage}
+                     filde={'categoryImages'}
+                     onChange={ImageGrabHandler}
+                  />
                </Box>
                <edit.flex>
                   <CustombuttonComponent
                      innerText={'Edit Category'}
                      btnCl={'category_upload'}
-                     onClick={() => EditHandler(selectedCategory._id)}
+                     onClick={() => EditHandler(selectedCategory.category._id)}
                      isLoading={editCategoryLoading}
                   />
 
@@ -128,4 +144,4 @@ function EditProductCategoryInnerComponent() {
    );
 }
 
-export default EditProductCategoryInnerComponent;
+export default React.memo(EditProductCategoryInnerComponent);

@@ -1017,9 +1017,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.adminExportHistory,
                history: {
                   ...state.adminExportHistory.history,
-                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter(
-                     (el) => el._id !== action.payload
-                  ),
+                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter((el) => el._id !== action.payload),
                },
             },
          };

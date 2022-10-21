@@ -5,6 +5,7 @@ export const div = styled.div`
 
    .flex {
       display: flex;
+      justify-content: space-between;
       align-items: center;
    }
 
@@ -14,12 +15,22 @@ export const div = styled.div`
    }
 
    .headingSpace {
-      width: 40%;
       text-align: center;
       margin: 0;
    }
 
    p {
       text-align: center;
+   }
+
+   .view {
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--spec-static-brand-black);
+   }
+
+   hr {
+      border: transparent;
+      border-top: 1px solid var(--smooht-gray-cl);
    }
 `;

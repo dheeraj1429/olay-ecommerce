@@ -28,13 +28,6 @@ export const editProductCategory = function (data) {
    };
 };
 
-export const selectedCategory = function (data) {
-   return {
-      type: ADMIN_ACTION_TYPES.SELECTED_EDIT_CATEGORY,
-      payload: data,
-   };
-};
-
 export const categoryUpdateLoading = function (data) {
    return {
       type: ADMIN_ACTION_TYPES.CATEGORY_UPDATE_LOADING,

@@ -16,12 +16,7 @@ function ProductCategorysComponent() {
    return (
       <category.div>
          <HeadingComponent cl="sm_heading" Heading={'Product Categorys'} />
-         <ProductCategoryInnerComponent
-            CategoryName={'Category name'}
-            description={'description'}
-            edit={'edit'}
-            folder={false}
-         />
+         <ProductCategoryInnerComponent CategoryName={'Category name'} description={'description'} edit={'edit'} folder={false} />
          {!!productAllCategory && productAllCategory.success
             ? productAllCategory.allCategory.map((el) => (
                  <ProductCategoryInnerComponent

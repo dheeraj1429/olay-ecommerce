@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import * as inner from './ProductCategoryInnerComponent.style';
 import { Popconfirm } from 'antd';
 import { useDispatch } from 'react-redux';
-import { editProductCategory, selectedCategory } from '../../Redux/Actions/adminAppAction';
+import { editProductCategory } from '../../Redux/Actions/adminAppAction';
 import { FcSupport } from '@react-icons/all-files/fc/FcSupport';
 import { FcGenealogy } from '@react-icons/all-files/fc/FcGenealogy';
 import Badge from '@mui/material/Badge';
+import { getSelectedProductCategory } from '../../Redux/Actions/adminAction';
 
 function ProductCategoryInnerComponent({ CategoryName, description, edit, folder, data }) {
    const [open, setOpen] = useState(false);
@@ -20,11 +21,10 @@ function ProductCategoryInnerComponent({ CategoryName, description, edit, folder
       setOpen(false);
       setConfirmLoading(false);
       dispatch(editProductCategory(true));
-      dispatch(selectedCategory(data));
+      dispatch(getSelectedProductCategory(data));
    };
 
    const handleCancel = () => {
-      console.log('Clicked cancel button');
       setOpen(false);
    };
 
@@ -74,4 +74,4 @@ function ProductCategoryInnerComponent({ CategoryName, description, edit, folder
    );
 }
 
-export default ProductCategoryInnerComponent;
+export default React.memo(ProductCategoryInnerComponent);

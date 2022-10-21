@@ -5,7 +5,7 @@ export const div = styled.div`
 
    .grid_div {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
    }
 
    .center_div {

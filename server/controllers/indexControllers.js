@@ -6,7 +6,7 @@ const getTrandingProducts = catchAsync(async function (req, res, next) {
    const findProducts = await productModel.aggregate([
       { $match: { salePrice: { $exists: true } } },
       { $project: { _id: 1, name: 1, price: 1, productImage: 1, stockStatus: 1, salePrice: 1 } },
-      { $limit: 4 },
+      { $limit: 5 },
    ]);
 
    if (findProducts) {

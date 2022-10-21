@@ -8,15 +8,14 @@ import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingCom
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllProductTags, fetchProductBrandItemsInfo } from '../../Redux/Actions/adminAction';
 import { useParams } from 'react-router';
-import Autocomplete from '@mui/material/Autocomplete';
 
-function ProductUploadSecondComponent({ sugAge, state, ChangeHandler, ImageGrabHandler, TagHandler }) {
+function ProductUploadSecondComponent({ sugAge, state, ChangeHandler, ImageGrabHandler }) {
    const param = useParams();
    const [Image, setImage] = useState('');
 
    const allProductBrands = useSelector((state) => state.admin.allProductBrands);
    const singleProductFetch = useSelector((state) => state.admin.singleProductFetch);
-   const allTags = useSelector((state) => state.admin.allTags);
+   // const allTags = useSelector((state) => state.admin.allTags);
 
    const dispatch = useDispatch();
 
@@ -120,4 +119,4 @@ function ProductUploadSecondComponent({ sugAge, state, ChangeHandler, ImageGrabH
    );
 }
 
-export default ProductUploadSecondComponent;
+export default React.memo(ProductUploadSecondComponent);

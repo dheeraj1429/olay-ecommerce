@@ -30,6 +30,7 @@ const insertCategoryInfo = async function (data, res) {
 
 const uploadProductCategory = catchAsync(async function (req, res, next) {
    const { categoryName, categoryDescription } = req.body;
+   const file = req.files[0];
 
    if (!!categoryName) {
       const isExists = await categoryModel.findOne({ name: categoryName });
@@ -43,18 +44,24 @@ const uploadProductCategory = catchAsync(async function (req, res, next) {
             message: 'category is already exists',
          });
       } else {
-         if (categoryName && categoryDescription) {
-            const data = {
-               name: categoryName,
-               description: categoryDescription,
-            };
+         const data = {
+            name: categoryName,
+            description: categoryDescription ? categoryDescription : '',
+         };
 
+         if (!file) {
             await insertCategoryInfo(data, res);
-         } else if (categoryName) {
-            const data = {
-               name: categoryName,
-            };
+         } else if (file) {
+            /**
+             * if admin upload the image with the category then we want to store the image with other data.
+             * so first compress image then then store the image into the database.
+             */
+            const originalname = file.originalname;
+            const imagePath = file.path;
+            data.categoryImage = originalname;
+            data.categoryDescription = '';
 
+            await imageCompress(imagePath, 130, 'categoryCompressImages', originalname);
             await insertCategoryInfo(data, res);
          }
       }
@@ -83,12 +90,45 @@ const getAllCategorys = catchAsync(async function (req, res, next) {
    }
 });
 
+const findCategory = async function (collection, find, res, filed) {
+   let findSelectedCategory;
+
+   if (filed === 'id') {
+      findSelectedCategory = await collection.findOne({ _id: find }, { products: 0, createdAt: 0 });
+   } else if (filed === 'name') {
+      findSelectedCategory = await collection.findOne({ name: find });
+   }
+
+   if (findSelectedCategory) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         category: findSelectedCategory,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'internal server error',
+      });
+   }
+};
+
+const getSelectedProductCategory = catchAsync(async function (req, res, next) {
+   const { name, _id } = req.query;
+
+   if (_id) {
+      await findCategory(categoryModel, _id, res, 'id');
+   } else if (name) {
+      await findCategory(categoryModel, name, res, 'name');
+   }
+});
+
 /**
  * @editproductCategory find the category and update then catefory fileds
  * @return flag true and false
  */
 const editproductCategory = catchAsync(async function (req, res, next) {
    const { categoryId, name, description } = req.body;
+   const file = req.files[0];
 
    if (!categoryId) {
       return res.status(httpStatusCodes.OK).json({
@@ -97,18 +137,38 @@ const editproductCategory = catchAsync(async function (req, res, next) {
       });
    }
 
-   /**
-    * @findCategoryAndUpdate find the category and update.
-    */
-   const findCategoryAndUpdate = await categoryModel.updateOne(
-      { _id: categoryId },
-      {
-         $set: {
-            name,
-            description,
-         },
-      }
-   );
+   const data = {
+      name,
+      description,
+   };
+
+   let findCategoryAndUpdate;
+
+   if (file) {
+      const originalname = file.originalname;
+      const imagePath = file.path;
+      data.categoryImage = originalname;
+
+      await imageCompress(imagePath, 130, 'categoryCompressImages', originalname);
+
+      data.categoryImage = originalname;
+      findCategoryAndUpdate = await categoryModel.updateOne(
+         { _id: categoryId },
+         {
+            $set: data,
+         }
+      );
+   } else {
+      /**
+       * @findCategoryAndUpdate find the category and update.
+       */
+      findCategoryAndUpdate = await categoryModel.updateOne(
+         { _id: categoryId },
+         {
+            $set: data,
+         }
+      );
+   }
 
    // TODO: check the update is done or not
    if (!!findCategoryAndUpdate.modifiedCount) {
@@ -1782,6 +1842,7 @@ module.exports = {
    uploadProductCategory,
    getAllCategorys,
    editproductCategory,
+   getSelectedProductCategory,
    deleteSelectedCategory,
    insertNewProductBrand,
    getAllProductBrand,

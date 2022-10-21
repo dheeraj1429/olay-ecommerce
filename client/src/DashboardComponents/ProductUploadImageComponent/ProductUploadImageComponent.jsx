@@ -1,11 +1,11 @@
-import React, { useRef, useState, useEffect } from "react";
-import * as prImage from "./ProductUploadImageComponent.style";
-import { AiOutlineFileImage } from "@react-icons/all-files/ai/AiOutlineFileImage";
-import backendConfigData from "../../backendConfig";
+import React, { useRef, useState, useEffect } from 'react';
+import * as prImage from './ProductUploadImageComponent.style';
+import { AiOutlineFileImage } from '@react-icons/all-files/ai/AiOutlineFileImage';
+import backendConfigData from '../../backendConfig';
 
 function ProductUploadImageComponent({ Heading, name, value, onChange, Clear, selectedPrevImage, size, filde }) {
    const image = useRef(null);
-   const [Src, setSrc] = useState("");
+   const [Src, setSrc] = useState('');
    const ClickHandler = function (e) {
       image.current.click();
    };
@@ -22,7 +22,7 @@ function ProductUploadImageComponent({ Heading, name, value, onChange, Clear, se
 
    useEffect(() => {
       if (Clear) {
-         setSrc("");
+         setSrc('');
       }
    }, [Clear]);
 
@@ -30,7 +30,7 @@ function ProductUploadImageComponent({ Heading, name, value, onChange, Clear, se
       <prImage.main>
          <h4>{Heading}</h4>
          <prImage.flex>
-            <prImage.div onClick={ClickHandler} className={size ? "big-image" : null}>
+            <prImage.div onClick={ClickHandler} className={size ? 'big-image' : null}>
                <div className="image_div">
                   <AiOutlineFileImage />
                   <input

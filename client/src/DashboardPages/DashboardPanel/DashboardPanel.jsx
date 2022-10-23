@@ -1,18 +1,22 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import * as dashboard from './DashboardPanle.style';
 import DashboardPanelSidebarComponent from '../../DashboardComponents/DashboardPanelSidebarComponent/DashboardPanelSidebarComponent';
 import { Outlet, useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 function DashboardPanel() {
-   const { auth } = useSelector((state) => state.auth);
+   const [cookie] = useCookies('user');
    const navigation = useNavigate();
 
-   useLayoutEffect(() => {
-      if (!!auth && auth.success && auth.userObject.isAdmin === 'user') {
+   useEffect(() => {
+      if (!!cookie && cookie.user && cookie.user.isAdmin === 'user') {
          navigation('/dashboard-auth/sign-in');
+      } else if (!!cookie && cookie.user && cookie.user.isAdmin === 'admin') {
+         return;
+      } else {
+         navigation('/');
       }
-   }, [auth]);
+   }, []);
 
    return (
       <dashboard.div>

@@ -4,6 +4,7 @@ const multer = require('multer');
 
 const adminController = require('../controllers/adminControllers');
 const saleController = require('../controllers/adminSaleController');
+const adminBlogController = require('../controllers/adminBlogControllers');
 
 const storage = multer.diskStorage({
    destination: function (req, file, cb) {
@@ -12,6 +13,8 @@ const storage = multer.diskStorage({
             cb(null, './upload/productImages');
          } else if (file.fieldname === 'CategoryImage') {
             cb(null, './upload/categoryImages');
+         } else if (file.fieldname === 'BlogImage') {
+            cb(null, './upload/blogPostImages');
          } else {
             cb(null, './upload/brandImages');
          }
@@ -66,6 +69,7 @@ route.post('/insert-new-product-flash-sale', saleController.insertNewProductFlas
 route.post('/insert-new-product-label', adminController.insertNewProductColorLable);
 route.post('/shop-setting', adminController.ShopSetting);
 route.post('/store-shop-loaction', adminController.storeShopLocationInfo);
+route.post('/create-new-blog', upload, adminBlogController.createNewBlog);
 // ---------------------------------------------------------------------------------------
 
 // Apis => PATCH

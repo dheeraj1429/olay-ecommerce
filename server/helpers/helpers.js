@@ -113,11 +113,23 @@ const productExportFolderPath = function (fileName) {
    /**
     * @folderPath .. => one folder up level , datafiles/exportsData/products/filename
     */
-   const folderPath = path.join(__dirname, '..', 'dataFiles', 'exportData', 'Products', fileName);
+   const folderPath = path.join(
+      __dirname,
+      '..',
+      'dataFiles',
+      'exportData',
+      'Products',
+      fileName
+   );
    return folderPath;
 };
 
-const downloadImageFromWeb = async function (url, imagePath, compressImageFolderPath, imageName) {
+const downloadImageFromWeb = async function (
+   url,
+   imagePath,
+   compressImageFolderPath,
+   imageName
+) {
    try {
       /**
        * @url url which is used for the download images from the web.

@@ -21,6 +21,8 @@ import { AiOutlineHome } from '@react-icons/all-files/ai/AiOutlineHome';
 import { AiOutlineInfo } from '@react-icons/all-files/ai/AiOutlineInfo';
 import { VscLocation } from '@react-icons/all-files/vsc/VscLocation';
 import { SiWebmoney } from '@react-icons/all-files/si/SiWebmoney';
+import { SiBloglovin } from '@react-icons/all-files/si/SiBloglovin';
+import { VscFile } from '@react-icons/all-files/vsc/VscFile';
 
 function DashboardPanelSidebarComponent() {
    const [Active, setActive] = useState('Dashboard');
@@ -163,6 +165,19 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<VscHistory />}
                   innerText={'Export history'}
+                  onClick={ActiveHandler}
+                  Active={Active}
+               />
+            </DashboardSidebarCardComponent>
+            <DashboardSidebarCardComponent
+               heading={'Blog'}
+               icon={<SiBloglovin />}
+               onClick={dashboardActiveHandler}
+               show={DashboardCard}
+            >
+               <DashboardNavigationComponent
+                  icon={<VscFile />}
+                  innerText={'Post'}
                   onClick={ActiveHandler}
                   Active={Active}
                />

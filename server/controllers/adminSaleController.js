@@ -1,4 +1,9 @@
-const { catchAsync, fetchLimitDocument, dataConvertor, convertObjectDataIntoArray } = require('../helpers/helpers');
+const {
+   catchAsync,
+   fetchLimitDocument,
+   dataConvertor,
+   convertObjectDataIntoArray,
+} = require('../helpers/helpers');
 const httpStatusCodes = require('../helpers/httpStatusCodes');
 const saleModel = require('../model/schema/flashSaleSchema');
 const Timer = require('../helpers/timer');
@@ -35,7 +40,15 @@ const storeSaleInfo = async function (data, response) {
 };
 
 const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
-   const { name, statusInfo, label, dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime } = req.body;
+   const {
+      name,
+      statusInfo,
+      label,
+      dateOfStart,
+      dateOfStartTime,
+      dateOfend,
+      dateOfEndTime,
+   } = req.body;
    const findIsSaleExists = await saleModel.findOne({ name });
 
    /**
@@ -44,7 +57,12 @@ const insertNewProductFlashSale = catchAsync(async function (req, res, next) {
     * @endTimeWithDate end date with time.
     */
 
-   const { startTimeWithDate, endTimeWithDate } = dataConvertor(dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime);
+   const { startTimeWithDate, endTimeWithDate } = dataConvertor(
+      dateOfStart,
+      dateOfStartTime,
+      dateOfend,
+      dateOfEndTime
+   );
 
    const data = {
       name,
@@ -87,9 +105,17 @@ const getAllFlashSales = catchAsync(async function (req, res, next) {
    const page = req.query.page;
    if (!page) next(new AppError('flash sale page number is required!'));
    const DOCUMENT_LIMIT = 10;
-   await fetchLimitDocument(saleModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, 'sales', {
-      products: 0,
-   });
+   await fetchLimitDocument(
+      saleModel,
+      page,
+      res,
+      httpStatusCodes,
+      DOCUMENT_LIMIT,
+      'sales',
+      {
+         products: 0,
+      }
+   );
 });
 
 const deleteAllFlashSales = catchAsync(async function (req, res, next) {
@@ -153,13 +179,22 @@ const getSinlgeFlashSale = catchAsync(async function (req, res, next) {
 
 const updateFlashSaleInfo = async function (collection, flashSaleId, data, res) {
    try {
-      const findAndUpdateFlashSaleDetails = await collection.updateOne({ _id: flashSaleId }, { $set: data });
-      if (findAndUpdateFlashSaleDetails.acknowledged && !!findAndUpdateFlashSaleDetails.modifiedCount) {
+      const findAndUpdateFlashSaleDetails = await collection.updateOne(
+         { _id: flashSaleId },
+         { $set: data }
+      );
+      if (
+         findAndUpdateFlashSaleDetails.acknowledged &&
+         !!findAndUpdateFlashSaleDetails.modifiedCount
+      ) {
          return res.status(httpStatusCodes.OK).json({
             success: true,
             message: 'Flash sale updated',
          });
-      } else if (findAndUpdateFlashSaleDetails.acknowledged && !findAndUpdateFlashSaleDetails.modifiedCount) {
+      } else if (
+         findAndUpdateFlashSaleDetails.acknowledged &&
+         !findAndUpdateFlashSaleDetails.modifiedCount
+      ) {
          return res.status(httpStatusCodes.OK).json({
             success: true,
             message: 'Flash sale alrady updated',
@@ -175,10 +210,27 @@ const updateFlashSaleInfo = async function (collection, flashSaleId, data, res) 
 const updateSingleFlashSale = catchAsync(async function (req, res, next) {
    const { flashSaleId } = req.body;
    if (!flashSaleId) {
-      next(new AppError('Flash sale id is required for update the sub variaitons products data'));
+      next(
+         new AppError(
+            'Flash sale id is required for update the sub variaitons products data'
+         )
+      );
    }
-   const { name, statusInfo, label, dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime } = req.body;
-   const { startTimeWithDate, endTimeWithDate } = dataConvertor(dateOfStart, dateOfStartTime, dateOfend, dateOfEndTime);
+   const {
+      name,
+      statusInfo,
+      label,
+      dateOfStart,
+      dateOfStartTime,
+      dateOfend,
+      dateOfEndTime,
+   } = req.body;
+   const { startTimeWithDate, endTimeWithDate } = dataConvertor(
+      dateOfStart,
+      dateOfStartTime,
+      dateOfend,
+      dateOfEndTime
+   );
 
    const data = {
       name,

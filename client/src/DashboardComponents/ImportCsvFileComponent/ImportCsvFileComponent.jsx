@@ -8,6 +8,7 @@ import {
    downloadTemplateLoadingFunction,
    insertCsvLoading,
    showProductInfoCom,
+   removerCsvInfo,
 } from '../../Redux/Actions/adminAppAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { message } from 'antd';
@@ -53,6 +54,7 @@ function ImportCsvFileComponent() {
    useEffect(() => {
       if (!!importCsvInfo && importCsvInfo.success) {
          message.success('product uploded successfully');
+         dispatch(removerCsvInfo(null));
       } else if (!!importCsvInfo && !importCsvInfo.success) {
          message.info('something worng!');
       }

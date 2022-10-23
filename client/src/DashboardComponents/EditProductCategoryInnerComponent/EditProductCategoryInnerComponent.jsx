@@ -80,8 +80,8 @@ function EditProductCategoryInnerComponent() {
       if (selectedCategory) {
          dispatch(
             deleteSelectedCategory({
-               id: selectedCategory._id,
-               name: selectedCategory.name,
+               id: selectedCategory.category._id,
+               name: selectedCategory.category.name,
             })
          );
       }

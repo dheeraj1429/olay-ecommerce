@@ -419,6 +419,13 @@ export const insertCsvLoading = function (data) {
    };
 };
 
+export const removerCsvInfo = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.REMOVE_CSV_INFO,
+      payload: data,
+   };
+};
+
 export const showProductInfoCom = function (data) {
    return {
       type: ADMIN_ACTION_TYPES.SHOW_PRODUCT_UPLOAD_INFO_COMPONENT,
@@ -478,6 +485,20 @@ export const RemoveSelectedShopInfo = function (data) {
 export const removeUpdateShopInfo = function (data) {
    return {
       type: ADMIN_ACTION_TYPES.REMOVER_UPDATE_SHOP_INFO,
+      payload: data,
+   };
+};
+
+export const createNewBlogPostLoading = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.CREATE_NEW_BLOG_POST_LOADING,
+      payload: data,
+   };
+};
+
+export const removeBlogInsertInfo = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.REMOVE_BLOG_INFO,
       payload: data,
    };
 };

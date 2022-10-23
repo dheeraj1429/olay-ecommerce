@@ -96,6 +96,8 @@ const INITAL_STATE = {
    allShops: null,
    selectedShopInfo: null,
    updateShopInformation: null,
+   blogInfo: null,
+   blogInfoLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -1017,7 +1019,9 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.adminExportHistory,
                history: {
                   ...state.adminExportHistory.history,
-                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter((el) => el._id !== action.payload),
+                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter(
+                     (el) => el._id !== action.payload
+                  ),
                },
             },
          };
@@ -1070,6 +1074,12 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             importCsvLoading: false,
+            importCsvInfo: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.REMOVE_CSV_INFO:
+         return {
+            ...state,
             importCsvInfo: action.payload,
          };
 
@@ -1206,6 +1216,26 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             updateShopInformation: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.CREATE_NEW_BLOG_POST:
+         return {
+            ...state,
+            blogInfo: action.payload,
+            blogInfoLoading: false,
+         };
+
+      case ADMIN_ACTION_TYPES.CREATE_NEW_BLOG_POST_LOADING:
+         return {
+            ...state,
+            blogInfoLoading: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.REMOVE_BLOG_INFO:
+         return {
+            ...state,
+            blogInfo: action.payload,
+            blogInfoLoading: false,
          };
 
       default:

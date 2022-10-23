@@ -55,4 +55,4 @@ function ProductUploadImageComponent({ Heading, name, value, onChange, Clear, se
    );
 }
 
-export default ProductUploadImageComponent;
+export default React.memo(ProductUploadImageComponent);

@@ -29,7 +29,8 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
 
       if (isAdmin !== 'admin') {
          return res.status(httpStatusCodes.OK).json({
-            message: 'This feature is not working for the user is only made for the admin.',
+            message:
+               'This feature is not working for the user is only made for the admin.',
          });
       }
 
@@ -70,7 +71,8 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
       /**
        * @uniqueID for the export file unique name.
        */
-      const uniqueID = Date.now().toString(36) + Math.random().toString(36).split('.').join('');
+      const uniqueID =
+         Date.now().toString(36) + Math.random().toString(36).split('.').join('');
       const fileName = `products${uniqueID}.csv`;
       const folderPath = productExportFolderPath(fileName);
 
@@ -160,9 +162,15 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
    if (!!cookie && cookie.user && cookie.user.token) {
       const { _id } = tokenVarifyFunction(cookie);
 
-      const findUserAndRemoveSingleHistory = await userModel.updateOne({ _id }, { $pull: { exportsHistory: { _id: id } } });
+      const findUserAndRemoveSingleHistory = await userModel.updateOne(
+         { _id },
+         { $pull: { exportsHistory: { _id: id } } }
+      );
 
-      if (findUserAndRemoveSingleHistory.acknowledged && !!findUserAndRemoveSingleHistory.modifiedCount) {
+      if (
+         findUserAndRemoveSingleHistory.acknowledged &&
+         !!findUserAndRemoveSingleHistory.modifiedCount
+      ) {
          fs.unlink(filePath, function (err) {
             if (err) {
                console.log(err);
@@ -258,7 +266,11 @@ const convertUrlToName = function (url) {
    return imageName;
 };
 
-const insertProductIdIntoTheCollections = async function (collection, collectionId, product_id) {
+const insertProductIdIntoTheCollections = async function (
+   collection,
+   collectionId,
+   product_id
+) {
    try {
       const checkIsProductAlreadyExists = await collection.findOne({
          _id: collectionId,
@@ -266,7 +278,10 @@ const insertProductIdIntoTheCollections = async function (collection, collection
       });
 
       if (!checkIsProductAlreadyExists) {
-         await collection.updateOne({ _id: collectionId }, { $push: { products: { productId: product_id } } });
+         await collection.updateOne(
+            { _id: collectionId },
+            { $push: { products: { productId: product_id } } }
+         );
       }
    } catch (err) {
       console.log(err);
@@ -294,7 +309,14 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
    }
 
    const originalname = file.originalname;
-   const filePath = path.join(__dirname, '..', 'dataFiles', 'importData', 'Products', originalname);
+   const filePath = path.join(
+      __dirname,
+      '..',
+      'dataFiles',
+      'importData',
+      'Products',
+      originalname
+   );
 
    /**
     * upload the csv file into the backend foleds.
@@ -306,15 +328,28 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
       const productName = csvToJsonData[i].name;
 
       if (csvToJsonData[i]?.brand?.name) {
-         const brandIsExists = await productBrandModel.findOne({ name: csvToJsonData[i].brand.name });
+         const brandIsExists = await productBrandModel.findOne({
+            name: csvToJsonData[i].brand.name,
+         });
 
          if (!brandIsExists) {
             let brandIconUrl = csvToJsonData[i]?.brand?.brandIcon;
 
             if (!!brandIconUrl) {
                const imageName = convertUrlToName(brandIconUrl);
-               const imagePath = path.join(__dirname, '..', 'upload', 'brandImages', imageName);
-               await downloadImageFromWeb(brandIconUrl, imagePath, 'brandImagesCompress', imageName);
+               const imagePath = path.join(
+                  __dirname,
+                  '..',
+                  'upload',
+                  'brandImages',
+                  imageName
+               );
+               await downloadImageFromWeb(
+                  brandIconUrl,
+                  imagePath,
+                  'brandImagesCompress',
+                  imageName
+               );
                csvToJsonData[i].brand.brandIcon = imageName;
             }
 
@@ -323,7 +358,9 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
                description: csvToJsonData[i].brand.description,
                website: csvToJsonData[i].brand.website,
                order: !!csvToJsonData[i].brand?.order ? csvToJsonData[i].brand.order : 0,
-               brandStatusInfo: !!csvToJsonData[i].brand.brandStatusInfo ? csvToJsonData[i].brand.brandStatusInfo : 'Draft',
+               brandStatusInfo: !!csvToJsonData[i].brand.brandStatusInfo
+                  ? csvToJsonData[i].brand.brandStatusInfo
+                  : 'Draft',
                brandIcon: csvToJsonData[i].brand.brandIcon,
                SEOTitle: csvToJsonData[i].brand.SEOTitle,
                SEODescription: csvToJsonData[i].brand.SEODescription,
@@ -333,7 +370,10 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
 
             if (insertProductBrand) {
                brand_id = insertProductBrand._id;
-               brandsInserted.push({ name: insertProductBrand.name, _id: insertProductBrand._id });
+               brandsInserted.push({
+                  name: insertProductBrand.name,
+                  _id: insertProductBrand._id,
+               });
             }
          } else {
             brand_id = brandIsExists._id;
@@ -342,32 +382,52 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
       }
 
       if (csvToJsonData[i]?.category?.name) {
-         const categoryIsExists = await categoryModel.findOne({ name: csvToJsonData[i].category.name });
+         const categoryIsExists = await categoryModel.findOne({
+            name: csvToJsonData[i].category.name,
+         });
 
          if (!categoryIsExists) {
-            const categoryObjectInfo = {
-               name: csvToJsonData[i].category.name,
-               description: csvToJsonData[i].category.description,
-            };
-
             let categoryImageUrl = csvToJsonData[i]?.category?.categoryImage;
 
             if (!!categoryImageUrl) {
                const imageName = convertUrlToName(categoryImageUrl);
-               const imagePath = path.join(__dirname, '..', 'upload', 'categoryImages', imageName);
-               await downloadImageFromWeb(categoryImageUrl, imagePath, 'categoryCompressImages', imageName);
+               const imagePath = path.join(
+                  __dirname,
+                  '..',
+                  'upload',
+                  'categoryImages',
+                  imageName
+               );
+               await downloadImageFromWeb(
+                  categoryImageUrl,
+                  imagePath,
+                  'categoryCompressImages',
+                  imageName
+               );
                csvToJsonData[i].category.categoryImage = imageName;
             }
+
+            const categoryObjectInfo = {
+               name: csvToJsonData[i].category.name,
+               description: csvToJsonData[i].category.description,
+               categoryImage: csvToJsonData[i]?.category?.categoryImage,
+            };
 
             const insertCategory = await categoryModel(categoryObjectInfo).save();
 
             if (insertCategory) {
                category_id = insertCategory._id;
-               categoryinserted.push({ name: insertCategory.name, _id: insertCategory._id });
+               categoryinserted.push({
+                  name: insertCategory.name,
+                  _id: insertCategory._id,
+               });
             }
          } else {
             category_id = categoryIsExists._id;
-            categorySkiped.push({ name: categoryIsExists.name, _id: categoryIsExists._id });
+            categorySkiped.push({
+               name: categoryIsExists.name,
+               _id: categoryIsExists._id,
+            });
          }
       }
 
@@ -387,8 +447,19 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
              */
             if (!!url) {
                const imageName = convertUrlToName(url);
-               const imagePath = path.join(__dirname, '..', 'upload', 'productImages', imageName);
-               await downloadImageFromWeb(url, imagePath, 'productImagesCompress', imageName);
+               const imagePath = path.join(
+                  __dirname,
+                  '..',
+                  'upload',
+                  'productImages',
+                  imageName
+               );
+               await downloadImageFromWeb(
+                  url,
+                  imagePath,
+                  'productImagesCompress',
+                  imageName
+               );
                csvToJsonData[i].productImage = imageName;
             }
 
@@ -417,7 +488,9 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
                height: !!csvToJsonData[i].height ? csvToJsonData[i].height : 0,
                productImage: csvToJsonData[i].productImage,
                suggestedAge: csvToJsonData[i].suggestedAge,
-               productStatusInfo: !!csvToJsonData[i].productStatusInfo ? csvToJsonData[i].productStatusInfo : 'Draft',
+               productStatusInfo: !!csvToJsonData[i].productStatusInfo
+                  ? csvToJsonData[i].productStatusInfo
+                  : 'Draft',
             };
 
             if (csvToJsonData[i].brand.name) {
@@ -440,11 +513,19 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
                 */
 
                if (csvToJsonData[i].brand.name && brand_id) {
-                  await insertProductIdIntoTheCollections(productBrandModel, brand_id, insertData._id);
+                  await insertProductIdIntoTheCollections(
+                     productBrandModel,
+                     brand_id,
+                     insertData._id
+                  );
                }
 
                if (csvToJsonData[i].category.name && category_id) {
-                  await insertProductIdIntoTheCollections(categoryModel, category_id, insertData._id);
+                  await insertProductIdIntoTheCollections(
+                     categoryModel,
+                     category_id,
+                     insertData._id
+                  );
                }
             }
          } else {

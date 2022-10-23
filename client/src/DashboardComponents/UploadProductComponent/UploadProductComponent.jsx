@@ -52,7 +52,6 @@ function UploadProductComponent() {
       brand: '',
       productStatusInfo: 'Draft',
    });
-   const [Tags, setTags] = useState([]);
    const param = useParams();
 
    const dispatch = useDispatch();
@@ -70,10 +69,6 @@ function UploadProductComponent() {
    const ImageGrabHandler = function (e) {
       const data = e.target.files[0];
       setProduct({ ...Product, productImage: data });
-   };
-
-   const TagHandler = function (value) {
-      setTags(value);
    };
 
    const info = (msg) => {
@@ -185,12 +180,12 @@ function UploadProductComponent() {
                state={Product}
                productStatusInfo={brandStatus}
             />
+
             <ProductUploadSecondComponent
                sugAge={sugAge}
                ChangeHandler={ChangeHandler}
                state={Product}
                ImageGrabHandler={ImageGrabHandler}
-               TagHandler={TagHandler}
             />
 
             <div className="margin-left">

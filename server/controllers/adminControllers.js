@@ -94,7 +94,10 @@ const findCategory = async function (collection, find, res, filed) {
    let findSelectedCategory;
 
    if (filed === 'id') {
-      findSelectedCategory = await collection.findOne({ _id: find }, { products: 0, createdAt: 0 });
+      findSelectedCategory = await collection.findOne(
+         { _id: find },
+         { products: 0, createdAt: 0 }
+      );
    } else if (filed === 'name') {
       findSelectedCategory = await collection.findOne({ name: find });
    }
@@ -227,7 +230,15 @@ const sendBrandResponseFunction = function (res) {
  * @return produict barnd is successful inserted or not
  */
 const insertNewProductBrand = catchAsync(async function (req, res, next) {
-   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription } = req.body;
+   const {
+      name,
+      description,
+      website,
+      order,
+      brandStatusInfo,
+      SEOTitle,
+      SEODescription,
+   } = req.body;
    const file = req.files[0];
 
    // TODO: function scope variables
@@ -287,7 +298,12 @@ const insertNewProductBrand = catchAsync(async function (req, res, next) {
  * @getAllProductBrand get all brand
  * @return send brand array of object to the client
  */
-const getAllProductBrand = catchAsync(async function (req, res, next, perItems = undefined) {
+const getAllProductBrand = catchAsync(async function (
+   req,
+   res,
+   next,
+   perItems = undefined
+) {
    /**
     * @BRAND_LIMIT how many documents we want to return to the client
     * @page which page is client right now ?page=1 ......
@@ -297,7 +313,14 @@ const getAllProductBrand = catchAsync(async function (req, res, next, perItems =
 
    const page = req.query.page || 0;
 
-   await fetchLimitDocument(productBrandModel, page, res, httpStatusCodes, BRAND_LIMIT, 'brands');
+   await fetchLimitDocument(
+      productBrandModel,
+      page,
+      res,
+      httpStatusCodes,
+      BRAND_LIMIT,
+      'brands'
+   );
 });
 
 const deleteOneProductBrand = catchAsync(async function (req, res, next) {
@@ -390,7 +413,8 @@ const updateFildes = async function (id, updateObject, res) {
    } else {
       return res.status(httpStatusCodes.OK).json({
          success: true,
-         message: 'Not updated please selecte valid files and fill all the required fileds',
+         message:
+            'Not updated please selecte valid files and fill all the required fileds',
       });
    }
 };
@@ -400,7 +424,16 @@ const updateFildes = async function (id, updateObject, res) {
  * @return flag true || false
  */
 const editSelectedBrand = catchAsync(async function (req, res, next) {
-   const { name, description, website, order, brandStatusInfo, SEOTitle, SEODescription, id } = req.body;
+   const {
+      name,
+      description,
+      website,
+      order,
+      brandStatusInfo,
+      SEOTitle,
+      SEODescription,
+      id,
+   } = req.body;
 
    const updateObject = {
       name,
@@ -466,7 +499,11 @@ const getProductBrands = catchAsync(async function (req, res, next) {
 /**
  * @updateSelectedCollections insert product id into the product brand collections and the product category collection.
  */
-const updateSelectedCollections = catchAsync(async function (id, uploadProductId, collection) {
+const updateSelectedCollections = catchAsync(async function (
+   id,
+   uploadProductId,
+   collection
+) {
    await collection.updateOne(
       { _id: id },
       {
@@ -570,7 +607,14 @@ const fetchUploadProducts = catchAsync(async function (req, res, next) {
     */
    const DOCUMENT_LIMIT = 10;
 
-   await fetchLimitDocument(productModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, 'products');
+   await fetchLimitDocument(
+      productModel,
+      page,
+      res,
+      httpStatusCodes,
+      DOCUMENT_LIMIT,
+      'products'
+   );
 });
 
 const deleteAllProducts = catchAsync(async function (req, res, next) {
@@ -618,7 +662,10 @@ const removeIdsFromDocuments = async function (collection, collecitonId, product
     * once admin just delete the products we also make sure to delete the products from category
     * or the product brands collections.
     */
-   await collection.updateOne({ _id: collecitonId }, { $pull: { products: { productId: productId } } });
+   await collection.updateOne(
+      { _id: collecitonId },
+      { $pull: { products: { productId: productId } } }
+   );
 };
 
 /**
@@ -681,7 +728,12 @@ const fetchSingleProduct = catchAsync(async function (req, res, next) {
    }
 });
 
-const changeCollectionDataPosition = async function (field, productId, collection, prevId) {
+const changeCollectionDataPosition = async function (
+   field,
+   productId,
+   collection,
+   prevId
+) {
    try {
       const checkIsProductAlreadyExists = await collection.findOne({
          _id: field,
@@ -695,7 +747,10 @@ const changeCollectionDataPosition = async function (field, productId, collectio
          );
 
          if (!!findBrandProductAndInsertId.modifiedCount) {
-            await collection.updateOne({ _id: prevId }, { $pull: { products: { productId: productId } } });
+            await collection.updateOne(
+               { _id: prevId },
+               { $pull: { products: { productId: productId } } }
+            );
          }
       }
    } catch (err) {
@@ -750,15 +805,31 @@ const editSingleProduct = catchAsync(async function (req, res, next) {
    const prevCategoryId = findProduct?.category;
 
    if (req.body?.brand && prevBrandId && prevBrandId !== req.body.brand) {
-      await changeCollectionDataPosition(req.body.brand, productId, productBrandModel, prevBrandId);
+      await changeCollectionDataPosition(
+         req.body.brand,
+         productId,
+         productBrandModel,
+         prevBrandId
+      );
    } else if (req.body?.brand && !prevBrandId) {
-      await productBrandModel.updateOne({ _id: req.body.brand }, { $push: { products: { productId: productId } } });
+      await productBrandModel.updateOne(
+         { _id: req.body.brand },
+         { $push: { products: { productId: productId } } }
+      );
    }
 
    if (req.body?.category && prevCategoryId && prevCategoryId !== req.body.category) {
-      await changeCollectionDataPosition(req.body.category, productId, categoryModel, prevCategoryId);
+      await changeCollectionDataPosition(
+         req.body.category,
+         productId,
+         categoryModel,
+         prevCategoryId
+      );
    } else if (req.body?.category && !prevCategoryId) {
-      await categoryModel.updateOne({ _id: req.body.category }, { $push: { products: { productId: productId } } });
+      await categoryModel.updateOne(
+         { _id: req.body.category },
+         { $push: { products: { productId: productId } } }
+      );
    }
 
    // if there is the file uploded then upload new file name and store into the database, but if there is no image updated then update only the new information.
@@ -770,7 +841,10 @@ const editSingleProduct = catchAsync(async function (req, res, next) {
       await imageCompress(imagePath, 400, 'productImagesCompress', originalname);
    }
 
-   const updateProductInfo = await productModel.updateOne({ _id: id }, { $set: updateObjectInfo });
+   const updateProductInfo = await productModel.updateOne(
+      { _id: id },
+      { $set: updateObjectInfo }
+   );
 
    // if the database information is updated then return the status of the products
    if (!!updateProductInfo.modifiedCount) {
@@ -1302,16 +1376,24 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
          const updatedFildes = {
             variationName: req.body.variationName,
             sku: req.body.sku,
-            regularPrice: !!req.body.regularPrice ? req.body.regularPrice : findParentProduct.price,
+            regularPrice: !!req.body.regularPrice
+               ? req.body.regularPrice
+               : findParentProduct.price,
             salePrice: req.body.salePrice,
             stokeStatus: !!req.body.stokeStatus ? req.body.stokeStatus : 'draft',
             description: req.body.description,
             colorSwatches: req.body.colorSwatches,
             size: req.body.size,
-            weight: !!req.body.weight ? !!req.body.weight : findParentProduct.weight || '',
-            length: !!req.body.length ? !!req.body.length : findParentProduct.length || '',
+            weight: !!req.body.weight
+               ? !!req.body.weight
+               : findParentProduct.weight || '',
+            length: !!req.body.length
+               ? !!req.body.length
+               : findParentProduct.length || '',
             wide: !!req.body.wide ? !!req.body.wide : findParentProduct.wide || '',
-            height: !!req.body.height ? !!req.body.height : findParentProduct.height || '',
+            height: !!req.body.height
+               ? !!req.body.height
+               : findParentProduct.height || '',
          };
 
          if (req.files[0]) {
@@ -1363,7 +1445,10 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
    }
 
    const findSubVaition = await productModel
-      .findOne({ _id: parentProductId, 'variations._id': { $eq: subVariation } }, { 'variations.$': 1 })
+      .findOne(
+         { _id: parentProductId, 'variations._id': { $eq: subVariation } },
+         { 'variations.$': 1 }
+      )
       .populate('variations.size')
       .populate('variations.colorSwatches');
 
@@ -1386,7 +1471,12 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
  * @param { Object } updateObject
  * @param { Object } res
  */
-const updateSubVaritionFunction = async function (parentProductId, subVaritionId, updateObject, res) {
+const updateSubVaritionFunction = async function (
+   parentProductId,
+   subVaritionId,
+   updateObject,
+   res
+) {
    let findSubVariationAndUpdate;
 
    /**
@@ -1400,7 +1490,10 @@ const updateSubVaritionFunction = async function (parentProductId, subVaritionId
       }
    );
 
-   if (!!findSubVariationAndUpdate.modifiedCount && findSubVariationAndUpdate.acknowledged) {
+   if (
+      !!findSubVariationAndUpdate.modifiedCount &&
+      findSubVariationAndUpdate.acknowledged
+   ) {
       res.status(httpStatusCodes.OK).json({
          success: true,
          message: 'product updated',
@@ -1823,7 +1916,10 @@ const getAllSignInUsers = catchAsync(async function (req, res, next) {
 });
 
 const getProductGenralReport = catchAsync(async function (req, res, next) {
-   const genrateProductReport = await groupDataFunction(productModel, 'totalProductUploded');
+   const genrateProductReport = await groupDataFunction(
+      productModel,
+      'totalProductUploded'
+   );
 
    if (genrateProductReport) {
       return res.status(httpStatusCodes.OK).json({

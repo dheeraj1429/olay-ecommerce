@@ -241,7 +241,10 @@ export const uplodNewProduct = function (data) {
 export const fetchUploadProducts = function (page, docItems) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`, headers);
+         const fetchProducts = await axios.get(
+            `/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`,
+            headers
+         );
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
@@ -1035,7 +1038,10 @@ export const getAllExportInfo = function () {
 export const deleteSingleProductHistory = function (id, fileName) {
    return async function (dispatch) {
       try {
-         const deleteProductHistory = await axios.delete(`/admin/tools/delete-single-product-history/${id}/${fileName}`, headers);
+         const deleteProductHistory = await axios.delete(
+            `/admin/tools/delete-single-product-history/${id}/${fileName}`,
+            headers
+         );
 
          if (deleteProductHistory && deleteProductHistory?.data && deleteProductHistory?.data?.success) {
             dispatch({
@@ -1261,12 +1267,32 @@ export const UpdateStoreShopInformation = function (data) {
 export const getSelectedProductCategory = function (data) {
    return async function (dispatch) {
       try {
-         const selectedCategory = await axios.get(`/admin/selected-product-category?name=${data.name}&_id=${data._id}`, headers);
+         const selectedCategory = await axios.get(
+            `/admin/selected-product-category?name=${data.name}&_id=${data._id}`,
+            headers
+         );
 
          if (selectedCategory && selectedCategory?.data && selectedCategory?.data.success) {
             dispatch({
                type: ADMIN_ACTION_TYPES.SELECTED_EDIT_CATEGORY,
                payload: selectedCategory && selectedCategory?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const createNewBlogPost = function (data) {
+   return async function (dispatch) {
+      try {
+         const blogPostResponse = await axios.post('/admin/create-new-blog', data, headers);
+
+         if (blogPostResponse && blogPostResponse?.data) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.CREATE_NEW_BLOG_POST,
+               payload: blogPostResponse && blogPostResponse?.data,
             });
          }
       } catch (err) {

@@ -44,6 +44,8 @@ export const CampareFunction = function (filter, state, filde) {
          filterState = filterByName('Published', state, 'status', filde);
       } else if (filde === 'sales') {
          filterState = filterByName('Published', state, 'statusInfo', filde);
+      } else if (filde === 'posts') {
+         filterState = filterByName('Published', state, 'status', filde);
       }
    } else if (filter === 'Out of stock') {
       filterState = filterByName(filter, state, 'stockStatus', filde);

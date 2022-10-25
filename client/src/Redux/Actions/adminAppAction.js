@@ -496,6 +496,13 @@ export const createNewBlogPostLoading = function (data) {
    };
 };
 
+export const fetchBlogPostLoading = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.FETCH_BLOG_POSTS_LOADING,
+      payload: data,
+   };
+};
+
 export const removeBlogInsertInfo = function (data) {
    return {
       type: ADMIN_ACTION_TYPES.REMOVE_BLOG_INFO,

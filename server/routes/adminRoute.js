@@ -50,7 +50,8 @@ route.get('/get-all-shop-location-data', adminController.getAllShopInfomation);
 route.get('/get-signin-users', adminController.getAllSignInUsers);
 route.get('/get-product-genral-report', adminController.getProductGenralReport);
 route.get('/selected-product-category', adminController.getSelectedProductCategory);
-
+route.get('/get-blogs-posts', adminBlogController.getBlogPosts);
+route.get('/get-single-post/:id', adminBlogController.getSingleBlogPost);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
@@ -84,6 +85,7 @@ route.patch('/update-single-flash-sale', saleController.updateSingleFlashSale);
 route.patch('/update-product-label', adminController.updateProductLabel);
 route.patch('/update-shop-info', adminController.updateShopInformation);
 route.patch('/update-shop-information', adminController.UpdateStoreShopInformation);
+route.patch('/update-single-blog-post', upload, adminBlogController.updateSingleBlogPost);
 // ---------------------------------------------------------------------------------------
 
 // Apis => DELETE
@@ -104,6 +106,8 @@ route.delete('/delete-single-flash-sale/:id', saleController.deleteSingleFlashSa
 route.delete('/delete-selected-flash-sale-product', saleController.deleteFlashSaleProduct);
 route.delete('/delete-all-lables', adminController.deleteAllProductLabel);
 route.delete('/delete-single-product-label/:id', adminController.deleteSingleProductLabel);
+route.delete('/delete-single-blog-post/:id', adminBlogController.deleteSingleBlogPost);
+route.delete('/delete-all-blog-posts', adminBlogController.deleteAllBlogs)
 // ---------------------------------------------------------------------------------------
 
 module.exports = route;

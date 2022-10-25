@@ -22,7 +22,7 @@ import { AiOutlineInfo } from '@react-icons/all-files/ai/AiOutlineInfo';
 import { VscLocation } from '@react-icons/all-files/vsc/VscLocation';
 import { SiWebmoney } from '@react-icons/all-files/si/SiWebmoney';
 import { SiBloglovin } from '@react-icons/all-files/si/SiBloglovin';
-import { VscFile } from '@react-icons/all-files/vsc/VscFile';
+import { VscSymbolRuler } from '@react-icons/all-files/vsc/VscSymbolRuler';
 
 function DashboardPanelSidebarComponent() {
    const [Active, setActive] = useState('Dashboard');
@@ -176,7 +176,7 @@ function DashboardPanelSidebarComponent() {
                show={DashboardCard}
             >
                <DashboardNavigationComponent
-                  icon={<VscFile />}
+                  icon={<VscSymbolRuler />}
                   innerText={'Post'}
                   onClick={ActiveHandler}
                   Active={Active}

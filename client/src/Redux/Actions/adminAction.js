@@ -1300,3 +1300,87 @@ export const createNewBlogPost = function (data) {
       }
    };
 };
+
+export const fetchBlogPosts = function (page) {
+   return async function (dispatch) {
+      try {
+         const posts = await axios.get(`/admin/get-blogs-posts?page=${page}`);
+         if (posts && posts?.data) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.FETCH_BLOG_POSTS,
+               payload: posts && posts?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const fetchSingleBlogPost = function (id) {
+   return async function (dispatch) {
+      try {
+         const singlePost = await axios.get(`/admin/get-single-post/${id}`);
+
+         if (singlePost && singlePost?.data && singlePost?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.FETCH_SINGLE_BLOG_POST,
+               payload: singlePost && singlePost?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const updateSingleBlogPost = function (data) {
+   return async function (dispatch) {
+      try {
+         const updateResponse = await axios.patch('/admin/update-single-blog-post', data, headers);
+
+         if (updateResponse && updateResponse?.data && updateResponse?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.UPDATE_SINGLE_BLOG_POST,
+               payload: updateResponse && updateResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteSingleBlogPost = function (id) {
+   return async function (dispatch) {
+      try {
+         const response = await axios.delete(`/admin/delete-single-blog-post/${id}`);
+
+         if (response && response?.data && response?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.DELETE_SINGLE_BLOG_POST,
+               payload: response && response?.data,
+               id: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteAllPosts = function () {
+   return async function (dispatch) {
+      try {
+         const postsResponse = await axios.delete('/admin/delete-all-blog-posts', headers);
+
+         if (postsResponse && postsResponse?.data && postsResponse?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.DELETE_ALL_BLOG_POSTS,
+            })
+         }
+      } catch (err) {
+         console.log(err)
+      }
+   }
+}

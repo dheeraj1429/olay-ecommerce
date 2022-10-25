@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as styled from './CreateBlogPostComponent.style';
 import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
 import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
@@ -10,10 +10,10 @@ import JoditEditor from 'jodit-react';
 import { MenuItem } from '@mui/material';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import { message } from 'antd';
-import { createNewBlogPost } from '../../Redux/Actions/adminAction';
+import { createNewBlogPost, fetchSingleBlogPost, updateSingleBlogPost } from '../../Redux/Actions/adminAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewBlogPostLoading, removeBlogInsertInfo } from '../../Redux/Actions/adminAppAction';
-import { useEffect } from 'react';
+import { useParams } from 'react-router';
 
 const Status = [
    { value: 'Published', label: 'Published' },
@@ -33,8 +33,9 @@ function CreateBlogPostComponent() {
 
    const editor = useRef(null);
    const dispatch = useDispatch();
+   const param = useParams();
 
-   const { blogInfoLoading, blogInfo } = useSelector((state) => state.admin);
+   const { blogInfoLoading, blogInfo, singleBlogPost } = useSelector((state) => state.admin);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -66,8 +67,13 @@ function CreateBlogPostComponent() {
       formData.append('BlogImage', BlogImage);
       formData.append('blogStatus', Blog.blogStatus);
 
+      if (param?.id) {
+         formData.append('id', param.id);
+         dispatch(updateSingleBlogPost(formData));
+      } else {
+         dispatch(createNewBlogPost(formData));
+      }
       dispatch(createNewBlogPostLoading(true));
-      dispatch(createNewBlogPost(formData));
    };
 
    useEffect(() => {
@@ -79,12 +85,31 @@ function CreateBlogPostComponent() {
       }
    }, [blogInfo]);
 
+   useEffect(() => {
+      if (!!param && param?.id) {
+         dispatch(fetchSingleBlogPost(param?.id));
+      }
+   }, [param]);
+
+   useEffect(() => {
+      if (!!param && param?.id && !!singleBlogPost && singleBlogPost.success) {
+         setBlog({
+            name: singleBlogPost.singlePost.name,
+            description: singleBlogPost.singlePost.description,
+            isFeature: singleBlogPost.singlePost.isFeature,
+            blogStatus: singleBlogPost.singlePost.status,
+         });
+         setBlogImage(singleBlogPost.singlePost.blogImage);
+         setContent(singleBlogPost.singlePost.content);
+      }
+   }, [singleBlogPost]);
+
    return (
       <styled.div>
          <DashboardNavbarComponent />
          <styled.space>
             <HeadingComponent
-               Heading={'Create new blog post'}
+               Heading={param?.id ? 'Edit blog post' : 'Create new blog post'}
                subHeading={`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, `}
             />
 
@@ -170,11 +195,15 @@ function CreateBlogPostComponent() {
                </styled.flexDiv>
             </Box>
 
-            <ProductUploadImageComponent onChange={ImageGrabHandler} />
+            <ProductUploadImageComponent
+               selectedPrevImage={BlogImage}
+               filde={'blogPostImages'}
+               onChange={ImageGrabHandler}
+            />
 
             <CustombuttonComponent
                onClick={sendHandler}
-               innerText={'Save'}
+               innerText={param?.id ? 'Update' : 'Save'}
                btnCl={'category_upload'}
                isLoading={blogInfoLoading}
             />

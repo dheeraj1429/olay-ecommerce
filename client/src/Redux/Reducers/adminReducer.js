@@ -98,6 +98,9 @@ const INITAL_STATE = {
    updateShopInformation: null,
    blogInfo: null,
    blogInfoLoading: false,
+   allBlogs: null,
+   fetchBlogLoading: false,
+   singleBlogPost: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -339,6 +342,14 @@ const adminReducer = function (state = INITAL_STATE, action) {
                allProductLabel: {
                   ...state.allProductLabel,
                   allLabels: CampareFunction(action.payload.filter, state.allProductLabel, 'allLabels'),
+               },
+            };
+         } else if (action.payload.filde === 'posts') {
+            return {
+               ...state,
+               allBlogs: {
+                  ...state.allBlogs,
+                  posts: CampareFunction(action.payload.filter, state.allBlogs, 'posts'),
                },
             };
          }
@@ -1236,6 +1247,50 @@ const adminReducer = function (state = INITAL_STATE, action) {
             ...state,
             blogInfo: action.payload,
             blogInfoLoading: false,
+         };
+
+      case ADMIN_ACTION_TYPES.FETCH_BLOG_POSTS:
+         return {
+            ...state,
+            allBlogs: action.payload,
+            fetchBlogLoading: false,
+         };
+
+      case ADMIN_ACTION_TYPES.FETCH_BLOG_POSTS_LOADING:
+         return {
+            ...state,
+            fetchBlogLoading: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.FETCH_SINGLE_BLOG_POST:
+         return {
+            ...state,
+            singleBlogPost: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.UPDATE_SINGLE_BLOG_POST:
+         return {
+            ...state,
+            blogInfo: action.payload,
+            blogInfoLoading: false,
+         };
+
+      case ADMIN_ACTION_TYPES.DELETE_SINGLE_BLOG_POST:
+         return {
+            ...state,
+            allBlogs: {
+               ...state.allBlogs,
+               posts: state.allBlogs.posts.filter((el) => el._id !== action.id),
+            },
+         };
+
+      case ADMIN_ACTION_TYPES.DELETE_ALL_BLOG_POSTS:
+         return {
+            ...state,
+            allBlogs: {
+               ...state.allBlogs,
+               posts: [],
+            },
          };
 
       default:

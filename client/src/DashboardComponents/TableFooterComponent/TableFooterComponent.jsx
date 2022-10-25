@@ -13,6 +13,7 @@ import {
    fetchUploadProducts,
    getProductTags,
    getAllFlashSales,
+   fetchBlogPosts,
 } from '../../Redux/Actions/adminAction';
 import {
    fetchBrandProductLoading,
@@ -20,6 +21,7 @@ import {
    fetchLoadingProducts,
    productTagsFetchLoading,
    getAllFlashSalesLoading,
+   fetchBlogPostLoading,
 } from '../../Redux/Actions/adminAppAction';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
@@ -39,6 +41,8 @@ function TableFooterComponent({ action, state }) {
             dispatch(productTagsFetchLoading(true));
          } else if (action === 'sales') {
             dispatch(getAllFlashSalesLoading(true));
+         } else if (action === 'posts') {
+            dispatch(fetchBlogPostLoading(true));
          }
       }
    };
@@ -54,6 +58,8 @@ function TableFooterComponent({ action, state }) {
             dispatch(productTagsFetchLoading(true));
          } else if (action === 'sales') {
             dispatch(getAllFlashSalesLoading(true));
+         } else if (action === 'posts') {
+            dispatch(fetchBlogPostLoading(true));
          }
       }
    };
@@ -76,6 +82,8 @@ function TableFooterComponent({ action, state }) {
          dispatch(getProductTags(Limit));
       } else if (action === 'sales') {
          dispatch(getAllFlashSales(Limit));
+      } else if (action === 'posts') {
+         dispatch(fetchBlogPosts(Limit));
       }
    }, [Limit]);
 
@@ -132,4 +140,4 @@ function TableFooterComponent({ action, state }) {
    );
 }
 
-export default TableFooterComponent;
+export default React.memo(TableFooterComponent);

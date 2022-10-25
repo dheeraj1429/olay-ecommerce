@@ -42,6 +42,7 @@ import ImportCsvFileComponent from './DashboardComponents/ImportCsvFileComponent
 import ShopInfomationComponent from './DashboardComponents/ShopInfomationComponent/ShopInfomationComponent';
 import CreateStoreComponent from './DashboardComponents/CreateStoreComponent/CreateStoreComponent';
 import CreateBlogPostComponent from './DashboardComponents/CreateBlogPostComponent/CreateBlogPostComponent';
+import BlogPostContinerComponent from './DashboardComponents/BlogPostContainerComponent/BlogPostContainerComponent';
 
 // site components
 import SignInAndLoginComponent from './Components/SignInAndLoginComponent/SignInAndLoginComponent';
@@ -114,7 +115,9 @@ function App() {
                <Route path="export-history" element={<ExportHistoryComponent />} />
                <Route path="import-product" element={<ImportCsvFileComponent />} />
                <Route path="store-locators" element={<CreateStoreComponent />} />
-               <Route path="post" element={<CreateBlogPostComponent />} />
+               <Route path="post" element={<BlogPostContinerComponent />} />
+               <Route path="post/create" element={<CreateBlogPostComponent />} />
+               <Route path="post/edit/:id" element={<CreateBlogPostComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

@@ -29,7 +29,7 @@ function ProductSectionFeatureComponent({ state, pageLink, field, action, items 
       if (!!Filter && !!state && state.success && !!state[field].length) {
          dispatch(bulkAction({ filter: Filter, filde: field }));
       } else if (!!state && !!!state[field].length && !!Filter) {
-         info('There is no product brands exists');
+         info(`There is no ${field} exists`);
       } else {
          info('Please select the filter option');
       }
@@ -114,4 +114,4 @@ function ProductSectionFeatureComponent({ state, pageLink, field, action, items 
    );
 }
 
-export default ProductSectionFeatureComponent;
+export default React.memo(ProductSectionFeatureComponent);

@@ -8,6 +8,7 @@ const blogSchema = new mongoose.Schema({
    status: { type: String, default: 'Draft' },
    blogImage: { type: String },
    content: { type: String },
+   createdAt: { type: Date, default: Date.now },
 });
 
 const blogModel = mongoose.model('blog', blogSchema);

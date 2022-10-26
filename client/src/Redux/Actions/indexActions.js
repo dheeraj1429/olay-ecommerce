@@ -23,3 +23,71 @@ export const getTrandingProducts = function () {
       }
    };
 };
+
+export const getSelectedPrevProduct = function (id) {
+   return async function (dispatch) {
+      try {
+         const productResponse = await axios.get(`/index/get-prev-product/${id}`, headers);
+         if (productResponse && productResponse?.data && productResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.SELECTED_PREV_PRODUCT,
+               payload: productResponse && productResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const productAddToCart = function (data, img) {
+   return async function (dispatch) {
+      try {
+         const addToCartResponse = await axios.post('/index/add-to-cart-product', data, headers);
+
+         if (addToCartResponse && addToCartResponse?.data && addToCartResponse?.data?.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.ADD_TO_CART,
+               payload: addToCartResponse && addToCartResponse?.data,
+               img,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getUserCartProducts = function (token) {
+   return async function (dispatch) {
+      try {
+         const getProductsResponse = await axios.get(`/index/get-cart-products/${token}`);
+
+         if (getProductsResponse && getProductsResponse?.data && getProductsResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_CART_ITEMS,
+               payload: getProductsResponse && getProductsResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const removerProductsFromCart = function (id, token) {
+   return async function (dispatch) {
+      try {
+         const cartResponse = await axios.patch(`/index/remove-cart-item?id=${id}&token=${token}`, headers);
+
+         if (cartResponse && cartResponse?.data && cartResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.REMOVER_CART_ITEMS,
+               payload: cartResponse && cartResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

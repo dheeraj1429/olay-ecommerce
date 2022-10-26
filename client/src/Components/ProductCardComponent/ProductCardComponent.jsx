@@ -6,8 +6,32 @@ import { BsArrowsAngleContract } from '@react-icons/all-files/bs/BsArrowsAngleCo
 import backendConfigData from '../../backendConfig';
 import { FaEye } from '@react-icons/all-files/fa/FaEye';
 import { IoMdArrowDropright } from '@react-icons/all-files/io/IoMdArrowDropright';
+import { loadingPrevSelectedProduct, productPrev } from '../../Redux/Actions/indexAppAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSelectedPrevProduct, productAddToCart } from '../../Redux/Actions/indexActions';
 
 function ProductCardComponent({ data }) {
+   const dispatch = useDispatch();
+   const { auth } = useSelector((state) => state.auth);
+
+   const showHandler = function (id) {
+      dispatch(productPrev(true));
+      dispatch(getSelectedPrevProduct(id));
+      dispatch(loadingPrevSelectedProduct(true));
+   };
+
+   const AddToCartHandler = function (productId, img) {
+      const token = auth?.userObject?.token;
+      if (token) {
+         const data = {
+            productId,
+            token,
+            qty: 1,
+         };
+         dispatch(productAddToCart(data, img));
+      }
+   };
+
    return (
       <styled.div>
          <div className="img_Prv_div">
@@ -26,14 +50,14 @@ function ProductCardComponent({ data }) {
                   </div>
                   <BsArrowsAngleContract />
                </div>
-               <div className="icons_div">
+               <div className="icons_div" onClick={() => showHandler(data._id)}>
                   <div className="hover_hidden_div">
                      <IoMdArrowDropright />
                      <p>View</p>
                   </div>
                   <FaEye />
                </div>
-               <div className="icons_div">
+               <div className="icons_div" onClick={() => AddToCartHandler(data._id, data.productImage)}>
                   <div className="hover_hidden_div">
                      <IoMdArrowDropright />
                      <p>Add to cart</p>
@@ -61,4 +85,4 @@ function ProductCardComponent({ data }) {
    );
 }
 
-export default ProductCardComponent;
+export default React.memo(ProductCardComponent);

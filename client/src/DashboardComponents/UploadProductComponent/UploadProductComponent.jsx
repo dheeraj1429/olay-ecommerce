@@ -15,6 +15,7 @@ import {
    removeEditProductInfo,
 } from '../../Redux/Actions/adminAppAction';
 import { useParams } from 'react-router';
+import ProductSizeCheckBoxComponent from '../ProductSizeCheckBoxComponent/ProductSizeCheckBoxComponent';
 
 const sugAge = [
    { value: '18 - 25', label: '18 - 25' },
@@ -52,9 +53,11 @@ function UploadProductComponent() {
       brand: '',
       productStatusInfo: 'Draft',
    });
-   const param = useParams();
+   // const [SizeVariation, setSizeVariation] = useState([]);
 
+   const param = useParams();
    const dispatch = useDispatch();
+
    const { uploadProduct, uploadProductLoading, productEditLoading, singleProductFetch, productEditInfo } = useSelector(
       (state) => state.admin
    );
@@ -74,6 +77,16 @@ function UploadProductComponent() {
    const info = (msg) => {
       message.info(msg);
    };
+
+   // const CheckBoxHandler = function (event, id) {
+   //    const isChecked = event.target.checked;
+
+   //    if (isChecked) {
+   //       setSizeVariation((prevState) => [...prevState, id]);
+   //    } else {
+   //       setSizeVariation(SizeVariation.filter((el) => el !== id));
+   //    }
+   // };
 
    useEffect(() => {
       if (!!uploadProduct) {
@@ -180,6 +193,8 @@ function UploadProductComponent() {
                state={Product}
                productStatusInfo={brandStatus}
             />
+
+            {/* <ProductSizeCheckBoxComponent onChange={CheckBoxHandler} /> */}
 
             <ProductUploadSecondComponent
                sugAge={sugAge}

@@ -63,7 +63,7 @@ body {
    --spec-themed-blue: #3ea5ffca;
    --spec-themed-green: #2ba640;
    --spec-ad-indicator: #00aaa7;
-   --spec-themed-overlay-background: rgba(0, 0, 0, 0.8);
+   --spec-themed-overlay-background: rgba(0, 0, 0, 0.3);
    --spec-themed-overlay: rgba(0, 0, 0, 0.1);
    --spec-commerce-badge-background: #002d08;
    --spec-static-brand-red: #f00;

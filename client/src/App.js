@@ -6,7 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { setLoginUser } from './Redux/Actions/authAppAction';
-import { getTrandingProducts } from './Redux/Actions/indexActions';
+import { getTrandingProducts, getUserCartProducts } from './Redux/Actions/indexActions';
 import { trandingProductsLoading } from './Redux/Actions/indexAppAction';
 
 // dashboard components
@@ -65,6 +65,7 @@ function App() {
       dispatch(trandingProductsLoading(true));
 
       if (cookie && cookie.user) {
+         dispatch(getUserCartProducts(cookie.user.token));
          dispatch(setLoginUser(cookie.user));
       }
    }, []);

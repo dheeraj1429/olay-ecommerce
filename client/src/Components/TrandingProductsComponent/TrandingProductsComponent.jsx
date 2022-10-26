@@ -4,12 +4,16 @@ import { useSelector } from 'react-redux';
 import ProductCardComponent from '../ProductCardComponent/ProductCardComponent';
 import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerComponent';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import ProductViewComponent from '../ProductViewComponent/ProductViewComponent';
+import ProductAddToCartSideNoficationComponent from '../ProductAddToCartSideNoficationComponent/ProductAddToCartSideNoficationComponent';
 
 function TrandingProductsComponent() {
-   const { trandingProducts, trandingProductsLoading } = useSelector((state) => state.index);
+   const { trandingProducts, trandingProductsLoading, showProductPrev } = useSelector((state) => state.index);
 
    return (
       <styled.div>
+         <ProductViewComponent show={showProductPrev} />
+         <ProductAddToCartSideNoficationComponent />
          <div className="side_padding_one">
             {!!trandingProducts && trandingProductsLoading ? (
                <div className="center_div">

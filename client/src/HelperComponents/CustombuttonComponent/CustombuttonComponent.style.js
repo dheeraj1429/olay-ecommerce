@@ -114,6 +114,22 @@ export const div = styled.div`
       color: var(--main-cl);
       border: 2px solid transparent;
    }
+   .addToCart {
+      padding: 0.5rem 3rem;
+      background-color: var(--dark-cl);
+      color: var(--main-cl);
+      transition: all 0.3s ease;
+   }
+   .addToCart:hover {
+      background-color: var(--spec-suggested-action);
+      box-shadow: 0 0 10px 1px #e1e1e1;
+   }
+   .addToCart_2 {
+      padding: 0.3rem 3rem;
+      background-color: var(--dark-cl);
+      color: var(--main-cl);
+      transition: all 0.3s ease;
+   }
 `;
 
 export const button = styled.button`

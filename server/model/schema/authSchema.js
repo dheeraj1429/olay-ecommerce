@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
          exportProducts: { type: Number },
       },
    ],
+   cart: [{ cartItem: { type: mongoose.Types.ObjectId, ref: 'product' }, qty: { type: Number } }],
 });
 
 userSchema.methods.genrateUserToken = async function () {

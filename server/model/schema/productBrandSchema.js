@@ -1,17 +1,17 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const productBrandSchema = new mongoose.Schema({
-   name: { type: String, required: [true, "product brand is required"] },
+   name: { type: String, required: [true, 'product brand is required'] },
    description: { type: String },
    website: { type: String },
-   order: { type: String, default: "0" },
-   brandStatusInfo: { type: String, default: "draft" },
+   order: { type: String, default: '0' },
+   brandStatusInfo: { type: String, default: 'draft' },
    brandIcon: { type: String },
-   SEOTitle: { type: String, default: "No title" },
-   SEODescription: { type: String, default: "No description" },
-   products: [{ productId: { type: mongoose.Types.ObjectId, ref: "product" } }],
+   SEOTitle: { type: String, default: 'No title' },
+   SEODescription: { type: String, default: 'No description' },
+   products: [{ productId: { type: mongoose.Types.ObjectId, ref: 'product' } }],
 });
 
-const productBrandModel = mongoose.model("productBrand", productBrandSchema);
+const productBrandModel = mongoose.model('productBrand', productBrandSchema);
 
 module.exports = productBrandModel;

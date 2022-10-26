@@ -73,8 +73,8 @@ const updateSingleBlogPost = catchAsync(async function (req, res, next) {
     * once the document is find from the database then. check the admin update the filed or not.
     * if the admin is not update the filed and the old values or the new values is the same then we don't neet to update the  document filed.
     * check also the category if the admin update the category or not.
-    * if the prev category is change mean the new selected category is not equl to the prev selected category.
-    * then we want to first remove the blog post from the prev category. and insrt into the new category docuemnt.
+    * if the prev category is change mean the new selected category is not equl to the prev selected category. [-]
+    * then we want to first remove the blog post from the prev category. and insrt into the new category docuemnt. [-]
     * alost compress the images when the admin update new images.
     */
 
@@ -156,5 +156,5 @@ module.exports = {
    getSingleBlogPost,
    updateSingleBlogPost,
    deleteSingleBlogPost,
-   deleteAllBlogs
+   deleteAllBlogs,
 };

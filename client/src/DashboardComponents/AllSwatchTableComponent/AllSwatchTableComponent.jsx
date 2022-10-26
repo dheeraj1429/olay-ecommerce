@@ -25,6 +25,8 @@ function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
       }
    };
 
+   console.log(dataTarget);
+
    return (
       <tableCm.div>
          {!!variation && variation.success && !!variation[field].length ? (
@@ -94,9 +96,7 @@ function AllSwatchTableComponent({ variation, row, field, color, dataTarget }) {
             </tableCm.tableDiv>
          ) : (
             <div className="center_div">
-               <p>
-                  No {`${color && !dataTarget ? 'color swatches' : dataTarget ? 'Product label' : 'size variations'}`}
-               </p>
+               <p>No {dataTarget}</p>
             </div>
          )}
       </tableCm.div>

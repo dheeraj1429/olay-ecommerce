@@ -13,3 +13,37 @@ export const trandingProductsLoading = function (data) {
       payload: data,
    };
 };
+
+export const productPrev = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.SHOW_PRODUCT_PREV,
+      payload: data,
+   };
+};
+
+export const loadingPrevSelectedProduct = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.SELECTED_PREV_PRODUCT_LOADING,
+      payload: data,
+   };
+};
+
+export const prevSelectedProduct = function () {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVER_SELECTED_PRODUCT,
+   };
+};
+
+export const addToCartLoadingHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.ADD_TO_CART_LOADING,
+      payload: data,
+   };
+};
+
+export const removeShowCartNotification = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVE_SHOW_CART_ITEM_NOTIFICATION,
+      payload: data,
+   };
+};

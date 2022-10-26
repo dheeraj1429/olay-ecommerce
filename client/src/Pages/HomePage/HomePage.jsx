@@ -16,8 +16,8 @@ function HomePage() {
             }
             subHeading={
                <p>
-                  As rich and unique as the coffee beans it is intended for, this little scoop will make your morning <br />{' '}
-                  ritual a special occasion every day.
+                  As rich and unique as the coffee beans it is intended for, this little scoop will make your morning{' '}
+                  <br /> ritual a special occasion every day.
                </p>
             }
          />

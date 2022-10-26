@@ -95,7 +95,7 @@ const convertObjectDataIntoArray = function (selectedProduct) {
    return selectedProductAr;
 };
 
-const tokenVarifyFunction = function (cookie) {
+const tokenVarifyFunction = function (cookie, userToken) {
    /**
     * @token use login and sign in token to varify the use is valid or not.
     * @tokenVarify varifying the user.
@@ -103,8 +103,13 @@ const tokenVarifyFunction = function (cookie) {
     * @_id @isAdmin values which is grab from the token varification.
     * @return @_id @isAdmin
     */
-   const { token } = cookie.user;
-   const tokenVarify = jwt.verify(token, JWT_TOKEN);
+   let tokenVarify;
+   if (userToken) {
+      tokenVarify = jwt.verify(userToken, JWT_TOKEN);
+   } else {
+      const { token } = cookie.user;
+      tokenVarify = jwt.verify(token, JWT_TOKEN);
+   }
    const { _id, isAdmin } = tokenVarify;
    return { _id, isAdmin };
 };
@@ -113,23 +118,11 @@ const productExportFolderPath = function (fileName) {
    /**
     * @folderPath .. => one folder up level , datafiles/exportsData/products/filename
     */
-   const folderPath = path.join(
-      __dirname,
-      '..',
-      'dataFiles',
-      'exportData',
-      'Products',
-      fileName
-   );
+   const folderPath = path.join(__dirname, '..', 'dataFiles', 'exportData', 'Products', fileName);
    return folderPath;
 };
 
-const downloadImageFromWeb = async function (
-   url,
-   imagePath,
-   compressImageFolderPath,
-   imageName
-) {
+const downloadImageFromWeb = async function (url, imagePath, compressImageFolderPath, imageName) {
    try {
       /**
        * @url url which is used for the download images from the web.

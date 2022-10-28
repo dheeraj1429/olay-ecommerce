@@ -91,3 +91,33 @@ export const removerProductsFromCart = function (id, token) {
       }
    };
 };
+
+export const addToWishList = function (id, token) {
+   return async function (dispatch) {
+      const data = {
+         id,
+         token,
+      };
+      const wishListResponse = await axios.post('/index/add-to-wish-list', data, headers);
+
+      if (wishListResponse && wishListResponse?.data && wishListResponse?.data.success) {
+         dispatch({
+            type: INDEX_ACTION_TYPE.ADD_TO_WISH_LIST,
+            payload: wishListResponse && wishListResponse?.data,
+         });
+      }
+   };
+};
+
+export const getUserWishListProducts = function (token) {
+   return async function (dispatch) {
+      const wishListResponse = await axios.get(`/index/get-wishlist-products?token=${token}`, headers);
+
+      if (wishListResponse && wishListResponse?.data && wishListResponse?.data.success) {
+         dispatch({
+            type: INDEX_ACTION_TYPE.GET_WISH_LIST_PRODUCTS,
+            payload: wishListResponse && wishListResponse?.data,
+         });
+      }
+   };
+};

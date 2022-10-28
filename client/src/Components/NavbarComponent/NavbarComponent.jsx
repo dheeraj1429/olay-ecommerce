@@ -24,6 +24,7 @@ const navigationRow = [
 function NavbarComponent() {
    const dispatch = useDispatch();
    const { auth } = useSelector((state) => state.auth);
+   const { cartItems } = useSelector((state) => state.index);
 
    const showCartSideBarHandler = function () {
       dispatch(showAndHideCartSideBar(true));
@@ -61,7 +62,10 @@ function NavbarComponent() {
                      <p>Search</p>
                   </div>
                   <div className="flex_div ms-1">
-                     <Badge badgeContent={1} color="primary">
+                     <Badge
+                        badgeContent={!!cartItems && cartItems.cartItems.length ? cartItems.cartItems.length : 0}
+                        color="primary"
+                     >
                         <AiOutlineShoppingCart />
                      </Badge>
                      <p>Cart</p>

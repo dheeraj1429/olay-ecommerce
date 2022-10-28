@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import NavbarComponent from '../../Components/NavbarComponent/NavbarComponent';
 import BannerComponent from '../../Components/BannerComponent/BannerComponent';
 import ShopHeadingComponent from '../../Components/ShopHeadingComponent/ShopHeadingComponent';
 import TrandingProductsComponent from '../../Components/TrandingProductsComponent/TrandingProductsComponent';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserWishListProducts } from '../../Redux/Actions/indexActions';
 
 function HomePage() {
+   const dispatch = useDispatch();
+   const auth = useSelector((state) => state.auth);
+
+   useEffect(() => {
+      if (!!auth && auth?.auth && auth?.auth?.userObject) {
+         dispatch(getUserWishListProducts(auth.auth.userObject.token));
+      }
+   }, [!!auth]);
+
    return (
       <div>
          <NavbarComponent />

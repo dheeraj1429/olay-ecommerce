@@ -8,11 +8,16 @@ import { FaEye } from '@react-icons/all-files/fa/FaEye';
 import { IoMdArrowDropright } from '@react-icons/all-files/io/IoMdArrowDropright';
 import { loadingPrevSelectedProduct, productPrev } from '../../Redux/Actions/indexAppAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectedPrevProduct, productAddToCart } from '../../Redux/Actions/indexActions';
+import { getSelectedPrevProduct, productAddToCart, addToWishList } from '../../Redux/Actions/indexActions';
+import { useNavigate } from 'react-router';
+import { AiFillHeart } from '@react-icons/all-files/ai/AiFillHeart';
 
 function ProductCardComponent({ data }) {
+   const navigation = useNavigate();
    const dispatch = useDispatch();
+
    const { auth } = useSelector((state) => state.auth);
+   const { wishListItemAr } = useSelector((state) => state.index);
 
    const showHandler = function (id) {
       dispatch(productPrev(true));
@@ -29,6 +34,17 @@ function ProductCardComponent({ data }) {
             qty: 1,
          };
          dispatch(productAddToCart(data, img));
+      } else {
+         navigation('/auth/signin');
+      }
+   };
+
+   const wishListHander = function (id) {
+      const token = auth?.userObject?.token;
+      if (token) {
+         dispatch(addToWishList(id, token));
+      } else {
+         navigation('/auth/signin');
       }
    };
 
@@ -36,12 +52,18 @@ function ProductCardComponent({ data }) {
       <styled.div>
          <div className="img_Prv_div">
             <div className="right_icons">
-               <div className="icons_div">
+               <div className="icons_div" onClick={() => wishListHander(data._id)}>
                   <div className="hover_hidden_div">
                      <IoMdArrowDropright />
                      <p>wishlist</p>
                   </div>
-                  <AiOutlineHeart />
+                  {(function () {
+                     if (!!wishListItemAr && wishListItemAr.length && wishListItemAr.includes(data._id)) {
+                        return <AiFillHeart style={{ fill: 'var(--spec-static-brand-red)' }} />;
+                     } else {
+                        return <AiOutlineHeart />;
+                     }
+                  })()}
                </div>
                <div className="icons_div">
                   <div className="hover_hidden_div">

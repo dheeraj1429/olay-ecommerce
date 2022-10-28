@@ -11,10 +11,12 @@ import { AiOutlinePlus } from '@react-icons/all-files/ai/AiOutlinePlus';
 import { AiOutlineMinus } from '@react-icons/all-files/ai/AiOutlineMinus';
 import { productAddToCart } from '../../Redux/Actions/indexActions';
 import { addToCartLoadingHandler } from '../../Redux/Actions/indexAppAction';
+import { useNavigate } from 'react-router';
 
 function ProductViewComponent({ show }) {
    const [ProductQty, setProductQty] = useState(1);
 
+   const navigation = useNavigate();
    const dispatch = useDispatch();
    const { selectedPrevProduct, selectedPrevProductLoading, addToCartLoading } = useSelector((state) => state.index);
    const { auth } = useSelector((state) => state.auth);
@@ -54,6 +56,8 @@ function ProductViewComponent({ show }) {
          };
          dispatch(addToCartLoadingHandler(true));
          dispatch(productAddToCart(data, img));
+      } else {
+         navigation('/auth/signin');
       }
    };
 

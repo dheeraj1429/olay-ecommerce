@@ -8,7 +8,6 @@ import backendConfigData from '../../backendConfig';
 
 function ProductAddToCartSideNoficationComponent() {
    const [Show, setShow] = useState(false);
-   console.log('render');
 
    const dispatch = useDispatch();
 

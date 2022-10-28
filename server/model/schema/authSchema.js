@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
       },
    ],
    cart: [{ cartItem: { type: mongoose.Types.ObjectId, ref: 'product' }, qty: { type: Number } }],
+   wishLists: [{ ItemId: { type: mongoose.Types.ObjectId, ref: 'product' } }],
 });
 
 userSchema.methods.genrateUserToken = async function () {

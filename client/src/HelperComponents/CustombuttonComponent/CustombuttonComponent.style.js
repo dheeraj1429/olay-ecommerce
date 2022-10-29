@@ -130,6 +130,20 @@ export const div = styled.div`
       color: var(--main-cl);
       transition: all 0.3s ease;
    }
+   .addToCart_wide {
+      width: 100%;
+      margin: 1rem 0;
+   }
+   .subscribe {
+      padding: 0 3rem;
+      height: 50px;
+      background-color: var(--spec-ad-indicator);
+      color: var(--main-cl);
+      transition: all 0.2s ease;
+   }
+   .subscribe:hover {
+      background-color: var(--dark-cl);
+   }
 `;
 
 export const button = styled.button`

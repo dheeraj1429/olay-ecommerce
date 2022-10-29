@@ -52,6 +52,7 @@ route.get('/get-product-genral-report', adminController.getProductGenralReport);
 route.get('/selected-product-category', adminController.getSelectedProductCategory);
 route.get('/get-blogs-posts', adminBlogController.getBlogPosts);
 route.get('/get-single-post/:id', adminBlogController.getSingleBlogPost);
+route.get('/get-blog-categories', adminBlogController.getBlogCategories);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
@@ -71,6 +72,7 @@ route.post('/insert-new-product-label', adminController.insertNewProductColorLab
 route.post('/shop-setting', adminController.ShopSetting);
 route.post('/store-shop-loaction', adminController.storeShopLocationInfo);
 route.post('/create-new-blog', upload, adminBlogController.createNewBlog);
+route.post('/insert-blog-categories', adminBlogController.createBlogCategory);
 // ---------------------------------------------------------------------------------------
 
 // Apis => PATCH
@@ -107,7 +109,7 @@ route.delete('/delete-selected-flash-sale-product', saleController.deleteFlashSa
 route.delete('/delete-all-lables', adminController.deleteAllProductLabel);
 route.delete('/delete-single-product-label/:id', adminController.deleteSingleProductLabel);
 route.delete('/delete-single-blog-post/:id', adminBlogController.deleteSingleBlogPost);
-route.delete('/delete-all-blog-posts', adminBlogController.deleteAllBlogs)
+route.delete('/delete-all-blog-posts', adminBlogController.deleteAllBlogs);
 // ---------------------------------------------------------------------------------------
 
 module.exports = route;

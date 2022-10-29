@@ -1377,10 +1377,48 @@ export const deleteAllPosts = function () {
          if (postsResponse && postsResponse?.data && postsResponse?.data.success) {
             dispatch({
                type: ADMIN_ACTION_TYPES.DELETE_ALL_BLOG_POSTS,
-            })
+            });
          }
       } catch (err) {
-         console.log(err)
+         console.log(err);
       }
-   }
-}
+   };
+};
+
+export const insertBlogPostCategories = function (data) {
+   return async function (dispatch) {
+      try {
+         const blogResponse = await axios.post('/admin/insert-blog-categories', data, headers);
+
+         if (blogResponse && blogResponse?.data && blogResponse?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.INSERT_BLOG_POST_CATEGORIES,
+               payload: blogResponse && blogResponse?.data,
+            });
+         } else if (blogResponse && blogResponse?.data && !blogResponse?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.INSERT_BLOG_POST_CATEGORIES_ERROR,
+               payload: blogResponse && blogResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getBlogCategories = function () {
+   return async function (dispatch) {
+      try {
+         const categoreies = await axios.get('/admin/get-blog-categories', headers);
+         if (categoreies && categoreies?.data && categoreies?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.GET_BLOG_CATEGORIES,
+               payload: categoreies && categoreies?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

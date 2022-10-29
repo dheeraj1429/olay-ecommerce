@@ -101,6 +101,10 @@ const INITAL_STATE = {
    allBlogs: null,
    fetchBlogLoading: false,
    singleBlogPost: null,
+   insertBlogPostCategoriesInfo: null,
+   insertBlogPostCategoriesLoading: false,
+   insertBlogPostCategoriesError: null,
+   blogCategories: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -1291,6 +1295,46 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.allBlogs,
                posts: [],
             },
+         };
+
+      case ADMIN_ACTION_TYPES.INSERT_BLOG_POST_CATEGORIES:
+         return {
+            ...state,
+            insertBlogPostCategoriesInfo: { success: action.payload.success, message: action.payload.message },
+            insertBlogPostCategoriesLoading: false,
+            insertBlogPostCategoriesError: null,
+            blogCategories: {
+               ...state.blogCategories,
+               categories: state.blogCategories.categories.concat(action.payload.document),
+            },
+         };
+
+      case ADMIN_ACTION_TYPES.INSERT_BLOG_POST_CATEGORIES_LOADING:
+         return {
+            ...state,
+            insertBlogPostCategoriesLoading: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.INSERT_BLOG_POST_CATEGORIES_ERROR:
+         return {
+            ...state,
+            insertBlogPostCategoriesInfo: null,
+            insertBlogPostCategoriesLoading: false,
+            insertBlogPostCategoriesError: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.REMOVER_BLOG_CATEGORIES_INFO:
+         return {
+            ...state,
+            insertBlogPostCategoriesInfo: null,
+            insertBlogPostCategoriesLoading: false,
+            insertBlogPostCategoriesError: null,
+         }
+
+      case ADMIN_ACTION_TYPES.GET_BLOG_CATEGORIES:
+         return {
+            ...state,
+            blogCategories: action.payload,
          };
 
       default:

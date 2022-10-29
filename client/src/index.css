@@ -23,7 +23,7 @@ body {
    --body-background-cl: #181818;
    --smooht-gray-cl: #f1f1f1;
    --google-button-cl: #4c8cf1;
-   --timer-bg-cl:#fb7412;
+   --timer-bg-cl: #fb7412;
    --spec-base-background: #0f0f0f;
    --spec-elevated-background: #212121;
    --spec-menu-background: #2f2f2f;
@@ -45,7 +45,7 @@ body {
    --spec-call-to-action-inverse: #065fd4;
    --spec-suggested-action: #263850;
    --spec-icon-active-other: #fff;
-   --spec-icon-inactive: #909090;   
+   --spec-icon-inactive: #909090;
    --spec-icon-disabled: #606060;
    --spec-badge-chip-background: rgba(255, 255, 255, 0.1);
    --spec-verified-badge-background: rgba(255, 255, 255, 0.25);
@@ -121,12 +121,11 @@ table tr {
    text-align: left;
 }
 
-
 table th {
    font-size: 14px;
    color: var(--smooth-light-color);
    font-weight: 400;
-   padding: 0.8rem .2rem;
+   padding: 0.8rem 0.2rem;
 }
 
 table td {
@@ -175,4 +174,15 @@ table td {
 
 a {
    text-decoration: none;
+}
+
+@media screen and (min-width: 1920px) {
+   .side_padding_one {
+      padding: 0 200px;
+   }
+}
+@media screen and (min-width: 3840px) {
+   .side_padding_one {
+      padding: 0 200px;
+   }
 }

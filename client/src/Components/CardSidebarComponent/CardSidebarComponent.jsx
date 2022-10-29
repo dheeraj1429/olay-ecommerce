@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import * as styled from './CardSidebarComponent.style';
 import ReactDOM from 'react-dom';
 import { useSelector } from 'react-redux';
 import { VscClose } from '@react-icons/all-files/vsc/VscClose';
 import { useDispatch } from 'react-redux';
-import { showAndHideCartSideBar } from '../../Redux/Actions/indexAppAction';
+import { showAndHideCartSideBar, removeCartItemLoadingHandler } from '../../Redux/Actions/indexAppAction';
 import backendConfigData from '../../backendConfig';
 import { removerProductsFromCart } from '../../Redux/Actions/indexActions';
+import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
+import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerComponent';
 
 function CardSidebarComponent() {
+   const [CartPrice, setCartPrice] = useState(0);
    const dispatch = useDispatch();
-   const { showCardSideBar, cartItems } = useSelector((state) => state.index);
+   const { showCardSideBar, cartItems, removeCartItemLoading } = useSelector((state) => state.index);
    const { auth } = useSelector((state) => state.auth);
 
    const CloseHandler = function () {
@@ -21,43 +24,77 @@ function CardSidebarComponent() {
       const token = auth?.userObject?.token;
       if (token) {
          dispatch(removerProductsFromCart(id, token));
+         dispatch(removeCartItemLoadingHandler(true, id));
       }
    };
+
+   useEffect(() => {
+      if (!!cartItems && cartItems.cartItems.length) {
+         const priceAr = cartItems.cartItems
+            .map((el) => (el.cartItem?.salePrice ? el.cartItem.salePrice * el.qty : el.cartItem.price * el.qty))
+            .reduce((acc, crv) => {
+               return acc + crv;
+            }, 0);
+         setCartPrice(priceAr);
+      }
+   }, [cartItems]);
 
    return ReactDOM.createPortal(
       <styled.div show={showCardSideBar}>
          <div className="mainDiv">
-            <div className="close_btn">
-               <VscClose onClick={CloseHandler} />
-            </div>
             <div>
-               <p>Shopping cart</p>
+               <div className="close_btn">
+                  <VscClose onClick={CloseHandler} />
+               </div>
+               <div>
+                  <p>Shopping cart</p>
+               </div>
             </div>
-            {!!cartItems && cartItems?.success && cartItems.cartItems.length ? (
-               cartItems.cartItems.map((el) => (
-                  <div className="productInCart" key={el._id} id={el._id}>
-                     <div className="remove_cart_items" onClick={() => RemoveCartItems(el.cartItem._id)}>
-                        <VscClose />
+            <div className="cart_items_div">
+               {!!cartItems && cartItems?.success && cartItems.cartItems.length ? (
+                  cartItems.cartItems.map((el) => (
+                     <div className="productInCart" key={el._id}>
+                        <div className="remove_cart_items" onClick={() => RemoveCartItems(el.cartItem._id)}>
+                           {!!removeCartItemLoading &&
+                           removeCartItemLoading.loading &&
+                           removeCartItemLoading.cartId === el.cartItem._id ? (
+                              <SpnnerComponent blackSpenner={true} />
+                           ) : (
+                              <VscClose />
+                           )}
+                        </div>
+                        <div className="cartProductImage">
+                           <img
+                              crossorigin="anonymous"
+                              src={`${backendConfigData.URL}/productImagesCompress/${el.cartItem.productImage}`}
+                           />
+                        </div>
+                        <div className="content">
+                           <p>{el.cartItem.name.slice(0, 60)}</p>
+                           <span>qty: {el.qty}</span>
+                           <p>Price: ${el.cartItem?.salePrice ? el.cartItem.salePrice : el.cartItem.price}</p>
+                        </div>
                      </div>
-                     <div className="cartProductImage">
-                        <img
-                           crossorigin="anonymous"
-                           src={`${backendConfigData.URL}/productImagesCompress/${el.cartItem.productImage}`}
-                        />
-                     </div>
-                     <div className="content">
-                        <p>{el.cartItem.name.slice(0, 60)}</p>
-                        <span>qty: {el.qty}</span>
-                     </div>
-                  </div>
-               ))
-            ) : (
-               <div className="nf">No products</div>
-            )}
+                  ))
+               ) : (
+                  <div className="nf">No products</div>
+               )}
+            </div>
+
+            <div className="cart_options_div">
+               <div className="flex">
+                  <h5>Subtotal</h5>
+                  <p>${CartPrice}</p>
+               </div>
+
+               <div>
+                  <CustombuttonComponent innerText={'View Cart'} btnCl={'addToCart_wide addToCart'} />
+               </div>
+            </div>
          </div>
       </styled.div>,
       document.getElementById('cart-sidebar')
    );
 }
 
-export default CardSidebarComponent;
+export default React.memo(CardSidebarComponent);

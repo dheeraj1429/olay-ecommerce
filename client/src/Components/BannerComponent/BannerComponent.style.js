@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const div = styled.div`
    width: 100%;
-   height: 600px;
-   background-image: url('/images/home-banner-img.jpg');
+   height: 800px;
+   background-image: url('/images/home-banner-img-1.jpg');
    background-position: center;
    background-size: cover;
    padding: 2rem 0;

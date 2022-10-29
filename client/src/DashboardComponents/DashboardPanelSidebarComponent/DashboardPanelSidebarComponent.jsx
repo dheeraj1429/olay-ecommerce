@@ -23,6 +23,7 @@ import { VscLocation } from '@react-icons/all-files/vsc/VscLocation';
 import { SiWebmoney } from '@react-icons/all-files/si/SiWebmoney';
 import { SiBloglovin } from '@react-icons/all-files/si/SiBloglovin';
 import { VscSymbolRuler } from '@react-icons/all-files/vsc/VscSymbolRuler';
+import { VscCircuitBoard } from '@react-icons/all-files/vsc/VscCircuitBoard';
 
 function DashboardPanelSidebarComponent() {
    const [Active, setActive] = useState('Dashboard');
@@ -178,6 +179,12 @@ function DashboardPanelSidebarComponent() {
                <DashboardNavigationComponent
                   icon={<VscSymbolRuler />}
                   innerText={'Post'}
+                  onClick={ActiveHandler}
+                  Active={Active}
+               />
+               <DashboardNavigationComponent
+                  icon={<VscCircuitBoard />}
+                  innerText={'Blog categories'}
                   onClick={ActiveHandler}
                   Active={Active}
                />

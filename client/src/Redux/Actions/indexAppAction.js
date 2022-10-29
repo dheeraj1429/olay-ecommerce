@@ -41,9 +41,24 @@ export const addToCartLoadingHandler = function (data) {
    };
 };
 
+export const removeCartItemLoadingHandler = function (data, id) {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVER_CART_ITEMS_LOADING,
+      payload: data,
+      productId: id,
+   };
+};
+
 export const removeShowCartNotification = function (data) {
    return {
       type: INDEX_ACTION_TYPE.REMOVE_SHOW_CART_ITEM_NOTIFICATION,
+      payload: data,
+   };
+};
+
+export const newsLetterMailLadingHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.SEND_NEWS_LETTER_LOADING,
       payload: data,
    };
 };

@@ -509,3 +509,16 @@ export const removeBlogInsertInfo = function (data) {
       payload: data,
    };
 };
+
+export const insertBlogCategorisLoadingHandler = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.INSERT_BLOG_POST_CATEGORIES_LOADING,
+      payload: data,
+   };
+};
+
+export const removerBlogCategoriInfo = function () {
+   return {
+      type: ADMIN_ACTION_TYPES.REMOVER_BLOG_CATEGORIES_INFO,
+   };
+};

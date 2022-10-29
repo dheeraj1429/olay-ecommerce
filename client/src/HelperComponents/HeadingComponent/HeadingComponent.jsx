@@ -1,5 +1,5 @@
-import React from "react";
-import * as heading from "./HeadingComponent.style";
+import React from 'react';
+import * as heading from './HeadingComponent.style';
 
 function HeadingComponent({ Heading, subHeading, cl, dark }) {
    return (
@@ -8,10 +8,10 @@ function HeadingComponent({ Heading, subHeading, cl, dark }) {
             style={
                dark
                   ? {
-                       color: "var(--spec-background-gry-cl)",
+                       color: 'var(--spec-background-gry-cl)',
                     }
                   : {
-                       color: "var(--smooth-light-heading-color)",
+                       color: 'var(--smooth-light-heading-color)',
                     }
             }
             className={cl ? cl : null}

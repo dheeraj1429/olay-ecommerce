@@ -15,6 +15,9 @@ const INITAL_STATE = {
    cartItems: null,
    wishListInfo: null,
    wishListItemAr: [],
+   removeCartItemLoading: null,
+   newsLetterMailInfo: null,
+   newsLetterMailLoading: false,
 };
 
 const shopReducer = function (state = INITAL_STATE, action) {
@@ -142,6 +145,19 @@ const shopReducer = function (state = INITAL_STATE, action) {
                ...state.cartItems,
                cartItems: state.cartItems.cartItems.filter((el) => el.cartItem._id !== action.payload.removeProductId),
             },
+            removeCartItemLoading: {
+               loading: false,
+               cartId: action.payload.removeProductId,
+            },
+         };
+
+      case INDEX_ACTION_TYPE.REMOVER_CART_ITEMS_LOADING:
+         return {
+            ...state,
+            removeCartItemLoading: {
+               loading: action.payload,
+               cartId: action.productId,
+            },
          };
 
       case INDEX_ACTION_TYPE.ADD_TO_WISH_LIST:
@@ -163,6 +179,19 @@ const shopReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             wishListItemAr: action.payload.items[0].wishLists,
+         };
+
+      case INDEX_ACTION_TYPE.SEND_NEWS_LETTER:
+         return {
+            ...state,
+            newsLetterMailInfo: action.payload,
+            newsLetterMailLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.SEND_NEWS_LETTER_LOADING:
+         return {
+            ...state,
+            newsLetterMailLoading: action.payload,
          };
 
       default:

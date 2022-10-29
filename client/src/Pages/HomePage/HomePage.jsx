@@ -5,6 +5,7 @@ import ShopHeadingComponent from '../../Components/ShopHeadingComponent/ShopHead
 import TrandingProductsComponent from '../../Components/TrandingProductsComponent/TrandingProductsComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserWishListProducts } from '../../Redux/Actions/indexActions';
+import NewsLetterComponent from '../../Components/NewsLetterComponent/NewsLetterComponent';
 
 function HomePage() {
    const dispatch = useDispatch();
@@ -37,6 +38,8 @@ function HomePage() {
             subHeading={'Mirum est notare quam littera gothica quam nunc putamus parum claram!'}
          />
          <TrandingProductsComponent />
+
+         <NewsLetterComponent />
       </div>
    );
 }

@@ -3,6 +3,10 @@ const productModel = require('../model/schema/productSchema');
 const httpStatusCodes = require('../helpers/httpStatusCodes');
 const AppError = require('../helpers/appError');
 const userModel = require('../model/schema/authSchema');
+const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const path = require('path');
+const subscriptionModel = require('../model/schema/subscriptionUsersSchema');
 
 // grab the sale products from the databse and then send back the data to the client.
 const getTrandingProducts = catchAsync(async function (req, res, next) {
@@ -233,6 +237,88 @@ const getUserWishListProducts = catchAsync(async function (req, res, next) {
       });
 });
 
+// send the news letter when the user successfully subscription the website.
+const subcsriptionHandler = catchAsync(async function (req, res, next) {
+   /**
+    * @param { String } email.
+    * @param { String } userName.
+    * is there is no email then send back the error reponse.
+    * if the email is successfully send the user then render the ejs template then send them into the user email.
+    * once the user is subscrip the website then store the user infomation into the database.
+    */
+
+   const { email, userName, token } = req.body;
+
+   if (!email) {
+      next(new AppError('news letter email is requred!'));
+   }
+
+   checkTokenIsExists(token, next);
+   const { _id } = await tokenVarifyFunction(undefined, token);
+
+   subscriptionModel.findOne({ email: email }).then((data) => {
+      if (data) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: 'Already subscribe with this mail.',
+         });
+      } else {
+         // subscription thank you page.
+         const templatePath = path.join(__dirname, '..', 'views', 'templates', 'emailSubscription.ejs');
+
+         ejs.renderFile(templatePath, { customerName: userName }, (err, data) => {
+            if (err) {
+               console.log(err);
+            } else {
+               const mail = nodemailer.createTransport({
+                  service: 'gmail',
+                  auth: {
+                     user: process.env.EMAIL,
+                     pass: process.env.APPPASSWORD,
+                  },
+               });
+
+               // mail optaions
+               const opts = {
+                  from: process.env.EMAIL,
+                  to: email,
+                  subject: 'News letter subscription',
+                  html: data,
+               };
+
+               // mail send to the user.
+               mail.sendMail(opts, function (err, info) {
+                  if (err) {
+                     return res.status(httpStatusCodes.OK).json({
+                        success: false,
+                        message: 'mail not send!!',
+                     });
+                  } else {
+                     console.log(info);
+
+                     // when the mail is send successfully then store the user infomation into the database.
+                     // first check the user is exits or not. if the user is exists alrady then we don't need the to store the user info into the database.
+                     subscriptionModel({
+                        name: userName,
+                        email,
+                        token,
+                        userId: _id,
+                     })
+                        .save()
+                        .then((response) => {
+                           return res.status(httpStatusCodes.OK).json({
+                              success: true,
+                              message: 'Thank you for subscription, please check your email',
+                           });
+                        });
+                  }
+               });
+            }
+         });
+      }
+   });
+});
+
 module.exports = {
    getTrandingProducts,
    getSelectedPrevProduct,
@@ -241,4 +327,5 @@ module.exports = {
    removerProductsFromCart,
    addToWishListProducts,
    getUserWishListProducts,
+   subcsriptionHandler,
 };

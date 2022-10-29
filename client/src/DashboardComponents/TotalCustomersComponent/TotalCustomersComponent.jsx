@@ -35,7 +35,7 @@ function TotalCustomersComponent({ heading }) {
             <h5>{heading}</h5>
             {!!DateSet ? (
                <div className="chart">
-                  <Line data={DateSet} height="280px" />
+                  <Line data={DateSet} height="250px" />
                </div>
             ) : null}
          </div>

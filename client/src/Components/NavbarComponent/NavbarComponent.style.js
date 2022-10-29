@@ -3,9 +3,10 @@ import styled from 'styled-components';
 export const div = styled.div`
    width: 100%;
    padding: 2rem 0;
-   position: absolute;
+   /* position: absolute;
    top: 0;
-   left: 0;
+   left: 0; */
+   background-color: var(--main-cl);
 
    ul {
       display: flex;

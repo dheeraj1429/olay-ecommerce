@@ -56,7 +56,6 @@ export const iconDiv = styled.div`
 `;
 
 export const dropDownItems = styled.ul`
-   width: 200px;
    /* background-color: var(--main-cl); */
    border-radius: 8px;
    /* right: -250px; */

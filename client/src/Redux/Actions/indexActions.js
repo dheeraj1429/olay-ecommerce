@@ -1,6 +1,9 @@
 import { INDEX_ACTION_TYPE } from '../ActionTypes/indexActionType';
 import axios from 'axios';
 import { headers } from '../../headers';
+import backendConfigData from '../../backendConfig';
+
+axios.defaults.headers.common['x-api-key'] = backendConfigData.ACCESS_TOKEN;
 
 export const getTrandingProducts = function () {
    return async function (dispatch) {
@@ -118,6 +121,23 @@ export const getUserWishListProducts = function (token) {
             type: INDEX_ACTION_TYPE.GET_WISH_LIST_PRODUCTS,
             payload: wishListResponse && wishListResponse?.data,
          });
+      }
+   };
+};
+
+export const sendNewsLetter = function (data) {
+   return async function (dispatch) {
+      try {
+         const newsLetterResponse = await axios.post('/index/news-letter', data, headers);
+
+         if (newsLetterResponse && newsLetterResponse?.data) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.SEND_NEWS_LETTER,
+               payload: newsLetterResponse && newsLetterResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
       }
    };
 };

@@ -2,6 +2,7 @@ const AppError = require('../helpers/appError');
 const { catchAsync, imageCompress, fetchLimitDocument } = require('../helpers/helpers');
 const httpStatusCodes = require('../helpers/httpStatusCodes');
 const blogModel = require('../model/schema/blogSchema');
+const blogCategorieModel = require('../model/schema/blogCategoriesSchema');
 
 const createNewBlog = catchAsync(async function (req, res, next) {
    const { name, description, isFeature, content, blogStatus } = req.body;
@@ -150,6 +151,55 @@ const deleteAllBlogs = catchAsync(async function (req, res, next) {
    }
 });
 
+const createBlogCategory = catchAsync(async function (req, res, next) {
+   const { name } = req.body;
+   if (!name) {
+      next(new AppError('Blog categories name is required!'));
+   }
+   const insertObts = Object.assign(req.body);
+
+   // check the categorie is exists or not.
+   // if the admin selecte any parent category then find the parent categories and push inside that categories document.
+   const checkIsExists = await blogCategorieModel.findOne({ name: insertObts.name });
+
+   if (checkIsExists) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: 'Categorie is already exist',
+      });
+   } else {
+      const insertNewBlogCategories = await blogCategorieModel(insertObts).save();
+
+      if (insertNewBlogCategories) {
+         return res.status(httpStatusCodes.CREATED).json({
+            success: true,
+            message: 'Categorie saved',
+            document: insertNewBlogCategories,
+         });
+      } else {
+         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            success: false,
+            message: 'server error',
+         });
+      }
+   }
+});
+
+const getBlogCategories = catchAsync(async function (req, res, next) {
+   const findAllBlogCategories = await blogCategorieModel.find({});
+   if (findAllBlogCategories) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         categories: findAllBlogCategories,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'server error',
+      });
+   }
+});
+
 module.exports = {
    createNewBlog,
    getBlogPosts,
@@ -157,4 +207,6 @@ module.exports = {
    updateSingleBlogPost,
    deleteSingleBlogPost,
    deleteAllBlogs,
+   createBlogCategory,
+   getBlogCategories,
 };

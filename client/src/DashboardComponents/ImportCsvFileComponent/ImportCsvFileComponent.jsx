@@ -54,11 +54,16 @@ function ImportCsvFileComponent() {
    useEffect(() => {
       if (!!importCsvInfo && importCsvInfo.success) {
          message.success('product uploded successfully');
-         dispatch(removerCsvInfo(null));
       } else if (!!importCsvInfo && !importCsvInfo.success) {
          message.info('something worng!');
       }
    }, [importCsvInfo]);
+
+   useEffect(() => {
+      return () => {
+         dispatch(removerCsvInfo(null));
+      };
+   }, []);
 
    return (
       <styles.div>

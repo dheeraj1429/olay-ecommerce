@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
-const helmat = require('helmet');
+const helmet = require('helmet');
 const logger = require('morgan');
 const port = process.env.PORT || 8000;
 const path = require('path');
@@ -10,6 +10,8 @@ const cors = require('cors');
 const numCPUs = require('node:os').cpus().length;
 const cluster = require('node:cluster');
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_TOKEN;
 
 // database connection
 const databaseConnectionFunction = require('./model/db/db');
@@ -21,15 +23,39 @@ const authRoute = require('./routes/authRoute');
 const indexRoute = require('./routes/indexRoute');
 
 // middlewares
-app.use(cors('*'));
-app.options('*', cors());
-app.use(helmat());
+app.set('view engine', 'ejs');
+app.use(
+   cors({
+      origin: 'http://localhost:3000',
+   })
+);
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'upload')));
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'views')));
 app.use(logger());
+
+// check is there access token headers if the user don't have any access token then block the user.
+app.use(async function (req, res, next) {
+   const xApiKey = req.headers['x-api-key'];
+   if (xApiKey) {
+      try {
+         const { key } = jwt.verify(xApiKey, JWT_SECRET);
+         if (key === process.env.KEY) next();
+      } catch (err) {
+         return res.status(200).json({
+            message: 'invalid access token',
+         });
+      }
+   } else {
+      return res.status(200).json({
+         message: 'access token required',
+      });
+   }
+});
 
 // routes
 app.use('/index', indexRoute);

@@ -43,6 +43,7 @@ import ShopInfomationComponent from './DashboardComponents/ShopInfomationCompone
 import CreateStoreComponent from './DashboardComponents/CreateStoreComponent/CreateStoreComponent';
 import CreateBlogPostComponent from './DashboardComponents/CreateBlogPostComponent/CreateBlogPostComponent';
 import BlogPostContinerComponent from './DashboardComponents/BlogPostContainerComponent/BlogPostContainerComponent';
+import BlogCategoriesComponent from './DashboardComponents/BlogCategoyrsComponent/BlogCategoriesComponent';
 
 // site components
 import SignInAndLoginComponent from './Components/SignInAndLoginComponent/SignInAndLoginComponent';
@@ -120,6 +121,7 @@ function App() {
                <Route path="post" element={<BlogPostContinerComponent />} />
                <Route path="post/create" element={<CreateBlogPostComponent />} />
                <Route path="post/edit/:id" element={<CreateBlogPostComponent />} />
+               <Route path="blog-categories" element={<BlogCategoriesComponent />} />
             </Route>
             <Route path="*" element={<PageNotFound />} />
          </Routes>

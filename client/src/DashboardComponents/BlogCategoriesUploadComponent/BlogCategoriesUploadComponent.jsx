@@ -5,9 +5,13 @@ import TextField from '@mui/material/TextField';
 import { MenuItem } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
-import { insertBlogPostCategories, getBlogCategories } from '../../Redux/Actions/adminAction';
+import { insertBlogPostCategories, getBlogCategories, editBlogCategoris } from '../../Redux/Actions/adminAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { insertBlogCategorisLoadingHandler, removerBlogCategoriInfo } from '../../Redux/Actions/adminAppAction';
+import {
+   insertBlogCategorisLoadingHandler,
+   removerBlogCategoriInfo,
+   selecteSingleBlogPostsCategorie,
+} from '../../Redux/Actions/adminAppAction';
 import { message } from 'antd';
 
 const Status = [
@@ -19,16 +23,16 @@ const Status = [
 function BlogCategoriesUploadComponent() {
    const [Categorie, setCategorie] = useState({
       name: '',
-      parent: '',
       description: '',
       categorieStatus: 'Draft',
       IsDefault: false,
       IsFeatured: false,
    });
-   const [Parent, setParent] = useState([]);
 
    const dispatch = useDispatch();
-   const { insertBlogPostCategoriesLoading, insertBlogPostCategoriesInfo } = useSelector((state) => state.admin);
+   const { insertBlogPostCategoriesLoading, insertBlogPostCategoriesInfo, selectedBlogCategory } = useSelector(
+      (state) => state.admin
+   );
 
    const changeHandler = function (e, target = undefined) {
       const name = e.target.name;
@@ -50,6 +54,35 @@ function BlogCategoriesUploadComponent() {
       }
    };
 
+   const upateHandler = function () {
+      if (!!selectedBlogCategory && selectedBlogCategory._id) {
+         dispatch(
+            editBlogCategoris(
+               {
+                  name: Categorie.name,
+                  description: Categorie.description,
+                  categorieStatus: Categorie.categorieStatus,
+                  IsDefault: Categorie.IsDefault,
+                  IsFeatured: Categorie.IsFeatured,
+               },
+               selectedBlogCategory._id
+            )
+         );
+         dispatch(insertBlogCategorisLoadingHandler(true));
+      }
+   };
+
+   const ResetHandler = function () {
+      dispatch(selecteSingleBlogPostsCategorie(null));
+      setCategorie({
+         name: '',
+         description: '',
+         categorieStatus: 'Draft',
+         IsDefault: false,
+         IsFeatured: false,
+      });
+   };
+
    useEffect(() => {
       if (!!insertBlogPostCategoriesInfo && insertBlogPostCategoriesInfo?.success) {
          message.success(insertBlogPostCategoriesInfo.message);
@@ -66,6 +99,20 @@ function BlogCategoriesUploadComponent() {
          dispatch(removerBlogCategoriInfo());
       };
    }, []);
+
+   useEffect(() => {
+      if (!!selectedBlogCategory && selectedBlogCategory?._id) {
+         setCategorie(selectedBlogCategory);
+      } else {
+         setCategorie({
+            name: '',
+            description: '',
+            categorieStatus: 'Draft',
+            IsDefault: false,
+            IsFeatured: false,
+         });
+      }
+   }, [selectedBlogCategory]);
 
    return (
       <styled.div>
@@ -86,21 +133,6 @@ function BlogCategoriesUploadComponent() {
                variant="outlined"
             />
 
-            <TextField
-               id="outlined-select-currency"
-               select
-               label="parent"
-               value={Parent}
-               name="Parent"
-               onChange={(e) => changeHandler(e)}
-               helperText="parent categorie"
-            >
-               {Parent.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                     {option.label}
-                  </MenuItem>
-               ))}
-            </TextField>
             <TextField
                id="outlined-multiline-static"
                onChange={(e) => changeHandler(e)}
@@ -142,12 +174,17 @@ function BlogCategoriesUploadComponent() {
                <p>Is featured?</p>
             </div>
          </Box>
-         <CustombuttonComponent
-            isLoading={insertBlogPostCategoriesLoading}
-            onClick={sendHandler}
-            innerText={'Save'}
-            btnCl={'category_upload'}
-         />
+         <div className="flex">
+            <CustombuttonComponent
+               isLoading={insertBlogPostCategoriesLoading}
+               onClick={!!selectedBlogCategory && selectedBlogCategory?._id ? upateHandler : sendHandler}
+               innerText={!!selectedBlogCategory && selectedBlogCategory?._id ? 'Update' : 'Save'}
+               btnCl={'category_upload'}
+            />
+            <div className="ms-2">
+               <CustombuttonComponent innerText={'Create'} onClick={ResetHandler} btnCl={'category_upload'} />
+            </div>
+         </div>
       </styled.div>
    );
 }

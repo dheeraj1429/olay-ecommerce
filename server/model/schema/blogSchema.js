@@ -6,6 +6,7 @@ const blogSchema = new mongoose.Schema({
    isFeature: { type: Boolean, default: false },
    metaContent: { type: String },
    status: { type: String, default: 'Draft' },
+   categorie: { type: mongoose.Types.ObjectId, ref: 'blogCategorie' },
    blogImage: { type: String },
    content: { type: String },
    createdAt: { type: Date, default: Date.now },

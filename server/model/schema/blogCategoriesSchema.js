@@ -7,6 +7,7 @@ const blogCategorieSchema = new mongoose.Schema({
    IsDefault: { type: Boolean },
    IsFeatured: { type: Boolean },
    createdAt: { type: Date, default: Date.now },
+   blogs: [{ blogId: { type: mongoose.Types.ObjectId, ref: 'blog' } }],
 });
 
 blogCategorieSchema.index({ name: 1 });

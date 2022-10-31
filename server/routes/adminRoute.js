@@ -88,6 +88,7 @@ route.patch('/update-product-label', adminController.updateProductLabel);
 route.patch('/update-shop-info', adminController.updateShopInformation);
 route.patch('/update-shop-information', adminController.UpdateStoreShopInformation);
 route.patch('/update-single-blog-post', upload, adminBlogController.updateSingleBlogPost);
+route.patch('/edit-blog-posts-categorie/:id', adminBlogController.updateSingleBlogPostCategorie);
 // ---------------------------------------------------------------------------------------
 
 // Apis => DELETE
@@ -110,6 +111,7 @@ route.delete('/delete-all-lables', adminController.deleteAllProductLabel);
 route.delete('/delete-single-product-label/:id', adminController.deleteSingleProductLabel);
 route.delete('/delete-single-blog-post/:id', adminBlogController.deleteSingleBlogPost);
 route.delete('/delete-all-blog-posts', adminBlogController.deleteAllBlogs);
+route.delete('/delete-single-blog-categorie/:id', adminBlogController.deleteSingleBlogCategorie);
 // ---------------------------------------------------------------------------------------
 
 module.exports = route;

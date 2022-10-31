@@ -4,7 +4,6 @@ import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavba
 import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
 import BlogCategoriesUploadComponent from '../BlogCategoriesUploadComponent/BlogCategoriesUploadComponent';
 import BlogAllCategoriesComponent from '../BlogAllCategoriesComponent/BlogAllCategoriesComponent';
-import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 
 function BlogCategoriesComponent() {
    return (
@@ -20,9 +19,6 @@ function BlogCategoriesComponent() {
                   <BlogCategoriesUploadComponent />
                </styled.formDiv>
                <div className="categories_div">
-                  <div className="flex_div">
-                     <CustombuttonComponent innerText={'Create'} btnCl={'category_upload'} />
-                  </div>
                   <BlogAllCategoriesComponent />
                </div>
             </styled.flex>

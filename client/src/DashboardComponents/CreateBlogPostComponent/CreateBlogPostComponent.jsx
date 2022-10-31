@@ -10,7 +10,12 @@ import JoditEditor from 'jodit-react';
 import { MenuItem } from '@mui/material';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import { message } from 'antd';
-import { createNewBlogPost, fetchSingleBlogPost, updateSingleBlogPost } from '../../Redux/Actions/adminAction';
+import {
+   createNewBlogPost,
+   fetchSingleBlogPost,
+   updateSingleBlogPost,
+   getBlogCategories,
+} from '../../Redux/Actions/adminAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewBlogPostLoading, removeBlogInsertInfo } from '../../Redux/Actions/adminAppAction';
 import { useParams } from 'react-router';
@@ -27,7 +32,9 @@ function CreateBlogPostComponent() {
       description: '',
       isFeature: false,
       blogStatus: '',
+      categorie: '',
    });
+   const [Categories, setCategories] = useState([]);
    const [Content, setContent] = useState('');
    const [BlogImage, setBlogImage] = useState('');
 
@@ -35,7 +42,7 @@ function CreateBlogPostComponent() {
    const dispatch = useDispatch();
    const param = useParams();
 
-   const { blogInfoLoading, blogInfo, singleBlogPost } = useSelector((state) => state.admin);
+   const { blogInfoLoading, blogInfo, singleBlogPost, blogCategories } = useSelector((state) => state.admin);
 
    const ChangeHandler = function (e) {
       const name = e.target.name;
@@ -60,12 +67,14 @@ function CreateBlogPostComponent() {
       }
 
       const formData = new FormData();
+
       formData.append('name', name);
       formData.append('description', Blog.description);
       formData.append('isFeature', Blog.isFeature);
       formData.append('content', Content);
       formData.append('BlogImage', BlogImage);
       formData.append('blogStatus', Blog.blogStatus);
+      formData.append('categorie', Blog.categorie);
 
       if (param?.id) {
          formData.append('id', param.id);
@@ -98,11 +107,22 @@ function CreateBlogPostComponent() {
             description: singleBlogPost.singlePost.description,
             isFeature: singleBlogPost.singlePost.isFeature,
             blogStatus: singleBlogPost.singlePost.status,
+            categorie: singleBlogPost?.singlePost?.categorie ? singleBlogPost.singlePost.categorie : '',
          });
          setBlogImage(singleBlogPost.singlePost.blogImage);
          setContent(singleBlogPost.singlePost.content);
       }
    }, [singleBlogPost]);
+
+   useEffect(() => {
+      if (!!blogCategories && blogCategories?.success && Object.keys(blogCategories.categories).length) {
+         setCategories(blogCategories.categories);
+      }
+   }, [blogCategories]);
+
+   useEffect(() => {
+      dispatch(getBlogCategories());
+   }, []);
 
    return (
       <styled.div>
@@ -175,23 +195,23 @@ function CreateBlogPostComponent() {
                         ))}
                      </TextField>
                   </div>
-                  {/* <div className="content_div">
+                  <div className="content_div">
                      <TextField
                         id="outlined-select-currency"
                         select
                         label="Select"
-                        name="status"
-                        value={Blog.status}
+                        name="categorie"
+                        value={Blog.categorie}
                         onChange={ChangeHandler}
                         helperText="Please select your blog categories"
                      >
-                        {Status.map((option) => (
-                           <MenuItem key={option.value} value={option.value}>
-                              {option.label}
+                        {Categories?.map((option) => (
+                           <MenuItem key={option._id} value={option._id}>
+                              {option.name}
                            </MenuItem>
                         ))}
                      </TextField>
-                  </div> */}
+                  </div>
                </styled.flexDiv>
             </Box>
 

@@ -105,6 +105,7 @@ const INITAL_STATE = {
    insertBlogPostCategoriesLoading: false,
    insertBlogPostCategoriesError: null,
    blogCategories: null,
+   selectedBlogCategory: null,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -1329,12 +1330,61 @@ const adminReducer = function (state = INITAL_STATE, action) {
             insertBlogPostCategoriesInfo: null,
             insertBlogPostCategoriesLoading: false,
             insertBlogPostCategoriesError: null,
-         }
+         };
 
       case ADMIN_ACTION_TYPES.GET_BLOG_CATEGORIES:
          return {
             ...state,
             blogCategories: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.SELECTED_SINGLE_BLOG_CATEGORIE:
+         return {
+            ...state,
+            selectedBlogCategory: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.UPDATE_BLOG_CATEGORIE:
+         if (action.payload.success) {
+            return {
+               ...state,
+               insertBlogPostCategoriesInfo: action.payload,
+               insertBlogPostCategoriesLoading: false,
+               blogCategories: {
+                  ...state.blogCategories,
+                  categories: state.blogCategories.categories.map((el) =>
+                     el._id === action.updateCategoryId
+                        ? {
+                             ...el,
+                             name: action.updateData.name,
+                             description: action.updateData.description,
+                             categorieStatus: action.updateData.categorieStatus,
+                             IsDefault: action.updateData.IsDefault,
+                             IsFeatured: action.updateData.IsFeatured,
+                          }
+                        : el
+                  ),
+               },
+            };
+         } else if (!action.payload.success) {
+            return {
+               ...state,
+               insertBlogPostCategoriesInfo: action.payload,
+               insertBlogPostCategoriesLoading: false,
+            };
+         }
+
+      case ADMIN_ACTION_TYPES.REMOVER_BLOG_CATEGORIE:
+         return {
+            ...state,
+            blogCategories: {
+               ...state.blogCategories,
+               categories: state.blogCategories.categories.filter((el) => el._id !== action.removeId),
+            },
+            selectedBlogCategory:
+               !!state.selectedBlogCategory && state.selectedBlogCategory._id === action.removeId
+                  ? null
+                  : state.selectedBlogCategory,
          };
 
       default:

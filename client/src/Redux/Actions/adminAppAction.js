@@ -522,3 +522,10 @@ export const removerBlogCategoriInfo = function () {
       type: ADMIN_ACTION_TYPES.REMOVER_BLOG_CATEGORIES_INFO,
    };
 };
+
+export const selecteSingleBlogPostsCategorie = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.SELECTED_SINGLE_BLOG_CATEGORIE,
+      payload: data,
+   };
+};

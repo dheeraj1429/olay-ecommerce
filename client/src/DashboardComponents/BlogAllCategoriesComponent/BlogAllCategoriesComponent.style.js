@@ -20,7 +20,7 @@ export const div = styled.div`
       display: flex;
       align-items: center;
       padding: 0.5rem 0;
-      cursor: pointer;
+      /* cursor: pointer; */
       transition: all 0.2s ease;
 
       p {
@@ -32,6 +32,7 @@ export const div = styled.div`
          fill: var(--main-cl);
          font-size: 19px;
          margin-left: 1rem;
+         cursor: pointer;
       }
    }
 `;

@@ -17,6 +17,8 @@ const productSchema = new mongoose.Schema({
    createdAt: { type: Date, default: Date.now },
    productStatusInfo: { type: String, default: 'draft' },
    tags: [{ _id: { type: mongoose.Types.ObjectId, ref: 'tag' } }],
+   productType: { type: String, default: 'Untype' },
+   metaContent: { type: String },
    variations: [
       {
          variationName: {

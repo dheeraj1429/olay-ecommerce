@@ -7,6 +7,7 @@ route.get('/get-tranding-products', indexController.getTrandingProducts);
 route.get('/get-prev-product/:id', indexController.getSelectedPrevProduct);
 route.get('/get-cart-products/:token', indexController.getUserCartProducts);
 route.get('/get-wishlist-products', indexController.getUserWishListProducts);
+route.get('/get-single_product/:id', indexController.getSingleProduct);
 
 // API => POST
 route.post('/add-to-cart-product', indexController.productAddToCart);

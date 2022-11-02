@@ -9,12 +9,15 @@ import backendConfigData from '../../backendConfig';
 import { removerProductsFromCart } from '../../Redux/Actions/indexActions';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerComponent';
+import { useNavigate } from 'react-router';
 
 function CardSidebarComponent() {
    const [CartPrice, setCartPrice] = useState(0);
    const dispatch = useDispatch();
    const { showCardSideBar, cartItems, removeCartItemLoading } = useSelector((state) => state.index);
    const { auth } = useSelector((state) => state.auth);
+
+   const navigation = useNavigate();
 
    const CloseHandler = function () {
       dispatch(showAndHideCartSideBar(false));
@@ -35,7 +38,7 @@ function CardSidebarComponent() {
             .reduce((acc, crv) => {
                return acc + crv;
             }, 0);
-         setCartPrice(priceAr);
+         setCartPrice(priceAr.toFixed(2));
       }
    }, [cartItems]);
 
@@ -55,24 +58,15 @@ function CardSidebarComponent() {
                   cartItems.cartItems.map((el) => (
                      <div className="productInCart" key={el._id}>
                         <div className="remove_cart_items" onClick={() => RemoveCartItems(el.cartItem._id)}>
-                           {!!removeCartItemLoading &&
-                           removeCartItemLoading.loading &&
-                           removeCartItemLoading.cartId === el.cartItem._id ? (
-                              <SpnnerComponent blackSpenner={true} />
-                           ) : (
-                              <VscClose />
-                           )}
+                           {!!removeCartItemLoading && removeCartItemLoading.loading && removeCartItemLoading.cartId === el.cartItem._id ? <SpnnerComponent blackSpenner={true} /> : <VscClose />}
                         </div>
                         <div className="cartProductImage">
-                           <img
-                              crossorigin="anonymous"
-                              src={`${backendConfigData.URL}/productImagesCompress/${el.cartItem.productImage}`}
-                           />
+                           <img crossorigin="anonymous" src={`${backendConfigData.URL}/productImagesCompress/${el.cartItem.productImage}`} />
                         </div>
                         <div className="content">
                            <p>{el.cartItem.name.slice(0, 60)}</p>
                            <span>qty: {el.qty}</span>
-                           <p>Price: ${el.cartItem?.salePrice ? el.cartItem.salePrice : el.cartItem.price}</p>
+                           <p>Price: ${el.cartItem?.salePrice ? el.cartItem.salePrice.toFixed(2) : el.cartItem.price.toFixed(2)}</p>
                         </div>
                      </div>
                   ))
@@ -88,7 +82,14 @@ function CardSidebarComponent() {
                </div>
 
                <div>
-                  <CustombuttonComponent innerText={'View Cart'} btnCl={'addToCart_wide addToCart'} />
+                  <CustombuttonComponent
+                     innerText={'View Cart'}
+                     onClick={() => {
+                        navigation('/cart');
+                        dispatch(showAndHideCartSideBar(false));
+                     }}
+                     btnCl={'addToCart_wide addToCart'}
+                  />
                </div>
             </div>
          </div>

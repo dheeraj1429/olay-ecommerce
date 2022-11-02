@@ -1,5 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
 
 * {
    margin: 0;
@@ -8,7 +7,7 @@
 }
 
 body {
-   /* font-family: 'Roboto', sans-serif; */
+   font-family: 'Roboto', sans-serif;
    position: relative;
    overflow-x: hidden;
 }
@@ -16,9 +15,12 @@ body {
 :root {
    --main-cl: #ffffff;
    --button-cl: #e50914;
+   --sale: #f14604;
+   --light-cl: #f2f3f3;
    --dark-cl: #202020;
    --extra-dark-cl: #121212;
    --light-gray: #313131;
+   --smooth-light-gray: #f1f1f1;
    --gray-cl: #1e1e21;
    --body-background-cl: #181818;
    --smooht-gray-cl: #f1f1f1;
@@ -39,7 +41,7 @@ body {
    --spec-error-background: #edebeb;
    --spec-text-primary: #fff;
    --spec-text-secondary: rgb(192, 192, 192);
-   --spec-text-disabled: #b7b7b7;
+   --spec-text-disabled: #8b8b8b;
    --spec-text-primary-inverse: #030303;
    --spec-call-to-action: #3ea6ff;
    --spec-call-to-action-inverse: #065fd4;
@@ -66,7 +68,8 @@ body {
    --spec-themed-overlay-background: rgba(0, 0, 0, 0.3);
    --spec-themed-overlay: rgba(0, 0, 0, 0.1);
    --spec-commerce-badge-background: #002d08;
-   --spec-static-brand-red: #f00;
+   --spec-static-brand-red: rgb(226, 15, 15);
+   --spec-static-brand-dark: rgb(120, 19, 19);
    --spec-static-brand-white: #fff;
    --spec-static-brand-black: #4b4a4a;
    --spec-static-clear-color: rgba(255, 255, 255, 0);

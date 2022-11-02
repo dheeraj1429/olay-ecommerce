@@ -13,10 +13,7 @@ function ProductUploadSecondComponent({ sugAge, state, ChangeHandler, ImageGrabH
    const param = useParams();
    const [Image, setImage] = useState('');
 
-   const allProductBrands = useSelector((state) => state.admin.allProductBrands);
-   const singleProductFetch = useSelector((state) => state.admin.singleProductFetch);
-   // const allTags = useSelector((state) => state.admin.allTags);
-
+   const { allProductBrands, singleProductFetch } = useSelector((state) => state.admin);
    const dispatch = useDispatch();
 
    useEffect(() => {
@@ -46,10 +43,6 @@ function ProductUploadSecondComponent({ sugAge, state, ChangeHandler, ImageGrabH
                   filde={'productImages'}
                />
             </div>
-            {/* <div>
-               <HeadingComponent cl="sm_heading" Heading={"Product Tags"} />
-               <ProductTagsContainerComponent />
-            </div> */}
          </upload.flexDiv>
          <upload.marginDiv>
             <Box
@@ -75,27 +68,6 @@ function ProductUploadSecondComponent({ sugAge, state, ChangeHandler, ImageGrabH
                      </MenuItem>
                   ))}
                </TextField>
-               {/* <Autocomplete
-                  multiple
-                  limitTags={5}
-                  id="multiple-limit-tags"
-                  options={
-                     !!allTags && allTags?.success && allTags?.allTags
-                        ? allTags.allTags
-                        : []
-                  }
-                  getOptionLabel={(option) => option.name}
-                  defaultValue={
-                     !!allTags && allTags?.success && allTags?.allTags
-                        ? allTags.allTags[0]
-                        : []
-                  }
-                  onChange={(event, value) => TagHandler(value)}
-                  renderInput={(params) => (
-                     <TextField {...params} label="Tags" placeholder="Favorites" />
-                  )}
-                  sx={{ width: "500px" }}
-               /> */}
                <TextField
                   id="outlined-select-currency"
                   select

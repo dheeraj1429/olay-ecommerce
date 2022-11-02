@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as upload from './UploadProductComponent.style';
 import DashboardNavbarComponent from '../DashboardNavbarComponent/DashboardNavbarComponent';
 import HeadingComponent from '../../HelperComponents/HeadingComponent/HeadingComponent';
@@ -15,7 +15,7 @@ import {
    removeEditProductInfo,
 } from '../../Redux/Actions/adminAppAction';
 import { useParams } from 'react-router';
-import ProductSizeCheckBoxComponent from '../ProductSizeCheckBoxComponent/ProductSizeCheckBoxComponent';
+import JoditEditor from 'jodit-react';
 
 const sugAge = [
    { value: '18 - 25', label: '18 - 25' },
@@ -52,9 +52,11 @@ function UploadProductComponent() {
       suggestedAge: '',
       brand: '',
       productStatusInfo: 'Draft',
+      metaContent: '',
+      productType: '',
    });
-   // const [SizeVariation, setSizeVariation] = useState([]);
 
+   const editor = useRef();
    const param = useParams();
    const dispatch = useDispatch();
 
@@ -78,15 +80,55 @@ function UploadProductComponent() {
       message.info(msg);
    };
 
-   // const CheckBoxHandler = function (event, id) {
-   //    const isChecked = event.target.checked;
+   const checkTrueValues = function (formData, string, filde) {
+      if (!!string) {
+         formData.append(filde, string);
+      }
 
-   //    if (isChecked) {
-   //       setSizeVariation((prevState) => [...prevState, id]);
-   //    } else {
-   //       setSizeVariation(SizeVariation.filter((el) => el !== id));
-   //    }
-   // };
+      return formData;
+   };
+
+   const createFormDateHandler = function () {
+      const formData = new FormData();
+      checkTrueValues(formData, Product.name, 'name');
+      checkTrueValues(formData, Product.price, 'price');
+      checkTrueValues(formData, Product.salePrice, 'salePrice');
+      checkTrueValues(formData, Product.discription, 'discription');
+      checkTrueValues(formData, Product.category, 'category');
+      checkTrueValues(formData, Product.stockStatus, 'stockStatus');
+      checkTrueValues(formData, Product.weight, 'weight');
+      checkTrueValues(formData, Product.length, 'length');
+      checkTrueValues(formData, Product.wide, 'wide');
+      checkTrueValues(formData, Product.height, 'height');
+      checkTrueValues(formData, Product.productImage, 'productImage');
+      checkTrueValues(formData, Product.suggestedAge, 'suggestedAge');
+      checkTrueValues(formData, Product.brand, 'brand');
+      checkTrueValues(formData, Product.productStatusInfo, 'productStatusInfo');
+      checkTrueValues(formData, Product.metaContent, 'metaContent');
+      checkTrueValues(formData, Product.productType, 'productType');
+
+      return formData;
+   };
+
+   const SendDataHandler = function () {
+      if (!!Product.name && !!Product.price) {
+         const formData = createFormDateHandler();
+         dispatch(uplodNewProduct(formData));
+         dispatch(uploadLoading(true));
+      } else {
+         info('Product name and product price is required!!');
+      }
+   };
+
+   const updateHandler = function () {
+      if (param?.id) {
+         const formData = createFormDateHandler();
+         dispatch(editSingleProduct(formData, param.id, singleProductFetch.product._id));
+         dispatch(editSingleProductLoading(true));
+      } else {
+         throw Error('Id is reuqired!');
+      }
+   };
 
    useEffect(() => {
       if (!!uploadProduct) {
@@ -123,58 +165,11 @@ function UploadProductComponent() {
             suggestedAge: singleProductFetch.product?.suggestedAge || '',
             brand: singleProductFetch.product?.brand?._id || '',
             productStatusInfo: singleProductFetch.product?.productStatusInfo || 'Draft',
+            metaContent: singleProductFetch.product?.metaContent || '',
+            productType: singleProductFetch.product?.productType || '',
          });
       }
    }, [singleProductFetch]);
-
-   const checkTrueValues = function (formData, string, filde) {
-      if (!!string) {
-         formData.append(filde, string);
-      }
-
-      return formData;
-   };
-
-   const createFormDateHandler = function () {
-      const formData = new FormData();
-      checkTrueValues(formData, Product.name, 'name');
-      checkTrueValues(formData, Product.price, 'price');
-      checkTrueValues(formData, Product.salePrice, 'salePrice');
-      checkTrueValues(formData, Product.discription, 'discription');
-      checkTrueValues(formData, Product.category, 'category');
-      checkTrueValues(formData, Product.stockStatus, 'stockStatus');
-      checkTrueValues(formData, Product.weight, 'weight');
-      checkTrueValues(formData, Product.length, 'length');
-      checkTrueValues(formData, Product.wide, 'wide');
-      checkTrueValues(formData, Product.height, 'height');
-      checkTrueValues(formData, Product.productImage, 'productImage');
-      checkTrueValues(formData, Product.suggestedAge, 'suggestedAge');
-      checkTrueValues(formData, Product.brand, 'brand');
-      checkTrueValues(formData, Product.productStatusInfo, 'productStatusInfo');
-      // formData.append("tags[]", JSON.stringify(Tags));
-
-      return formData;
-   };
-
-   const SendDataHandler = function () {
-      if (!!Product.name && !!Product.price) {
-         const formData = createFormDateHandler();
-         dispatch(uplodNewProduct(formData));
-         dispatch(uploadLoading(true));
-      } else {
-         info('Product name and product price is required!!');
-      }
-   };
-
-   const updateHandler = function () {
-      if (param?.id) {
-         const formData = createFormDateHandler();
-         dispatch(editSingleProduct(formData, param.id, singleProductFetch.product._id));
-         dispatch(editSingleProductLoading(true));
-      } else {
-         throw Error('Id is reuqired!');
-      }
-   };
 
    return (
       <upload.div>
@@ -194,7 +189,16 @@ function UploadProductComponent() {
                productStatusInfo={brandStatus}
             />
 
-            {/* <ProductSizeCheckBoxComponent onChange={CheckBoxHandler} /> */}
+            <p className="text-white">Meta content</p>
+            <JoditEditor
+               ref={editor}
+               value={Product.metaContent}
+               tabIndex={1}
+               onBlur={(newContent) => setProduct({ ...Product, metaContent: newContent })}
+               onChange={(newContent) => {
+                  setProduct({ ...Product, metaContent: newContent });
+               }}
+            />
 
             <ProductUploadSecondComponent
                sugAge={sugAge}

@@ -23,6 +23,10 @@ export const div = styled.div`
       text-align: center;
    }
 
+   h1 {
+      font-size: 27px;
+   }
+
    .view {
       cursor: pointer;
       font-size: 14px;
@@ -32,5 +36,7 @@ export const div = styled.div`
    hr {
       border: transparent;
       border-top: 1px solid var(--smooht-gray-cl);
+      padding: 0;
+      margin: 0;
    }
 `;

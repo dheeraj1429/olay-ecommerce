@@ -3,8 +3,9 @@ import * as styled from './ShopStoreTableComponent.style';
 import { FiEdit2 } from '@react-icons/all-files/fi/FiEdit2';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllShopInfomation } from '../../Redux/Actions/adminAction';
-import { Link } from 'react-router-dom';
 import { storeShowHideHandler, selectedShopInfoHandler } from '../../Redux/Actions/adminAppAction';
+import { VscChromeClose } from '@react-icons/all-files/vsc/VscChromeClose';
+import { Popconfirm } from 'antd';
 
 const row = [
    { elm: 'name', value: 'Name' },
@@ -24,6 +25,10 @@ function ShopStoreTableComponent() {
    const UpdateStoreInfoHandler = function (el) {
       dispatch(storeShowHideHandler(true));
       dispatch(selectedShopInfoHandler(el));
+   };
+
+   const confirm = function (id) {
+      // dispatch()
    };
 
    useEffect(() => {
@@ -52,6 +57,13 @@ function ShopStoreTableComponent() {
                        <td className="coutnry_div">{el.country}</td>
                        <td>
                           <FiEdit2 onClick={() => UpdateStoreInfoHandler(el)} />
+                          <Popconfirm
+                             title="if you want to delete the store then first contact the shop owner first."
+                             okText="Yes"
+                             cancelText="No"
+                          >
+                             <VscChromeClose className="ms-2" />
+                          </Popconfirm>
                        </td>
                     </tr>
                  ))

@@ -62,3 +62,10 @@ export const newsLetterMailLadingHandler = function (data) {
       payload: data,
    };
 };
+
+export const qtyPricHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.QTY_PRICE_HANDLER,
+      payload: data,
+   };
+};

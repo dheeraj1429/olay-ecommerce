@@ -1,7 +1,7 @@
 // https://preview.themeforest.net/item/outstock-react-next-js-minimal-ecommerce-template/full_screen_preview/39081703
 // https://preview.themeforest.net/item/martfury-multipurpose-store-shopify-theme/full_screen_preview/34866272
 
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
@@ -9,53 +9,56 @@ import { setLoginUser } from './Redux/Actions/authAppAction';
 import { getTrandingProducts, getUserCartProducts, getUserWishListProducts } from './Redux/Actions/indexActions';
 import { trandingProductsLoading } from './Redux/Actions/indexAppAction';
 
+// site pages
+import HomePage from './Pages/HomePage/HomePage';
+import LoadingComponent from './HelperComponents/LoadingComponent/LoadingComponent';
+const SignInAndLoginPage = lazy(() => import('./Pages/SignInAndLoginPage/SignInAndLoginPage'));
+
 // dashboard components
-import DashboardSingInComponent from './DashboardComponents/DashboardSingInComponent/DashboardSingInComponent';
-import DashboardHomeComponent from './DashboardComponents/DashboardHomeComponent/DashboardHomeComponent';
-import UploadProductComponent from './DashboardComponents/UploadProductComponent/UploadProductComponent';
-import UploadProductCategory from './DashboardComponents/UploadProductCategory/UploadProductCategory';
-import ProductBrandUploadComponent from './DashboardComponents/ProductBrandUploadComponent/ProductBrandUploadComponent';
-import ProductBrandsComponent from './DashboardComponents/ProductBrandsComponent/ProductBrandsComponent';
-import ProductBrandEditComponent from './DashboardComponents/ProductBrandEditComponent/ProductBrandEditComponent';
-import AllProductComponent from './DashboardComponents/AllProductComponent/AllProductComponent';
-import ProductEditComponent from './DashboardComponents/ProductEditComponent/ProductEditComponent';
-import ProductTagsComponent from './DashboardComponents/ProductTagsComponent/ProductTagsComponent';
-import AllProductsTagsComponent from './DashboardComponents/AllProductsTagsComponent/AllProductsTagsComponent';
-import AllProductTagEditComponent from './DashboardComponents/AllProductTagEditComponent/AllProductTagEditComponent';
-import VariationSwatchesComponent from './DashboardComponents/VariationSwatchesComponent/VariationSwatchesComponent';
-import ProductSwatchesTableComponent from './DashboardComponents/ProductSwatchesTableComponent/ProductSwatchesTableComponent';
-import EditProductSwatchesComponent from './DashboardComponents/EditProductSwatchesComponent/EditProductSwatchesComponent';
-import ProductVariationCreatorComponent from './DashboardComponents/ProductVariationCreatorComponent/ProductVariationCreatorComponent';
-import CreateSelectedProductVariationComponent from './DashboardComponents/CreateSelectedProductVariationComponent/CreateSelectedProductVariationComponent';
-import ProductSizeVariationComponent from './DashboardComponents/ProductSizeVariationComponent/ProductSizeVariationComponent';
-import ProductSizeVariationTableComponent from './DashboardComponents/ProductSizeVariationTableComponent/ProductSizeVariationTableComponent';
-import ProductSizeVariationEditComponent from './DashboardComponents/ProductSizeVariationEditComponent/ProductSizeVariationEditComponent';
-import FlashSaleTableViewComponent from './DashboardComponents/FlashSaleTableViewComponent/FlashSaleTableViewComponent';
-import CreateNewFlashSaleComponent from './DashboardComponents/CreateNewFlashSaleComponent/CreateNewFlashSaleComponent';
-import EditProductFlashSaleComponent from './DashboardComponents/EditProductFlashSaleComponent/EditProductFlashSaleComponent';
-import ProductSaleLabelComponent from './DashboardComponents/ProductSaleLabelComponent/ProductSaleLabelComponent';
-import ProductLabelTableViewComponent from './DashboardComponents/ProductLabelTableViewComponent/ProductLabelTableViewComponent';
-import EditProductLabelComponent from './DashboardComponents/EditProductLabelComponent/EditProductLabelComponent';
-import ExportCsvComponent from './DashboardComponents/ExportCsvComponent/ExportCsvComponent';
-import ExportHistoryComponent from './DashboardComponents/ExportHistoryComponent/ExportHistoryComponent';
-import ImportCsvFileComponent from './DashboardComponents/ImportCsvFileComponent/ImportCsvFileComponent';
-import ShopInfomationComponent from './DashboardComponents/ShopInfomationComponent/ShopInfomationComponent';
-import CreateStoreComponent from './DashboardComponents/CreateStoreComponent/CreateStoreComponent';
-import CreateBlogPostComponent from './DashboardComponents/CreateBlogPostComponent/CreateBlogPostComponent';
-import BlogPostContinerComponent from './DashboardComponents/BlogPostContainerComponent/BlogPostContainerComponent';
-import BlogCategoriesComponent from './DashboardComponents/BlogCategoyrsComponent/BlogCategoriesComponent';
+const DashboardSingInComponent = lazy(() => import('./DashboardComponents/DashboardSingInComponent/DashboardSingInComponent'));
+const DashboardHomeComponent = lazy(() => import('./DashboardComponents/DashboardHomeComponent/DashboardHomeComponent'));
+const UploadProductComponent = lazy(() => import('./DashboardComponents/UploadProductComponent/UploadProductComponent'));
+const UploadProductCategory = lazy(() => import('./DashboardComponents/UploadProductCategory/UploadProductCategory'));
+const ProductBrandUploadComponent = lazy(() => import('./DashboardComponents/ProductBrandUploadComponent/ProductBrandUploadComponent'));
+const ProductBrandsComponent = lazy(() => import('./DashboardComponents/ProductBrandsComponent/ProductBrandsComponent'));
+const ProductBrandEditComponent = lazy(() => import('./DashboardComponents/ProductBrandEditComponent/ProductBrandEditComponent'));
+const AllProductComponent = lazy(() => import('./DashboardComponents/AllProductComponent/AllProductComponent'));
+const ProductEditComponent = lazy(() => import('./DashboardComponents/ProductEditComponent/ProductEditComponent'));
+const ProductTagsComponent = lazy(() => import('./DashboardComponents/ProductTagsComponent/ProductTagsComponent'));
+const AllProductsTagsComponent = lazy(() => import('./DashboardComponents/AllProductsTagsComponent/AllProductsTagsComponent'));
+const AllProductTagEditComponent = lazy(() => import('./DashboardComponents/AllProductTagEditComponent/AllProductTagEditComponent'));
+const VariationSwatchesComponent = lazy(() => import('./DashboardComponents/VariationSwatchesComponent/VariationSwatchesComponent'));
+const ProductSwatchesTableComponent = lazy(() => import('./DashboardComponents/ProductSwatchesTableComponent/ProductSwatchesTableComponent'));
+const EditProductSwatchesComponent = lazy(() => import('./DashboardComponents/EditProductSwatchesComponent/EditProductSwatchesComponent'));
+const ProductVariationCreatorComponent = lazy(() => import('./DashboardComponents/ProductVariationCreatorComponent/ProductVariationCreatorComponent'));
+const CreateSelectedProductVariationComponent = lazy(() => import('./DashboardComponents/CreateSelectedProductVariationComponent/CreateSelectedProductVariationComponent'));
+const ProductSizeVariationComponent = lazy(() => import('./DashboardComponents/ProductSizeVariationComponent/ProductSizeVariationComponent'));
+const ProductSizeVariationTableComponent = lazy(() => import('./DashboardComponents/ProductSizeVariationTableComponent/ProductSizeVariationTableComponent'));
+const ProductSizeVariationEditComponent = lazy(() => import('./DashboardComponents/ProductSizeVariationEditComponent/ProductSizeVariationEditComponent'));
+const FlashSaleTableViewComponent = lazy(() => import('./DashboardComponents/FlashSaleTableViewComponent/FlashSaleTableViewComponent'));
+const CreateNewFlashSaleComponent = lazy(() => import('./DashboardComponents/CreateNewFlashSaleComponent/CreateNewFlashSaleComponent'));
+const EditProductFlashSaleComponent = lazy(() => import('./DashboardComponents/EditProductFlashSaleComponent/EditProductFlashSaleComponent'));
+const ProductSaleLabelComponent = lazy(() => import('./DashboardComponents/ProductSaleLabelComponent/ProductSaleLabelComponent'));
+const ProductLabelTableViewComponent = lazy(() => import('./DashboardComponents/ProductLabelTableViewComponent/ProductLabelTableViewComponent'));
+const EditProductLabelComponent = lazy(() => import('./DashboardComponents/EditProductLabelComponent/EditProductLabelComponent'));
+const ExportCsvComponent = lazy(() => import('./DashboardComponents/ExportCsvComponent/ExportCsvComponent'));
+const ExportHistoryComponent = lazy(() => import('./DashboardComponents/ExportHistoryComponent/ExportHistoryComponent'));
+const ImportCsvFileComponent = lazy(() => import('./DashboardComponents/ImportCsvFileComponent/ImportCsvFileComponent'));
+const ShopInfomationComponent = lazy(() => import('./DashboardComponents/ShopInfomationComponent/ShopInfomationComponent'));
+const CreateStoreComponent = lazy(() => import('./DashboardComponents/CreateStoreComponent/CreateStoreComponent'));
+const CreateBlogPostComponent = lazy(() => import('./DashboardComponents/CreateBlogPostComponent/CreateBlogPostComponent'));
+const BlogPostContinerComponent = lazy(() => import('./DashboardComponents/BlogPostContainerComponent/BlogPostContainerComponent'));
+const BlogCategoriesComponent = lazy(() => import('./DashboardComponents/BlogCategoyrsComponent/BlogCategoriesComponent'));
 
 // site components
-import SignInAndLoginComponent from './Components/SignInAndLoginComponent/SignInAndLoginComponent';
+const SignInAndLoginComponent = lazy(() => import('./Components/SignInAndLoginComponent/SignInAndLoginComponent'));
+const SingleProductPage = lazy(() => import('./Pages/SingleProductPage/SingleProductPage'));
+const CartPage = lazy(() => import('./Pages/CartPage/CartPage'));
 
 // dashboard pages
-import Dashboard from './DashboardPages/Dashboard/Dashboard';
-import DashboardPanel from './DashboardPages/DashboardPanel/DashboardPanel';
-import PageNotFound from './DashboardPages/PageNotFound/PageNotFound';
-
-// site pages
-import SignInAndLoginPage from './Pages/SignInAndLoginPage/SignInAndLoginPage';
-import HomePage from './Pages/HomePage/HomePage';
+const Dashboard = lazy(() => import('./DashboardPages/Dashboard/Dashboard'));
+const DashboardPanel = lazy(() => import('./DashboardPages/DashboardPanel/DashboardPanel'));
+const PageNotFound = lazy(() => import('./DashboardPages/PageNotFound/PageNotFound'));
 
 function App() {
    const [cookie] = useCookies(['user']);
@@ -74,57 +77,58 @@ function App() {
 
    return (
       <div className="App">
-         <Routes>
-            <Route path="" element={<HomePage />} />
-            <Route path="auth" element={<SignInAndLoginPage />}>
-               <Route path="signin" element={<SignInAndLoginComponent />} />
-               <Route path="login" element={<SignInAndLoginComponent />} />
-            </Route>
-            <Route path="dashboard-auth" element={<Dashboard />}>
-               <Route path="sign-in" element={<DashboardSingInComponent />} />
-            </Route>
-            <Route path="dashboard" element={<DashboardPanel />}>
-               <Route path="" element={<DashboardHomeComponent />} />
-               <Route path="upload-products" element={<UploadProductComponent />} />
-               <Route path="product-category" element={<UploadProductCategory />} />
-               <Route path="upload-product-brand" element={<ProductBrandUploadComponent />} />
-               <Route path="product-brands" element={<ProductBrandsComponent />} />
-               <Route path="product-brands/edit/:id" element={<ProductBrandEditComponent />} />
-               <Route path="all-products" element={<AllProductComponent />} />
-               <Route path="/dashboard/product/edit/:id" element={<ProductEditComponent />} />
-               <Route path="product-tags" element={<AllProductsTagsComponent />} />
-               <Route path="insert/new-product-tags" element={<ProductTagsComponent />} />
-               <Route path="product-tag/edit/:id" element={<AllProductTagEditComponent />} />
-               <Route path="variation-swatches" element={<ProductSwatchesTableComponent />} />
-               <Route path="variation-swatches/create" element={<VariationSwatchesComponent />} />
-               <Route path="allSwatches/:id" element={<EditProductSwatchesComponent />} />
-               <Route path="product-variation" element={<ProductVariationCreatorComponent />} />
-               <Route path="product/create-variations/:id" element={<CreateSelectedProductVariationComponent />} />
-               <Route
-                  path="/dashboard/product/sub-variations/:id/editSub/:id"
-                  element={<CreateSelectedProductVariationComponent />}
-               />
-               <Route path="product-size-variation" element={<ProductSizeVariationTableComponent />} />
-               <Route path="product-size-variation/create" element={<ProductSizeVariationComponent />} />
-               <Route path="sizeVariations/:id" element={<ProductSizeVariationEditComponent />} />
-               <Route path="flash-sale" element={<FlashSaleTableViewComponent />} />
-               <Route path="flash-sale/create" element={<CreateNewFlashSaleComponent />} />
-               <Route path="flash-sale/edit/:id" element={<EditProductFlashSaleComponent />} />
-               <Route path="product-label" element={<ProductLabelTableViewComponent />} />
-               <Route path="product-label/create" element={<ProductSaleLabelComponent />} />
-               <Route path="allLabels/:id" element={<EditProductLabelComponent />} />
-               <Route path="information" element={<ShopInfomationComponent />} />
-               <Route path="export-product" element={<ExportCsvComponent />} />
-               <Route path="export-history" element={<ExportHistoryComponent />} />
-               <Route path="import-product" element={<ImportCsvFileComponent />} />
-               <Route path="store-locators" element={<CreateStoreComponent />} />
-               <Route path="post" element={<BlogPostContinerComponent />} />
-               <Route path="post/create" element={<CreateBlogPostComponent />} />
-               <Route path="post/edit/:id" element={<CreateBlogPostComponent />} />
-               <Route path="blog-categories" element={<BlogCategoriesComponent />} />
-            </Route>
-            <Route path="*" element={<PageNotFound />} />
-         </Routes>
+         <Suspense fallback={<LoadingComponent />}>
+            <Routes>
+               <Route path="" element={<HomePage />} />
+               <Route path="/products/:productName/:id" element={<SingleProductPage />} />
+               <Route path="/cart" element={<CartPage />} />
+               <Route path="auth" element={<SignInAndLoginPage />}>
+                  <Route path="signin" element={<SignInAndLoginComponent />} />
+                  <Route path="login" element={<SignInAndLoginComponent />} />
+               </Route>
+               <Route path="dashboard-auth" element={<Dashboard />}>
+                  <Route path="sign-in" element={<DashboardSingInComponent />} />
+               </Route>
+               <Route path="dashboard" element={<DashboardPanel />}>
+                  <Route path="" element={<DashboardHomeComponent />} />
+                  <Route path="upload-products" element={<UploadProductComponent />} />
+                  <Route path="product-category" element={<UploadProductCategory />} />
+                  <Route path="upload-product-brand" element={<ProductBrandUploadComponent />} />
+                  <Route path="product-brands" element={<ProductBrandsComponent />} />
+                  <Route path="product-brands/edit/:id" element={<ProductBrandEditComponent />} />
+                  <Route path="all-products" element={<AllProductComponent />} />
+                  <Route path="/dashboard/product/edit/:id" element={<ProductEditComponent />} />
+                  <Route path="product-tags" element={<AllProductsTagsComponent />} />
+                  <Route path="insert/new-product-tags" element={<ProductTagsComponent />} />
+                  <Route path="product-tag/edit/:id" element={<AllProductTagEditComponent />} />
+                  <Route path="variation-swatches" element={<ProductSwatchesTableComponent />} />
+                  <Route path="variation-swatches/create" element={<VariationSwatchesComponent />} />
+                  <Route path="allSwatches/:id" element={<EditProductSwatchesComponent />} />
+                  <Route path="product-variation" element={<ProductVariationCreatorComponent />} />
+                  <Route path="product/create-variations/:id" element={<CreateSelectedProductVariationComponent />} />
+                  <Route path="/dashboard/product/sub-variations/:id/editSub/:id" element={<CreateSelectedProductVariationComponent />} />
+                  <Route path="product-size-variation" element={<ProductSizeVariationTableComponent />} />
+                  <Route path="product-size-variation/create" element={<ProductSizeVariationComponent />} />
+                  <Route path="sizeVariations/:id" element={<ProductSizeVariationEditComponent />} />
+                  <Route path="flash-sale" element={<FlashSaleTableViewComponent />} />
+                  <Route path="flash-sale/create" element={<CreateNewFlashSaleComponent />} />
+                  <Route path="flash-sale/edit/:id" element={<EditProductFlashSaleComponent />} />
+                  <Route path="product-label" element={<ProductLabelTableViewComponent />} />
+                  <Route path="product-label/create" element={<ProductSaleLabelComponent />} />
+                  <Route path="allLabels/:id" element={<EditProductLabelComponent />} />
+                  <Route path="information" element={<ShopInfomationComponent />} />
+                  <Route path="export-product" element={<ExportCsvComponent />} />
+                  <Route path="export-history" element={<ExportHistoryComponent />} />
+                  <Route path="import-product" element={<ImportCsvFileComponent />} />
+                  <Route path="store-locators" element={<CreateStoreComponent />} />
+                  <Route path="post" element={<BlogPostContinerComponent />} />
+                  <Route path="post/create" element={<CreateBlogPostComponent />} />
+                  <Route path="post/edit/:id" element={<CreateBlogPostComponent />} />
+                  <Route path="blog-categories" element={<BlogCategoriesComponent />} />
+               </Route>
+               <Route path="*" element={<PageNotFound />} />
+            </Routes>
+         </Suspense>
       </div>
    );
 }

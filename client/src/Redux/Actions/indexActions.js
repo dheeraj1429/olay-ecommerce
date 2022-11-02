@@ -27,6 +27,7 @@ export const getTrandingProducts = function () {
    };
 };
 
+// when the user click the preview icons to show some details about product.
 export const getSelectedPrevProduct = function (id) {
    return async function (dispatch) {
       try {
@@ -43,6 +44,7 @@ export const getSelectedPrevProduct = function (id) {
    };
 };
 
+// product add to cart function
 export const productAddToCart = function (data, img) {
    return async function (dispatch) {
       try {
@@ -61,6 +63,7 @@ export const productAddToCart = function (data, img) {
    };
 };
 
+// show all user product from the carts
 export const getUserCartProducts = function (token) {
    return async function (dispatch) {
       try {
@@ -78,6 +81,7 @@ export const getUserCartProducts = function (token) {
    };
 };
 
+// remove cart products when the user click on the close button.
 export const removerProductsFromCart = function (id, token) {
    return async function (dispatch) {
       try {
@@ -95,6 +99,7 @@ export const removerProductsFromCart = function (id, token) {
    };
 };
 
+// add to wishlist feature
 export const addToWishList = function (id, token) {
    return async function (dispatch) {
       const data = {
@@ -112,6 +117,7 @@ export const addToWishList = function (id, token) {
    };
 };
 
+// grab al the user wishlist products
 export const getUserWishListProducts = function (token) {
    return async function (dispatch) {
       const wishListResponse = await axios.get(`/index/get-wishlist-products?token=${token}`, headers);
@@ -125,6 +131,7 @@ export const getUserWishListProducts = function (token) {
    };
 };
 
+// send subscription mail with news letter.
 export const sendNewsLetter = function (data) {
    return async function (dispatch) {
       try {
@@ -134,6 +141,23 @@ export const sendNewsLetter = function (data) {
             dispatch({
                type: INDEX_ACTION_TYPE.SEND_NEWS_LETTER,
                payload: newsLetterResponse && newsLetterResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+// get the single products
+export const getSingleProduct = function (id) {
+   return async function (dispatch) {
+      try {
+         const productResponse = await axios.get(`/index/get-single_product/${id}`);
+         if (productResponse && productResponse?.data) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_SINGLE_PRODUCT,
+               payload: productResponse && productResponse?.data,
             });
          }
       } catch (err) {

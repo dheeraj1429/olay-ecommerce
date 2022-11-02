@@ -11,6 +11,8 @@ import 'antd/dist/antd.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import 'react-color-palette/lib/css/styles.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

@@ -6,6 +6,7 @@ import TrandingProductsComponent from '../../Components/TrandingProductsComponen
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserWishListProducts } from '../../Redux/Actions/indexActions';
 import NewsLetterComponent from '../../Components/NewsLetterComponent/NewsLetterComponent';
+import FooterComponent from '../../Components/FooterComponent/FooterComponent';
 
 function HomePage() {
    const dispatch = useDispatch();
@@ -28,18 +29,15 @@ function HomePage() {
             }
             subHeading={
                <p>
-                  As rich and unique as the coffee beans it is intended for, this little scoop will make your morning{' '}
-                  <br /> ritual a special occasion every day.
+                  As rich and unique as the coffee beans it is intended for, this little scoop will make your morning <br /> ritual a special occasion every day.
                </p>
             }
          />
-         <ShopHeadingComponent
-            heading={'Deals Of The Day'}
-            subHeading={'Mirum est notare quam littera gothica quam nunc putamus parum claram!'}
-         />
+         <ShopHeadingComponent heading={'Deals Of The Day'} subHeading={'Mirum est notare quam littera gothica quam nunc putamus parum claram!'} />
          <TrandingProductsComponent />
 
          <NewsLetterComponent />
+         <FooterComponent />
       </div>
    );
 }

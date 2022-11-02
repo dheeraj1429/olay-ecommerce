@@ -12,11 +12,13 @@ const subscriptionModel = require('../model/schema/subscriptionUsersSchema');
 const getTrandingProducts = catchAsync(async function (req, res, next) {
    const findProducts = await productModel.aggregate([
       // stage one
-      { $match: { salePrice: { $exists: true } } },
+      { $match: { salePrice: { $exists: true }, salePrice: { $gt: 0 } } },
       // stage two
       { $project: { _id: 1, name: 1, price: 1, productImage: 1, stockStatus: 1, salePrice: 1 } },
       // stage three
-      { $limit: 5 },
+      { $sort: { salePrice: 1 } },
+      // stage four
+      { $limit: 10 },
    ]);
 
    // if there is there is some error then send back the message to the client. otherwise send back the filters products.
@@ -42,10 +44,7 @@ const getSelectedPrevProduct = catchAsync(async function (req, res, next) {
       next(new AppError('Id is required'));
    }
 
-   const findSelectedProduct = await productModel
-      .findOne({ _id: id })
-      .populate('brand', { name: 1, website: 1, brandIcon: 1 })
-      .populate('category', { products: 0 });
+   const findSelectedProduct = await productModel.findOne({ _id: id }).populate('brand', { name: 1, website: 1, brandIcon: 1 }).populate('category', { products: 0 });
 
    if (findSelectedProduct) {
       return res.status(httpStatusCodes.OK).json({
@@ -80,18 +79,16 @@ const productAddToCart = catchAsync(async function (req, res, next) {
     */
 
    const { _id } = await tokenVarifyFunction(undefined, token);
+
+   // check the products is exists into the datbase. find the products using id.
    productModel.findOne({ _id: productId }, { name: 1, price: 1, salePrice: 1, productImage: 1 }).then(async (data) => {
       if (data) {
-         const findDocumentIsExists = await userModel.findOne(
-            { _id, cart: { $elemMatch: { cartItem: data._id } } },
-            { 'cart.$': 1 }
-         );
+         // find the products is exists into the user cart.
+         const findDocumentIsExists = await userModel.findOne({ _id, cart: { $elemMatch: { cartItem: data._id } } }, { 'cart.$': 1 });
 
          if (!!findDocumentIsExists && findDocumentIsExists?.cart) {
-            const updateUserCart = await userModel.updateOne(
-               { _id, cart: { $elemMatch: { cartItem: data._id } } },
-               { $inc: { 'cart.$.qty': qty } }
-            );
+            // if the product is exists into the user cart then only inc the product quntity.
+            const updateUserCart = await userModel.updateOne({ _id, cart: { $elemMatch: { cartItem: data._id } } }, { $inc: { 'cart.$.qty': qty } });
 
             if (!!updateUserCart.modifiedCount) {
                return res.status(httpStatusCodes.OK).json({
@@ -102,6 +99,7 @@ const productAddToCart = catchAsync(async function (req, res, next) {
                });
             }
          } else {
+            // else insert the products into the user cart.
             userModel
                .updateOne(
                   { _id },
@@ -142,9 +140,7 @@ const getUserCartProducts = catchAsync(async function (req, res, next) {
    checkTokenIsExists(token, next);
 
    const { _id } = await tokenVarifyFunction(undefined, token);
-   const findUserCartItems = await userModel
-      .findOne({ _id })
-      .populate('cart.cartItem', { name: 1, price: 1, productImage: 1, salePrice: 1 });
+   const findUserCartItems = await userModel.findOne({ _id }).populate('cart.cartItem', { name: 1, price: 1, productImage: 1, salePrice: 1 });
    if (findUserCartItems) {
       return res.status(httpStatusCodes.OK).json({
          success: true,
@@ -224,11 +220,7 @@ const getUserWishListProducts = catchAsync(async function (req, res, next) {
    const { _id } = await tokenVarifyFunction(undefined, token);
 
    userModel
-      .aggregate([
-         { $match: { $expr: { $eq: ['$_id', { $toObjectId: _id }] } } },
-         { $unwind: '$wishLists' },
-         { $group: { _id: '$_id', wishLists: { $push: '$wishLists.ItemId' } } },
-      ])
+      .aggregate([{ $match: { $expr: { $eq: ['$_id', { $toObjectId: _id }] } } }, { $unwind: '$wishLists' }, { $group: { _id: '$_id', wishLists: { $push: '$wishLists.ItemId' } } }])
       .then((response) => {
          return res.status(httpStatusCodes.OK).json({
             success: true,
@@ -253,9 +245,11 @@ const subcsriptionHandler = catchAsync(async function (req, res, next) {
       next(new AppError('news letter email is requred!'));
    }
 
+   // varify the user token.
    checkTokenIsExists(token, next);
    const { _id } = await tokenVarifyFunction(undefined, token);
 
+   // first check the user alrady subscription the website or not.
    subscriptionModel.findOne({ email: email }).then((data) => {
       if (data) {
          return res.status(httpStatusCodes.OK).json({
@@ -266,10 +260,12 @@ const subcsriptionHandler = catchAsync(async function (req, res, next) {
          // subscription thank you page.
          const templatePath = path.join(__dirname, '..', 'views', 'templates', 'emailSubscription.ejs');
 
+         // send back the thank you template.
          ejs.renderFile(templatePath, { customerName: userName }, (err, data) => {
             if (err) {
                console.log(err);
             } else {
+               // mail information.
                const mail = nodemailer.createTransport({
                   service: 'gmail',
                   auth: {
@@ -319,6 +315,25 @@ const subcsriptionHandler = catchAsync(async function (req, res, next) {
    });
 });
 
+const getSingleProduct = catchAsync(async function (req, res, next) {
+   const { id } = req.params;
+   if (!id) {
+      next(new AppError('product id is required'));
+   }
+   const findProduct = await productModel.findOne({ _id: id }).populate('brand', { name: 1, brandIcon: 1 }).populate('category', { categoryImage: 1, name: 1 });
+   if (findProduct) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         product: findProduct,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'Internal server error',
+      });
+   }
+});
+
 module.exports = {
    getTrandingProducts,
    getSelectedPrevProduct,
@@ -328,4 +343,5 @@ module.exports = {
    addToWishListProducts,
    getUserWishListProducts,
    subcsriptionHandler,
+   getSingleProduct,
 };

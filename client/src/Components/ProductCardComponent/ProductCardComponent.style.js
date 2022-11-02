@@ -9,6 +9,12 @@ export const div = styled.div`
       height: 280px;
       position: relative;
       overflow: hidden;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+
+      &:hover {
+         box-shadow: 0 0 1px 1px var(--spec-error-background);
+      }
 
       .right_icons {
          position: absolute;
@@ -28,6 +34,7 @@ export const div = styled.div`
          cursor: pointer;
          transition: all 0.3s ease;
          margin-bottom: 0.5rem;
+         box-shadow: 0 0 10px 1px #e1e1e1;
 
          .hover_hidden_div {
             position: absolute;
@@ -84,7 +91,7 @@ export const div = styled.div`
          content: '';
          width: 100%;
          height: 100%;
-         background-color: var(--spec-themed-overlay);
+         /* background-color: var(--spec-themed-overlay); */
          position: absolute;
          z-index: 10;
       }
@@ -96,7 +103,7 @@ export const div = styled.div`
          height: 100%;
          width: 100%;
          object-fit: contain;
-         /* transform: scale(1.1); */
+         transform: scale(0.7);
       }
 
       .options_div {
@@ -176,26 +183,54 @@ export const div = styled.div`
       h5 {
          font-size: 15px;
          margin-bottom: 0.2rem;
+         transition: all 0.2s ease;
+         font-weight: 500;
+
+         &:hover {
+            color: var(--spec-brand-link-text);
+         }
       }
 
-      p {
-         font-size: 14px;
+      .flexContent {
+         display: flex;
+         align-items: flex-end;
 
+         p {
+            font-size: 24px;
+            display: flex;
+            margin: 0;
+
+            span {
+               margin-top: 0.4rem;
+               font-size: 12px;
+               color: var(--dark-cl);
+            }
+         }
          span {
-            margin-left: 1rem;
-            color: var(--spec-static-grey);
+            margin-left: 0.3rem;
+            margin-bottom: 0.3rem;
+            color: var(--spec-text-disabled);
          }
       }
    }
-   .off {
-      width: fit-content;
-      margin-left: 0.6rem;
-      transform: scale(0.9);
+
+   .sale {
+      background-color: var(--sale);
+      padding: 0.2rem 0.8rem;
+      border-radius: 3px;
+      position: absolute;
+      left: 10px;
+      top: 10px;
 
       p {
          margin: 0;
-         color: var(--spec-brand-link-text);
+         color: var(--main-cl);
       }
+   }
+
+   .off {
+      width: fit-content;
+      transform: scale(0.9);
    }
 
    .flexContent {

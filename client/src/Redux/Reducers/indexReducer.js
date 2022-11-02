@@ -18,6 +18,7 @@ const INITAL_STATE = {
    removeCartItemLoading: null,
    newsLetterMailInfo: null,
    newsLetterMailLoading: false,
+   singleProduct: null,
 };
 
 const shopReducer = function (state = INITAL_STATE, action) {
@@ -81,16 +82,10 @@ const shopReducer = function (state = INITAL_STATE, action) {
 
       case INDEX_ACTION_TYPE.ADD_TO_CART:
          const checkProductIsExistsInCart = function () {
-            const exist = state.cartItems.cartItems.find(
-               (el) => el.cartItem._id === action.payload.insertedProduct._id
-            );
+            const exist = state.cartItems.cartItems.find((el) => el.cartItem._id === action.payload.insertedProduct._id);
 
             if (exist) {
-               return state.cartItems.cartItems.map((el) =>
-                  el.cartItem._id === action.payload.insertedProduct._id
-                     ? { ...el, qty: el.qty + action.payload.insertProductQuntity }
-                     : el
-               );
+               return state.cartItems.cartItems.map((el) => (el.cartItem._id === action.payload.insertedProduct._id ? { ...el, qty: el.qty + action.payload.insertProductQuntity } : el));
             } else {
                return state.cartItems.cartItems.concat(
                   Object.assign({
@@ -192,6 +187,22 @@ const shopReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             newsLetterMailLoading: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.GET_SINGLE_PRODUCT:
+         return {
+            ...state,
+            singleProduct: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.QTY_PRICE_HANDLER:
+         console.log(action.payload);
+         return {
+            ...state,
+            cartItems: {
+               ...state.cartItems,
+               cartItems: state.cartItems.cartItems.map((el) => (el.cartItem._id === action.payload.productId ? { ...el, qty: el.qty + action.payload.qty } : el)),
+            },
          };
 
       default:

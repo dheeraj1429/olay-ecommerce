@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const div = styled.div`
    width: 100%;
@@ -11,6 +11,18 @@ export const div = styled.div`
 
    .margin-left {
       margin-left: 1rem;
+   }
+
+   .jodit-status-bar {
+      display: none !important;
+   }
+
+   .jodit .jodit-workplace .jodit-wysiwyg,
+   .jodit .jodit-workplace .jodit-wysiwyg_iframe,
+   .jodit-container .jodit-workplace .jodit-wysiwyg,
+   .jodit-container .jodit-workplace .jodit-wysiwyg_iframe {
+      min-height: 300px !important;
+      background-color: var(--main-cl);
    }
 `;
 

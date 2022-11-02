@@ -144,6 +144,12 @@ export const div = styled.div`
    .subscribe:hover {
       background-color: var(--dark-cl);
    }
+   .checkout {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: var(--timer-bg-cl);
+      color: var(--main-cl);
+   }
 `;
 
 export const button = styled.button`

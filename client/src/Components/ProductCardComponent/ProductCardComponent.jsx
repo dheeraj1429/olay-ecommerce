@@ -2,7 +2,6 @@ import React from 'react';
 import * as styled from './ProductCardComponent.style';
 import { AiOutlineShoppingCart } from '@react-icons/all-files/ai/AiOutlineShoppingCart';
 import { AiOutlineHeart } from '@react-icons/all-files/ai/AiOutlineHeart';
-import { BsArrowsAngleContract } from '@react-icons/all-files/bs/BsArrowsAngleContract';
 import backendConfigData from '../../backendConfig';
 import { FaEye } from '@react-icons/all-files/fa/FaEye';
 import { IoMdArrowDropright } from '@react-icons/all-files/io/IoMdArrowDropright';
@@ -11,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedPrevProduct, productAddToCart, addToWishList } from '../../Redux/Actions/indexActions';
 import { useNavigate } from 'react-router';
 import { AiFillHeart } from '@react-icons/all-files/ai/AiFillHeart';
+import { Link } from 'react-router-dom';
 
 function ProductCardComponent({ data }) {
    const navigation = useNavigate();
@@ -51,6 +51,11 @@ function ProductCardComponent({ data }) {
    return (
       <styled.div>
          <div className="img_Prv_div">
+            <div className="sale">
+               <div className="off">
+                  <p>-{(((data.price - data.salePrice) / data.price) * 100).toFixed(2)}%</p>
+               </div>
+            </div>
             <div className="right_icons">
                <div className="icons_div" onClick={() => wishListHander(data._id)}>
                   <div className="hover_hidden_div">
@@ -65,13 +70,6 @@ function ProductCardComponent({ data }) {
                      }
                   })()}
                </div>
-               <div className="icons_div">
-                  <div className="hover_hidden_div">
-                     <IoMdArrowDropright />
-                     <p>Compare</p>
-                  </div>
-                  <BsArrowsAngleContract />
-               </div>
                <div className="icons_div" onClick={() => showHandler(data._id)}>
                   <div className="hover_hidden_div">
                      <IoMdArrowDropright />
@@ -79,28 +77,30 @@ function ProductCardComponent({ data }) {
                   </div>
                   <FaEye />
                </div>
-               <div className="icons_div" onClick={() => AddToCartHandler(data._id, data.productImage)}>
-                  <div className="hover_hidden_div">
-                     <IoMdArrowDropright />
-                     <p>Add to cart</p>
+               {data?.stockStatus === 'Out of stock' ? null : (
+                  <div className="icons_div" onClick={() => AddToCartHandler(data._id, data.productImage)}>
+                     <div className="hover_hidden_div">
+                        <IoMdArrowDropright />
+                        <p>Add to cart</p>
+                     </div>
+                     <AiOutlineShoppingCart />
                   </div>
-                  <AiOutlineShoppingCart />
-               </div>
+               )}
             </div>
-            <img crossorigin="anonymous" src={`${backendConfigData.URL}/productImages/${data.productImage}`} />
+            <img crossOrigin="anonymous" src={`${backendConfigData.URL}/productImages/${data.productImage}`} />
          </div>
          <div className="content_div">
-            <h5>{data.name.slice(0, 35)}</h5>
+            <Link to={`/products/${data.name.split(' ').join('-')}/${data._id}`}>
+               <h5>{data.name.length > 100 ? `${data.name.slice(0, 120)}...` : data.name}</h5>
+            </Link>
             <div className="flexContent">
                <p>
-                  ${data.salePrice}
-                  <span>
-                     <strike>${data.price}</strike>
-                  </span>
+                  <span>$</span>
+                  {data.salePrice}
                </p>
-               <div className="off">
-                  <p>-{(((data.price - data.salePrice) / data.price) * 100).toFixed(2)}%</p>
-               </div>
+               <span>
+                  <strike>${data.price}</strike>
+               </span>
             </div>
          </div>
       </styled.div>

@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { removeAllSelctedIds, selectedBrandProduct } from '../../Redux/Actions/adminAppAction';
 import { Link } from 'react-router-dom';
 import * as globalClass from '../../Global.style';
+import Badge from '@mui/material/Badge';
 
 function ProductBrandsTableInnerComponent({ AllBrands, change }) {
    const dispatch = useDispatch();
@@ -55,16 +56,20 @@ function ProductBrandsTableInnerComponent({ AllBrands, change }) {
                   </table.btnDiv>
                </td>
                <td>
-                  <div className="icon">
-                     {!!el.brandIcon ? (
-                        <img
-                           crossorigin="anonymous"
-                           src={!!el.brandIcon ? `${backendConfigData.URL}brandImagesCompress/${el.brandIcon}` : null}
-                        />
-                     ) : (
-                        <div className="brand"></div>
-                     )}
-                  </div>
+                  <Badge badgeContent={el?.products.length ? el?.products.length : 0} color="primary">
+                     <div className="icon">
+                        {!!el.brandIcon ? (
+                           <img
+                              crossorigin="anonymous"
+                              src={
+                                 !!el.brandIcon ? `${backendConfigData.URL}brandImagesCompress/${el.brandIcon}` : null
+                              }
+                           />
+                        ) : (
+                           <div className="brand"></div>
+                        )}
+                     </div>
+                  </Badge>
                </td>
                <td>{el.name}</td>
                <td>{el.description.slice(0, 100)}</td>

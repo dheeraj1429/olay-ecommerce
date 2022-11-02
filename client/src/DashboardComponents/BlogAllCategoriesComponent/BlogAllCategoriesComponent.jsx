@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selecteSingleBlogPostsCategorie } from '../../Redux/Actions/adminAppAction';
 import { removeSelectedBlogCategorie } from '../../Redux/Actions/adminAction';
 import { Popconfirm } from 'antd';
+import Badge from '@mui/material/Badge';
 
 function BlogAllCategoriesComponent() {
    const [Active, setActive] = useState('');
@@ -33,7 +34,9 @@ function BlogAllCategoriesComponent() {
                   key={el._id}
                >
                   <VscFolderOpened onClick={() => dispatch(selecteSingleBlogPostsCategorie(el))} />
-                  <p>{el.name}</p>
+                  <Badge badgeContent={el?.blogs && el?.blogs.length ? el?.blogs.length : 0} color="primary">
+                     <p>{el.name}</p>
+                  </Badge>
                   <Popconfirm
                      title="Are you sure to delete this categorie?"
                      onConfirm={() => confirm(el._id)}

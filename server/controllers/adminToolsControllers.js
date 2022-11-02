@@ -50,6 +50,8 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
          'length',
          'wide',
          'height',
+         'productType',
+         'metaContent',
          'productImage',
          'suggestedAge',
          'brand.name',
@@ -436,6 +438,8 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
                productImage: csvToJsonData[i].productImage,
                suggestedAge: csvToJsonData[i].suggestedAge,
                productStatusInfo: !!csvToJsonData[i].productStatusInfo ? csvToJsonData[i].productStatusInfo : 'Draft',
+               productType: csvToJsonData[i].productType,
+               metaContent: csvToJsonData[i].metaContent,
             };
 
             if (csvToJsonData[i].brand.name) {

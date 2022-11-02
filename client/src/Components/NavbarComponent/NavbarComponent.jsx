@@ -12,6 +12,7 @@ import Badge from '@mui/material/Badge';
 import CardSidebarComponent from '../CardSidebarComponent/CardSidebarComponent';
 import { useDispatch } from 'react-redux';
 import { showAndHideCartSideBar } from '../../Redux/Actions/indexAppAction';
+import { useNavigate } from 'react-router-dom';
 
 const navigationRow = [
    { name: 'Home', link: '/' },
@@ -25,6 +26,8 @@ function NavbarComponent() {
    const dispatch = useDispatch();
    const { auth } = useSelector((state) => state.auth);
    const { cartItems } = useSelector((state) => state.index);
+
+   const navigation = useNavigate();
 
    const showCartSideBarHandler = function () {
       dispatch(showAndHideCartSideBar(true));
@@ -62,11 +65,8 @@ function NavbarComponent() {
                      <p>Search</p>
                   </div>
                   <div className="flex_div ms-1">
-                     <Badge
-                        badgeContent={!!cartItems && cartItems.cartItems.length ? cartItems.cartItems.length : 0}
-                        color="primary"
-                     >
-                        <AiOutlineShoppingCart />
+                     <Badge badgeContent={!!cartItems && cartItems.cartItems.length ? cartItems.cartItems.length : 0} color="primary">
+                        <AiOutlineShoppingCart onClick={() => navigation('/cart')} />
                      </Badge>
                      <p>Cart</p>
                   </div>

@@ -7,43 +7,26 @@ import { VscClose } from '@react-icons/all-files/vsc/VscClose';
 import { prevSelectedProduct, productPrev } from '../../Redux/Actions/indexAppAction';
 import { useDispatch, useSelector } from 'react-redux';
 import backendConfigData from '../../backendConfig';
-import { AiOutlinePlus } from '@react-icons/all-files/ai/AiOutlinePlus';
-import { AiOutlineMinus } from '@react-icons/all-files/ai/AiOutlineMinus';
 import { productAddToCart } from '../../Redux/Actions/indexActions';
 import { addToCartLoadingHandler } from '../../Redux/Actions/indexAppAction';
 import { useNavigate } from 'react-router';
+import ProductIncComponent from '../../HelperComponents/ProductIncComponent/ProductIncComponent';
 
 function ProductViewComponent({ show }) {
-   const [ProductQty, setProductQty] = useState(1);
-
+   const [Qty, setQty] = useState(1);
    const navigation = useNavigate();
    const dispatch = useDispatch();
+
    const { selectedPrevProduct, selectedPrevProductLoading, addToCartLoading } = useSelector((state) => state.index);
    const { auth } = useSelector((state) => state.auth);
 
    const hideHandler = function () {
       dispatch(productPrev(false));
       dispatch(prevSelectedProduct());
-      setProductQty(1);
    };
 
-   const QuntityPlusHandler = function () {
-      setProductQty((prev) => {
-         if (prev < 0) {
-            return 1;
-         } else {
-            return prev + 1;
-         }
-      });
-   };
-   const QuntityMinusHandler = function () {
-      setProductQty((prev) => {
-         if (prev <= 1) {
-            return 1;
-         } else {
-            return prev - 1;
-         }
-      });
+   const getStateValue = function (value) {
+      setQty(value);
    };
 
    const CartHandler = function (productId, img) {
@@ -52,7 +35,7 @@ function ProductViewComponent({ show }) {
          const data = {
             productId,
             token,
-            qty: ProductQty,
+            qty: Qty,
          };
          dispatch(addToCartLoadingHandler(true));
          dispatch(productAddToCart(data, img));
@@ -76,11 +59,7 @@ function ProductViewComponent({ show }) {
                <styled.flexDiv>
                   <div className="image_prv_div">
                      <div className="product_big_image">
-                        <img
-                           crossOrigin="anonymous"
-                           src={`${backendConfigData.URL}productImages/${selectedPrevProduct?.product?.productImage}`}
-                           alt=""
-                        />
+                        <img crossOrigin="anonymous" src={`${backendConfigData.URL}productImages/${selectedPrevProduct?.product?.productImage}`} alt="" />
                      </div>
                   </div>
 
@@ -96,16 +75,10 @@ function ProductViewComponent({ show }) {
                               <div className="brandIconDiv">
                                  {selectedPrevProduct?.product?.brand.website ? (
                                     <a href={`${selectedPrevProduct?.product?.brand.website}`}>
-                                       <img
-                                          src={`${backendConfigData.URL}/brandImagesCompress/${selectedPrevProduct?.product?.brand?.brandIcon}`}
-                                          crossorigin="anonymous"
-                                       />
+                                       <img src={`${backendConfigData.URL}/brandImagesCompress/${selectedPrevProduct?.product?.brand?.brandIcon}`} crossorigin="anonymous" />
                                     </a>
                                  ) : (
-                                    <img
-                                       src={`${backendConfigData.URL}/brandImagesCompress/${selectedPrevProduct?.product?.brand?.brandIcon}`}
-                                       crossorigin="anonymous"
-                                    />
+                                    <img src={`${backendConfigData.URL}/brandImagesCompress/${selectedPrevProduct?.product?.brand?.brandIcon}`} crossorigin="anonymous" />
                                  )}
                               </div>
                            ) : null}
@@ -122,29 +95,23 @@ function ProductViewComponent({ show }) {
                      <hr />
                      <div className="price_div">
                         {selectedPrevProduct?.product?.salePrice ? (
-                           <p>${selectedPrevProduct?.product?.salePrice}</p>
-                        ) : null}
-                        <strike>${selectedPrevProduct?.product?.price}</strike>
+                           <>
+                              <p>${selectedPrevProduct?.product?.salePrice}</p>
+                              <strike>${selectedPrevProduct?.product?.price}</strike>
+                           </>
+                        ) : (
+                           <p>${selectedPrevProduct?.product?.price}</p>
+                        )}
                         {selectedPrevProduct?.product?.salePrice ? (
                            <>
-                              <span>
-                                 ( -
-                                 {(
-                                    ((selectedPrevProduct?.product.price - selectedPrevProduct?.product.salePrice) /
-                                       selectedPrevProduct?.product.price) *
-                                    100
-                                 ).toFixed(2)}
-                                 % )
-                              </span>
+                              <span>( -{(((selectedPrevProduct?.product.price - selectedPrevProduct?.product.salePrice) / selectedPrevProduct?.product.price) * 100).toFixed(2)}% )</span>
                            </>
                         ) : null}
                      </div>
                      {!!selectedPrevProduct?.product.stockStatus ? (
                         <div className="stock">
                            <h5>Status :</h5>
-                           <div className={selectedPrevProduct?.product.stockStatus.toLowerCase().split(' ').join('-')}>
-                              {selectedPrevProduct?.product.stockStatus}
-                           </div>
+                           <div className={selectedPrevProduct?.product.stockStatus.toLowerCase().split(' ').join('-')}>{selectedPrevProduct?.product.stockStatus}</div>
                         </div>
                      ) : null}
 
@@ -173,30 +140,17 @@ function ProductViewComponent({ show }) {
                      <div className="quntityGrDiv">
                         <span>Quantity</span>
                         <styled.flexDiv className="quntity_group">
-                           <div className="quntityDiv">
-                              <div className="qtyBtn" onClick={QuntityMinusHandler}>
-                                 <AiOutlineMinus />
-                              </div>
-                              <div>
-                                 <p>{ProductQty}</p>
-                              </div>
-                              <div className="qtyBtn" onClick={QuntityPlusHandler}>
-                                 <AiOutlinePlus />
-                              </div>
-                           </div>
+                           <ProductIncComponent getValue={getStateValue} />
 
-                           {addToCartLoading ? (
+                           {!!selectedPrevProduct?.product && selectedPrevProduct?.product.stockStatus === 'Out of stock' ? (
+                              <CustombuttonComponent innerText={'Out of stock'} btnCl={'Delete_btn mt-0'} />
+                           ) : addToCartLoading ? (
                               <CustombuttonComponent btnCl={'addToCart_2'}>
                                  <SpnnerComponent />
                               </CustombuttonComponent>
                            ) : (
                               <CustombuttonComponent
-                                 onClick={() =>
-                                    CartHandler(
-                                       selectedPrevProduct?.product._id,
-                                       selectedPrevProduct?.product?.productImage
-                                    )
-                                 }
+                                 onClick={() => CartHandler(selectedPrevProduct?.product._id, selectedPrevProduct?.product?.productImage)}
                                  innerText={'ADD TO CART'}
                                  btnCl={'addToCart'}
                               />

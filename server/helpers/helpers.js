@@ -56,7 +56,7 @@ const fetchLimitDocument = async function (
    if (collection === productModel) {
       documents = await collection.countDocuments({});
       findData = await collection
-         .find({}, item ? item : null)
+         .find({}, item ? item : {})
          .populate('brand')
          .populate('category')
          .limit(DOCUMENT_LIMIT)
@@ -64,7 +64,7 @@ const fetchLimitDocument = async function (
    } else {
       documents = await collection.countDocuments({});
       findData = await collection
-         .find({}, item ? item : null)
+         .find({}, item ? item : {})
          .limit(DOCUMENT_LIMIT)
          .skip(page * DOCUMENT_LIMIT);
    }

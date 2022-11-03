@@ -150,6 +150,12 @@ export const div = styled.div`
       background-color: var(--timer-bg-cl);
       color: var(--main-cl);
    }
+   .shipping_button {
+      padding: 0.7rem 1.5rem;
+      color: var(--main-cl);
+      background-color: var(--spec-call-to-action-inverse);
+      border-radius: 5px;
+   }
 `;
 
 export const button = styled.button`

@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import * as styled from './ProductIncComponent.style';
 
-function ProductIncComponent({ getValue, qtyValue = 1 }) {
-   const [ProductQty, setProductQty] = useState(qtyValue);
+function ProductIncComponent({ getValue, qtyValue }) {
+   const [ProductQty, setProductQty] = useState(1);
 
    const QuntityPlusHandler = function () {
       setProductQty((prev) => {
@@ -29,6 +29,10 @@ function ProductIncComponent({ getValue, qtyValue = 1 }) {
    useEffect(() => {
       getValue(ProductQty);
    }, [ProductQty]);
+
+   useEffect(() => {
+      setProductQty(qtyValue);
+   }, [qtyValue]);
 
    return (
       <styled.div>

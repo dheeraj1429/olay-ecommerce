@@ -140,7 +140,7 @@ function ProductViewComponent({ show }) {
                      <div className="quntityGrDiv">
                         <span>Quantity</span>
                         <styled.flexDiv className="quntity_group">
-                           <ProductIncComponent getValue={getStateValue} />
+                           <ProductIncComponent qtyValue={1} getValue={getStateValue} />
 
                            {!!selectedPrevProduct?.product && selectedPrevProduct?.product.stockStatus === 'Out of stock' ? (
                               <CustombuttonComponent innerText={'Out of stock'} btnCl={'Delete_btn mt-0'} />

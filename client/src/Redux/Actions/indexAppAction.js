@@ -69,3 +69,10 @@ export const qtyPricHandler = function (data) {
       payload: data,
    };
 };
+
+export const shippingInformationLoading = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.STORE_USER_SHIPPING_INFORMATION_LOADING,
+      payload: data,
+   };
+};

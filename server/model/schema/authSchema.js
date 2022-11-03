@@ -21,14 +21,49 @@ const userSchema = new mongoose.Schema({
    ],
    cart: [{ cartItem: { type: mongoose.Types.ObjectId, ref: 'product' }, qty: { type: Number } }],
    wishLists: [{ ItemId: { type: mongoose.Types.ObjectId, ref: 'product' } }],
+   ShippingInfo: [
+      {
+         userEmail: { type: String },
+         country: { type: String, required: [true, 'country name is required'] },
+         name: { type: String },
+         lastName: { type: String },
+         address: { type: String, required: [true, 'user address is required'] },
+         Apt: { type: String },
+         subUrb: { type: String },
+         state: { type: String, reuqired: [true, 'state names is required'] },
+         pinCode: { type: Number, required: [true, 'pin code is required'] },
+         emailOffers: { type: Boolean, default: false },
+         saveInformation: { type: Boolean, default: false },
+      },
+   ],
+   orders: [
+      {
+         productId: { type: mongoose.Types.ObjectId, ref: 'product' },
+         qty: { type: Number, default: 1 },
+         paymentMethod: { type: String, required: [true, 'payment method is required'] },
+         process: { type: String, default: 'Pending' },
+         createdAt: { type: Date, default: Date.now },
+         currentOrderCoordinates: {
+            location: {
+               type: {
+                  enum: ['Point'],
+                  required: true,
+               },
+               coordinates: {
+                  type: [Number],
+                  required: true,
+               },
+            },
+         },
+      },
+   ],
 });
+
+userSchema.index({ 'ShippingInfo.country': 1, 'ShippingInfo.address': 1, 'ShippingInfo.state': 1 });
 
 userSchema.methods.genrateUserToken = async function () {
    try {
-      const token = await jwt.sign(
-         { _id: this.id.toString(), name: this.name, email: this.email, isAdmin: this.isAdmin },
-         JWT_TOKEN
-      );
+      const token = await jwt.sign({ _id: this.id.toString(), name: this.name, email: this.email, isAdmin: this.isAdmin }, JWT_TOKEN);
       this.tokens = this.tokens.concat({ token });
       this.save();
       return token;

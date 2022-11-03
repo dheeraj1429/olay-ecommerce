@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setLoginUser } from './Redux/Actions/authAppAction';
 import { getTrandingProducts, getUserCartProducts, getUserWishListProducts } from './Redux/Actions/indexActions';
 import { trandingProductsLoading } from './Redux/Actions/indexAppAction';
+import { getShopInfromation } from './Redux/Actions/adminAction';
 
 // site pages
 import HomePage from './Pages/HomePage/HomePage';
@@ -54,6 +55,9 @@ const BlogCategoriesComponent = lazy(() => import('./DashboardComponents/BlogCat
 const SignInAndLoginComponent = lazy(() => import('./Components/SignInAndLoginComponent/SignInAndLoginComponent'));
 const SingleProductPage = lazy(() => import('./Pages/SingleProductPage/SingleProductPage'));
 const CartPage = lazy(() => import('./Pages/CartPage/CartPage'));
+const CheckOutPage = lazy(() => import('./Pages/CheckOutPage/CheckOutPage'));
+const CartContactInfromation = lazy(() => import('./Components/CartContactInfromation/CartContactInfromation'));
+const ShippingMethodComponent = lazy(() => import('./Components/ShippingMethodComponent/ShippingMethodComponent'));
 
 // dashboard pages
 const Dashboard = lazy(() => import('./DashboardPages/Dashboard/Dashboard'));
@@ -67,6 +71,7 @@ function App() {
    useEffect(() => {
       dispatch(getTrandingProducts());
       dispatch(trandingProductsLoading(true));
+      dispatch(getShopInfromation());
 
       if (cookie && cookie.user) {
          dispatch(getUserCartProducts(cookie.user.token));
@@ -82,6 +87,10 @@ function App() {
                <Route path="" element={<HomePage />} />
                <Route path="/products/:productName/:id" element={<SingleProductPage />} />
                <Route path="/cart" element={<CartPage />} />
+               <Route path="/checkout" element={<CheckOutPage />}>
+                  <Route path="" element={<CartContactInfromation />} />
+                  <Route path="shipping-methods" element={<ShippingMethodComponent />} />
+               </Route>
                <Route path="auth" element={<SignInAndLoginPage />}>
                   <Route path="signin" element={<SignInAndLoginComponent />} />
                   <Route path="login" element={<SignInAndLoginComponent />} />

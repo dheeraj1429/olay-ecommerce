@@ -334,6 +334,96 @@ const getSingleProduct = catchAsync(async function (req, res, next) {
    }
 });
 
+const getRandomProducts = catchAsync(async function (req, res, next) {
+   const products = await productModel.aggregate([{ $sample: { size: 10 } }]);
+
+   if (products) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         product: products,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'Internal server error',
+      });
+   }
+});
+
+const storeUserShippingInformation = catchAsync(async function (req, res, next) {
+   const { token } = req.params;
+
+   if (!token) {
+      next(new AppError('user token is required'));
+   }
+
+   // grab required fields from the request
+   const { country, address, state, pinCode } = req.body;
+
+   // if some required fields is missing then send back the error response.
+   if (!!country && address && state && pinCode) {
+      // clone the req object values into the new object.
+      const insertObject = Object.assign(req.body);
+
+      // find the user which user is fill the shipping information.
+      const { _id } = await tokenVarifyFunction(undefined, token);
+
+      // check address is already in a database or not.
+      const findAddress = await userModel.findOne({ 'ShippingInfo.country': country, 'ShippingInfo.address': address, 'ShippingInfo.state': state });
+
+      if (findAddress) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: 'user shipping information already saved',
+         });
+      } else {
+         // insert data inside the user document.
+         const insertShippingInfo = await userModel.updateOne({ _id }, { $push: { ShippingInfo: insertObject } });
+
+         if (insertShippingInfo) {
+            return res.status(httpStatusCodes.OK).json({
+               success: true,
+               message: 'user shipping information saved',
+            });
+         } else {
+            return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+               success: false,
+               message: 'internal server error',
+            });
+         }
+      }
+   } else {
+      return res.status(httpStatusCodes.OK).json({
+         success: false,
+         message: 'fill all required fields!',
+      });
+   }
+});
+
+const getLoginUserDeatils = catchAsync(async function (req, res, next) {
+   const { token } = req.params;
+   if (!token) {
+      next(new AppError('user token is required'));
+   }
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   const findUser = await userModel.findOne({ _id }, { ShippingInfo: 1, userContactEmail: 1 });
+   if (findUser) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         user: findUser,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'internal server error',
+      });
+   }
+});
+
+const userOrderPlace = catchAsync(async function (req, res, next) {
+   console.log(req.body);
+});
+
 module.exports = {
    getTrandingProducts,
    getSelectedPrevProduct,
@@ -344,4 +434,8 @@ module.exports = {
    getUserWishListProducts,
    subcsriptionHandler,
    getSingleProduct,
+   getRandomProducts,
+   storeUserShippingInformation,
+   getLoginUserDeatils,
+   userOrderPlace,
 };

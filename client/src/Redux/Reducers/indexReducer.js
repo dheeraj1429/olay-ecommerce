@@ -19,6 +19,12 @@ const INITAL_STATE = {
    newsLetterMailInfo: null,
    newsLetterMailLoading: false,
    singleProduct: null,
+   randomProducts: null,
+   shippingInfo: null,
+   shippingInsertInfoLoading: false,
+   userInformation: null,
+   placeOrder: null,
+   placeOrderLoading: false,
 };
 
 const shopReducer = function (state = INITAL_STATE, action) {
@@ -196,13 +202,37 @@ const shopReducer = function (state = INITAL_STATE, action) {
          };
 
       case INDEX_ACTION_TYPE.QTY_PRICE_HANDLER:
-         console.log(action.payload);
          return {
             ...state,
             cartItems: {
                ...state.cartItems,
-               cartItems: state.cartItems.cartItems.map((el) => (el.cartItem._id === action.payload.productId ? { ...el, qty: el.qty + action.payload.qty } : el)),
+               cartItems: state.cartItems.cartItems.map((el) => (el.cartItem._id === action.payload.productId ? { ...el, qty: action.payload.qty } : el)),
             },
+         };
+
+      case INDEX_ACTION_TYPE.GET_RANDOM_PRODUCTS:
+         return {
+            ...state,
+            randomProducts: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.STORE_USER_SHIPPING_INFORMATION:
+         return {
+            ...state,
+            shippingInfo: action.payload,
+            shippingInsertInfoLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.STORE_USER_SHIPPING_INFORMATION_LOADING:
+         return {
+            ...state,
+            shippingInsertInfoLoading: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.GET_USER_INFORMATION:
+         return {
+            ...state,
+            userInformation: action.payload,
          };
 
       default:

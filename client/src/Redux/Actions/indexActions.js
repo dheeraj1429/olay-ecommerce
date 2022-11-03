@@ -165,3 +165,64 @@ export const getSingleProduct = function (id) {
       }
    };
 };
+
+export const getRandomProducts = function () {
+   return async function (dispatch) {
+      try {
+         const response = await axios.get('/index/get-random-products', headers);
+
+         if (response && response?.data) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_RANDOM_PRODUCTS,
+               payload: response && response?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const storeUserShippingInformation = function (data, token) {
+   return async function (dispatch) {
+      try {
+         const shippingResponse = await axios.post(`/index/user-shipping-infomation/${token}`, data, headers);
+
+         if (shippingResponse && shippingResponse?.data) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.STORE_USER_SHIPPING_INFORMATION,
+               payload: shippingResponse && shippingResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getLoginUserDeatils = function (token) {
+   return async function (dispatch) {
+      try {
+         const userResponse = await axios.get(`/index/get-login-user/${token}`, headers);
+         if (userResponse && userResponse?.data) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_USER_INFORMATION,
+               payload: userResponse && userResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const userOrderPlace = function (data) {
+   return async function (dispatch) {
+      try {
+         const orderResponse = await axios.post('/index/place-user-order', data, headers);
+         console.log(orderResponse);
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

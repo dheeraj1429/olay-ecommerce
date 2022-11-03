@@ -13,11 +13,13 @@ import { useNavigate } from 'react-router';
 
 function CardSidebarComponent() {
    const [CartPrice, setCartPrice] = useState(0);
+
    const dispatch = useDispatch();
+   const navigation = useNavigate();
+
    const { showCardSideBar, cartItems, removeCartItemLoading } = useSelector((state) => state.index);
    const { auth } = useSelector((state) => state.auth);
-
-   const navigation = useNavigate();
+   const { shopInformation } = useSelector((state) => state.admin);
 
    const CloseHandler = function () {
       dispatch(showAndHideCartSideBar(false));
@@ -66,7 +68,10 @@ function CardSidebarComponent() {
                         <div className="content">
                            <p>{el.cartItem.name.slice(0, 60)}</p>
                            <span>qty: {el.qty}</span>
-                           <p>Price: ${el.cartItem?.salePrice ? el.cartItem.salePrice.toFixed(2) : el.cartItem.price.toFixed(2)}</p>
+                           <p>
+                              Price: {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+                              {el.cartItem?.salePrice ? el.cartItem.salePrice.toFixed(2) : el.cartItem.price.toFixed(2)}
+                           </p>
                         </div>
                      </div>
                   ))
@@ -78,7 +83,10 @@ function CardSidebarComponent() {
             <div className="cart_options_div">
                <div className="flex">
                   <h5>Subtotal</h5>
-                  <p>${CartPrice}</p>
+                  <p>
+                     {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+                     {CartPrice}
+                  </p>
                </div>
 
                <div>

@@ -3,6 +3,7 @@ import * as styled from './ProductCartPayComponent.style';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import CartItemsComponent from '../CartItemsComponent/CartItemsComponent';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 const row = [
    { value: 'Image', label: 'Product Image' },
@@ -14,7 +15,11 @@ const row = [
 
 function ProductCartPayComponent() {
    const [CartPrice, setCartPrice] = useState(0);
+
    const { cartItems } = useSelector((state) => state.index);
+   const { shopInformation } = useSelector((state) => state.admin);
+
+   const navigator = useNavigate();
 
    useEffect(() => {
       if (!!cartItems && cartItems.cartItems.length) {
@@ -48,12 +53,15 @@ function ProductCartPayComponent() {
                   <div className="coupon_form_div">
                      <div className="d-flex align-items-center justify-content-between">
                         <h5>Subtotal</h5>
-                        <p>${CartPrice}</p>
+                        <p>
+                           {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+                           {CartPrice}
+                        </p>
                      </div>
                      <hr />
                      <input type="text" placeholder="Coupon code" />
 
-                     <CustombuttonComponent innerText={'Proceed to checkout'} btnCl={'checkout mt-4'} />
+                     <CustombuttonComponent innerText={'Proceed to checkout'} onClick={() => navigator('/checkout')} btnCl={'checkout mt-4'} />
                   </div>
                </div>
             </>

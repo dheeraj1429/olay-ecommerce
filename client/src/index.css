@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
 
 * {
    margin: 0;
@@ -188,4 +189,28 @@ a {
    .side_padding_one {
       padding: 0 200px;
    }
+}
+
+.input_div {
+   width: 100%;
+}
+.input_div input {
+   width: 100%;
+   height: 46px;
+   padding: 1rem;
+   border-radius: 5px;
+   border: 1px solid var(--spec-text-disabled);
+}
+
+.input_div select {
+   width: 100%;
+   padding: 0.8rem;
+   border-radius: 5px;
+   border: 1px solid var(--spec-text-disabled);
+   background-color: transparent;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   -ms-appearance: none;
+   -o-appearance: none;
+   appearance: none;
 }

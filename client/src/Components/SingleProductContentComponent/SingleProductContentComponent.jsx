@@ -18,6 +18,7 @@ function SingleProductContentComponent() {
 
    const { singleProduct, addToCartLoading, wishListItemAr } = useSelector((state) => state.index);
    const { auth } = useSelector((state) => state.auth);
+   const { shopInformation } = useSelector((state) => state.admin);
 
    const getStateValue = function (value) {
       setQty(value);
@@ -58,10 +59,26 @@ function SingleProductContentComponent() {
                   <h1>{singleProduct.product.name}</h1>
                   <div className="d-flex align-items-center">
                      <div className="choise_tag_div mt-2 mb-2">Best Choice</div>
-                     {singleProduct.product?.stockStatus ? <div className="ms-2 text-red">Out of stock</div> : null}
+                     {singleProduct.product?.stockStatus && singleProduct.product.stockStatus === 'Out of stock' ? <div className="ms-2 text-red">Out of stock</div> : null}
                   </div>
-                  <p className="price border-bottom pb-1">
-                     Price : <span>${!!singleProduct.product?.salePrice && singleProduct.product?.salePrice ? singleProduct.product.salePrice : singleProduct.product?.price}</span>
+                  <p className="price border-bottom pb-1 d-flex">
+                     <p className="me-1 mb-0">Price :</p>
+                     <span className="d-flex align-items-end">
+                        {!!singleProduct.product?.salePrice && singleProduct.product?.salePrice ? (
+                           <>
+                              <p className="mb-0">
+                                 {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+                                 {singleProduct.product.salePrice}
+                              </p>
+                              <strike className="salePrice ms-2">
+                                 {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+                                 {singleProduct.product.price}
+                              </strike>
+                           </>
+                        ) : (
+                           singleProduct.product?.price
+                        )}
+                     </span>
                   </p>
                   <div className="product_details_div mt-2">
                      <h5>Product details</h5>
@@ -109,7 +126,7 @@ function SingleProductContentComponent() {
                   <div className="quntityGrDiv mt-4">
                      <span className="mb-1">Quantity</span>
                      <styeld.flexDiv className="quntity_group">
-                        <ProductIncComponent getValue={getStateValue} />
+                        <ProductIncComponent qtyValue={1} getValue={getStateValue} />
 
                         {!!singleProduct?.product && singleProduct?.product.stockStatus === 'Out of stock' ? (
                            <CustombuttonComponent innerText={'Out of stock'} btnCl={'Delete_btn mt-0'} />

@@ -18,6 +18,7 @@ function ProductCardComponent({ data }) {
 
    const { auth } = useSelector((state) => state.auth);
    const { wishListItemAr } = useSelector((state) => state.index);
+   const { shopInformation } = useSelector((state) => state.admin);
 
    const showHandler = function (id) {
       dispatch(productPrev(true));
@@ -51,11 +52,14 @@ function ProductCardComponent({ data }) {
    return (
       <styled.div>
          <div className="img_Prv_div">
-            <div className="sale">
-               <div className="off">
-                  <p>-{(((data.price - data.salePrice) / data.price) * 100).toFixed(2)}%</p>
+            {data?.salePrice && !!data.salePrice ? (
+               <div className="sale">
+                  <div className="off">
+                     <p>-{(((data.price - data.salePrice) / data.price) * 100).toFixed(2)}%</p>
+                  </div>
                </div>
-            </div>
+            ) : null}
+
             <div className="right_icons">
                <div className="icons_div" onClick={() => wishListHander(data._id)}>
                   <div className="hover_hidden_div">
@@ -94,13 +98,22 @@ function ProductCardComponent({ data }) {
                <h5>{data.name.length > 100 ? `${data.name.slice(0, 120)}...` : data.name}</h5>
             </Link>
             <div className="flexContent">
-               <p>
-                  <span>$</span>
-                  {data.salePrice}
-               </p>
-               <span>
-                  <strike>${data.price}</strike>
-               </span>
+               {data?.salePrice && !!data.salePrice ? (
+                  <>
+                     <p>
+                        <span>{!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}</span>
+                        {data.salePrice}
+                     </p>
+                     <span>
+                        <strike>${data.price}</strike>
+                     </span>
+                  </>
+               ) : (
+                  <p>
+                     <span>{!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}</span>
+                     {data.price}
+                  </p>
+               )}
             </div>
          </div>
       </styled.div>

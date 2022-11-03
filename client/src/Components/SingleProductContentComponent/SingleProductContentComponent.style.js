@@ -11,6 +11,11 @@ export const div = styled.div`
       }
    }
 
+   .salePrice {
+      font-size: 13px;
+      color: var(--spec-text-disabled);
+   }
+
    .text-red {
       color: var(--spec-static-brand-red);
    }

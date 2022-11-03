@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductIncComponent from '../../HelperComponents/ProductIncComponent/ProductIncComponent';
 import { VscClose } from '@react-icons/all-files/vsc/VscClose';
 import backendConfigData from '../../backendConfig';
@@ -7,10 +7,11 @@ import { removeCartItemLoadingHandler, qtyPricHandler } from '../../Redux/Action
 import { useSelector, useDispatch } from 'react-redux';
 
 function CartItemsComponent({ data }) {
-   const [Qty, setQty] = useState(data?.qty ? data.qty : 1);
+   const [Qty, setQty] = useState(1);
 
    const dispatch = useDispatch();
    const { auth } = useSelector((state) => state.auth);
+   const { shopInformation } = useSelector((state) => state.admin);
 
    const getStateValue = function (value) {
       setQty(value);
@@ -25,6 +26,12 @@ function CartItemsComponent({ data }) {
       }
    };
 
+   useEffect(() => {
+      if (data?.qty) {
+         setQty(data.qty);
+      }
+   }, [data]);
+
    return (
       <tr>
          <td>
@@ -36,10 +43,13 @@ function CartItemsComponent({ data }) {
             <h5>{data.cartItem.name.length > 130 ? `${data.cartItem.name.slice(130)}...` : data.cartItem.name}</h5>
          </td>
          <td>
-            <ProductIncComponent getValue={getStateValue} qtyValue={data.qty} />
+            <ProductIncComponent getValue={getStateValue} qtyValue={Qty} />
          </td>
          <td>
-            <h4 className="mb-0">${data.cartItem?.salePrice ? (data.cartItem.salePrice * Qty).toFixed(2) : data.cartItem.price * Qty}</h4>
+            <h4 className="mb-0">
+               {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+               {data.cartItem?.salePrice ? (data.cartItem.salePrice * Qty).toFixed(2) : (data.cartItem.price * Qty).toFixed(2)}
+            </h4>
          </td>
          <td>
             <VscClose onClick={() => RemoveCartItems(data.cartItem._id)} />

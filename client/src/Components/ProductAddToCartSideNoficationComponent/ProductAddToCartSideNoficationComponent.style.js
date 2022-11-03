@@ -13,6 +13,7 @@ export const div = styled.div`
    align-items: center;
    border-radius: 8px;
    transition: all 0.3s ease;
+   z-index: 100;
 
    .imagePrev {
       width: 40px;

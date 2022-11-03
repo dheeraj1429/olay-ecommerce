@@ -1035,9 +1035,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.adminExportHistory,
                history: {
                   ...state.adminExportHistory.history,
-                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter(
-                     (el) => el._id !== action.payload
-                  ),
+                  exportsHistory: state.adminExportHistory.history.exportsHistory.filter((el) => el._id !== action.payload),
                },
             },
          };
@@ -1215,9 +1213,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                shopInformationStoreLoading: false,
                allShops: {
                   ...state.allShops,
-                  allShops: state.allShops.allShops.map((el) =>
-                     el._id === action.updatedData._id ? (el = action.updatedData) : el
-                  ),
+                  allShops: state.allShops.allShops.map((el) => (el._id === action.updatedData._id ? (el = action.updatedData) : el)),
                },
             };
          } else {
@@ -1381,10 +1377,7 @@ const adminReducer = function (state = INITAL_STATE, action) {
                ...state.blogCategories,
                categories: state.blogCategories.categories.filter((el) => el._id !== action.removeId),
             },
-            selectedBlogCategory:
-               !!state.selectedBlogCategory && state.selectedBlogCategory._id === action.removeId
-                  ? null
-                  : state.selectedBlogCategory,
+            selectedBlogCategory: !!state.selectedBlogCategory && state.selectedBlogCategory._id === action.removeId ? null : state.selectedBlogCategory,
          };
 
       default:

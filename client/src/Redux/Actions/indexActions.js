@@ -2,6 +2,7 @@ import { INDEX_ACTION_TYPE } from '../ActionTypes/indexActionType';
 import axios from 'axios';
 import { headers } from '../../headers';
 import backendConfigData from '../../backendConfig';
+import { AUTH_ACTION_TYPE } from '../ActionTypes/authActionType';
 
 axios.defaults.headers.common['x-api-key'] = backendConfigData.ACCESS_TOKEN;
 
@@ -216,11 +217,61 @@ export const getLoginUserDeatils = function (token) {
    };
 };
 
-export const userOrderPlace = function (data) {
+export const orderPlaceByCashOnDelivery = function (data) {
    return async function (dispatch) {
       try {
-         const orderResponse = await axios.post('/index/place-user-order', data, headers);
-         console.log(orderResponse);
+         const orderResponse = await axios.post('/index/place-user-cash-on-delivery', data, headers);
+         if (orderResponse && orderResponse?.data && orderResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.PLACE_USER_ORDER,
+               payload: orderResponse && orderResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getUserData = function (token) {
+   return async function (dispatch) {
+      try {
+         const userResponse = await axios.get(`/index/get-user-data/${token}`, headers);
+
+         if (userResponse && userResponse?.data && userResponse?.data?.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_USER_DATA,
+               payload: userResponse && userResponse?.data,
+            });
+         } else {
+            console.log(userResponse);
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const updateUserData = function (data) {
+   return async function (dispatch) {
+      try {
+         const userUpdateResponse = await axios.patch('/index/update-user-info', data, headers);
+
+         console.log(userUpdateResponse);
+
+         if (userUpdateResponse && userUpdateResponse?.data && userUpdateResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.UPDATE_USER_INFO,
+               payload: {
+                  success: userUpdateResponse && userUpdateResponse?.data?.success,
+                  message: userUpdateResponse && userUpdateResponse?.data?.message,
+               },
+            });
+            dispatch({
+               type: AUTH_ACTION_TYPE.AUTH_UPDATE_USER,
+               payload: userUpdateResponse && userUpdateResponse?.data && userUpdateResponse?.data?.user,
+            });
+         }
       } catch (err) {
          console.log(err);
       }

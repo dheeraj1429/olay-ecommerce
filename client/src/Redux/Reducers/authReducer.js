@@ -48,6 +48,15 @@ const authReducer = function (state = INITAL_STATE, action) {
             isLoading: action.payload,
          };
 
+      case AUTH_ACTION_TYPE.AUTH_UPDATE_USER:
+         return {
+            ...state,
+            auth: {
+               ...state.auth,
+               userObject: action.payload,
+            },
+         };
+
       default:
          return {
             ...state,

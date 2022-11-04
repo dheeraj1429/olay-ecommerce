@@ -32,6 +32,14 @@ function ProductCartPayComponent() {
       }
    }, [cartItems]);
 
+   const checkOutHandler = function () {
+      if (!!cartItems && cartItems.success && cartItems.cartItems.length) {
+         navigator('/checkout');
+      } else {
+         navigator('/');
+      }
+   };
+
    return (
       <styled.div className="d-flex mt-5">
          {!!cartItems && cartItems.success ? (
@@ -61,7 +69,7 @@ function ProductCartPayComponent() {
                      <hr />
                      <input type="text" placeholder="Coupon code" />
 
-                     <CustombuttonComponent innerText={'Proceed to checkout'} onClick={() => navigator('/checkout')} btnCl={'checkout mt-4'} />
+                     <CustombuttonComponent innerText={'Proceed to checkout'} onClick={checkOutHandler} btnCl={'checkout mt-4'} />
                   </div>
                </div>
             </>

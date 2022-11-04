@@ -17,7 +17,7 @@ export const div = styled.div`
 
    ul li {
       list-style: none;
-      margin-left: 2rem;
+      margin-left: 3rem;
       display: flex;
 
       a {
@@ -83,6 +83,28 @@ export const div = styled.div`
       visibility: hidden;
       transform: translateY(10px);
    }
+
+   .avatar_div {
+      position: relative;
+
+      .css-1tkml5t-MuiAvatar-root {
+         cursor: pointer;
+      }
+   }
+
+   .userImage {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+
+      img {
+         cursor: pointer;
+         width: 100%;
+         height: 100%;
+         border-radius: 50%;
+      }
+   }
 `;
 
 export const flex = styled.div`
@@ -90,3 +112,5 @@ export const flex = styled.div`
    align-items: center;
    justify-content: space-between;
 `;
+
+export const userOptionDiv = styled.div``;

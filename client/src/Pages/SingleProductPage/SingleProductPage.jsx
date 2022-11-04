@@ -21,7 +21,7 @@ function SingleProductPage() {
    return (
       <styled.div>
          <NavbarComponent />
-         <CategorieTagShowComponent name={params.productName.replaceAll('-', ' ')} />
+         <CategorieTagShowComponent heading={'home'} name={params.productName.replaceAll('-', ' ')} />
          {/* <ProductSocialShareComponent name={params.productName.replaceAll('-', ' ')} /> */}
          <SingleProductContentComponent />
       </styled.div>

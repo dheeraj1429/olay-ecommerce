@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
    isAdmin: { type: String, default: 'user' },
    tokens: [{ token: { type: String, required: [true, 'user token is required'] } }],
    userProfileImage: { type: String, default: 'defaultUser.jpeg' },
+   phone: { type: Number },
+   dateOfBirth: { type: Date },
    createdAt: { type: Date, default: Date.now },
    exportsHistory: [
       {
@@ -21,40 +23,16 @@ const userSchema = new mongoose.Schema({
    ],
    cart: [{ cartItem: { type: mongoose.Types.ObjectId, ref: 'product' }, qty: { type: Number } }],
    wishLists: [{ ItemId: { type: mongoose.Types.ObjectId, ref: 'product' } }],
-   ShippingInfo: [
+   myAddress: [
       {
-         userEmail: { type: String },
-         country: { type: String, required: [true, 'country name is required'] },
-         name: { type: String },
-         lastName: { type: String },
-         address: { type: String, required: [true, 'user address is required'] },
-         Apt: { type: String },
-         subUrb: { type: String },
-         state: { type: String, reuqired: [true, 'state names is required'] },
-         pinCode: { type: Number, required: [true, 'pin code is required'] },
-         emailOffers: { type: Boolean, default: false },
-         saveInformation: { type: Boolean, default: false },
-      },
-   ],
-   orders: [
-      {
-         productId: { type: mongoose.Types.ObjectId, ref: 'product' },
-         qty: { type: Number, default: 1 },
-         paymentMethod: { type: String, required: [true, 'payment method is required'] },
-         process: { type: String, default: 'Pending' },
-         createdAt: { type: Date, default: Date.now },
-         currentOrderCoordinates: {
-            location: {
-               type: {
-                  enum: ['Point'],
-                  required: true,
-               },
-               coordinates: {
-                  type: [Number],
-                  required: true,
-               },
-            },
-         },
+         fullName: { type: String },
+         email: { type: String },
+         phone: { type: String },
+         country: { type: String, required: [true, 'Country name is required'] },
+         state: { type: String, required: [true, 'state is required'] },
+         city: { type: String, required: [true, 'city name is required'] },
+         address: { type: String, required: [true, 'address is required'] },
+         IsDefault: { type: Boolean, default: false },
       },
    ],
 });

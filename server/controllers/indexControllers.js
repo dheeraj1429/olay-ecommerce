@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 const ejs = require('ejs');
 const path = require('path');
 const subscriptionModel = require('../model/schema/subscriptionUsersSchema');
+const orderModel = require('../model/schema/ordersSchema');
 
 // grab the sale products from the databse and then send back the data to the client.
 const getTrandingProducts = catchAsync(async function (req, res, next) {
@@ -420,8 +421,102 @@ const getLoginUserDeatils = catchAsync(async function (req, res, next) {
    }
 });
 
-const userOrderPlace = catchAsync(async function (req, res, next) {
-   console.log(req.body);
+const orderPlaceByCashOnDelivery = catchAsync(async function (req, res, next) {
+   // const { userToken } = req.body;
+   // if (!userToken) {
+   //    next(new AppError('user token is required'));
+   // }
+   // // varify the user token. user is valid or not.
+   // const { _id } = await tokenVarifyFunction(undefined, userToken);
+   // const { items, paymentMethod } = req.body;
+   // let orderPlace;
+   // for (let i = 0; i < items.length; i++) {
+   //    // insert all the user product into the order document.
+   //    orderPlace = await orderModel({ userId: _id, productId: items[i].cartItem._id, qty: items[i].qty, paymentMethod }).save();
+   // }
+   // if (orderPlace) {
+   //    // once all products is inserted into the order document. and place all the orders. the remove the user cart products.
+   //    for (let i = 0; i < items.length; i++) {
+   //       await userModel.updateOne({ _id }, { $pull: { cart: { _id: items[i]._id } } });
+   //    }
+   //    return res.status(httpStatusCodes.CREATED).json({
+   //       success: true,
+   //       message: 'Order placed',
+   //    });
+   // } else {
+   //    return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+   //       success: false,
+   //       message: 'internal server error',
+   //    });
+   // }
+});
+
+const getUserData = catchAsync(async function (req, res, next) {
+   const { token } = req.params;
+   if (!token) {
+      next(new AppError('user token is required'));
+   }
+   // varify the user token. user is valid or not.
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   const user = await userModel.findOne({ _id }, { name: 1, email: 1, phone: 1, dateOfBirth: 1 });
+   if (user) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         user,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'internal server error',
+      });
+   }
+});
+
+const updateUserData = catchAsync(async function (req, res, next) {
+   const { _id } = req.body;
+   if (!_id) {
+      next(new AppError('user id is required'));
+   }
+   const { name, dateOfBirth, phone, email, isAdmin, userProfileImage, token } = req.body;
+
+   // first check email is already exists or not
+   const emailIsEsists = await userModel.findOne({ email, _id: { $ne: _id } });
+
+   if (emailIsEsists) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: 'email is already used',
+         error: true,
+      });
+   } else {
+      // update the document.
+      const findUserAndUpdate = await userModel.updateOne({ _id }, { $set: { name, dateOfBirth, phone, email } });
+
+      if (!!findUserAndUpdate.modifiedCount) {
+         const userObject = {
+            name: name,
+            email: email,
+            isAdmin: isAdmin,
+            userProfileImage: userProfileImage,
+            token: token,
+         };
+
+         // set the user info into the cookie
+         res.cookie('user', userObject);
+
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: 'User information updated',
+            user: userObject,
+         });
+      } else {
+         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            success: false,
+            message: 'internal server error',
+            error: true,
+         });
+      }
+   }
 });
 
 module.exports = {
@@ -437,5 +532,7 @@ module.exports = {
    getRandomProducts,
    storeUserShippingInformation,
    getLoginUserDeatils,
-   userOrderPlace,
+   orderPlaceByCashOnDelivery,
+   getUserData,
+   updateUserData,
 };

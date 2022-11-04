@@ -14,6 +14,7 @@ import { getShopInfromation } from './Redux/Actions/adminAction';
 import HomePage from './Pages/HomePage/HomePage';
 import LoadingComponent from './HelperComponents/LoadingComponent/LoadingComponent';
 const SignInAndLoginPage = lazy(() => import('./Pages/SignInAndLoginPage/SignInAndLoginPage'));
+const UserDashboardPage = lazy(() => import('./Pages/UserDashboardPage/UserDashboardPage'));
 
 // dashboard components
 const DashboardSingInComponent = lazy(() => import('./DashboardComponents/DashboardSingInComponent/DashboardSingInComponent'));
@@ -59,6 +60,9 @@ const CheckOutPage = lazy(() => import('./Pages/CheckOutPage/CheckOutPage'));
 const CartContactInfromation = lazy(() => import('./Components/CartContactInfromation/CartContactInfromation'));
 const ShippingMethodComponent = lazy(() => import('./Components/ShippingMethodComponent/ShippingMethodComponent'));
 
+// user dashboard components
+const MyDetailsComponent = lazy(() => import('./UserDashboardComponent/MyDetailsComponent/MyDetailsComponent'));
+
 // dashboard pages
 const Dashboard = lazy(() => import('./DashboardPages/Dashboard/Dashboard'));
 const DashboardPanel = lazy(() => import('./DashboardPages/DashboardPanel/DashboardPanel'));
@@ -91,13 +95,20 @@ function App() {
                   <Route path="" element={<CartContactInfromation />} />
                   <Route path="shipping-methods" element={<ShippingMethodComponent />} />
                </Route>
+
+               <Route path="/my-account" element={<UserDashboardPage />}>
+                  <Route path="my-details" element={<MyDetailsComponent />} />
+               </Route>
+
                <Route path="auth" element={<SignInAndLoginPage />}>
                   <Route path="signin" element={<SignInAndLoginComponent />} />
                   <Route path="login" element={<SignInAndLoginComponent />} />
                </Route>
+
                <Route path="dashboard-auth" element={<Dashboard />}>
                   <Route path="sign-in" element={<DashboardSingInComponent />} />
                </Route>
+
                <Route path="dashboard" element={<DashboardPanel />}>
                   <Route path="" element={<DashboardHomeComponent />} />
                   <Route path="upload-products" element={<UploadProductComponent />} />
@@ -135,6 +146,7 @@ function App() {
                   <Route path="post/edit/:id" element={<CreateBlogPostComponent />} />
                   <Route path="blog-categories" element={<BlogCategoriesComponent />} />
                </Route>
+
                <Route path="*" element={<PageNotFound />} />
             </Routes>
          </Suspense>

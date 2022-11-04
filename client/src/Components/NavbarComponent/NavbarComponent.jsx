@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import * as styled from './NavbarComponent.style';
-import { MdKeyboardArrowDown } from '@react-icons/all-files/md/MdKeyboardArrowDown';
 import { BsSearch } from '@react-icons/all-files/bs/BsSearch';
 import { AiOutlineShoppingCart } from '@react-icons/all-files/ai/AiOutlineShoppingCart';
 import { AiOutlineBars } from '@react-icons/all-files/ai/AiOutlineBars';
 import { RiUser6Line } from '@react-icons/all-files/ri/RiUser6Line';
 import { useSelector } from 'react-redux';
-import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import CardSidebarComponent from '../CardSidebarComponent/CardSidebarComponent';
 import { useDispatch } from 'react-redux';
 import { showAndHideCartSideBar } from '../../Redux/Actions/indexAppAction';
 import { useNavigate } from 'react-router-dom';
+import backendConfigData from '../../backendConfig';
+import UserProfileOptionComponent from '../UserProfileOptionComponent/UserProfileOptionComponent';
 
 const navigationRow = [
    { name: 'Home', link: '/' },
@@ -23,6 +23,8 @@ const navigationRow = [
 ];
 
 function NavbarComponent() {
+   const [Show, setShow] = useState(false);
+
    const dispatch = useDispatch();
    const { auth } = useSelector((state) => state.auth);
    const { cartItems } = useSelector((state) => state.index);
@@ -50,9 +52,6 @@ function NavbarComponent() {
                               <Link to={el.link}>
                                  <p>{el.name}</p>
                               </Link>
-                              <div>
-                                 <MdKeyboardArrowDown />
-                              </div>
                            </li>
                         );
                      })}
@@ -71,7 +70,14 @@ function NavbarComponent() {
                      <p>Cart</p>
                   </div>
                   {!!auth && auth.success && auth.userObject ? (
-                     <Avatar alt="Remy Sharp" src=".." sx={{ width: 24, height: 24, marginRight: '1rem' }} />
+                     <>
+                        <div className="avatar_div">
+                           <div className="userImage">
+                              <img crossOrigin="anonymous" onClick={() => setShow(!Show)} src={`${backendConfigData.URL}userProfiles/${auth.userObject.userProfileImage}`} alt="" />
+                           </div>
+                           <UserProfileOptionComponent show={Show} />
+                        </div>
+                     </>
                   ) : (
                      <Link to={'/auth/signin'}>
                         <div className="flex_div hove_parent_div">

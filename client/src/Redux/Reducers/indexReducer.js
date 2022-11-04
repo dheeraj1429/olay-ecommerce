@@ -25,6 +25,9 @@ const INITAL_STATE = {
    userInformation: null,
    placeOrder: null,
    placeOrderLoading: false,
+   userData: null,
+   updateUserInfo: null,
+   updateUserInfoLoading: false,
 };
 
 const shopReducer = function (state = INITAL_STATE, action) {
@@ -233,6 +236,52 @@ const shopReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             userInformation: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.PLACE_USER_ORDER:
+         return {
+            ...state,
+            placeOrder: action.payload,
+            placeOrderLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.PLACE_USER_ORDER_LOADING:
+         return {
+            ...state,
+            placeOrderLoading: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.REMOVE_USER_ORDER_INFORMATION:
+         return {
+            ...state,
+            placeOrder: action.payload,
+            placeOrderLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.GET_USER_DATA:
+         return {
+            ...state,
+            userData: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.UPDATE_USER_INFO:
+         return {
+            ...state,
+            updateUserInfo: action.payload,
+            updateUserInfoLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.UPDATE_USER_INFO_LOADING:
+         return {
+            ...state,
+            updateUserInfoLoading: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.REMOVE_PROFILE_UPDATE_INFO:
+         return {
+            ...state,
+            updateUserInfo: action.payload,
+            updateUserInfoLoading: false,
          };
 
       default:

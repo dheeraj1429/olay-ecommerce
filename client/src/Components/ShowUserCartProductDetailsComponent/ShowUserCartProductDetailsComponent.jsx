@@ -37,31 +37,30 @@ function ShowUserCartProductDetailsComponent() {
                           {el.cartItem?.salePrice ? el.cartItem.salePrice.toFixed(2) : el.cartItem.price.toFixed(2)}
                        </strong>
                     </div>
-
-                    <div className="border-top py-4 sub">
-                       <div className="d-flex align-items-center justify-content-between">
-                          <p>Subtotal</p>
-                          <strong>
-                             {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
-                             {SubTotal}
-                          </strong>
-                       </div>
-                       <div className="d-flex align-items-center justify-content-between mt-2">
-                          <p>Shipping</p>
-                          <span>Calculated at next step</span>
-                       </div>
-                    </div>
-
-                    <div className="border-top py-3 sub d-flex align-items-center justify-content-between">
-                       <h5 className="mb-0">Total</h5>
-                       <h4 className="mb-0">
-                          <span>{!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}</span>
-                          {SubTotal}
-                       </h4>
-                    </div>
                  </>
               ))
             : null}
+         <div className="border-top py-4 sub">
+            <div className="d-flex align-items-center justify-content-between">
+               <p>Subtotal</p>
+               <strong>
+                  {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+                  {SubTotal}
+               </strong>
+            </div>
+            <div className="d-flex align-items-center justify-content-between mt-2">
+               <p>Shipping</p>
+               <span>Calculated at next step</span>
+            </div>
+         </div>
+
+         <div className="border-top py-3 sub d-flex align-items-center justify-content-between">
+            <h5 className="mb-0">Total</h5>
+            <h4 className="mb-0">
+               <span>{!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}</span>
+               {SubTotal}
+            </h4>
+         </div>
       </styled.div>
    );
 }

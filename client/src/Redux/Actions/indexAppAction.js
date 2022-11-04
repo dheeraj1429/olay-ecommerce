@@ -76,3 +76,31 @@ export const shippingInformationLoading = function (data) {
       payload: data,
    };
 };
+
+export const orderLoadingHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.PLACE_USER_ORDER_LOADING,
+      payload: data,
+   };
+};
+
+export const removeUserOrderInformation = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVE_USER_ORDER_INFORMATION,
+      payload: data,
+   };
+};
+
+export const updateUserProfileLoading = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.UPDATE_USER_INFO_LOADING,
+      payload: data,
+   };
+};
+
+export const removeProfileUpdateInfo = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVE_PROFILE_UPDATE_INFO,
+      payload: data,
+   };
+};

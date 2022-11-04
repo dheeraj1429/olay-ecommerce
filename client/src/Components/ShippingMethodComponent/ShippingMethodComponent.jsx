@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import * as styled from './ShippingMethodComponent.style';
 import { useDispatch, useSelector } from 'react-redux';
-import { getLoginUserDeatils } from '../../Redux/Actions/indexActions';
+import { getLoginUserDeatils, orderPlaceByCashOnDelivery } from '../../Redux/Actions/indexActions';
 import { Radio } from 'antd';
 import { Link } from 'react-router-dom';
 import { IoIosArrowBack } from '@react-icons/all-files/io/IoIosArrowBack';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
-import { userOrderPlace } from '../../Redux/Actions/indexActions';
 import { useNavigate } from 'react-router-dom';
+import { orderLoadingHandler, removeUserOrderInformation } from '../../Redux/Actions/indexAppAction';
+import PaymentNotificationComponent from '../PaymentNotificationComponent/PaymentNotificationComponent';
 
 function ShippingMethodComponent() {
    const [MethodCheck, setMethodCheck] = useState('');
@@ -16,20 +17,26 @@ function ShippingMethodComponent() {
    const navigation = useNavigate();
 
    const { auth } = useSelector((state) => state.auth);
-   const { userInformation, placeOrderLoading, cartItems } = useSelector((state) => state.index);
+   const { userInformation, placeOrderLoading, cartItems, placeOrder } = useSelector((state) => state.index);
 
    const methodHandler = (e) => {
-      console.log('radio checked', e.target.value);
+      // console.log('radio checked', e.target.value);
       setMethodCheck(e.target.value);
    };
 
-   const orderHandler = function () {
+   const removeCartInfoHandler = function () {
+      dispatch(removeUserOrderInformation(null));
+   };
+
+   const cashOnDeliveryHandler = function () {
       if (!!auth && auth?.userObject && auth?.userObject?.token && !!cartItems && cartItems.success) {
          const orderObject = {
             userToken: auth.userObject.token,
             items: cartItems.cartItems,
+            paymentMethod: MethodCheck,
          };
-         dispatch(userOrderPlace(orderObject));
+         dispatch(orderPlaceByCashOnDelivery(orderObject));
+         dispatch(orderLoadingHandler(true));
       } else {
          navigation('/auth/signin');
       }
@@ -41,8 +48,15 @@ function ShippingMethodComponent() {
       }
    }, []);
 
+   useEffect(() => {
+      if (!!cartItems && cartItems.success && !cartItems.cartItems.length) {
+         navigation('/');
+      }
+   }, []);
+
    return (
       <styled.div>
+         <PaymentNotificationComponent show={placeOrder} />
          {!!userInformation && userInformation?.success && userInformation?.user && userInformation?.user?.ShippingInfo.length ? (
             <>
                <div className="User_info_div border">
@@ -80,7 +94,7 @@ function ShippingMethodComponent() {
                   <div className="User_info_div p-3 border">
                      <Radio.Group className="radioFrom" onChange={methodHandler} value={MethodCheck}>
                         <div>
-                           <Radio value={1}>
+                           <Radio value={'case on delivery'}>
                               <p>Case on delivery</p>
                            </Radio>
                         </div>
@@ -95,8 +109,15 @@ function ShippingMethodComponent() {
                         Back to cart
                      </span>
                   </Link>
-                  {!!MethodCheck && MethodCheck === 1 ? (
-                     <CustombuttonComponent spennerBlack={true} onClick={orderHandler} isLoading={placeOrderLoading} type="submit" btnCl={'shipping_button'} innerText={'Order Now'} />
+                  {!!MethodCheck && MethodCheck === 'case on delivery' && !placeOrder ? (
+                     <CustombuttonComponent spennerBlack={true} onClick={cashOnDeliveryHandler} isLoading={placeOrderLoading} type="submit" btnCl={'shipping_button'} innerText={'Order Now'} />
+                  ) : !!placeOrder && placeOrder.success ? (
+                     <p>
+                        {placeOrder.message}. please click here{' '}
+                        <Link to={'/my-account/my-orders'} onClick={removeCartInfoHandler}>
+                           Orders
+                        </Link>
+                     </p>
                   ) : (
                      <CustombuttonComponent spennerBlack={true} isLoading={''} type="submit" btnCl={'shipping_button'} innerText={'Continue to shopping'} />
                   )}

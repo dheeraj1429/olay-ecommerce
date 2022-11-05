@@ -7,6 +7,6 @@ export const div = styled.div`
    }
 
    span {
-      font-size: 13px;
+      font-size: 12px;
    }
 `;

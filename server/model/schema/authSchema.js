@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
    ],
 });
 
-userSchema.index({ 'ShippingInfo.country': 1, 'ShippingInfo.address': 1, 'ShippingInfo.state': 1 });
+userSchema.index({ 'myAddress.country': 1, 'myAddress.address': 1, 'myAddress.state': 1 });
 
 userSchema.methods.genrateUserToken = async function () {
    try {

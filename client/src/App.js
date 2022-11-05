@@ -62,6 +62,7 @@ const ShippingMethodComponent = lazy(() => import('./Components/ShippingMethodCo
 
 // user dashboard components
 const MyDetailsComponent = lazy(() => import('./UserDashboardComponent/MyDetailsComponent/MyDetailsComponent'));
+const AddressBookComponent = lazy(() => import('./UserDashboardComponent/AddressBookComponent/AddressBookComponent'));
 
 // dashboard pages
 const Dashboard = lazy(() => import('./DashboardPages/Dashboard/Dashboard'));
@@ -98,6 +99,7 @@ function App() {
 
                <Route path="/my-account" element={<UserDashboardPage />}>
                   <Route path="my-details" element={<MyDetailsComponent />} />
+                  <Route path="my-address-book" element={<AddressBookComponent />} />
                </Route>
 
                <Route path="auth" element={<SignInAndLoginPage />}>

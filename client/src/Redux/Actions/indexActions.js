@@ -252,6 +252,7 @@ export const getUserData = function (token) {
    };
 };
 
+// when user update the profile with my account page.
 export const updateUserData = function (data) {
    return async function (dispatch) {
       try {
@@ -270,6 +271,23 @@ export const updateUserData = function (data) {
             dispatch({
                type: AUTH_ACTION_TYPE.AUTH_UPDATE_USER,
                payload: userUpdateResponse && userUpdateResponse?.data && userUpdateResponse?.data?.user,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const insertUserAddress = function (data) {
+   return async function (dispatch) {
+      try {
+         const addressResponse = await axios.post('/index/insert-new-address', data, headers);
+
+         if (addressResponse && addressResponse?.data) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.SAVE_USER_ADDRESS,
+               payload: addressResponse && addressResponse?.data,
             });
          }
       } catch (err) {

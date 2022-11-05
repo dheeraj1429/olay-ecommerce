@@ -40,6 +40,16 @@ export const div = styled.div`
       }
    }
 
+   .activeTab {
+      background-color: var(--spec-static-brand-black);
+      p {
+         color: var(--main-cl);
+      }
+      svg {
+         fill: var(--main-cl);
+      }
+   }
+
    .optionsRow {
       padding: 0.5rem 1rem;
       cursor: pointer;
@@ -48,6 +58,14 @@ export const div = styled.div`
 
       &:hover {
          background-color: var(--spec-snackbar-background-updated);
+      }
+
+      &:hover p {
+         color: var(--dark-cl);
+      }
+
+      &:hover svg {
+         fill: var(--dark-cl);
       }
 
       p {

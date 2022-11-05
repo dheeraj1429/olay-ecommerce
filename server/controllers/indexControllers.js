@@ -519,6 +519,46 @@ const updateUserData = catchAsync(async function (req, res, next) {
    }
 });
 
+const insertUserAddress = catchAsync(async function (req, res, next) {
+   const { token } = req.body;
+
+   if (!token) {
+      next(new AppError('user token is required'));
+   }
+
+   const userAddressObject = { ...req.body };
+   delete userAddressObject.token;
+
+   // varify the user token. user is valid or not.
+   const { _id } = await tokenVarifyFunction(undefined, token);
+
+   // check the address is exists or not.
+   const findAddressIsExists = await userModel.findOne(
+      {
+         _id,
+         myAddress: { $elemMatch: { country: userAddressObject.country, address: userAddressObject.address, state: userAddressObject.state } },
+      },
+      { 'myAddress.$': 1 }
+   );
+
+   if (!!findAddressIsExists) {
+      return res.status(httpStatusCodes.OK).json({
+         success: false,
+         message: 'address is already exists',
+      });
+   } else {
+      // find the user and inser the address date into the user document.
+      const findAndUpdateUser = await userModel.updateOne({ _id }, { $push: { myAddress: userAddressObject } });
+
+      if (!!findAndUpdateUser.modifiedCount) {
+         return res.status(httpStatusCodes.CREATED).json({
+            success: true,
+            message: 'Address saved',
+         });
+      }
+   }
+});
+
 module.exports = {
    getTrandingProducts,
    getSelectedPrevProduct,
@@ -535,4 +575,5 @@ module.exports = {
    orderPlaceByCashOnDelivery,
    getUserData,
    updateUserData,
+   insertUserAddress,
 };

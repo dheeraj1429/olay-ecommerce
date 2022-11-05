@@ -215,3 +215,19 @@ a {
    -o-appearance: none;
    appearance: none;
 }
+
+.input_div input {
+   width: 100%;
+   padding: 1rem;
+   border: 1px solid #e1e1e1;
+   border-radius: 5px;
+}
+
+.input_div .information_div p {
+   font-size: 13px;
+   color: var(--spec-static-brand-black);
+}
+
+.input_div .error {
+   color: var(--spec-static-brand-red) !important;
+}

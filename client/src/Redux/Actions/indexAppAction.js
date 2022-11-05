@@ -104,3 +104,16 @@ export const removeProfileUpdateInfo = function (data) {
       payload: data,
    };
 };
+
+export const saveAddressLoadingHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.SAVE_USER_ADDRESS_LOADING,
+      payload: data,
+   };
+};
+
+export const removeAddressInformation = function () {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVE_SAVE_ADDRESS_INFO,
+   };
+};

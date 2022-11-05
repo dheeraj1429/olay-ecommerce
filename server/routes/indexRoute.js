@@ -18,6 +18,7 @@ route.post('/add-to-wish-list', indexController.addToWishListProducts);
 route.post('/news-letter', indexController.subcsriptionHandler);
 route.post('/user-shipping-infomation/:token', indexController.storeUserShippingInformation);
 route.post('/place-user-cash-on-delivery', indexController.orderPlaceByCashOnDelivery);
+route.post('/insert-new-address', indexController.insertUserAddress);
 
 // API => PATCH
 route.patch('/remove-cart-item', indexController.removerProductsFromCart);

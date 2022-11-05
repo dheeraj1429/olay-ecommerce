@@ -28,6 +28,8 @@ const INITAL_STATE = {
    userData: null,
    updateUserInfo: null,
    updateUserInfoLoading: false,
+   saveUserAddress: null,
+   saveUserAddressLoading: false,
 };
 
 const shopReducer = function (state = INITAL_STATE, action) {
@@ -182,7 +184,7 @@ const shopReducer = function (state = INITAL_STATE, action) {
       case INDEX_ACTION_TYPE.GET_WISH_LIST_PRODUCTS:
          return {
             ...state,
-            wishListItemAr: action.payload.items[0].wishLists,
+            wishListItemAr: action.payload?.items[0]?.wishLists ? action.payload?.items[0]?.wishLists : [],
          };
 
       case INDEX_ACTION_TYPE.SEND_NEWS_LETTER:
@@ -282,6 +284,25 @@ const shopReducer = function (state = INITAL_STATE, action) {
             ...state,
             updateUserInfo: action.payload,
             updateUserInfoLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.SAVE_USER_ADDRESS:
+         return {
+            ...state,
+            saveUserAddress: action.payload,
+            saveUserAddressLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.SAVE_USER_ADDRESS_LOADING:
+         return {
+            ...state,
+            saveUserAddressLoading: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.REMOVE_SAVE_ADDRESS_INFO:
+         return {
+            ...state,
+            saveUserAddress: null,
          };
 
       default:

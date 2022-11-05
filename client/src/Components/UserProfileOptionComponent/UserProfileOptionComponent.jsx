@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as styled from './UserProfileOptionComponent.style';
 import { useSelector } from 'react-redux';
 import backendConfigData from '../../backendConfig';
@@ -9,6 +9,8 @@ import { AiOutlineTag } from '@react-icons/all-files/ai/AiOutlineTag';
 import { AiOutlineSetting } from '@react-icons/all-files/ai/AiOutlineSetting';
 import { VscLinkExternal } from '@react-icons/all-files/vsc/VscLinkExternal';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { GetUrlValue } from '../../helpers/helper';
 
 const Options = [
    { icon: <RiUser6Line />, text: 'My details', cl: 'mt-1' },
@@ -20,7 +22,15 @@ const Options = [
 ];
 
 function UserProfileOptionComponent({ show, styles, hideProfile, hideOptions }) {
+   const [ActiveTab, setActiveTab] = useState('');
+
+   const location = useLocation();
    const { auth } = useSelector((state) => state.auth);
+
+   useEffect(() => {
+      const result = GetUrlValue(location);
+      setActiveTab(result);
+   }, [location.pathname]);
 
    return (
       <styled.div show={show} style={styles ? styles : null}>
@@ -42,7 +52,7 @@ function UserProfileOptionComponent({ show, styles, hideProfile, hideOptions }) 
                   {Options.map((el) => (
                      <Link to={el.text.toLowerCase() === 'my account' ? '/my-account' : `/my-account/${el.text.toLowerCase().replaceAll(' ', '-')}`}>
                         {!!hideOptions && hideOptions.includes(el.text) ? null : (
-                           <div key={el.text} className={`optionsRow ${el.cl ? el.cl : ''}  d-flex align-items-center`}>
+                           <div key={el.text} className={`optionsRow ${el.cl ? el.cl : ''}  d-flex align-items-center ${ActiveTab === el.text ? 'activeTab' : ''}`}>
                               <div className="options_icon">{el.icon}</div>
                               <div className="options_content">
                                  <p className="mb-0">{el.text}</p>

@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import * as styled from './AddressBookComponent.style';
 import axios from 'axios';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
-import { insertUserAddress } from '../../Redux/Actions/indexActions';
+import { getUserSingleAddress, insertUserAddress, updateUserAddress } from '../../Redux/Actions/indexActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox } from 'antd';
-import { saveAddressLoadingHandler, removeAddressInformation } from '../../Redux/Actions/indexAppAction';
+import { saveAddressLoadingHandler, removeAddressInformation, removeUserAddressInfo } from '../../Redux/Actions/indexAppAction';
+import { useParams } from 'react-router';
 
 function AddressBookComponent() {
    const [UserAddress, setUserAddress] = useState({
@@ -21,9 +22,10 @@ function AddressBookComponent() {
    const [Country, setCountry] = useState([]);
 
    const dispatch = useDispatch();
+   const params = useParams();
 
    const { auth } = useSelector((state) => state.auth);
-   const { saveUserAddressLoading, saveUserAddress } = useSelector((state) => state.index);
+   const { saveUserAddressLoading, saveUserAddress, userSingleAddress, userAddressUpdateInfo } = useSelector((state) => state.index);
 
    const getCountry = async function () {
       const data = await axios.get('https://restcountries.com/v2/all');
@@ -41,18 +43,34 @@ function AddressBookComponent() {
    const SendHandler = function (e) {
       e.preventDefault();
       if (!!auth && auth?.userObject && auth.userObject?.token) {
-         dispatch(saveAddressLoadingHandler(true));
-         dispatch(insertUserAddress(Object.assign(UserAddress, { token: auth.userObject.token })));
+         if (!params?.id) {
+            dispatch(saveAddressLoadingHandler(true));
+            dispatch(insertUserAddress(Object.assign(UserAddress, { token: auth.userObject.token })));
+         } else {
+            dispatch(saveAddressLoadingHandler(true));
+            dispatch(updateUserAddress(UserAddress, auth.userObject.token));
+         }
       }
    };
 
    useEffect(() => {
       getCountry();
 
+      if (params?.id && !!auth && auth?.userObject && auth.userObject?.token) {
+         dispatch(getUserSingleAddress({ token: auth.userObject.token, id: params?.id }));
+      }
+
       return () => {
          dispatch(removeAddressInformation());
+         dispatch(removeUserAddressInfo(null));
       };
    }, []);
+
+   useEffect(() => {
+      if (!!userSingleAddress && userSingleAddress?.success && userSingleAddress?.address) {
+         setUserAddress(userSingleAddress?.address?.myAddress[0]);
+      }
+   }, [userSingleAddress]);
 
    return (
       <styled.div>
@@ -98,11 +116,17 @@ function AddressBookComponent() {
                <span>Address</span>
                <input value={UserAddress.address} onChange={ChangeHandler} name="address" type="text" placeholder="Address" required />
             </div>
-            <Checkbox className="mt-2" onChange={(e) => setUserAddress({ ...UserAddress, IsDefault: e.target.checked })}>
+            <Checkbox className="mt-2" checked={UserAddress.IsDefault} onChange={(e) => setUserAddress({ ...UserAddress, IsDefault: e.target.checked })}>
                is default address
             </Checkbox>
-            <CustombuttonComponent isLoading={saveUserAddressLoading} spennerBlack={true} type={'submit'} innerText={'Add new address'} btnCl={'shipping_button mt-3'} />
+            {params?.id ? (
+               <CustombuttonComponent isLoading={saveUserAddressLoading} spennerBlack={true} type={'submit'} innerText={'Udpate address'} btnCl={'shipping_button mt-3'} />
+            ) : (
+               <CustombuttonComponent isLoading={saveUserAddressLoading} spennerBlack={true} type={'submit'} innerText={'Add new address'} btnCl={'shipping_button mt-3'} />
+            )}
+
             {!!saveUserAddress && saveUserAddress.message ? <p className="mt-2">{saveUserAddress.message}</p> : null}
+            {!!userAddressUpdateInfo && userAddressUpdateInfo.message ? <p className="mt-2">{userAddressUpdateInfo.message}</p> : null}
          </form>
       </styled.div>
    );

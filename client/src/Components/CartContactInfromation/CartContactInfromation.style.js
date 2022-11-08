@@ -11,4 +11,8 @@ export const div = styled.div`
       margin: 0;
       font-size: 15px;
    }
+
+   .input_div {
+      border-radius: 5px;
+   }
 `;

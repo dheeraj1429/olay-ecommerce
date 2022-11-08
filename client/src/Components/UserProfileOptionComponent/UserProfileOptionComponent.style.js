@@ -13,6 +13,7 @@ export const div = styled.div`
    transition: all 0.3s ease;
    transform: ${(props) => (props.show ? 'scale(1)' : 'scale(.5)')};
    transform-origin: top right;
+   z-index: 200;
 
    .userProfileDiv {
       width: 40px;

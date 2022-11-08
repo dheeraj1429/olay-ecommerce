@@ -49,7 +49,7 @@ export const getSelectedPrevProduct = function (id) {
 export const productAddToCart = function (data, img) {
    return async function (dispatch) {
       try {
-         const addToCartResponse = await axios.post('/index/add-to-cart-product', data, headers);
+         const addToCartResponse = await axios.post(`/index/add-to-cart-product/${data.token}`, data, headers);
 
          if (addToCartResponse && addToCartResponse?.data && addToCartResponse?.data?.success) {
             dispatch({
@@ -86,7 +86,7 @@ export const getUserCartProducts = function (token) {
 export const removerProductsFromCart = function (id, token) {
    return async function (dispatch) {
       try {
-         const cartResponse = await axios.patch(`/index/remove-cart-item?id=${id}&token=${token}`, headers);
+         const cartResponse = await axios.patch(`/index/remove-cart-item/${token}?id=${id}&token=${token}`, headers);
 
          if (cartResponse && cartResponse?.data && cartResponse?.data.success) {
             dispatch({
@@ -121,7 +121,7 @@ export const addToWishList = function (id, token) {
 // grab al the user wishlist products
 export const getUserWishListProducts = function (token) {
    return async function (dispatch) {
-      const wishListResponse = await axios.get(`/index/get-wishlist-products?token=${token}`, headers);
+      const wishListResponse = await axios.get(`/index/get-wishlist-products/${token}?token=${token}`, headers);
 
       if (wishListResponse && wishListResponse?.data && wishListResponse?.data.success) {
          dispatch({
@@ -136,7 +136,7 @@ export const getUserWishListProducts = function (token) {
 export const sendNewsLetter = function (data) {
    return async function (dispatch) {
       try {
-         const newsLetterResponse = await axios.post('/index/news-letter', data, headers);
+         const newsLetterResponse = await axios.post(`/index/news-letter/${data.token}`, data, headers);
 
          if (newsLetterResponse && newsLetterResponse?.data) {
             dispatch({
@@ -201,10 +201,10 @@ export const storeUserShippingInformation = function (data, token) {
    };
 };
 
-export const getLoginUserDeatils = function (token) {
+export const getUserAddressDetails = function (token, addressInfo) {
    return async function (dispatch) {
       try {
-         const userResponse = await axios.get(`/index/get-login-user/${token}`, headers);
+         const userResponse = await axios.get(`/index/get-login-user-address-info/${token}/${addressInfo}`, headers);
          if (userResponse && userResponse?.data) {
             dispatch({
                type: INDEX_ACTION_TYPE.GET_USER_INFORMATION,
@@ -217,10 +217,10 @@ export const getLoginUserDeatils = function (token) {
    };
 };
 
-export const orderPlaceByCashOnDelivery = function (data) {
+export const orderPlaceByCashOnDelivery = function (data, token) {
    return async function (dispatch) {
       try {
-         const orderResponse = await axios.post('/index/place-user-cash-on-delivery', data, headers);
+         const orderResponse = await axios.post(`/index/place-user-cash-on-delivery/${token}`, data, headers);
          if (orderResponse && orderResponse?.data && orderResponse?.data.success) {
             dispatch({
                type: INDEX_ACTION_TYPE.PLACE_USER_ORDER,
@@ -256,7 +256,7 @@ export const getUserData = function (token) {
 export const updateUserData = function (data) {
    return async function (dispatch) {
       try {
-         const userUpdateResponse = await axios.patch('/index/update-user-info', data, headers);
+         const userUpdateResponse = await axios.patch(`/index/update-user-info/${data.token}`, data, headers);
 
          console.log(userUpdateResponse);
 
@@ -282,12 +282,80 @@ export const updateUserData = function (data) {
 export const insertUserAddress = function (data) {
    return async function (dispatch) {
       try {
-         const addressResponse = await axios.post('/index/insert-new-address', data, headers);
+         const addressResponse = await axios.post(`/index/insert-new-address/${data.token}`, data, headers);
 
          if (addressResponse && addressResponse?.data) {
             dispatch({
                type: INDEX_ACTION_TYPE.SAVE_USER_ADDRESS,
                payload: addressResponse && addressResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getUserAddress = function (token) {
+   return async function (dispatch) {
+      try {
+         const addressRespose = await axios.get(`/index/get-user-address/${token}`, headers);
+
+         if (addressRespose && addressRespose?.data && addressRespose?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_USER_ADDRESS,
+               payload: addressRespose && addressRespose?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const deleteUserAddress = function (id, token) {
+   return async function (dispatch) {
+      try {
+         const userAddressDeleteResponse = await axios.delete(`/index/delete-user-address/${token}/${id}`, headers);
+
+         if (userAddressDeleteResponse && userAddressDeleteResponse?.data && userAddressDeleteResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.DELETE_USER_ADDRESS,
+               payload: userAddressDeleteResponse && userAddressDeleteResponse?.data,
+               deletedId: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getUserSingleAddress = function (data) {
+   return async function (dispatch) {
+      try {
+         const addressResponse = await axios.get(`/index/get-user-address/${data.token}/${data.id}`, headers);
+
+         if (addressResponse && addressResponse?.data) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_USER_SINGLE_ADDRESS,
+               payload: addressResponse && addressResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const updateUserAddress = function (data, token) {
+   return async function (dispatch) {
+      try {
+         const updateResponse = await axios.patch(`/index/update-user-address/${token}`, data, headers);
+         if (updateResponse && updateResponse?.data && updateResponse?.data?.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.UPDATE_USER_SINGLE_ADDRESS,
+               payload: updateResponse && updateResponse?.data,
             });
          }
       } catch (err) {

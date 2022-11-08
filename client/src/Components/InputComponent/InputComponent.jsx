@@ -36,18 +36,12 @@ function InputComponent() {
       <styled.div>
          <div className="flex_div">
             <input placeholder="Email Address" onChange={changeHandler} value={Email} name="email" type={'email'} />
-            <CustombuttonComponent
-               innerText={'Subscribe'}
-               btnCl={'subscribe'}
-               onClick={newsLetterMailLoading ? null : sendHandler}
-            >
+            <CustombuttonComponent innerText={'Subscribe'} btnCl={'subscribe'} onClick={newsLetterMailLoading ? null : sendHandler}>
                {newsLetterMailLoading ? <SpnnerComponent /> : null}
             </CustombuttonComponent>
          </div>
 
-         {!!newsLetterMailInfo && newsLetterMailInfo?.message ? (
-            <p className="subHeading">{newsLetterMailInfo.message}</p>
-         ) : null}
+         {!!newsLetterMailInfo && newsLetterMailInfo?.message ? <p className="subHeading">{newsLetterMailInfo.message}</p> : null}
       </styled.div>
    );
 }

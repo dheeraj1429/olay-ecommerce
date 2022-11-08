@@ -67,10 +67,6 @@ const productAddToCart = catchAsync(async function (req, res, next) {
       next(new AppError('productId is required'));
    }
 
-   if (!token) {
-      next(new AppError('token is required'));
-   }
-
    /**
     * @productId product id for the finding selected product.
     * @token user token to varifay user is valid or not.
@@ -125,21 +121,9 @@ const productAddToCart = catchAsync(async function (req, res, next) {
    });
 });
 
-const checkTokenIsExists = function (token, next) {
-   /**
-    * check the token is exists or note if there is no token the throw new error.
-    */
-   if (!token) {
-      next(new AppError('user token is required'));
-   }
-};
-
 // get the user cart pproducts from the database. always check the user token to varify the user is valid or not.
 const getUserCartProducts = catchAsync(async function (req, res, next) {
    const { token } = req.params;
-
-   checkTokenIsExists(token, next);
-
    const { _id } = await tokenVarifyFunction(undefined, token);
    const findUserCartItems = await userModel.findOne({ _id }).populate('cart.cartItem', { name: 1, price: 1, productImage: 1, salePrice: 1 });
    if (findUserCartItems) {
@@ -156,7 +140,6 @@ const removerProductsFromCart = catchAsync(async function (req, res, next) {
    if (!id) {
       next(new AppError('id is required'));
    }
-   checkTokenIsExists(token, next);
    const { _id } = await tokenVarifyFunction(undefined, token);
    const findUserAndRemoveCartItem = await userModel.updateOne({ _id }, { $pull: { cart: { cartItem: id } } });
    if (!!findUserAndRemoveCartItem.modifiedCount) {
@@ -177,13 +160,11 @@ const addToWishListProducts = catchAsync(async function (req, res, next) {
       next(new AppError('id is required'));
    }
 
-   checkTokenIsExists(token, next);
-
    const { _id } = await tokenVarifyFunction(undefined, token);
 
    /**
     * find the products is exists inside the user wishlist documents.
-    */
+    */ _id;
    userModel.findOne({ _id, wishLists: { $elemMatch: { ItemId: id } } }, { 'wishLists.$': 1 }).then((data) => {
       if (!!data && data.wishLists && data.wishLists.length) {
          // remove wislist products
@@ -216,7 +197,6 @@ const addToWishListProducts = catchAsync(async function (req, res, next) {
 // grab the user wishlist data array.
 const getUserWishListProducts = catchAsync(async function (req, res, next) {
    const { token } = req.query;
-   checkTokenIsExists(token, next);
 
    const { _id } = await tokenVarifyFunction(undefined, token);
 
@@ -247,7 +227,6 @@ const subcsriptionHandler = catchAsync(async function (req, res, next) {
    }
 
    // varify the user token.
-   checkTokenIsExists(token, next);
    const { _id } = await tokenVarifyFunction(undefined, token);
 
    // first check the user alrady subscription the website or not.
@@ -337,7 +316,6 @@ const getSingleProduct = catchAsync(async function (req, res, next) {
 
 const getRandomProducts = catchAsync(async function (req, res, next) {
    const products = await productModel.aggregate([{ $sample: { size: 10 } }]);
-
    if (products) {
       return res.status(httpStatusCodes.OK).json({
          success: true,
@@ -352,103 +330,75 @@ const getRandomProducts = catchAsync(async function (req, res, next) {
 });
 
 const storeUserShippingInformation = catchAsync(async function (req, res, next) {
-   const { token } = req.params;
-
-   if (!token) {
-      next(new AppError('user token is required'));
-   }
-
-   // grab required fields from the request
-   const { country, address, state, pinCode } = req.body;
-
-   // if some required fields is missing then send back the error response.
-   if (!!country && address && state && pinCode) {
-      // clone the req object values into the new object.
-      const insertObject = Object.assign(req.body);
-
-      // find the user which user is fill the shipping information.
-      const { _id } = await tokenVarifyFunction(undefined, token);
-
-      // check address is already in a database or not.
-      const findAddress = await userModel.findOne({ 'ShippingInfo.country': country, 'ShippingInfo.address': address, 'ShippingInfo.state': state });
-
-      if (findAddress) {
-         return res.status(httpStatusCodes.OK).json({
-            success: true,
-            message: 'user shipping information already saved',
-         });
-      } else {
-         // insert data inside the user document.
-         const insertShippingInfo = await userModel.updateOne({ _id }, { $push: { ShippingInfo: insertObject } });
-
-         if (insertShippingInfo) {
-            return res.status(httpStatusCodes.OK).json({
-               success: true,
-               message: 'user shipping information saved',
-            });
-         } else {
-            return res.status(httpStatusCodes.INTERNAL_SERVER).json({
-               success: false,
-               message: 'internal server error',
-            });
-         }
-      }
-   } else {
-      return res.status(httpStatusCodes.OK).json({
-         success: false,
-         message: 'fill all required fields!',
-      });
-   }
+   res.cookie('user-address', `${req.body.address}`);
+   return res.status(httpStatusCodes.OK).json({
+      success: true,
+      message: 'Address saved',
+   });
 });
 
 const getLoginUserDeatils = catchAsync(async function (req, res, next) {
-   const { token } = req.params;
-   if (!token) {
-      next(new AppError('user token is required'));
-   }
+   const { token, address } = req.params;
    const { _id } = await tokenVarifyFunction(undefined, token);
-   const findUser = await userModel.findOne({ _id }, { ShippingInfo: 1, userContactEmail: 1 });
-   if (findUser) {
+   const findUserAndAddress = await userModel.findOne({ _id, myAddress: { $elemMatch: { _id: address } } }, { 'myAddress.$': 1 });
+   if (!!findUserAndAddress) {
       return res.status(httpStatusCodes.OK).json({
          success: true,
-         user: findUser,
+         address: findUserAndAddress,
       });
    } else {
-      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+      return res.status(httpStatusCodes.NOT_FOUND).json({
          success: false,
-         message: 'internal server error',
+         message: 'No address found',
       });
    }
 });
 
 const orderPlaceByCashOnDelivery = catchAsync(async function (req, res, next) {
-   // const { userToken } = req.body;
-   // if (!userToken) {
-   //    next(new AppError('user token is required'));
-   // }
-   // // varify the user token. user is valid or not.
-   // const { _id } = await tokenVarifyFunction(undefined, userToken);
-   // const { items, paymentMethod } = req.body;
-   // let orderPlace;
-   // for (let i = 0; i < items.length; i++) {
-   //    // insert all the user product into the order document.
-   //    orderPlace = await orderModel({ userId: _id, productId: items[i].cartItem._id, qty: items[i].qty, paymentMethod }).save();
-   // }
-   // if (orderPlace) {
-   //    // once all products is inserted into the order document. and place all the orders. the remove the user cart products.
-   //    for (let i = 0; i < items.length; i++) {
-   //       await userModel.updateOne({ _id }, { $pull: { cart: { _id: items[i]._id } } });
-   //    }
-   //    return res.status(httpStatusCodes.CREATED).json({
-   //       success: true,
-   //       message: 'Order placed',
-   //    });
-   // } else {
-   //    return res.status(httpStatusCodes.INTERNAL_SERVER).json({
-   //       success: false,
-   //       message: 'internal server error',
-   //    });
-   // }
+   const { token } = req.params;
+   const { items, paymentMethod, addressId } = req.body;
+
+   // varify the user token. user is valid or not.
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   const findUser = await userModel.findOne({ _id });
+   if (findUser) {
+      let saveOrder;
+
+      for (let i = 0; i < items.length; i++) {
+         saveOrder = await orderModel({
+            userId: findUser._id,
+            productId: items[i].cartItem._id,
+            qty: items[i].qty,
+            paymentMethod: paymentMethod,
+            addressId: addressId,
+         }).save();
+      }
+
+      if (saveOrder) {
+         // once all products is inserted into the order document. and place all the orders. the remove the user cart products.
+         for (let i = 0; i < items.length; i++) {
+            await userModel.updateOne({ _id }, { $pull: { cart: { _id: items[i]._id } } });
+         }
+         return res.status(httpStatusCodes.CREATED).json({
+            success: true,
+            message: 'Order placed',
+         });
+
+         // send the email also the user and success message to the user number. for order place.
+
+         //-------------------------------
+      } else {
+         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            success: false,
+            message: 'internal server error',
+         });
+      }
+   } else {
+      return res.status(httpStatusCodes.NOT_FOUND).json({
+         success: false,
+         message: 'login user is not found!',
+      });
+   }
 });
 
 const getUserData = catchAsync(async function (req, res, next) {
@@ -559,6 +509,88 @@ const insertUserAddress = catchAsync(async function (req, res, next) {
    }
 });
 
+const getUserAddress = catchAsync(async function (req, res, next) {
+   const { token } = req.params;
+   // varify the user token. user is valid or not.
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   const findUserAddress = await userModel.findOne({ _id });
+   if (findUserAddress.myAddress) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         address: findUserAddress.myAddress,
+      });
+   }
+});
+
+const deleteUserAddress = catchAsync(async function (req, res, next) {
+   const { id, token } = req.params;
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   const findUserAndDeleteAddress = await userModel.updateOne({ _id }, { $pull: { myAddress: { _id: id } } });
+   if (!!findUserAndDeleteAddress.modifiedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: 'user address removed',
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'internal server error',
+         error: true,
+      });
+   }
+});
+
+const getUserSingleAddress = catchAsync(async function (req, res, next) {
+   const { token, id } = req.params;
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   const findUserAndGetAddress = await userModel.findOne({ _id, 'myAddress._id': id }, { 'myAddress.$': 1 });
+   if (findUserAndGetAddress) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         address: findUserAndGetAddress,
+         error: false,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'internal server error',
+         error: true,
+      });
+   }
+});
+
+const updateUserAddress = catchAsync(async function (req, res, next) {
+   const { token } = req.params;
+   console.log(token);
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   const findAndUpdateAddress = await userModel.updateOne(
+      { _id, myAddress: { $elemMatch: { _id: req.body._id } } },
+      {
+         $set: {
+            'myAddress.$.fullName': req.body.fullName,
+            'myAddress.$.email': req.body.email,
+            'myAddress.$.phone': req.body.phone,
+            'myAddress.$.country': req.body.country,
+            'myAddress.$.state': req.body.state,
+            'myAddress.$.city': req.body.city,
+            'myAddress.$.address': req.body.address,
+            'myAddress.$.IsDefault': req.body.IsDefault,
+         },
+      }
+   );
+   if (!!findAndUpdateAddress.modifiedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: 'Address saved',
+      });
+   } else {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: 'Address already updated',
+      });
+   }
+});
+
 module.exports = {
    getTrandingProducts,
    getSelectedPrevProduct,
@@ -576,4 +608,8 @@ module.exports = {
    getUserData,
    updateUserData,
    insertUserAddress,
+   getUserAddress,
+   deleteUserAddress,
+   getUserSingleAddress,
+   updateUserAddress,
 };

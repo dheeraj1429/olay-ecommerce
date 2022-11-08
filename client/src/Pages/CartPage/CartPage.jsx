@@ -3,23 +3,28 @@ import * as styled from './CartPage.style';
 import NavbarComponent from '../../Components/NavbarComponent/NavbarComponent';
 import ProductCartPayComponent from '../../Components/ProductCartPayComponent/ProductCartPayComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRandomProducts, getUserCartProducts } from '../../Redux/Actions/indexActions';
+import { getRandomProducts } from '../../Redux/Actions/indexActions';
 import ProductCardComponent from '../../Components/ProductCardComponent/ProductCardComponent';
 import settings from '../../slickConfig';
 import Slider from 'react-slick';
 import ProductViewComponent from '../../Components/ProductViewComponent/ProductViewComponent';
 import ProductAddToCartSideNoficationComponent from '../../Components/ProductAddToCartSideNoficationComponent/ProductAddToCartSideNoficationComponent';
 import ShopHeadingComponent from '../../Components/ShopHeadingComponent/ShopHeadingComponent';
+import { useNavigate } from 'react-router';
 
 function CartPage() {
    const dispatch = useDispatch();
+   const navigation = useNavigate();
 
    const { auth } = useSelector((state) => state.auth);
    const { randomProducts, showProductPrev } = useSelector((state) => state.index);
 
    useEffect(() => {
-      dispatch(getUserCartProducts(auth.userObject.token));
-      dispatch(getRandomProducts());
+      if (!!auth && auth?.userObject && auth?.userObject?.token) {
+         dispatch(getRandomProducts());
+      } else {
+         navigation('/auth/signin');
+      }
    }, []);
 
    return (

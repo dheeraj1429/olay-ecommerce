@@ -10,6 +10,7 @@ import { FcAlphabeticalSortingZa } from '@react-icons/all-files/fc/FcAlphabetica
 import { FcOk } from '@react-icons/all-files/fc/FcOk';
 import { FcIcons8Cup } from '@react-icons/all-files/fc/FcIcons8Cup';
 import FlashSaleInnerTableComponent from '../FlashSaleInnerTableComponent/FlashSaleInnerTableComponent';
+import { getAllFlashSalesLoading } from '../../Redux/Actions/adminAppAction';
 
 const link = '/dashboard/flash-sale/create';
 
@@ -41,18 +42,12 @@ function FlashSaleTableComponent() {
              Today's Best Deals & Offers On Mobiles, Fashion, \n
              Electronics, Hotels, Flights & Bus Ticket Bookings.`}
          />
-         <ProductSectionFeatureComponent
-            state={allSales}
-            pageLink={link}
-            field={'sales'}
-            items={items}
-            action={deleteAllFlashSales}
-         />
+         <ProductSectionFeatureComponent state={allSales} pageLink={link} field={'sales'} items={items} action={deleteAllFlashSales} />
 
          {!!allSales && allSales.success && allSales.sales.length ? (
             <>
                <FlashSaleInnerTableComponent isLoading={allSaleLoading} />
-               <TableFooterComponent state={allSales} action={'sales'} />
+               <TableFooterComponent state={allSales} action={'sales'} eventHandler={getAllFlashSales} eventLoading={getAllFlashSalesLoading(true)} />
             </>
          ) : (
             <div className="center_heading">

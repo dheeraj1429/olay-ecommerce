@@ -10,6 +10,7 @@ import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerCompon
 import { AiOutlineHeart } from '@react-icons/all-files/ai/AiOutlineHeart';
 import { AiFillHeart } from '@react-icons/all-files/ai/AiFillHeart';
 import ProductIncComponent from '../../HelperComponents/ProductIncComponent/ProductIncComponent';
+import dompurify from 'dompurify';
 
 function SingleProductContentComponent() {
    const [Qty, setQty] = useState(1);
@@ -120,7 +121,7 @@ function SingleProductContentComponent() {
                   </div>
 
                   <div className="mt-4">
-                     <div className="content" contentEditable="false" dangerouslySetInnerHTML={{ __html: singleProduct.product?.metaContent }}></div>
+                     <div className="content" contentEditable="false" dangerouslySetInnerHTML={{ __html: dompurify.sanitize(singleProduct.product?.metaContent) }}></div>
                   </div>
 
                   <div className="quntityGrDiv mt-4">

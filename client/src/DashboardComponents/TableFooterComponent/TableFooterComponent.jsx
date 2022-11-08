@@ -6,26 +6,10 @@ import { Popconfirm } from 'antd';
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import * as table from './TableFooterComponent.style';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-   fetchAllProductBrand,
-   deleteMultiSelectedProductBrand,
-   deleteSelectedproducts,
-   fetchUploadProducts,
-   getProductTags,
-   getAllFlashSales,
-   fetchBlogPosts,
-} from '../../Redux/Actions/adminAction';
-import {
-   fetchBrandProductLoading,
-   removeAllSelectedItems,
-   fetchLoadingProducts,
-   productTagsFetchLoading,
-   getAllFlashSalesLoading,
-   fetchBlogPostLoading,
-} from '../../Redux/Actions/adminAppAction';
+import { removeAllSelectedItems } from '../../Redux/Actions/adminAppAction';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 
-function TableFooterComponent({ action, state }) {
+function TableFooterComponent({ action, state, eventLoading, eventHandler, multiDeletHandler }) {
    const selectedItems = useSelector((state) => state.admin.selectedItems);
    const [Limit, setLimit] = useState(0);
    const dispatch = useDispatch();
@@ -33,58 +17,26 @@ function TableFooterComponent({ action, state }) {
    const ChnageNext = function () {
       if (Limit >= 0 && Limit < state.totalPages) {
          setLimit((prev) => prev + 1);
-         if (action === 'brands') {
-            dispatch(fetchBrandProductLoading(true));
-         } else if (action === 'products') {
-            dispatch(fetchLoadingProducts(true));
-         } else if (action === 'tags') {
-            dispatch(productTagsFetchLoading(true));
-         } else if (action === 'sales') {
-            dispatch(getAllFlashSalesLoading(true));
-         } else if (action === 'posts') {
-            dispatch(fetchBlogPostLoading(true));
-         }
+         dispatch(eventLoading);
       }
    };
 
    const ChangePrev = function () {
       setLimit((prev) => prev - 1);
       if (Limit > 0) {
-         if (action === 'brands') {
-            dispatch(fetchBrandProductLoading(true));
-         } else if (action === 'products') {
-            dispatch(fetchLoadingProducts(true));
-         } else if (action === 'tags') {
-            dispatch(productTagsFetchLoading(true));
-         } else if (action === 'sales') {
-            dispatch(getAllFlashSalesLoading(true));
-         } else if (action === 'posts') {
-            dispatch(fetchBlogPostLoading(true));
-         }
+         dispatch(eventLoading);
       }
    };
 
    const confirm = function () {
-      if (action === 'brands') {
-         dispatch(deleteMultiSelectedProductBrand(selectedItems));
-      } else if (action === 'products') {
-         dispatch(deleteSelectedproducts(selectedItems));
+      if (multiDeletHandler) {
+         dispatch(multiDeletHandler(selectedItems));
       }
       dispatch(removeAllSelectedItems([]));
    };
 
    useEffect(() => {
-      if (action === 'brands') {
-         dispatch(fetchAllProductBrand(Limit));
-      } else if (action === 'products') {
-         dispatch(fetchUploadProducts(Limit));
-      } else if (action === 'tags') {
-         dispatch(getProductTags(Limit));
-      } else if (action === 'sales') {
-         dispatch(getAllFlashSales(Limit));
-      } else if (action === 'posts') {
-         dispatch(fetchBlogPosts(Limit));
-      }
+      dispatch(eventHandler(Limit));
    }, [Limit]);
 
    return (
@@ -119,17 +71,11 @@ function TableFooterComponent({ action, state }) {
                </div>
                <div>
                   <table.flexDiv>
-                     <CustombuttonComponent
-                        btnCl={Limit <= 0 ? 'PrevDisable_btn' : 'pagination_btn'}
-                        onClick={ChangePrev}
-                     >
+                     <CustombuttonComponent btnCl={Limit <= 0 ? 'PrevDisable_btn' : 'pagination_btn'} onClick={ChangePrev}>
                         <GrFormPreviousLink />
                      </CustombuttonComponent>
 
-                     <CustombuttonComponent
-                        btnCl={Limit >= state.totalPages ? 'PrevDisable_btn' : 'pagination_btn'}
-                        onClick={ChnageNext}
-                     >
+                     <CustombuttonComponent btnCl={Limit >= state.totalPages ? 'PrevDisable_btn' : 'pagination_btn'} onClick={ChnageNext}>
                         <GrFormNextLink />
                      </CustombuttonComponent>
                   </table.flexDiv>

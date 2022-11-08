@@ -27,3 +27,10 @@ export const userLoginLoadingHandler = function (data) {
       payload: data,
    };
 };
+
+export const logout = function (data) {
+   return {
+      type: AUTH_ACTION_TYPE.LOG_OUT,
+      payload: data,
+   };
+};

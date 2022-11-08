@@ -67,11 +67,7 @@ function SignInAndLoginComponent() {
             <div className="image_prv"></div>
             <div className="content_div">
                <h1>{location.pathname === '/auth/login' ? 'Log in' : 'Sign In'}</h1>
-               <p>
-                  {location.pathname === '/auth/login'
-                     ? 'Fill your login details to access your account'
-                     : 'Ready for the new shoot ?'}
-               </p>
+               <p>{location.pathname === '/auth/login' ? 'Fill your login details to access your account' : 'Ready for the new shoot ?'}</p>
 
                <Box
                   component="form"
@@ -81,77 +77,28 @@ function SignInAndLoginComponent() {
                   noValidate
                   autoComplete="off"
                >
-                  <TextField
-                     name="name"
-                     value={User.name}
-                     onChange={ChangeHandler}
-                     id="outlined-basic"
-                     label="Name"
-                     type={'text'}
-                     variant="outlined"
-                  />
-                  <TextField
-                     name="email"
-                     value={User.email}
-                     onChange={ChangeHandler}
-                     id="outlined-basic"
-                     label="Email"
-                     type={'email'}
-                     variant="outlined"
-                  />
+                  {location.pathname === '/auth/login' ? null : <TextField name="name" value={User.name} onChange={ChangeHandler} id="outlined-basic" label="Name" type={'text'} variant="outlined" />}
+                  <TextField name="email" value={User.email} onChange={ChangeHandler} id="outlined-basic" label="Email" type={'email'} variant="outlined" />
                   {location.pathname === '/auth/login' ? (
                      <>
-                        <TextField
-                           name="password"
-                           value={User.password}
-                           onChange={ChangeHandler}
-                           id="outlined-basic"
-                           type={'password'}
-                           label="Password"
-                           variant="outlined"
-                        />
+                        <TextField name="password" value={User.password} onChange={ChangeHandler} id="outlined-basic" type={'password'} label="Password" variant="outlined" />
                      </>
                   ) : (
                      <>
-                        <TextField
-                           name="password"
-                           value={User.password}
-                           onChange={ChangeHandler}
-                           id="outlined-basic"
-                           type={'password'}
-                           label="Password"
-                           variant="outlined"
-                        />
-                        <TextField
-                           name="confirmPassword"
-                           value={User.confirmPassword}
-                           onChange={ChangeHandler}
-                           id="outlined-basic"
-                           type={'password'}
-                           label="Confirm password"
-                           variant="outlined"
-                        />
+                        <TextField name="password" value={User.password} onChange={ChangeHandler} id="outlined-basic" type={'password'} label="Password" variant="outlined" />
+                        <TextField name="confirmPassword" value={User.confirmPassword} onChange={ChangeHandler} id="outlined-basic" type={'password'} label="Confirm password" variant="outlined" />
                      </>
                   )}
                </Box>
                <div>
                   <div>{Error ? <span>{Error}</span> : null}</div>
-                  {location.pathname === '/auth/login' ? (
-                     <Link to={'/auth/signin'}>Don't have an account sing in</Link>
-                  ) : (
-                     <Link to={'/auth/login'}>Already have an account ?</Link>
-                  )}
+                  {location.pathname === '/auth/login' ? <Link to={'/auth/signin'}>Don't have an account sing in</Link> : <Link to={'/auth/login'}>Already have an account ?</Link>}
                   <div>
-                     <span>{!!auth && !auth.success ? auth.message : null}</span>
+                     <span>{!!auth && auth.success && auth?.message ? auth.message : null}</span>
                   </div>
                </div>
 
-               <CustombuttonComponent
-                  isLoading={isLoading}
-                  onClick={sendHandler}
-                  innerText={location.pathname === '/auth/login' ? 'Log in' : 'Sign In'}
-                  btnCl={'category_upload'}
-               />
+               <CustombuttonComponent isLoading={isLoading} onClick={sendHandler} innerText={location.pathname === '/auth/login' ? 'Log in' : 'Sign In'} btnCl={'category_upload'} />
             </div>
          </div>
       </styled.div>

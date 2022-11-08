@@ -22,7 +22,7 @@ const INITAL_STATE = {
    randomProducts: null,
    shippingInfo: null,
    shippingInsertInfoLoading: false,
-   userInformation: null,
+   userAddressInformation: null,
    placeOrder: null,
    placeOrderLoading: false,
    userData: null,
@@ -30,6 +30,10 @@ const INITAL_STATE = {
    updateUserInfoLoading: false,
    saveUserAddress: null,
    saveUserAddressLoading: false,
+   userAddresses: null,
+   userSingleAddress: null,
+   userSingleAddressLoading: false,
+   userAddressUpdateInfo: null,
 };
 
 const shopReducer = function (state = INITAL_STATE, action) {
@@ -237,7 +241,7 @@ const shopReducer = function (state = INITAL_STATE, action) {
       case INDEX_ACTION_TYPE.GET_USER_INFORMATION:
          return {
             ...state,
-            userInformation: action.payload,
+            userAddressInformation: action.payload,
          };
 
       case INDEX_ACTION_TYPE.PLACE_USER_ORDER:
@@ -303,6 +307,42 @@ const shopReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             saveUserAddress: null,
+         };
+
+      case INDEX_ACTION_TYPE.GET_USER_ADDRESS:
+         return {
+            ...state,
+            userAddresses: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.DELETE_USER_ADDRESS:
+         return {
+            ...state,
+            userAddresses: {
+               ...state.userAddresses,
+               address: state.userAddresses.address.filter((el) => el._id !== action.deletedId),
+            },
+         };
+
+      case INDEX_ACTION_TYPE.GET_USER_SINGLE_ADDRESS:
+         return {
+            ...state,
+            userSingleAddress: action.payload,
+            userSingleAddressLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.UPDATE_USER_SINGLE_ADDRESS:
+         return {
+            userAddressUpdateInfo: action.payload,
+            saveUserAddressLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.REMOVE_USER_ADDRESS_NOTIFICATION:
+         return {
+            ...state,
+            userAddressUpdateInfo: action.payload,
+            saveUserAddressLoading: false,
+            userSingleAddress: null,
          };
 
       default:

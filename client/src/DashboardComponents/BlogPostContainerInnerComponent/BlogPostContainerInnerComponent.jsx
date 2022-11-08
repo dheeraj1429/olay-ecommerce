@@ -32,15 +32,9 @@ function BlogPostContainerInnerComponent() {
 
    return (
       <styled.div>
-         <ProductSectionFeatureComponent
-            state={allBlogs}
-            pageLink={link}
-            field={'posts'}
-            items={items}
-            action={deleteAllPosts}
-         />
+         <ProductSectionFeatureComponent state={allBlogs} pageLink={link} field={'posts'} items={items} action={deleteAllPosts} />
          <BlogPostTableComponent blogs={allBlogs} isLoading={fetchBlogLoading} />
-         <TableFooterComponent state={allBlogs} action={'posts'} />
+         <TableFooterComponent state={allBlogs} action={'posts'} eventHandler={fetchBlogPosts} eventLoading={fetchBlogPostLoading(true)} />
       </styled.div>
    );
 }

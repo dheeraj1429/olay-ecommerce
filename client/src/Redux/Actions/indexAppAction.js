@@ -117,3 +117,10 @@ export const removeAddressInformation = function () {
       type: INDEX_ACTION_TYPE.REMOVE_SAVE_ADDRESS_INFO,
    };
 };
+
+export const removeUserAddressInfo = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVE_USER_ADDRESS_NOTIFICATION,
+      payload: data,
+   };
+};

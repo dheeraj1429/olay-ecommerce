@@ -13,6 +13,7 @@ import { getShopInfromation } from './Redux/Actions/adminAction';
 // site pages
 import HomePage from './Pages/HomePage/HomePage';
 import LoadingComponent from './HelperComponents/LoadingComponent/LoadingComponent';
+
 const SignInAndLoginPage = lazy(() => import('./Pages/SignInAndLoginPage/SignInAndLoginPage'));
 const UserDashboardPage = lazy(() => import('./Pages/UserDashboardPage/UserDashboardPage'));
 
@@ -63,6 +64,7 @@ const ShippingMethodComponent = lazy(() => import('./Components/ShippingMethodCo
 // user dashboard components
 const MyDetailsComponent = lazy(() => import('./UserDashboardComponent/MyDetailsComponent/MyDetailsComponent'));
 const AddressBookComponent = lazy(() => import('./UserDashboardComponent/AddressBookComponent/AddressBookComponent'));
+const UserAddressTableViewComponent = lazy(() => import('./UserDashboardComponent/UserAddressTableViewComponent/UserAddressTableViewComponent'));
 
 // dashboard pages
 const Dashboard = lazy(() => import('./DashboardPages/Dashboard/Dashboard'));
@@ -89,6 +91,7 @@ function App() {
       <div className="App">
          <Suspense fallback={<LoadingComponent />}>
             <Routes>
+               {/* website routes */}
                <Route path="" element={<HomePage />} />
                <Route path="/products/:productName/:id" element={<SingleProductPage />} />
                <Route path="/cart" element={<CartPage />} />
@@ -97,20 +100,26 @@ function App() {
                   <Route path="shipping-methods" element={<ShippingMethodComponent />} />
                </Route>
 
+               {/* user account pages routes */}
                <Route path="/my-account" element={<UserDashboardPage />}>
                   <Route path="my-details" element={<MyDetailsComponent />} />
-                  <Route path="my-address-book" element={<AddressBookComponent />} />
+                  <Route path="my-address-book" element={<UserAddressTableViewComponent />} />
+                  <Route path="my-address-book/create" element={<AddressBookComponent />} />
+                  <Route path="my-address-book/edit/:id" element={<AddressBookComponent />} />
                </Route>
 
+               {/* user auth pages routes */}
                <Route path="auth" element={<SignInAndLoginPage />}>
                   <Route path="signin" element={<SignInAndLoginComponent />} />
                   <Route path="login" element={<SignInAndLoginComponent />} />
                </Route>
 
+               {/* dashboard auth pages routes */}
                <Route path="dashboard-auth" element={<Dashboard />}>
                   <Route path="sign-in" element={<DashboardSingInComponent />} />
                </Route>
 
+               {/* dashboard routes */}
                <Route path="dashboard" element={<DashboardPanel />}>
                   <Route path="" element={<DashboardHomeComponent />} />
                   <Route path="upload-products" element={<UploadProductComponent />} />

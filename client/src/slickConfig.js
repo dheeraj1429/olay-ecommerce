@@ -4,7 +4,7 @@ const settings = {
    infinite: true,
    speed: 500,
    slidesToShow: 4,
-   slidesToScroll: 5,
+   slidesToScroll: 2,
    initialSlide: 0,
    responsive: [
       {

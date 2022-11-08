@@ -11,7 +11,7 @@ const signInUser = catchAsync(async function (req, res, next) {
 
       if (userIsExists) {
          return res.status(httpStatusCodes.OK).json({
-            success: false,
+            success: true,
             message: 'User is exists',
          });
       }
@@ -61,7 +61,7 @@ const logInUser = catchAsync(async function (req, res, next) {
 
       if (!userIsExists) {
          return res.status(httpStatusCodes.OK).json({
-            success: false,
+            success: true,
             message: 'User is not exists',
          });
       }

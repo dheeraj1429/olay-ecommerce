@@ -9,10 +9,10 @@ function Dashboard() {
    const navigation = useNavigate();
 
    useEffect(() => {
-      if (!!auth && auth.success && auth.userObject.isAdmin === 'admin') {
+      if (!!auth && auth.success && auth.userObject?.isAdmin === 'admin') {
          navigation('/dashboard');
       }
-      if (!!auth && auth.success && auth.userObject.isAdmin === 'user') {
+      if (!!auth && auth.success && auth.userObject?.isAdmin === 'user') {
          navigation('/dashboard-auth/sign-in');
       }
    }, [auth]);

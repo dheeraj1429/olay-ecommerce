@@ -3,7 +3,7 @@ import * as styled from './CheckOutPage.style';
 import { Outlet } from 'react-router-dom';
 import ShowUserCartProductDetailsComponent from '../../Components/ShowUserCartProductDetailsComponent/ShowUserCartProductDetailsComponent';
 import { useSelector, useDispatch } from 'react-redux';
-import { getLoginUserDeatils, getUserCartProducts } from '../../Redux/Actions/indexActions';
+import { getUserCartProducts } from '../../Redux/Actions/indexActions';
 
 function CheckOutPage() {
    const dispatch = useDispatch();
@@ -12,7 +12,6 @@ function CheckOutPage() {
    useEffect(() => {
       if (!!auth && auth?.userObject && auth?.userObject?.token) {
          dispatch(getUserCartProducts(auth.userObject.token));
-         dispatch(getLoginUserDeatils(auth.userObject.token));
       }
    }, []);
 

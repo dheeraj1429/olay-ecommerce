@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as styled from './UserDashboardPage.style';
 import NavbarComponent from '../../Components/NavbarComponent/NavbarComponent';
 import CategorieTagShowComponent from '../../Components/CategorieTagShowComponent/CategorieTagShowComponent';
 import UserProfileOptionComponent from '../../Components/UserProfileOptionComponent/UserProfileOptionComponent';
 import { Outlet } from 'react-router';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 function UserDashboardPage() {
+   const { auth } = useSelector((state) => state.auth);
+   const navigation = useNavigate();
+
+   useEffect(() => {
+      if (!auth) {
+         navigation('/auth/signin');
+      }
+   }, []);
+
    return (
       <styled.div>
          <NavbarComponent />

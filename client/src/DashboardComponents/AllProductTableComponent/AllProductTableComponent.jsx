@@ -9,7 +9,8 @@ import { FcAlphabeticalSortingZa } from '@react-icons/all-files/fc/FcAlphabetica
 import { FcOk } from '@react-icons/all-files/fc/FcOk';
 import { FcIcons8Cup } from '@react-icons/all-files/fc/FcIcons8Cup';
 import { FcHighPriority } from '@react-icons/all-files/fc/FcHighPriority';
-import { deleteAllProducts } from '../../Redux/Actions/adminAction';
+import { deleteAllProducts, deleteSelectedproducts, fetchUploadProducts } from '../../Redux/Actions/adminAction';
+import { fetchLoadingProducts } from '../../Redux/Actions/adminAppAction';
 
 const items = [
    { value: '', Option: 'None' },
@@ -27,15 +28,9 @@ function AllProductTableComponent() {
 
    return (
       <table.div>
-         <ProductSectionFeatureComponent
-            state={allProducts}
-            pageLink={link}
-            field={'products'}
-            items={items}
-            action={deleteAllProducts}
-         />
+         <ProductSectionFeatureComponent state={allProducts} pageLink={link} field={'products'} items={items} action={deleteAllProducts} />
          <AllProductsTableComponent />
-         <TableFooterComponent state={allProducts} action={'products'} />
+         <TableFooterComponent state={allProducts} action={'products'} eventLoading={fetchLoadingProducts(true)} eventHandler={fetchUploadProducts} multiDeletHandler={deleteSelectedproducts} />
       </table.div>
    );
 }

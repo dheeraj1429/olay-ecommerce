@@ -1,22 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as dashboard from './DashboardPanle.style';
 import DashboardPanelSidebarComponent from '../../DashboardComponents/DashboardPanelSidebarComponent/DashboardPanelSidebarComponent';
-import { Outlet, useNavigate } from 'react-router';
-import { useCookies } from 'react-cookie';
+import { Outlet, Navigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 function DashboardPanel() {
-   const [cookie] = useCookies('user');
-   const navigation = useNavigate();
+   const { auth } = useSelector((state) => state.auth);
 
-   useEffect(() => {
-      if (!!cookie && cookie.user && cookie.user.isAdmin === 'user') {
-         navigation('/dashboard-auth/sign-in');
-      } else if (!!cookie && cookie.user && cookie.user.isAdmin === 'admin') {
-         return;
-      } else {
-         navigation('/');
-      }
-   }, []);
+   if (!!auth && auth?.userObject && auth.userObject?.isAdmin === 'user') {
+      return <Navigate to={'/dashboard-auth/sign-in'} />;
+   }
+
+   if (!auth) {
+      return <Navigate to={'/auth/signin'} />;
+   }
 
    return (
       <dashboard.div>

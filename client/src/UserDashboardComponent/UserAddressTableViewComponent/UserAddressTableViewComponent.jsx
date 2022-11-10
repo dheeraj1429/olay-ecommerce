@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import * as styled from './UserAddressTableViewComponent.style';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserAddress } from '../../Redux/Actions/indexActions';
-import { Checkbox } from 'antd';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -57,31 +56,22 @@ function UserAddressTableViewComponent() {
             <div className="scrollDiv">
                <div className="mt-3 table_view_Div p-2" style={userAddresses.address.length ? null : { width: '100%', overflowX: 'hidden' }}>
                   <div className="row mb-3">
-                     <div className="col-12 col-sm-12 col-md-2">
-                        <p>Full name</p>
-                     </div>
-                     <div className="col-12 col-sm-12 col-md-2">
-                        <p>Email address</p>
-                     </div>
-                     <div className="col-12 col-sm-12 col-md-1">
+                     <div className="col-12 col-sm-12 col-md-2 center_div">
                         <p>Phone number</p>
                      </div>
-                     <div className="col-12 col-sm-12 col-md-1">
+                     <div className="col-12 col-sm-12 col-md-2 center_div">
                         <p>Country</p>
                      </div>
-                     <div className="col-12 col-sm-12 col-md-1">
+                     <div className="col-12 col-sm-12 col-md-2 center_div">
                         <p>State</p>
                      </div>
-                     <div className="col-12 col-sm-12 col-md-1">
+                     <div className="col-12 col-sm-12 col-md-2 center_div">
                         <p>City</p>
                      </div>
-                     <div className="col-12 col-sm-12 col-md-2">
+                     <div className="col-12 col-sm-12 col-md-3 center_div">
                         <p>Address</p>
                      </div>
-                     <div className="col-12 col-sm-12 col-md-1">
-                        <p>Is defatul</p>
-                     </div>
-                     <div className="col-12 col-sm-12 col-md-1">
+                     <div className="col-12 col-sm-12 col-md-1 center_div">
                         <p>Action</p>
                      </div>
                   </div>
@@ -90,33 +80,22 @@ function UserAddressTableViewComponent() {
                      ? userAddresses.address.map((el) => (
                           <div className="address_view_div container-fluid" key={el._id}>
                              <div className="row">
-                                <div className="col-12 col-sm-12 col-md-2">
-                                   <p>{el.fullName}</p>
-                                </div>
-                                <div className="col-12 col-sm-12 col-md-2">
-                                   <p>{el.email}</p>
-                                </div>
-                                <div className="col-12 col-sm-12 col-md-1">
+                                <div className="col-12 col-sm-12 col-md-2 center_div">
                                    <p>{el.phone}</p>
                                 </div>
-                                <div className="col-12 col-sm-12 col-md-1">
+                                <div className="col-12 col-sm-12 col-md-2 center_div">
                                    <p>{el.country}</p>
                                 </div>
-                                <div className="col-12 col-sm-12 col-md-1">
+                                <div className="col-12 col-sm-12 col-md-2 center_div">
                                    <p>{el.state}</p>
                                 </div>
-                                <div className="col-12 col-sm-12 col-md-1">
+                                <div className="col-12 col-sm-12 col-md-2 center_div">
                                    <p>{el.city}</p>
                                 </div>
-                                <div className="col-12 col-sm-12 col-md-2">
+                                <div className="col-12 col-sm-12 col-md-3 center_div">
                                    <p>{el.address}</p>
                                 </div>
-                                <div className="col-12 col-sm-12 col-md-1">
-                                   <p>
-                                      <Checkbox checked={el.IsDefault} />
-                                   </p>
-                                </div>
-                                <div className="col-12 col-sm-12 col-md-1">
+                                <div className="col-12 col-sm-12 col-md-1 center_div">
                                    <div className="d-flex align-items-center">
                                       <div>
                                          <Button id="fade-button" aria-controls={open ? 'fade-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleClick}>

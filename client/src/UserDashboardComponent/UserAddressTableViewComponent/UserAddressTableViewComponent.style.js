@@ -9,14 +9,14 @@ export const div = styled.div`
       margin-bottom: 0.8rem;
    }
 
-   .scrollDiv {
-      width: 100%;
-      overflow-x: scroll;
-      overflow-y: hidden;
+   .center_div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
    }
 
-   .table_view_Div {
-      width: 1400px;
+   .scrollDiv {
+      width: 100%;
    }
 
    p {

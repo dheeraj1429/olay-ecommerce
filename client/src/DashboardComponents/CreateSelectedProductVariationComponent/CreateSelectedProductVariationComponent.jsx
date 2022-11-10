@@ -8,14 +8,7 @@ import ProductUploadImageComponent from '../ProductUploadImageComponent/ProductU
 import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/CustombuttonComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import {
-   getAllProductSizeVariations,
-   getproductSwatches,
-   insertProductSubVariation,
-   fecthSingleSubVariation,
-   updateSubVarition,
-   delteSingleSubVariatoion,
-} from '../../Redux/Actions/adminAction';
+import { getAllProductSizeVariations, getproductSwatches, insertProductSubVariation, fecthSingleSubVariation, updateSubVarition, delteSingleSubVariatoion } from '../../Redux/Actions/adminAction';
 import { FaCircle } from '@react-icons/all-files/fa/FaCircle';
 import {
    insertNewSubVationLoading,
@@ -226,11 +219,7 @@ function CreateSelectedProductVariationComponent() {
 
          <variation.spaceDiv>
             <HeadingComponent
-               Heading={
-                  !!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation
-                     ? 'Edit Product sub varition'
-                     : 'Create product variations'
-               }
+               Heading={!!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation ? 'Edit Product sub varition' : 'Create product variations'}
                subHeading={`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.`}
             />
 
@@ -254,50 +243,18 @@ function CreateSelectedProductVariationComponent() {
                         onChange={changeHandler}
                         helperText="Product variations name for example: color red variation, size xl variation"
                      />
-                     <TextField
-                        id="outlined-basic"
-                        label="SKU"
-                        variant="outlined"
-                        type={'text'}
-                        name="sku"
-                        value={VariationInfo.sku}
-                        onChange={changeHandler}
-                     />
+                     <TextField id="outlined-basic" label="SKU" variant="outlined" type={'text'} name="sku" value={VariationInfo.sku} onChange={changeHandler} />
                      <variation.flex>
                         <div className="half-width">
-                           <TextField
-                              id="outlined-basic"
-                              label="Regular Price"
-                              variant="outlined"
-                              type={'number'}
-                              name="regularPrice"
-                              value={VariationInfo.regularPrice}
-                              onChange={changeHandler}
-                           />
+                           <TextField id="outlined-basic" label="Regular Price" variant="outlined" type={'number'} name="regularPrice" value={VariationInfo.regularPrice} onChange={changeHandler} />
                         </div>
                         <div className="half-width">
-                           <TextField
-                              id="outlined-basic"
-                              label="Sale Price"
-                              variant="outlined"
-                              type={'number'}
-                              name="salePrice"
-                              value={VariationInfo.salePrice}
-                              onChange={changeHandler}
-                           />
+                           <TextField id="outlined-basic" label="Sale Price" variant="outlined" type={'number'} name="salePrice" value={VariationInfo.salePrice} onChange={changeHandler} />
                         </div>
                      </variation.flex>
                      <variation.flex>
                         <div className="half-width">
-                           <TextField
-                              id="outlined-select-currency"
-                              select
-                              label="Select"
-                              helperText="Stock status"
-                              name="stokeStatus"
-                              value={VariationInfo.stokeStatus}
-                              onChange={changeHandler}
-                           >
+                           <TextField id="outlined-select-currency" select label="Select" helperText="Stock status" name="stokeStatus" value={VariationInfo.stokeStatus} onChange={changeHandler}>
                               {stock.map((option) => (
                                  <MenuItem key={option.value} value={option.value}>
                                     {option.label}
@@ -307,15 +264,7 @@ function CreateSelectedProductVariationComponent() {
                         </div>
 
                         <div className="half-width">
-                           <TextField
-                              id="outlined-select-currency"
-                              select
-                              label="Select"
-                              helperText="Product size variation"
-                              name="size"
-                              value={VariationInfo.size}
-                              onChange={changeHandler}
-                           >
+                           <TextField id="outlined-select-currency" select label="Select" helperText="Product size variation" name="size" value={VariationInfo.size} onChange={changeHandler}>
                               {!!allSizeVariations && allSizeVariations.success && allSizeVariations?.sizeVariations
                                  ? allSizeVariations.sizeVariations.map((option) => (
                                       <MenuItem key={option._id} value={option._id}>
@@ -356,63 +305,22 @@ function CreateSelectedProductVariationComponent() {
 
                      <variation.flex>
                         <div className="half-width">
-                           <TextField
-                              id="outlined-basic"
-                              label="Product weight"
-                              variant="outlined"
-                              type={'number'}
-                              name="weight"
-                              value={VariationInfo.weight}
-                              onChange={changeHandler}
-                           />
+                           <TextField id="outlined-basic" label="Product weight" variant="outlined" type={'number'} name="weight" value={VariationInfo.weight} onChange={changeHandler} />
                         </div>
                         <div className="half-width">
-                           <TextField
-                              id="outlined-basic"
-                              label="Product length"
-                              variant="outlined"
-                              type={'number'}
-                              name="length"
-                              value={VariationInfo.length}
-                              onChange={changeHandler}
-                           />
+                           <TextField id="outlined-basic" label="Product length" variant="outlined" type={'number'} name="length" value={VariationInfo.length} onChange={changeHandler} />
                         </div>
                      </variation.flex>
                      <variation.flex>
                         <div className="half-width">
-                           <TextField
-                              id="outlined-basic"
-                              label="Product wide"
-                              variant="outlined"
-                              type={'number'}
-                              name="wide"
-                              value={VariationInfo.wide}
-                              onChange={changeHandler}
-                           />
+                           <TextField id="outlined-basic" label="Product wide" variant="outlined" type={'number'} name="wide" value={VariationInfo.wide} onChange={changeHandler} />
                         </div>
                         <div className="half-width">
-                           <TextField
-                              id="outlined-basic"
-                              label="Product height"
-                              variant="outlined"
-                              type={'number'}
-                              name="height"
-                              value={VariationInfo.height}
-                              onChange={changeHandler}
-                           />
+                           <TextField id="outlined-basic" label="Product height" variant="outlined" type={'number'} name="height" value={VariationInfo.height} onChange={changeHandler} />
                         </div>
                      </variation.flex>
 
-                     <TextField
-                        id="outlined-multiline-static"
-                        label="Description"
-                        multiline
-                        rows={4}
-                        defaultValue=""
-                        name="description"
-                        value={VariationInfo.description}
-                        onChange={changeHandler}
-                     />
+                     <TextField id="outlined-multiline-static" label="Description" multiline rows={4} defaultValue="" name="description" value={VariationInfo.description} onChange={changeHandler} />
                      <HeadingComponent cl="sm_heading" Heading={'Product variations image'} />
                      <ProductUploadImageComponent
                         selectedPrevImage={!!VariationInfo?.variationImage ? VariationInfo?.variationImage : null}
@@ -421,37 +329,16 @@ function CreateSelectedProductVariationComponent() {
                         name="variationImage"
                      />
                   </Box>
-                  {!!fetchSingleSubVarition &&
-                  fetchSingleSubVarition?.success &&
-                  fetchSingleSubVarition?.subVariation ? (
+                  {!!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation ? (
                      <variation.flex>
-                        <CustombuttonComponent
-                           innerText={'Update'}
-                           btnCl={'category_upload'}
-                           onClick={updateHandler}
-                           isLoading={editProductSingleVariationLoading}
-                        />
+                        <CustombuttonComponent innerText={'Update'} btnCl={'category_upload'} onClick={updateHandler} isLoading={editProductSingleVariationLoading} />
 
-                        <Popconfirm
-                           title="Are you sure to delete this sub variation ?"
-                           onConfirm={DeleteHandler}
-                           okText="Yes"
-                           cancelText="No"
-                        >
-                           <CustombuttonComponent
-                              innerText={'Delete'}
-                              btnCl={'Delete_btn'}
-                              isLoading={deleteSubVaritionLoading}
-                           />
+                        <Popconfirm title="Are you sure to delete this sub variation ?" onConfirm={DeleteHandler} okText="Yes" cancelText="No">
+                           <CustombuttonComponent innerText={'Delete'} btnCl={'Delete_btn'} isLoading={deleteSubVaritionLoading} />
                         </Popconfirm>
                      </variation.flex>
                   ) : (
-                     <CustombuttonComponent
-                        innerText={'Save'}
-                        btnCl={'category_upload'}
-                        onClick={SaveVariationHandler}
-                        isLoading={productSubVariationLoading}
-                     />
+                     <CustombuttonComponent innerText={'Save'} btnCl={'category_upload'} onClick={SaveVariationHandler} isLoading={productSubVariationLoading} />
                   )}
                </li>
             </ul>

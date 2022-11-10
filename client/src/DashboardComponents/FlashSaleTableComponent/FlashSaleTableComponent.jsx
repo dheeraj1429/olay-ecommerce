@@ -28,8 +28,6 @@ function FlashSaleTableComponent() {
    const allSales = useSelector((state) => state.admin.allSales);
    const allSaleLoading = useSelector((state) => state.admin.allSaleLoading);
 
-   console.log(allSales);
-
    useEffect(() => {
       dispatch(getAllFlashSales(0));
    }, []);

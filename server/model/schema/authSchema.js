@@ -25,8 +25,6 @@ const userSchema = new mongoose.Schema({
    wishLists: [{ ItemId: { type: mongoose.Types.ObjectId, ref: 'product' } }],
    myAddress: [
       {
-         fullName: { type: String },
-         email: { type: String },
          phone: { type: String },
          country: { type: String, required: [true, 'Country name is required'] },
          state: { type: String, required: [true, 'state is required'] },

@@ -66,4 +66,5 @@ export const dropDownItems = styled.ul`
    transition: all 0.3s ease;
    /* top: -10px; */
    z-index: 100;
+   padding: 0;
 `;

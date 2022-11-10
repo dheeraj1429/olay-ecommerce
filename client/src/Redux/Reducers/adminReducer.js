@@ -106,6 +106,11 @@ const INITAL_STATE = {
    insertBlogPostCategoriesError: null,
    blogCategories: null,
    selectedBlogCategory: null,
+   allOrders: null,
+   userOrderInvoiceLoading: {
+      loading: false,
+      id: null,
+   },
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -1378,6 +1383,18 @@ const adminReducer = function (state = INITAL_STATE, action) {
                categories: state.blogCategories.categories.filter((el) => el._id !== action.removeId),
             },
             selectedBlogCategory: !!state.selectedBlogCategory && state.selectedBlogCategory._id === action.removeId ? null : state.selectedBlogCategory,
+         };
+
+      case ADMIN_ACTION_TYPES.GET_ALL_ORDERS:
+         return {
+            ...state,
+            allOrders: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.DOWNLOAD_ORDER_INVOICE_LOADING:
+         return {
+            ...state,
+            userOrderInvoiceLoading: action.payload,
          };
 
       default:

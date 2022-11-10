@@ -3,7 +3,7 @@ import * as styled from './CartPage.style';
 import NavbarComponent from '../../Components/NavbarComponent/NavbarComponent';
 import ProductCartPayComponent from '../../Components/ProductCartPayComponent/ProductCartPayComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRandomProducts } from '../../Redux/Actions/indexActions';
+import { getRandomProducts, getUserCartProducts } from '../../Redux/Actions/indexActions';
 import ProductCardComponent from '../../Components/ProductCardComponent/ProductCardComponent';
 import settings from '../../slickConfig';
 import Slider from 'react-slick';
@@ -22,6 +22,7 @@ function CartPage() {
    useEffect(() => {
       if (!!auth && auth?.userObject && auth?.userObject?.token) {
          dispatch(getRandomProducts());
+         dispatch(getUserCartProducts(auth.userObject.token));
       } else {
          navigation('/auth/signin');
       }

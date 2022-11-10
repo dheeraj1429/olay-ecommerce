@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUploadProducts } from "../../Redux/Actions/adminAction";
-import * as product from "./AllProductTableViewComponent.style";
-import AllProductTableInnerComponent from "../AllProductTableInnerComponent/AllProductTableInnerComponent";
-import TableFooterComponent from "../TableFooterComponent/TableFooterComponent";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUploadProducts } from '../../Redux/Actions/adminAction';
+import * as product from './AllProductTableViewComponent.style';
+import AllProductTableInnerComponent from '../AllProductTableInnerComponent/AllProductTableInnerComponent';
+import TableFooterComponent from '../TableFooterComponent/TableFooterComponent';
+import { fetchLoadingProducts } from '../../Redux/Actions/adminAppAction';
 
 const subVatiaions = 1;
 
@@ -21,11 +22,7 @@ function AllProductTableViewComponent() {
          <product.tableView>
             <table>
                {!!allProducts && allProducts.success && !!allProducts?.products.length ? (
-                  <AllProductTableInnerComponent
-                     allProducts={allProducts}
-                     variation={true}
-                     isLoading={fetchProductsLoading}
-                  />
+                  <AllProductTableInnerComponent allProducts={allProducts} variation={true} isLoading={fetchProductsLoading} />
                ) : (
                   <div className="center-div">
                      <p>No Products</p>
@@ -33,7 +30,7 @@ function AllProductTableViewComponent() {
                )}
             </table>
          </product.tableView>
-         <TableFooterComponent state={allProducts} action={"products"} />
+         <TableFooterComponent state={allProducts} action={'products'} eventLoading={fetchLoadingProducts(true)} eventHandler={fetchUploadProducts} />
       </product.div>
    );
 }

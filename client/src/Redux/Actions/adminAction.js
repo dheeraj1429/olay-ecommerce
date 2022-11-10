@@ -241,10 +241,7 @@ export const uplodNewProduct = function (data) {
 export const fetchUploadProducts = function (page, docItems) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(
-            `/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`,
-            headers
-         );
+         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`, headers);
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({
@@ -301,10 +298,7 @@ export const deleteSelectedproducts = function (data) {
 export const deleteOneProduct = function (id, categoryId, brandId) {
    return async function (dispatch) {
       try {
-         const deleteOneProducts = await axios.delete(
-            `/admin/delete-one-product?id=${id}&categoryId=${categoryId}&brandId=${brandId}`,
-            Headers
-         );
+         const deleteOneProducts = await axios.delete(`/admin/delete-one-product?id=${id}&categoryId=${categoryId}&brandId=${brandId}`, Headers);
 
          if (deleteOneProducts && deleteOneProducts?.data && deleteOneProducts?.data?.success) {
             dispatch({
@@ -344,11 +338,7 @@ export const fetchSingleProduct = function (id) {
 export const editSingleProduct = function (data, id, selectedProductId) {
    return async function (dispatch) {
       try {
-         const editSingleProduct = await axios.patch(
-            `/admin/eidt-single-product/${id}?selectedProductId=${selectedProductId}`,
-            data,
-            headers
-         );
+         const editSingleProduct = await axios.patch(`/admin/eidt-single-product/${id}?selectedProductId=${selectedProductId}`, data, headers);
 
          if (editSingleProduct && editSingleProduct?.data) {
             dispatch({
@@ -706,10 +696,7 @@ export const insertProductSubVariation = function (data) {
 export const fecthSingleSubVariation = function (id, parentProductId) {
    return async function (dispatch) {
       try {
-         const singelSubVariation = await axios.get(
-            `/admin/get-single-sub-variation?subVariation=${id}&parentProductId=${parentProductId}`,
-            headers
-         );
+         const singelSubVariation = await axios.get(`/admin/get-single-sub-variation?subVariation=${id}&parentProductId=${parentProductId}`, headers);
 
          if (singelSubVariation && singelSubVariation?.data && singelSubVariation?.data.success) {
             dispatch({
@@ -745,11 +732,7 @@ export const updateSubVarition = function (data) {
 export const delteSingleSubVariatoion = function (data) {
    return async function (dispatch) {
       try {
-         const deleteSingleVariation = await axios.delete(
-            `/admin/delete-single-sub-variaiton?parentId=${data.parentProductId}&subVariationId=${data.subVariationId}`,
-            data,
-            headers
-         );
+         const deleteSingleVariation = await axios.delete(`/admin/delete-single-sub-variaiton?parentId=${data.parentProductId}&subVariationId=${data.subVariationId}`, data, headers);
 
          if (deleteSingleVariation && deleteSingleVariation?.data) {
             dispatch({
@@ -869,16 +852,9 @@ export const updateSingleFlashSale = function (data) {
 export const removeFlashSaleProducts = function (id, parentSaleId) {
    return async function (dispatch) {
       try {
-         const removeSelectedFlashSaleProduct = await axios.delete(
-            `/admin/delete-selected-flash-sale-product?productId=${id}&parentSaleId=${parentSaleId}`,
-            headers
-         );
+         const removeSelectedFlashSaleProduct = await axios.delete(`/admin/delete-selected-flash-sale-product?productId=${id}&parentSaleId=${parentSaleId}`, headers);
 
-         if (
-            removeSelectedFlashSaleProduct &&
-            !!removeSelectedFlashSaleProduct?.data &&
-            !!removeSelectedFlashSaleProduct?.data.success
-         ) {
+         if (removeSelectedFlashSaleProduct && !!removeSelectedFlashSaleProduct?.data && !!removeSelectedFlashSaleProduct?.data.success) {
             dispatch({
                type: ADMIN_ACTION_TYPES.REMOVE_FLASH_SALE_PRODUCTS,
                payload: id,
@@ -1038,10 +1014,7 @@ export const getAllExportInfo = function () {
 export const deleteSingleProductHistory = function (id, fileName) {
    return async function (dispatch) {
       try {
-         const deleteProductHistory = await axios.delete(
-            `/admin/tools/delete-single-product-history/${id}/${fileName}`,
-            headers
-         );
+         const deleteProductHistory = await axios.delete(`/admin/tools/delete-single-product-history/${id}/${fileName}`, headers);
 
          if (deleteProductHistory && deleteProductHistory?.data && deleteProductHistory?.data?.success) {
             dispatch({
@@ -1267,10 +1240,7 @@ export const UpdateStoreShopInformation = function (data) {
 export const getSelectedProductCategory = function (data) {
    return async function (dispatch) {
       try {
-         const selectedCategory = await axios.get(
-            `/admin/selected-product-category?name=${data.name}&_id=${data._id}`,
-            headers
-         );
+         const selectedCategory = await axios.get(`/admin/selected-product-category?name=${data.name}&_id=${data._id}`, headers);
 
          if (selectedCategory && selectedCategory?.data && selectedCategory?.data.success) {
             dispatch({
@@ -1435,11 +1405,7 @@ export const editBlogCategoris = function (data, id) {
                updateData: data,
                updateCategoryId: id,
             });
-         } else if (
-            editBlogCategorisResponse &&
-            editBlogCategorisResponse?.data &&
-            !editBlogCategorisResponse?.data.success
-         ) {
+         } else if (editBlogCategorisResponse && editBlogCategorisResponse?.data && !editBlogCategorisResponse?.data.success) {
             dispatch({
                type: ADMIN_ACTION_TYPES.UPDATE_BLOG_CATEGORIE,
                payload: editBlogCategorisResponse && editBlogCategorisResponse?.data,
@@ -1464,6 +1430,52 @@ export const removeSelectedBlogCategorie = function (id) {
             });
          } else {
             console.log(deleteSingelBlogCategorie && deleteSingelBlogCategorie?.data);
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getAllOrders = function () {
+   return async function (dispatch) {
+      try {
+         const ordersResponse = await axios.get('/admin/get-all-orders/', headers);
+
+         if (ordersResponse && ordersResponse?.data && ordersResponse?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.GET_ALL_ORDERS,
+               payload: ordersResponse && ordersResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const downloadOrderInvoice = function (data) {
+   return async function (dispatch) {
+      try {
+         const invoiceResponse = await axios.post(
+            '/admin/order-invoice-download',
+            data,
+            {
+               responseType: 'blob',
+            },
+            headers
+         );
+
+         if (invoiceResponse) {
+            FileDownload(invoiceResponse?.data, 'userOrderInvoice.pdf');
+
+            dispatch({
+               type: ADMIN_ACTION_TYPES.DOWNLOAD_ORDER_INVOICE_LOADING,
+               payload: {
+                  loading: false,
+                  id: null,
+               },
+            });
          }
       } catch (err) {
          console.log(err);

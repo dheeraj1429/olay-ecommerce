@@ -356,47 +356,104 @@ const getLoginUserDeatils = catchAsync(async function (req, res, next) {
 
 const orderPlaceByCashOnDelivery = catchAsync(async function (req, res, next) {
    const { token } = req.params;
-   const { items, paymentMethod, addressId } = req.body;
+   const { items, paymentMethod, addressId, currencyName, countryCode, currencySymbol } = req.body;
 
    // varify the user token. user is valid or not.
    const { _id } = await tokenVarifyFunction(undefined, token);
-   const findUser = await userModel.findOne({ _id });
-   if (findUser) {
-      let saveOrder;
 
-      for (let i = 0; i < items.length; i++) {
-         saveOrder = await orderModel({
-            userId: findUser._id,
-            productId: items[i].cartItem._id,
-            qty: items[i].qty,
-            paymentMethod: paymentMethod,
-            addressId: addressId,
-         }).save();
-      }
+   // find the user which place we want to send the order.
+   const findUserAddress = await userModel.findOne({ _id, myAddress: { $elemMatch: { _id: addressId } } }, { 'myAddress.$': 1 });
+   const getUserInfo = await userModel.findOne({ _id });
 
-      if (saveOrder) {
-         // once all products is inserted into the order document. and place all the orders. the remove the user cart products.
-         for (let i = 0; i < items.length; i++) {
-            await userModel.updateOne({ _id }, { $pull: { cart: { _id: items[i]._id } } });
-         }
-         return res.status(httpStatusCodes.CREATED).json({
-            success: true,
-            message: 'Order placed',
-         });
-
-         // send the email also the user and success message to the user number. for order place.
-
-         //-------------------------------
-      } else {
-         return res.status(httpStatusCodes.INTERNAL_SERVER).json({
-            success: false,
-            message: 'internal server error',
-         });
-      }
-   } else {
+   if (!findUserAddress) {
       return res.status(httpStatusCodes.NOT_FOUND).json({
          success: false,
-         message: 'login user is not found!',
+         message: 'login user address is not found!',
+      });
+   }
+
+   // remove the id for the duplicate error.
+   delete findUserAddress.myAddress[0]._id;
+   let itemsCount = items.length,
+      itemsPrice = 0;
+
+   // store all the user order data into the order collection.
+   const saveOrder = await orderModel({
+      userId: _id,
+      orderItems: items,
+      paymentMethod: paymentMethod,
+      deliveryAddress: findUserAddress.myAddress[0],
+      currencyName,
+      countryCode,
+      currencySymbol,
+   }).save();
+
+   if (saveOrder) {
+      // once the product is placed then remove the all user cart items.
+      for (let i = 0; i < items.length; i++) {
+         // when the user order placed then send the email with calculate prices.
+         itemsPrice += items[i]?.salePrice && !!items[i].salePrice ? items[i].salePrice * items[i].qty : items[i].price * items[i].qty;
+
+         // remove the user cart products when the order is confirm.
+         await userModel.updateOne({ _id }, { $pull: { cart: { cartItem: items[i].productId } } });
+      }
+
+      // send the email also the user and success message to the user number. for order place.
+      const templatePath = path.join(__dirname, '..', 'views', 'templates', 'orderPlace.ejs');
+
+      // ejs template object data. to send the user and the order information into the email tamp.
+      const orderObject = {
+         orderId: 123,
+         address: findUserAddress.myAddress[0].address,
+         deliveryDate: 'January 1st, 2016',
+         Items: `${itemsCount}`,
+         itemsPrice: `${currencySymbol} ${itemsPrice.toFixed(2)}`,
+         shipping: 0,
+         saleTex: 0,
+         total: `${currencySymbol} ${itemsPrice.toFixed(2)}`,
+      };
+
+      // when the order is place then send back the confirmation email to the client.
+      ejs.renderFile(templatePath, orderObject, (err, data) => {
+         if (err) {
+            console.log(err);
+         } else {
+            // mail information.
+            const mail = nodemailer.createTransport({
+               service: 'gmail',
+               auth: {
+                  user: process.env.EMAIL,
+                  pass: process.env.APPPASSWORD,
+               },
+            });
+
+            // mail optaions
+            const opts = {
+               from: process.env.EMAIL,
+               to: getUserInfo.email,
+               subject: 'Order Confirm email',
+               html: data,
+            };
+
+            // mail send to the user.
+            mail.sendMail(opts, function (err, info) {
+               if (err) {
+                  console.log(err);
+               } else {
+                  console.log('email send information ');
+               }
+            });
+         }
+      });
+
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: 'Order placed Please check your email.',
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'internal server error',
       });
    }
 });
@@ -590,6 +647,53 @@ const updateUserAddress = catchAsync(async function (req, res, next) {
       });
    }
 });
+
+/*
+const orders = await orderModel.aggregate([
+      { $unwind: '$orders' },
+      {
+         $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userInformation',
+         },
+      },
+      {
+         $lookup: {
+            from: 'products',
+            localField: 'orders.productId',
+            foreignField: '_id',
+            as: 'orders.productInformation',
+         },
+      },
+      { $unwind: '$orders.productInformation' },
+      { $unwind: '$userInformation' },
+      {
+         $group: {
+            _id: { _id: '$_id', userId: '$userId', userInformation: '$userInformation' },
+            orders: { $push: '$orders' },
+         },
+      },
+      {
+         $project: {
+            '_id._id': 1,
+            '_id.userId': 1,
+            '_id.userInformation.name': 1,
+            '_id.userInformation.email': 1,
+            '_id.userInformation.userProfileImage': 1,
+            'orders.productId': 1,
+            'orders.deliveryAddress': 1,
+            'orders.productInformation._id': 1,
+            'orders.productInformation.name': 1,
+            'orders.productInformation.price': 1,
+            'orders.productInformation.salePrice': 1,
+            'orders.productInformation.productStatusInfo': 1,
+            'orders.productInformation.productImage': 1,
+         },
+      },
+   ]);
+*/
 
 module.exports = {
    getTrandingProducts,

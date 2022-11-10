@@ -15,16 +15,18 @@ function TableFooterComponent({ action, state, eventLoading, eventHandler, multi
    const dispatch = useDispatch();
 
    const ChnageNext = function () {
-      if (Limit >= 0 && Limit < state.totalPages) {
+      if (Limit >= 0 && Limit < state.totalPages && eventLoading) {
          setLimit((prev) => prev + 1);
          dispatch(eventLoading);
       }
    };
 
    const ChangePrev = function () {
-      setLimit((prev) => prev - 1);
-      if (Limit > 0) {
-         dispatch(eventLoading);
+      if (eventLoading) {
+         setLimit((prev) => prev - 1);
+         if (Limit > 0) {
+            dispatch(eventLoading);
+         }
       }
    };
 
@@ -36,7 +38,9 @@ function TableFooterComponent({ action, state, eventLoading, eventHandler, multi
    };
 
    useEffect(() => {
-      dispatch(eventHandler(Limit));
+      if (eventHandler) {
+         dispatch(eventHandler(Limit));
+      }
    }, [Limit]);
 
    return (

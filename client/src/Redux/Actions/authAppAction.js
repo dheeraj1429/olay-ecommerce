@@ -34,3 +34,10 @@ export const logout = function (data) {
       payload: data,
    };
 };
+
+export const removeUserRoll = function (data) {
+   return {
+      type: AUTH_ACTION_TYPE.REMOVE_USER_ROLL,
+      payload: data,
+   };
+};

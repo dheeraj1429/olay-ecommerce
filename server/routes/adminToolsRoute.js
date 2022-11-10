@@ -29,9 +29,6 @@ route.post('/send-history-with-email', adminToolsControllers.sendHistoryFileWith
 route.post('/import-csv-data', upload, adminToolsControllers.ImportCsvFileComponent);
 
 // API => DELETE
-route.delete(
-   '/delete-single-product-history/:id/:fileName',
-   adminToolsControllers.deleteSingleProductHistory
-);
+route.delete('/delete-single-product-history/:id/:fileName', adminToolsControllers.deleteSingleProductHistory);
 
 module.exports = route;

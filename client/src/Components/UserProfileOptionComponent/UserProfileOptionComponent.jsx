@@ -38,6 +38,7 @@ function UserProfileOptionComponent({ show, styles, hideProfile, hideOptions }) 
 
    const TargetEventHandler = function (event) {
       removeCookie('user');
+      removeCookie('user-address');
       dispatch(logout(null));
       navigation('/');
    };

@@ -10,8 +10,6 @@ import { useParams } from 'react-router';
 
 function AddressBookComponent() {
    const [UserAddress, setUserAddress] = useState({
-      fullName: '',
-      email: '',
       phone: '',
       country: '',
       state: '',
@@ -20,6 +18,7 @@ function AddressBookComponent() {
       IsDefault: false,
    });
    const [Country, setCountry] = useState([]);
+   const [Error, setError] = useState('');
 
    const dispatch = useDispatch();
    const params = useParams();
@@ -42,7 +41,13 @@ function AddressBookComponent() {
 
    const SendHandler = function (e) {
       e.preventDefault();
+
+      if (UserAddress.phone.length !== 10) {
+         return setError('Phone number almost 10 digit long');
+      }
+
       if (!!auth && auth?.userObject && auth.userObject?.token) {
+         setError('');
          if (!params?.id) {
             dispatch(saveAddressLoadingHandler(true));
             dispatch(insertUserAddress(Object.assign(UserAddress, { token: auth.userObject.token })));
@@ -79,14 +84,6 @@ function AddressBookComponent() {
          <hr />
 
          <form onSubmit={SendHandler}>
-            <div className="input_div">
-               <span>Full Name</span>
-               <input type="text" value={UserAddress.fullName} onChange={ChangeHandler} name="fullName" placeholder="Full name" required />
-            </div>
-            <div className="input_div mt-3">
-               <span>Email</span>
-               <input type="email" value={UserAddress.email} onChange={ChangeHandler} name="email" placeholder="Email" required />
-            </div>
             <div className="input_div mt-3">
                <span>Phone</span>
                <input type="number" value={UserAddress.phone} onChange={ChangeHandler} name="phone" placeholder="Phone" required />
@@ -128,6 +125,7 @@ function AddressBookComponent() {
             {!!saveUserAddress && saveUserAddress.message ? <p className="mt-2">{saveUserAddress.message}</p> : null}
             {!!userAddressUpdateInfo && userAddressUpdateInfo.message ? <p className="mt-2">{userAddressUpdateInfo.message}</p> : null}
          </form>
+         {!!Error ? <p className="error">{Error}</p> : null}
       </styled.div>
    );
 }

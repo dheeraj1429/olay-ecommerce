@@ -3,6 +3,7 @@ import { AUTH_ACTION_TYPE } from '../ActionTypes/authActionType';
 const INITAL_STATE = {
    auth: null,
    isLoading: false,
+   userRoll: null,
 };
 
 const authReducer = function (state = INITAL_STATE, action) {
@@ -12,6 +13,13 @@ const authReducer = function (state = INITAL_STATE, action) {
             ...state,
             auth: action.payload,
             isLoading: false,
+            userRoll: action.payload?.userObject?.isAdmin ? action.payload.userObject.isAdmin : null,
+         };
+
+      case AUTH_ACTION_TYPE.REMOVE_USER_ROLL:
+         return {
+            ...state,
+            userRoll: action.payload,
          };
 
       case AUTH_ACTION_TYPE.SET_LOGIN_USER:

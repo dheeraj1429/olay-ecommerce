@@ -32,10 +32,7 @@ const getAllProductCsv = catchAsync(async function (req, res, next) {
          });
       }
 
-      const findProduct = await productModel
-         .find({})
-         .populate('category', { _id: 0, products: 0, __v: 0 })
-         .populate('brand', { _id: 0, products: 0, __v: 0 });
+      const findProduct = await productModel.find({}).populate('category', { _id: 0, products: 0, __v: 0 }).populate('brand', { _id: 0, products: 0, __v: 0 });
 
       const fields = [
          'name',
@@ -161,10 +158,7 @@ const deleteSingleProductHistory = catchAsync(async function (req, res, next) {
    if (!!cookie && cookie.user && cookie.user.token) {
       const { _id } = tokenVarifyFunction(cookie);
 
-      const findUserAndRemoveSingleHistory = await userModel.updateOne(
-         { _id },
-         { $pull: { exportsHistory: { _id: id } } }
-      );
+      const findUserAndRemoveSingleHistory = await userModel.updateOne({ _id }, { $pull: { exportsHistory: { _id: id } } });
 
       if (findUserAndRemoveSingleHistory.acknowledged && !!findUserAndRemoveSingleHistory.modifiedCount) {
          fs.unlink(filePath, function (err) {
@@ -329,9 +323,7 @@ const ImportCsvFileComponent = catchAsync(async function (req, res, next) {
                description: csvToJsonData[i].brand.description,
                website: csvToJsonData[i].brand.website,
                order: !!csvToJsonData[i].brand?.order ? csvToJsonData[i].brand.order : 0,
-               brandStatusInfo: !!csvToJsonData[i].brand.brandStatusInfo
-                  ? csvToJsonData[i].brand.brandStatusInfo
-                  : 'Draft',
+               brandStatusInfo: !!csvToJsonData[i].brand.brandStatusInfo ? csvToJsonData[i].brand.brandStatusInfo : 'Draft',
                brandIcon: csvToJsonData[i].brand.brandIcon,
                SEOTitle: csvToJsonData[i].brand.SEOTitle,
                SEODescription: csvToJsonData[i].brand.SEODescription,

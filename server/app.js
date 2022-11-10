@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const http = require('http').createServer(app);
 const helmet = require('helmet');
 const logger = require('morgan');
 const port = process.env.PORT || 8000;
@@ -12,6 +11,14 @@ const cluster = require('node:cluster');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_TOKEN;
+const fs = require('fs');
+
+const options = {
+   key: fs.readFileSync(path.join(__dirname, './cert/key.pem')),
+   cert: fs.readFileSync(path.join(__dirname, './cert/cert.pem')),
+};
+
+const https = require('http').createServer(options, app);
 
 // database connection
 const databaseConnectionFunction = require('./model/db/db');
@@ -94,8 +101,8 @@ if (cluster.isPrimary) {
 } else {
    databaseConnectionFunction(() => {
       // server
-      http.listen(port, () => {
-         console.log(`server running on port http://localhost:${port}`);
+      https.listen(port, () => {
+         console.log(`server running on port https://localhost:${port}`);
       });
    });
 

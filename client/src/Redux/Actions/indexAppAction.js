@@ -124,3 +124,10 @@ export const removeUserAddressInfo = function (data) {
       payload: data,
    };
 };
+
+export const removeShippingInfo = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVE_SHIPPING_INFO,
+      payload: data,
+   };
+};

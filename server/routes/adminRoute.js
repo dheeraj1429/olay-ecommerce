@@ -53,6 +53,7 @@ route.get('/selected-product-category', adminController.getSelectedProductCatego
 route.get('/get-blogs-posts', adminBlogController.getBlogPosts);
 route.get('/get-single-post/:id', adminBlogController.getSingleBlogPost);
 route.get('/get-blog-categories', adminBlogController.getBlogCategories);
+route.get('/get-all-orders', adminController.getAllOrders);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
@@ -73,6 +74,7 @@ route.post('/shop-setting', adminController.ShopSetting);
 route.post('/store-shop-loaction', adminController.storeShopLocationInfo);
 route.post('/create-new-blog', upload, adminBlogController.createNewBlog);
 route.post('/insert-blog-categories', adminBlogController.createBlogCategory);
+route.post('/order-invoice-download', adminController.downloadOrderInvoice);
 // ---------------------------------------------------------------------------------------
 
 // Apis => PATCH

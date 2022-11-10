@@ -42,7 +42,7 @@ const signInUser = catchAsync(async function (req, res, next) {
       });
    } else {
       return res.status(httpStatusCodes.OK).json({
-         success: false,
+         success: true,
          message: 'User is not fill all details which is required',
       });
    }
@@ -93,7 +93,7 @@ const logInUser = catchAsync(async function (req, res, next) {
          });
       } else {
          return res.status(httpStatusCodes.OK).json({
-            success: false,
+            success: true,
             message: 'User account password is not match',
          });
       }

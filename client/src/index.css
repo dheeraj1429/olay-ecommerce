@@ -231,3 +231,7 @@ a {
 .input_div .error {
    color: var(--spec-static-brand-red) !important;
 }
+
+.error {
+   color: var(--button-cl);
+}

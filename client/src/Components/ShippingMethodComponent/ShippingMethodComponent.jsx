@@ -14,11 +14,13 @@ import { useCookies } from 'react-cookie';
 function ShippingMethodComponent() {
    const [MethodCheck, setMethodCheck] = useState('');
    const [cookie] = useCookies('user-address');
+   const [Error, setError] = useState('');
 
    const dispatch = useDispatch();
    const navigation = useNavigate();
 
    const { auth } = useSelector((state) => state.auth);
+   const { shopInformation } = useSelector((state) => state.admin);
    const { userAddressInformation, placeOrderLoading, cartItems, placeOrder } = useSelector((state) => state.index);
 
    const methodHandler = (e) => {
@@ -30,15 +32,35 @@ function ShippingMethodComponent() {
    };
 
    const cashOnDeliveryHandler = function () {
-      if (!!auth && auth?.userObject && auth?.userObject?.token && !!cartItems && cartItems.success) {
+      if (!MethodCheck) {
+         return setError('Please first check the payment method.');
+      }
+
+      if (!!auth && auth?.userObject && auth?.userObject?.token && !!cartItems && cartItems.success && !!shopInformation && shopInformation.success) {
          const token = auth.userObject.token;
+         let orderProducts = [];
+
+         for (let i = 0; i < cartItems.cartItems.length; i++) {
+            orderProducts.push({
+               productId: cartItems.cartItems[i].cartItem._id,
+               price: cartItems.cartItems[i].cartItem.price,
+               salePrice: cartItems.cartItems[i].cartItem.salePrice,
+               qty: cartItems.cartItems[i].qty,
+            });
+         }
+
          const orderObject = {
-            items: cartItems.cartItems,
+            items: orderProducts,
             paymentMethod: MethodCheck,
             addressId: userAddressInformation.address.myAddress[0]._id,
+            currencyName: shopInformation.shop[0].currencyName,
+            countryCode: shopInformation.shop[0].countryCode,
+            currencySymbol: shopInformation.shop[0].currencySymbol,
          };
+         setError('');
+
          dispatch(orderPlaceByCashOnDelivery(orderObject, token));
-         // dispatch(orderLoadingHandler(true));
+         dispatch(orderLoadingHandler(true));
       } else {
          navigation('/auth/signin');
       }
@@ -94,9 +116,10 @@ function ShippingMethodComponent() {
                      </Link>
                   </p>
                ) : (
-                  <CustombuttonComponent spennerBlack={true} isLoading={''} type="submit" btnCl={'shipping_button'} innerText={'Continue to shopping'} />
+                  <CustombuttonComponent onClick={cashOnDeliveryHandler} spennerBlack={true} isLoading={''} type="submit" btnCl={'shipping_button'} innerText={'Continue to shopping'} />
                )}
             </div>
+            {!!Error ? <p className="error">{Error}</p> : null}
          </>
       </styled.div>
    );

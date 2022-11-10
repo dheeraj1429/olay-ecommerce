@@ -14,6 +14,11 @@ const productLabelModel = require('../model/schema/productLabelSchema');
 const shopModel = require('../model/schema/shopInfoSchema');
 const shopLoactionModel = require('../model/schema/storeLocationSchema');
 const userModel = require('../model/schema/authSchema');
+const orderModel = require('../model/schema/ordersSchema');
+const ejs = require('ejs');
+const path = require('path');
+const html_to_pdf = require('html-pdf-node');
+const fs = require('fs');
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -1829,6 +1834,232 @@ const getProductGenralReport = catchAsync(async function (req, res, next) {
    }
 });
 
+const getAllOrders = catchAsync(async function (req, res, next) {
+   // get the all orders with user infomation and the address details.
+   const allOrders = await orderModel.aggregate([
+      // unwind the array to get the object collections fileds.
+      { $unwind: '$orderItems' },
+      // joining the products and the order collection.
+      {
+         $lookup: {
+            from: 'products',
+            localField: 'orderItems.productId',
+            foreignField: '_id',
+            as: 'orderItems.productInformation',
+         },
+      },
+      // unwind the product information array.
+      { $unwind: '$orderItems.productInformation' },
+      // join the user and the order collections.
+      {
+         $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userInformation',
+         },
+      },
+      // unwind the user information fileds
+      { $unwind: '$userInformation' },
+      // group all the document
+      {
+         $group: {
+            _id: {
+               _id: '$_id',
+               userId: '$userId',
+               currencySymbol: '$currencySymbol',
+               currencyName: '$currencyName',
+               paymentMethod: '$paymentMethod',
+               paymentStatus: '$paymentStatus',
+               orderStatus: '$orderStatus',
+               countryCode: '$countryCode',
+               orderCreateAt: '$orderCreateAt',
+               userInformation: '$userInformation',
+            },
+            orderItems: { $push: '$orderItems' },
+         },
+      },
+      // send back the project.
+      {
+         $project: {
+            '_id._id': 1,
+            '_id.userId': 1,
+            '_id.userInformation.name': 1,
+            '_id.userInformation.email': 1,
+            '_id.userInformation.userProfileImage': 1,
+            '_id.currencyName': 1,
+            '_id.countryCode': 1,
+            '_id.currencySymbol': 1,
+            '_id.orderCreateAt': 1,
+            '_id.paymentMethod': 1,
+            '_id.orderStatus': 1,
+            '_id.paymentStatus': 1,
+            'orderItems.productId': 1,
+            'orderItems.price': 1,
+            'orderItems.salePrice': 1,
+            'orderItems.qty': 1,
+            'orderItems.deliveryAddress': 1,
+            'orderItems.productInformation._id': 1,
+            'orderItems.productInformation.name': 1,
+            'orderItems.productInformation.price': 1,
+            'orderItems.productInformation.salePrice': 1,
+            'orderItems.productInformation.productStatusInfo': 1,
+            'orderItems.productInformation.productImage': 1,
+         },
+      },
+      { $sort: { '_id.orderCreateAt': -1 } },
+   ]);
+
+   if (allOrders) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         error: false,
+         ordersData: allOrders,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
+});
+
+const downloadOrderInvoice = catchAsync(async function (req, res, next) {
+   const { orderId } = req.body;
+
+   if (!orderId) {
+      next(new AppError('Order id is reuqired to download order invoice'));
+   }
+
+   /**
+    * find the user order information document.
+    * read the invoice template from the view folders. and render the dynamic data into the invoice template.
+    * convert the template data into the pdf.
+    * open the download link when process is complete.
+    * send back the response to the client.
+    * download the file.
+    */
+
+   const findUserOrderDocument = await orderModel.aggregate([
+      // find the order document.
+      { $match: { $expr: { $eq: ['$_id', { $toObjectId: orderId }] } } },
+      // unwind the array to get the object collections fileds.
+      { $unwind: '$orderItems' },
+      // joining the products and the order collection.
+      {
+         $lookup: {
+            from: 'products',
+            localField: 'orderItems.productId',
+            foreignField: '_id',
+            as: 'orderItems.productInformation',
+         },
+      },
+      // unwind the product information array.
+      { $unwind: '$orderItems.productInformation' },
+      // join the user and the order collections.
+      {
+         $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userInformation',
+         },
+      },
+      // unwind the user information fileds
+      { $unwind: '$userInformation' },
+      // group all the document
+      {
+         $group: {
+            _id: {
+               _id: '$_id',
+               userId: '$userId',
+               currencySymbol: '$currencySymbol',
+               currencyName: '$currencyName',
+               paymentMethod: '$paymentMethod',
+               paymentStatus: '$paymentStatus',
+               orderStatus: '$orderStatus',
+               countryCode: '$countryCode',
+               deliveryAddress: '$deliveryAddress',
+               orderCreateAt: '$orderCreateAt',
+               userInformation: '$userInformation',
+            },
+            orderItems: { $push: '$orderItems' },
+         },
+      },
+      // send back the project.
+      {
+         $project: {
+            '_id._id': 1,
+            '_id.userId': 1,
+            '_id.userInformation.name': 1,
+            '_id.userInformation.email': 1,
+            '_id.userInformation.userProfileImage': 1,
+            '_id.currencyName': 1,
+            '_id.countryCode': 1,
+            '_id.currencySymbol': 1,
+            '_id.orderCreateAt': 1,
+            '_id.paymentMethod': 1,
+            '_id.orderStatus': 1,
+            '_id.paymentStatus': 1,
+            '_id.deliveryAddress': 1,
+            'orderItems.productId': 1,
+            'orderItems.price': 1,
+            'orderItems.salePrice': 1,
+            'orderItems.qty': 1,
+            'orderItems.deliveryAddress': 1,
+            'orderItems.productInformation._id': 1,
+            'orderItems.productInformation.name': 1,
+            'orderItems.productInformation.price': 1,
+            'orderItems.productInformation.salePrice': 1,
+            'orderItems.productInformation.productStatusInfo': 1,
+            'orderItems.productInformation.productImage': 1,
+         },
+      },
+   ]);
+
+   // order invoice template path.
+   const templatePath = path.join(__dirname, '..', 'views', 'templates', 'orderInvoice.ejs');
+
+   let subTotal = findUserOrderDocument[0].orderItems.map((el) => (el?.salePrice && !!el.salePrice ? el.salePrice : el.price)).reduce((acc, crv) => acc + crv);
+
+   const invoiceData = {
+      userName: findUserOrderDocument[0]._id.userInformation.name,
+      userEmail: findUserOrderDocument[0]._id.userInformation.email,
+      deliveryAddress: findUserOrderDocument[0]._id.deliveryAddress.address,
+      orderCreateAt: findUserOrderDocument[0]._id.orderCreateAt,
+      orders: findUserOrderDocument[0].orderItems,
+      currencySymbol: findUserOrderDocument[0]._id.currencySymbol,
+      subTotal: subTotal,
+   };
+
+   ejs.renderFile(templatePath, invoiceData, (err, data) => {
+      if (err) {
+         console.log(err);
+      } else {
+         // pdf formate
+         let options = { format: 'A4' };
+
+         // file html data
+         let file = { content: `${data}` };
+         const uniqueID = Date.now().toString(36) + Math.random().toString(36).split('.').join('');
+         const filePath = path.join(__dirname, '..', 'dataFiles', 'invoice', `userOrderInvoice-${uniqueID}.pdf`);
+
+         // genrate file with buffer
+         html_to_pdf.generatePdf(file, options).then((pdfBuffer) => {
+            fs.writeFile(filePath, pdfBuffer, (error) => {
+               if (error) {
+                  console.log(error);
+               }
+
+               res.download(path.join(filePath), (err) => {
+                  if (err) console.log(err);
+               });
+            });
+         });
+      }
+   });
+});
+
 module.exports = {
    uploadProductCategory,
    getAllCategorys,
@@ -1887,4 +2118,6 @@ module.exports = {
    UpdateStoreShopInformation,
    getAllSignInUsers,
    getProductGenralReport,
+   getAllOrders,
+   downloadOrderInvoice,
 };

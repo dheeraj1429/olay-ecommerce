@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import * as sidebar from './DashboardPanelSidebarComponent.style';
 import DashboardNavigationComponent from '../DashboardNavigationComponent/DashboardNavigationComponent';
-import { useLocation } from 'react-router';
 import DashboardSidebarCardComponent from '../DashboardSidebarCardComponent/DashboardSidebarCardComponent';
 import { AiOutlineShoppingCart } from '@react-icons/all-files/ai/AiOutlineShoppingCart';
 import { VscHome } from '@react-icons/all-files/vsc/VscHome';
@@ -24,64 +23,45 @@ import { SiWebmoney } from '@react-icons/all-files/si/SiWebmoney';
 import { SiBloglovin } from '@react-icons/all-files/si/SiBloglovin';
 import { VscSymbolRuler } from '@react-icons/all-files/vsc/VscSymbolRuler';
 import { VscCircuitBoard } from '@react-icons/all-files/vsc/VscCircuitBoard';
-import { GetUrlValue } from '../../helpers/helper';
+import { GiShoppingCart } from '@react-icons/all-files/gi/GiShoppingCart';
 
 function DashboardPanelSidebarComponent() {
-   const [Active, setActive] = useState('Dashboard');
-   const [DashboardCard, setDashboardCard] = useState('');
-   const location = useLocation();
-
-   const ActiveHandler = function (e) {
-      const target = e.currentTarget.id;
-      setActive(target);
-   };
-
-   const dashboardActiveHandler = function (e) {
-      setDashboardCard(e.currentTarget.id);
-   };
-
-   useEffect(() => {
-      const result = GetUrlValue(location);
-      if (result !== 'Dashboard') {
-         setActive(result);
-      }
-   }, [location.pathname]);
-
    return (
       <sidebar.div>
          <h1>Dashboard</h1>
          <div className="sidebar_fix_container">
-            <DashboardSidebarCardComponent heading={'Home'} icon={<VscHome />} onClick={dashboardActiveHandler} show={DashboardCard}>
-               <DashboardNavigationComponent icon={<SiWebmoney />} innerText={'Website'} activeBar={true} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<AiOutlineHome />} innerText={'Dashboard'} activeBar={true} onClick={ActiveHandler} Active={Active} />
+            <DashboardSidebarCardComponent heading={'Home'} icon={<VscHome />}>
+               <DashboardNavigationComponent icon={<SiWebmoney />} innerText={'Website'} activeBar={true} />
+               <DashboardNavigationComponent icon={<AiOutlineHome />} innerText={'Dashboard'} activeBar={true} />
             </DashboardSidebarCardComponent>
 
-            <DashboardSidebarCardComponent heading={'Ecommerce'} icon={<AiOutlineShoppingCart />} onClick={dashboardActiveHandler} show={DashboardCard}>
-               <DashboardNavigationComponent icon={<BsPhone />} innerText={'All products'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<GoGitBranch />} innerText={'Product category'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<AiOutlineLaptop />} innerText={'Product brands'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<GoZap />} innerText={'Flash sale'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<GoVersions />} innerText={'Variation swatches'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<VscTextSize />} innerText={'Product size variation'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<GoRepoClone />} innerText={'Product variation'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<MdLabelOutline />} innerText={'Product label'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<AiOutlineInfo />} innerText={'Information'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<VscLocation />} innerText={'Store locators'} onClick={ActiveHandler} Active={Active} />
+            <DashboardSidebarCardComponent heading={'Ecommerce'} icon={<AiOutlineShoppingCart />}>
+               <DashboardNavigationComponent icon={<BsPhone />} innerText={'All products'} />
+               <DashboardNavigationComponent icon={<GoGitBranch />} innerText={'Product category'} />
+               <DashboardNavigationComponent icon={<AiOutlineLaptop />} innerText={'Product brands'} />
+               <DashboardNavigationComponent icon={<GoZap />} innerText={'Flash sale'} />
+               <DashboardNavigationComponent icon={<GiShoppingCart />} innerText={'Orders'} />
+               <DashboardNavigationComponent icon={<GoVersions />} innerText={'Variation swatches'} />
+               <DashboardNavigationComponent icon={<VscTextSize />} innerText={'Product size variation'} />
+               <DashboardNavigationComponent icon={<GoRepoClone />} innerText={'Product variation'} />
+               <DashboardNavigationComponent icon={<MdLabelOutline />} innerText={'Product label'} />
+               <DashboardNavigationComponent icon={<AiOutlineInfo />} innerText={'Information'} />
+               <DashboardNavigationComponent icon={<VscLocation />} innerText={'Store locators'} />
             </DashboardSidebarCardComponent>
 
-            <DashboardSidebarCardComponent heading={'Tools'} icon={<GoTools />} onClick={dashboardActiveHandler} show={DashboardCard}>
-               <DashboardNavigationComponent icon={<FaFileImport />} innerText={'Import product'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<AiOutlineExport />} innerText={'Export product'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<VscHistory />} innerText={'Export history'} onClick={ActiveHandler} Active={Active} />
+            <DashboardSidebarCardComponent heading={'Tools'} icon={<GoTools />}>
+               <DashboardNavigationComponent icon={<FaFileImport />} innerText={'Import product'} />
+               <DashboardNavigationComponent icon={<AiOutlineExport />} innerText={'Export product'} />
+               <DashboardNavigationComponent icon={<VscHistory />} innerText={'Export history'} />
             </DashboardSidebarCardComponent>
 
-            <DashboardSidebarCardComponent heading={'Blog'} icon={<SiBloglovin />} onClick={dashboardActiveHandler} show={DashboardCard}>
-               <DashboardNavigationComponent icon={<VscSymbolRuler />} innerText={'Post'} onClick={ActiveHandler} Active={Active} />
-               <DashboardNavigationComponent icon={<VscCircuitBoard />} innerText={'Blog categories'} onClick={ActiveHandler} Active={Active} />
+            <DashboardSidebarCardComponent heading={'Blog'} icon={<SiBloglovin />}>
+               <DashboardNavigationComponent icon={<VscSymbolRuler />} innerText={'Post'} />
+               <DashboardNavigationComponent icon={<VscCircuitBoard />} innerText={'Blog categories'} />
             </DashboardSidebarCardComponent>
          </div>
       </sidebar.div>
    );
 }
 
-export default DashboardPanelSidebarComponent;
+export default React.memo(DashboardPanelSidebarComponent);

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const URL = process.env.URL;
 
 const databaseConnectionFunction = function (callback) {
@@ -8,7 +8,7 @@ const databaseConnectionFunction = function (callback) {
          useUnifiedTopology: true,
       })
       .then((res) => {
-         console.log("database connected");
+         console.log('database connected');
          callback();
       })
       .catch((err) => {

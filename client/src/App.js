@@ -52,6 +52,7 @@ const CreateStoreComponent = lazy(() => import('./DashboardComponents/CreateStor
 const CreateBlogPostComponent = lazy(() => import('./DashboardComponents/CreateBlogPostComponent/CreateBlogPostComponent'));
 const BlogPostContinerComponent = lazy(() => import('./DashboardComponents/BlogPostContainerComponent/BlogPostContainerComponent'));
 const BlogCategoriesComponent = lazy(() => import('./DashboardComponents/BlogCategoyrsComponent/BlogCategoriesComponent'));
+const ProductOrdersTableComponent = lazy(() => import('./DashboardComponents/ProductOrdersTableComponent/ProductOrdersTableComponent'));
 
 // site components
 const SignInAndLoginComponent = lazy(() => import('./Components/SignInAndLoginComponent/SignInAndLoginComponent'));
@@ -128,6 +129,7 @@ function App() {
                   <Route path="product-brands" element={<ProductBrandsComponent />} />
                   <Route path="product-brands/edit/:id" element={<ProductBrandEditComponent />} />
                   <Route path="all-products" element={<AllProductComponent />} />
+                  <Route path="orders" element={<ProductOrdersTableComponent />} />
                   <Route path="/dashboard/product/edit/:id" element={<ProductEditComponent />} />
                   <Route path="product-tags" element={<AllProductsTagsComponent />} />
                   <Route path="insert/new-product-tags" element={<ProductTagsComponent />} />

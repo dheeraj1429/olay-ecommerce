@@ -529,3 +529,10 @@ export const selecteSingleBlogPostsCategorie = function (data) {
       payload: data,
    };
 };
+
+export const invoiceDownlaodLoading = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.DOWNLOAD_ORDER_INVOICE_LOADING,
+      payload: data,
+   };
+};

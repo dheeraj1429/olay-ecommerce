@@ -7,6 +7,10 @@ export const div = styled.div`
       margin: 0;
    }
 
+   .ant-radio-group {
+      width: 100%;
+   }
+
    p {
       margin: 0;
       font-size: 15px;

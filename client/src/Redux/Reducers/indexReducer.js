@@ -232,6 +232,12 @@ const shopReducer = function (state = INITAL_STATE, action) {
             shippingInsertInfoLoading: false,
          };
 
+      case INDEX_ACTION_TYPE.REMOVE_SHIPPING_INFO:
+         return {
+            ...state,
+            shippingInfo: action.payload,
+         };
+
       case INDEX_ACTION_TYPE.STORE_USER_SHIPPING_INFORMATION_LOADING:
          return {
             ...state,

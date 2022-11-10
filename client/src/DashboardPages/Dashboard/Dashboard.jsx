@@ -1,30 +1,20 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as dashboard from './Dashboard.style';
 import { Outlet } from 'react-router';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
-   const { auth } = useSelector((state) => state.auth);
-   const navigation = useNavigate();
-
-   useEffect(() => {
-      if (!!auth && auth.success && auth.userObject?.isAdmin === 'admin') {
-         navigation('/dashboard');
-      }
-      if (!!auth && auth.success && auth.userObject?.isAdmin === 'user') {
-         navigation('/dashboard-auth/sign-in');
-      }
-   }, [auth]);
-
    return (
       <dashboard.div>
-         <dashboard.flex>
-            <dashboard.renderDiv>
-               <Outlet />
-            </dashboard.renderDiv>
-            <dashboard.imageDiv />
-         </dashboard.flex>
+         <div className="container-fluid p-0 renderDiv">
+            <div className="row ">
+               <div className="col-12 col-sm-12 col-md-12 col-lg-5 d-flex justify-content-center">
+                  <Outlet />
+               </div>
+               <div className="col-12 col-sm-12 col-md-12 col-lg-7">
+                  <dashboard.imageDiv />
+               </div>
+            </div>
+         </div>
       </dashboard.div>
    );
 }

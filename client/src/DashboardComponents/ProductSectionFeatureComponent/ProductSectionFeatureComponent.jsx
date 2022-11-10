@@ -55,13 +55,7 @@ function ProductSectionFeatureComponent({ state, pageLink, field, action, items 
                   <Box>
                      <FormControl sx={{ m: 1, minWidth: 250 }} size="small">
                         <InputLabel id="demo-select-small">Bulk Actions</InputLabel>
-                        <Select
-                           labelId="demo-select-small"
-                           id="demo-select-small"
-                           value={Filter}
-                           label="Bulk Action"
-                           onChange={ChangeHandler}
-                        >
+                        <Select labelId="demo-select-small" id="demo-select-small" value={Filter} label="Bulk Action" onChange={ChangeHandler}>
                            {items.map((el) => (
                               <MenuItem value={el.value}>
                                  <feature.spaceBetween>
@@ -82,11 +76,7 @@ function ProductSectionFeatureComponent({ state, pageLink, field, action, items 
                   </Box>
 
                   {Filter !== 'Delete all' ? (
-                     <CustombuttonComponent
-                        innerText={'Filter'}
-                        btnCl={'category_upload margin-0'}
-                        onClick={filterHandler}
-                     />
+                     <CustombuttonComponent innerText={'Filter'} btnCl={'category_upload margin-0'} onClick={filterHandler} />
                   ) : (
                      <Popconfirm
                         title="Are you sure？"

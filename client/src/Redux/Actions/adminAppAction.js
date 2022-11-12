@@ -536,3 +536,17 @@ export const invoiceDownlaodLoading = function (data) {
       payload: data,
    };
 };
+
+export const showOrderPrev = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.SHOW_ORDER_PREVIEW,
+      payload: data,
+   };
+};
+
+export const showOrderPrevLoading = function (data) {
+   return {
+      type: ADMIN_ACTION_TYPES.GET_FULL_ORDER_INFO_LOADING,
+      payload: data,
+   };
+};

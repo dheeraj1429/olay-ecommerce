@@ -8,6 +8,7 @@ const row = [
    { value: 'Image', label: 'Product Image' },
    { value: 'Product', label: 'Product' },
    { value: 'Quntity', label: 'Quntity' },
+   { value: 'Price', label: 'Price' },
    { value: 'Total', label: 'Total' },
    { value: 'edit', label: '' },
 ];

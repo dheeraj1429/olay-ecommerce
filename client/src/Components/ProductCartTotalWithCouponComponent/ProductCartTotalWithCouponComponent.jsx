@@ -21,8 +21,10 @@ function ProductCartTotalWithCouponComponent() {
 
    useEffect(() => {
       if (!!cartItems && cartItems.cartItems.length) {
+         console.log(cartItems.cartItems);
+
          const priceAr = cartItems.cartItems
-            .map((el) => (el.cartItem?.salePrice ? el.cartItem.salePrice * el.qty : el.cartItem.price * el.qty))
+            .map((el) => (el.cartItem?.salePrice && !!el.cartItem.salePrice ? el.cartItem.salePrice * el.qty : el.cartItem.price * el.qty))
             .reduce((acc, crv) => {
                return acc + crv;
             }, 0);

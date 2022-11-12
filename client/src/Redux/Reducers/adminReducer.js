@@ -111,6 +111,12 @@ const INITAL_STATE = {
       loading: false,
       id: null,
    },
+   showOrderPreviewComponent: {
+      show: false,
+      id: null,
+   },
+   orderFullInfo: null,
+   orderFullInfoLoading: false,
 };
 
 const adminReducer = function (state = INITAL_STATE, action) {
@@ -298,6 +304,29 @@ const adminReducer = function (state = INITAL_STATE, action) {
          };
 
       case ADMIN_ACTION_TYPES.BULK_ACTIONS:
+         // const actionArr = [
+         //    { field: 'brands', collection: 'productBrands' },
+         //    { field: 'products', collection: 'allProducts' },
+         //    { field: 'tags', collection: 'allProductsTags' },
+         //    { field: 'allSwatches', collection: 'allProductSwatches' },
+         //    { field: 'sizeVariations', collection: 'allSizeVariations' },
+         //    { field: 'sales', collection: 'allSales' },
+         //    { field: 'allLabels', collection: 'allProductLabel' },
+         //    { field: 'posts', collection: 'allBlogs' },
+         // ];
+
+         // actionArr.forEach((el) => {
+         //    if (el.field === action.payload.filde) {
+         //       return {
+         //          ...state,
+         //          [el.collection]: {
+         //             ...state[el.collection],
+         //             [el.field]: CampareFunction(action.payload.filter, state[el.collection], el.field),
+         //          },
+         //       };
+         //    }
+         // });
+
          if (action.payload.filde === 'brands') {
             return {
                ...state,
@@ -307,6 +336,8 @@ const adminReducer = function (state = INITAL_STATE, action) {
                },
             };
          } else if (action.payload.filde === 'products') {
+            console.log(action.payload.filde);
+
             return {
                ...state,
                allProducts: {
@@ -1395,6 +1426,34 @@ const adminReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             userOrderInvoiceLoading: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.DELETE_USER_ORDER:
+         return {
+            ...state,
+            allOrders: {
+               ...state.allOrders,
+               ordersData: state.allOrders.ordersData.filter((el) => el._id._id !== action.orderId),
+            },
+         };
+
+      case ADMIN_ACTION_TYPES.SHOW_ORDER_PREVIEW:
+         return {
+            ...state,
+            showOrderPreviewComponent: action.payload,
+         };
+
+      case ADMIN_ACTION_TYPES.GET_FULL_ORDER_INFO:
+         return {
+            ...state,
+            orderFullInfo: action.payload,
+            orderFullInfoLoading: false,
+         };
+
+      case ADMIN_ACTION_TYPES.GET_FULL_ORDER_INFO_LOADING:
+         return {
+            ...state,
+            orderFullInfoLoading: action.payload,
          };
 
       default:

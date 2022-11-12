@@ -34,6 +34,12 @@ function CartItemsComponent({ data }) {
          <td>
             <h4 className="mb-0">
                {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+               {data.cartItem?.salePrice ? data.cartItem.salePrice.toFixed(2) : data.cartItem.price.toFixed(2)}
+            </h4>
+         </td>
+         <td>
+            <h4 className="mb-0">
+               {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
                {data.cartItem?.salePrice ? (data.cartItem.salePrice * data.qty).toFixed(2) : (data.cartItem.price * data.qty).toFixed(2)}
             </h4>
          </td>

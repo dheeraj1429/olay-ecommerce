@@ -8,22 +8,34 @@ import { RiUser4Line } from '@react-icons/all-files/ri/RiUser4Line';
 import { AiFillEdit } from '@react-icons/all-files/ai/AiFillEdit';
 import { VscClose } from '@react-icons/all-files/vsc/VscClose';
 import { AiOutlineDownload } from '@react-icons/all-files/ai/AiOutlineDownload';
-import { downloadOrderInvoice } from '../../Redux/Actions/adminAction';
+import { downloadOrderInvoice, deleteUserOrder } from '../../Redux/Actions/adminAction';
 import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerComponent';
-import { invoiceDownlaodLoading } from '../../Redux/Actions/adminAppAction';
+import { invoiceDownlaodLoading, showOrderPrev, showOrderPrevLoading } from '../../Redux/Actions/adminAppAction';
+import { Popconfirm } from 'antd';
+import OrderViewPreviewComponent from '../OrderViewPreviewComponent/OrderViewPreviewComponent';
 
 function OrdersTableComponent() {
    const dispatch = useDispatch();
 
    const { allOrders, userOrderInvoiceLoading } = useSelector((state) => state.admin);
 
+   const DeleteOrderHandler = function (id) {
+      dispatch(deleteUserOrder(id));
+   };
+
    const downloadInvoiceHandler = function (id) {
       dispatch(invoiceDownlaodLoading({ loading: true, id: id }));
       dispatch(downloadOrderInvoice({ orderId: id }));
    };
 
+   const showPrevHandler = function (data) {
+      dispatch(showOrderPrev(data));
+      dispatch(showOrderPrevLoading(true));
+   };
+
    return (
       <styled.div className="mt-4">
+         <OrderViewPreviewComponent />
          {!!allOrders && allOrders.success && allOrders?.ordersData && allOrders?.ordersData.length ? (
             <div className="scroll_div">
                <table>
@@ -42,7 +54,7 @@ function OrdersTableComponent() {
                         <td>{el?._id?.userInformation.email}</td>
                         <td>
                            {el._id.currencySymbol}
-                           {el.orderItems.map((elm) => (elm?.salePrice && !!elm.salePrice ? elm.salePrice : elm.price)).reduce((acc, crv) => acc + crv, 0)}
+                           {el.orderItems.map((elm) => (elm?.salePrice && !!elm.salePrice ? elm.salePrice * elm.qty : elm.price * elm.qty)).reduce((acc, crv) => acc + crv, 0)}
                         </td>
                         <td>00.00</td>
                         <td>00.00</td>
@@ -59,7 +71,7 @@ function OrdersTableComponent() {
                               <div className="hover_div">
                                  <p>View</p>
                               </div>
-                              <IoIosInformationCircle />
+                              <IoIosInformationCircle onClick={() => showPrevHandler({ show: true, id: el._id._id })} />
                            </div>
                            <div className="me-3 hover_div_parent">
                               <div className="hover_div">
@@ -71,7 +83,9 @@ function OrdersTableComponent() {
                               <div className="hover_div">
                                  <p>Delete</p>
                               </div>
-                              <VscClose />
+                              <Popconfirm title="Are your sure you want to delete the user order ?" onConfirm={() => DeleteOrderHandler(el._id._id)} okText="Yes" cancelText="No">
+                                 <VscClose />
+                              </Popconfirm>
                            </div>
                            <div className="me-3 hover_div_parent">
                               <div className="hover_div">

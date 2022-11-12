@@ -44,10 +44,7 @@ const createNewBlog = catchAsync(async function (req, res, next) {
    if (insertBlogDocument) {
       if (!!insertData.categorie) {
          //once document is saved then also insert the documend id inside the categorie document for keep trakc how much document inside the category.
-         await blogCategorieModel.updateOne(
-            { _id: categorie },
-            { $push: { blogs: { blogId: insertBlogDocument._id } } }
-         );
+         await blogCategorieModel.updateOne({ _id: categorie }, { $push: { blogs: { blogId: insertBlogDocument._id } } });
       }
 
       return res.status(httpStatusCodes.CREATED).json({
@@ -126,17 +123,11 @@ const updateSingleBlogPost = catchAsync(async function (req, res, next) {
 
          // if the is is find into the prevwise document then first remove the id remove the pre collections and push inside the new collections.
          if (findIdIsExistsInBlogCategorieCol) {
-            const insertIntoNewDocument = await blogCategorieModel.updateOne(
-               { _id: updateObject.categorie },
-               { $push: { blogs: { blogId: blogId } } }
-            );
+            const insertIntoNewDocument = await blogCategorieModel.updateOne({ _id: updateObject.categorie }, { $push: { blogs: { blogId: blogId } } });
 
             if (!!insertIntoNewDocument.modifiedCount) {
                // remove document from prev blog categorie collections.
-               await blogCategorieModel.updateOne(
-                  { _id: prevBlogCategorieId },
-                  { $pull: { blogs: { blogId: blogId } } }
-               );
+               await blogCategorieModel.updateOne({ _id: prevBlogCategorieId }, { $pull: { blogs: { blogId: blogId } } });
             }
          }
       } else {

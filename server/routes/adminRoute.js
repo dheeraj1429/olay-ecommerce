@@ -54,6 +54,7 @@ route.get('/get-blogs-posts', adminBlogController.getBlogPosts);
 route.get('/get-single-post/:id', adminBlogController.getSingleBlogPost);
 route.get('/get-blog-categories', adminBlogController.getBlogCategories);
 route.get('/get-all-orders', adminController.getAllOrders);
+route.get('/get-user-info/:id', adminController.getUserOrderAllInfo);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST
@@ -114,6 +115,7 @@ route.delete('/delete-single-product-label/:id', adminController.deleteSinglePro
 route.delete('/delete-single-blog-post/:id', adminBlogController.deleteSingleBlogPost);
 route.delete('/delete-all-blog-posts', adminBlogController.deleteAllBlogs);
 route.delete('/delete-single-blog-categorie/:id', adminBlogController.deleteSingleBlogCategorie);
+route.delete('/delete-user-order/:id', adminController.deleteUserOrder);
 // ---------------------------------------------------------------------------------------
 
 module.exports = route;

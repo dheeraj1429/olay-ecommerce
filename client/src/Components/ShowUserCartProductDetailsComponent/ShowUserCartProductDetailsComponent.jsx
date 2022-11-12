@@ -1,23 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import * as styled from './ShowUserCartProductDetailsComponent.style';
 import { useSelector } from 'react-redux';
 import backendConfigData from '../../backendConfig';
 
 function ShowUserCartProductDetailsComponent() {
-   const [SubTotal, setSubTotal] = useState(0);
-
    const { cartItems } = useSelector((state) => state.index);
    const { shopInformation } = useSelector((state) => state.admin);
-
-   useEffect(() => {
-      if (!!cartItems && cartItems?.success) {
-         const subTotal = cartItems.cartItems
-            .map((el) => (el.cartItem.salePrice && !!el.cartItem.salePrice ? el.cartItem.salePrice * el.qty : el.cartItem.price * el.qty))
-            .reduce((acc, crv) => acc + crv, 0)
-            .toFixed(2);
-         setSubTotal(subTotal);
-      }
-   }, [cartItems]);
 
    return (
       <styled.div className="border-start p-5">
@@ -43,10 +31,16 @@ function ShowUserCartProductDetailsComponent() {
          <div className="border-top py-4 sub">
             <div className="d-flex align-items-center justify-content-between">
                <p>Subtotal</p>
-               <strong>
-                  {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
-                  {SubTotal}
-               </strong>
+               {!!cartItems && cartItems?.success && cartItems?.cartItems.length ? (
+                  <strong>
+                     {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
+                     {cartItems.cartItems
+                        .map((elm) => (elm.cartItem?.salePrice && !!elm.cartItem.salePrice ? elm.cartItem.salePrice * elm.qty : elm.cartItem.price * elm.qty))
+                        .reduce((acc, crv) => acc + crv, 0)}
+                  </strong>
+               ) : (
+                  <strong>00</strong>
+               )}
             </div>
             <div className="d-flex align-items-center justify-content-between mt-2">
                <p>Shipping</p>
@@ -58,7 +52,15 @@ function ShowUserCartProductDetailsComponent() {
             <h5 className="mb-0">Total</h5>
             <h4 className="mb-0">
                <span>{!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}</span>
-               {SubTotal}
+               {!!cartItems && cartItems?.success && cartItems?.cartItems.length ? (
+                  <strong>
+                     {cartItems.cartItems
+                        .map((elm) => (elm.cartItem?.salePrice && !!elm.cartItem.salePrice ? elm.cartItem.salePrice * elm.qty : elm.cartItem.price * elm.qty))
+                        .reduce((acc, crv) => acc + crv, 0)}
+                  </strong>
+               ) : (
+                  <strong>00</strong>
+               )}
             </h4>
          </div>
       </styled.div>

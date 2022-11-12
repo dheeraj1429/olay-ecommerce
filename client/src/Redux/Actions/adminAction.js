@@ -1482,3 +1482,34 @@ export const downloadOrderInvoice = function (data) {
       }
    };
 };
+
+export const deleteUserOrder = function (id) {
+   return async function (dispatch) {
+      try {
+         const deleteOrderResponse = await axios.delete(`/admin/delete-user-order/${id}`, headers);
+
+         if (!!deleteOrderResponse && deleteOrderResponse?.data && deleteOrderResponse?.data.success) {
+            dispatch({
+               type: ADMIN_ACTION_TYPES.DELETE_USER_ORDER,
+               payload: !!deleteOrderResponse && deleteOrderResponse?.data,
+               orderId: id,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getUserOrderAllInfo = function (id) {
+   return async function (dispatch) {
+      const orderInfo = await axios.get(`/admin/get-user-info/${id}`, headers);
+
+      if (!!orderInfo && orderInfo?.data && orderInfo?.data.success) {
+         dispatch({
+            type: ADMIN_ACTION_TYPES.GET_FULL_ORDER_INFO,
+            payload: !!orderInfo && orderInfo?.data,
+         });
+      }
+   };
+};

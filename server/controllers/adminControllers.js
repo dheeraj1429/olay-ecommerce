@@ -1924,25 +1924,11 @@ const getAllOrders = catchAsync(async function (req, res, next) {
    }
 });
 
-const downloadOrderInvoice = catchAsync(async function (req, res, next) {
-   const { orderId } = req.body;
-
-   if (!orderId) {
-      next(new AppError('Order id is reuqired to download order invoice'));
-   }
-
-   /**
-    * find the user order information document.
-    * read the invoice template from the view folders. and render the dynamic data into the invoice template.
-    * convert the template data into the pdf.
-    * open the download link when process is complete.
-    * send back the response to the client.
-    * download the file.
-    */
-
+// find order document with id.
+const getSingleOrderInformation = async function (id) {
    const findUserOrderDocument = await orderModel.aggregate([
       // find the order document.
-      { $match: { $expr: { $eq: ['$_id', { $toObjectId: orderId }] } } },
+      { $match: { $expr: { $eq: ['$_id', { $toObjectId: id }] } } },
       // unwind the array to get the object collections fileds.
       { $unwind: '$orderItems' },
       // joining the products and the order collection.
@@ -2017,11 +2003,34 @@ const downloadOrderInvoice = catchAsync(async function (req, res, next) {
       },
    ]);
 
+   return findUserOrderDocument;
+};
+
+const downloadOrderInvoice = catchAsync(async function (req, res, next) {
+   const { orderId } = req.body;
+
+   if (!orderId) {
+      next(new AppError('Order id is reuqired to download order invoice'));
+   }
+
+   /**
+    * find the user order information document.
+    * read the invoice template from the view folders. and render the dynamic data into the invoice template.
+    * convert the template data into the pdf.
+    * open the download link when process is complete.
+    * send back the response to the client.
+    * download the file.
+    */
+
+   const findUserOrderDocument = await getSingleOrderInformation(orderId);
+
    // order invoice template path.
    const templatePath = path.join(__dirname, '..', 'views', 'templates', 'orderInvoice.ejs');
 
-   let subTotal = findUserOrderDocument[0].orderItems.map((el) => (el?.salePrice && !!el.salePrice ? el.salePrice : el.price)).reduce((acc, crv) => acc + crv);
+   // calculate the order price.
+   let subTotal = findUserOrderDocument[0].orderItems.map((el) => (el?.salePrice && !!el.salePrice ? el.salePrice * el.qty : el.price * el.qty)).reduce((acc, crv) => acc + crv);
 
+   // template dynmic data.
    const invoiceData = {
       userName: findUserOrderDocument[0]._id.userInformation.name,
       userEmail: findUserOrderDocument[0]._id.userInformation.email,
@@ -2051,6 +2060,7 @@ const downloadOrderInvoice = catchAsync(async function (req, res, next) {
                   console.log(error);
                }
 
+               // send back the download response to the client.
                res.download(path.join(filePath), (err) => {
                   if (err) console.log(err);
                });
@@ -2058,6 +2068,47 @@ const downloadOrderInvoice = catchAsync(async function (req, res, next) {
          });
       }
    });
+});
+
+const deleteUserOrder = catchAsync(async function (req, res, next) {
+   // grab the order id which we want to delete.
+   const { id } = req.params;
+   if (!id) {
+      next(new AppError('Order id is reuqired!'));
+   }
+   // find the document and delete.
+   const deleteOrder = await orderModel.deleteOne({ _id: id });
+   if (!!deleteOrder.deletedCount) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         message: 'User Order deleted',
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
+});
+
+const getUserOrderAllInfo = catchAsync(async function (req, res, next) {
+   const { id } = req.params;
+   if (!id) {
+      next(new AppError('Order id is reuqired!'));
+   }
+
+   const OrderDocument = await getSingleOrderInformation(id);
+   if (OrderDocument) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         order: OrderDocument,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
 });
 
 module.exports = {
@@ -2120,4 +2171,6 @@ module.exports = {
    getProductGenralReport,
    getAllOrders,
    downloadOrderInvoice,
+   deleteUserOrder,
+   getUserOrderAllInfo,
 };

@@ -43,6 +43,7 @@ export const div = styled.div`
 
    .activeTab {
       background-color: var(--spec-static-brand-black);
+
       p {
          color: var(--main-cl);
       }

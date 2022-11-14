@@ -93,8 +93,8 @@ export const div = styled.div`
    .Discover_btn {
       background-color: transparent;
       padding: 0.7rem 2rem;
-      border: 2px solid var(--spec-general-background-a);
-      color: var(--spec-general-background-a);
+      border: 2px solid var(--main-cl);
+      color: var(--main-cl);
       transition: all 0.4s ease;
       margin-top: 1rem;
    }

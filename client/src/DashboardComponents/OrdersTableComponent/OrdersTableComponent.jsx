@@ -47,7 +47,7 @@ function OrdersTableComponent() {
                   {allOrders.ordersData.map((el) => (
                      <tr key={el._id}>
                         <td>{el?._id._id}</td>
-                        <td>
+                        <td className="flex">
                            <RiUser4Line className="me-2" />
                            {el?._id?.userInformation.name}
                         </td>

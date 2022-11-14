@@ -34,6 +34,10 @@ const INITAL_STATE = {
    userSingleAddress: null,
    userSingleAddressLoading: false,
    userAddressUpdateInfo: null,
+   userOrders: null,
+   userOrdersLoading: false,
+   userSingleOrder: null,
+   userSingleOrderLoading: false,
 };
 
 const shopReducer = function (state = INITAL_STATE, action) {
@@ -349,6 +353,39 @@ const shopReducer = function (state = INITAL_STATE, action) {
             userAddressUpdateInfo: action.payload,
             saveUserAddressLoading: false,
             userSingleAddress: null,
+         };
+
+      case INDEX_ACTION_TYPE.GET_USER_ALL_ORDERS:
+         return {
+            ...state,
+            userOrders: action.payload,
+            userOrdersLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.GET_USER_ALL_ORDERS_LOADING:
+         return {
+            ...state,
+            userOrdersLoading: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.GET_SINGLE_ORDER_DETAILS:
+         return {
+            ...state,
+            userSingleOrder: action.payload,
+            userSingleOrderLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.GET_SINGLE_ORDER_DETAILS_LOADING:
+         return {
+            ...state,
+            userSingleOrderLoading: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.REMOVE_SINGLE_ORDER_ITEM:
+         return {
+            ...state,
+            userSingleOrder: action.payload,
+            userSingleOrderLoading: false,
          };
 
       default:

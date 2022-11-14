@@ -5,7 +5,7 @@ import CustombuttonComponent from '../../HelperComponents/CustombuttonComponent/
 function BannerComponent({ heading, subHeading }) {
    return (
       <styled.div>
-         <div className="side_padding_one">
+         <div className="side_padding_one text-center">
             {heading}
             {subHeading}
             <CustombuttonComponent innerText={'DISCOVER NOW'} btnCl={'Discover_btn'} />

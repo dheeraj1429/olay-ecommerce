@@ -18,7 +18,7 @@ function ProductCartPayComponent() {
 
    return (
       <styled.div className="d-flex mt-5">
-         {!!cartItems && cartItems.success ? (
+         {!!cartItems && cartItems.success && cartItems.cartItems.length ? (
             <>
                <div className="cart_items">
                   <table>
@@ -36,8 +36,8 @@ function ProductCartPayComponent() {
                <ProductCartTotalWithCouponComponent />
             </>
          ) : (
-            <div className="text-center">
-               <p>No cart products</p>
+            <div className="w-full text-center border p-3 rounded-lg">
+               <p className=" text-2xl mb-0">No cart products</p>
             </div>
          )}
       </styled.div>

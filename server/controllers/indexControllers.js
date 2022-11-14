@@ -8,6 +8,7 @@ const ejs = require('ejs');
 const path = require('path');
 const subscriptionModel = require('../model/schema/subscriptionUsersSchema');
 const orderModel = require('../model/schema/ordersSchema');
+const mongoose = require('mongoose');
 
 // grab the sale products from the databse and then send back the data to the client.
 const getTrandingProducts = catchAsync(async function (req, res, next) {
@@ -618,7 +619,6 @@ const getUserSingleAddress = catchAsync(async function (req, res, next) {
 
 const updateUserAddress = catchAsync(async function (req, res, next) {
    const { token } = req.params;
-   console.log(token);
    const { _id } = await tokenVarifyFunction(undefined, token);
    const findAndUpdateAddress = await userModel.updateOne(
       { _id, myAddress: { $elemMatch: { _id: req.body._id } } },
@@ -648,9 +648,130 @@ const updateUserAddress = catchAsync(async function (req, res, next) {
    }
 });
 
-/*
-const orders = await orderModel.aggregate([
-      { $unwind: '$orders' },
+// get the user order information data.
+const getUserAllOrders = catchAsync(async function (req, res, next) {
+   // get the client token. to check which user is request for the data.
+   const { token } = req.params;
+   // varify the user token.
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   const userOrderDocument = await orderModel.aggregate([
+      { $match: { $expr: { $eq: ['$userId', { $toObjectId: _id }] } } },
+      { $unwind: '$orderItems' },
+      {
+         $lookup: {
+            from: 'products',
+            localField: 'orderItems.productId',
+            foreignField: '_id',
+            as: 'orderItems.productInformation',
+         },
+      },
+      { $unwind: '$orderItems.productInformation' },
+      {
+         $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userInformation',
+         },
+      },
+      { $unwind: '$userInformation' },
+      {
+         $group: {
+            _id: {
+               userId: '$userId',
+               currencySymbol: '$currencySymbol',
+               currencyName: '$currencyName',
+               countryCode: '$countryCode',
+               userInformation: '$userInformation',
+            },
+            orderItems: {
+               $push: {
+                  productInformation: '$orderItems.productInformation',
+                  orderPlaceDate: '$orderCreateAt',
+                  paymentMethod: '$paymentMethod',
+                  paymentStatus: '$paymentStatus',
+                  price: '$orderItems.price',
+                  salePrice: '$orderItems.salePrice',
+                  qty: '$orderItems.qty',
+                  orderStatus: '$orderStatus',
+                  deliveryAddress: '$deliveryAddress',
+               },
+            },
+         },
+      },
+      {
+         $project: {
+            '_id.userId': 1,
+            '_id.currencySymbol': 1,
+            '_id.currencyName': 1,
+            '_id.countryCode': 1,
+            '_id.userInformation.name': 1,
+            '_id.userInformation.email': 1,
+            '_id.userInformation.userProfileImage': 1,
+            'orderItems.productInformation._id': 1,
+            'orderItems.productInformation.name': 1,
+            'orderItems.productInformation.productImage': 1,
+            'orderItems.orderPlaceDate': 1,
+            'orderItems.paymentStatus': 1,
+            'orderitems.orderStatus': 1,
+            'orderItems.price': 1,
+            'orderItems.salePrice': 1,
+            'orderItems.qty': 1,
+         },
+      },
+   ]);
+
+   // const userOrderDocument = await getSingleOrderInformation(_id, 'userId');
+   if (userOrderDocument) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         order: userOrderDocument,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
+});
+
+// get user single order.
+const getUserSingleOrderDetails = catchAsync(async function (req, res, next) {
+   const { token, id } = req.params;
+   if (!id) {
+      next(new AppError('Order Id is required!'));
+   }
+   // varify the user token.
+   const { _id } = await tokenVarifyFunction(undefined, token);
+
+   const userOrder = await orderModel.aggregate([
+      {
+         $match: {
+            $and: [{ userId: mongoose.Types.ObjectId(_id) }, { 'orderItems.productId': mongoose.Types.ObjectId(id) }],
+         },
+      },
+      {
+         $project: {
+            _id: 1,
+            userId: 1,
+            paymentMethod: 1,
+            deliveryAddress: 1,
+            currencyName: 1,
+            countryCode: 1,
+            currencySymbol: 1,
+            orderStatus: 1,
+            paymentStatus: 1,
+            orderCreateAt: 1,
+            order: {
+               $arrayElemAt: [
+                  '$orderItems',
+                  {
+                     $indexOfArray: ['$orderItems.productId', mongoose.Types.ObjectId(id)],
+                  },
+               ],
+            },
+         },
+      },
       {
          $lookup: {
             from: 'users',
@@ -662,38 +783,55 @@ const orders = await orderModel.aggregate([
       {
          $lookup: {
             from: 'products',
-            localField: 'orders.productId',
+            localField: 'order.productId',
             foreignField: '_id',
-            as: 'orders.productInformation',
+            as: 'order.productInformation',
          },
       },
-      { $unwind: '$orders.productInformation' },
+      { $unwind: '$order.productInformation' },
       { $unwind: '$userInformation' },
       {
-         $group: {
-            _id: { _id: '$_id', userId: '$userId', userInformation: '$userInformation' },
-            orders: { $push: '$orders' },
-         },
-      },
-      {
          $project: {
-            '_id._id': 1,
-            '_id.userId': 1,
-            '_id.userInformation.name': 1,
-            '_id.userInformation.email': 1,
-            '_id.userInformation.userProfileImage': 1,
-            'orders.productId': 1,
-            'orders.deliveryAddress': 1,
-            'orders.productInformation._id': 1,
-            'orders.productInformation.name': 1,
-            'orders.productInformation.price': 1,
-            'orders.productInformation.salePrice': 1,
-            'orders.productInformation.productStatusInfo': 1,
-            'orders.productInformation.productImage': 1,
+            _id: 1,
+            userId: 1,
+            paymentMethod: 1,
+            deliveryAddress: 1,
+            currencyName: 1,
+            countryCode: 1,
+            currencySymbol: 1,
+            orderStatus: 1,
+            paymentStatus: 1,
+            orderCreateAt: 1,
+            'order.productId': 1,
+            'order.price': 1,
+            'order.salePrice': 1,
+            'order.qty': 1,
+            'order.productInformation._id': 1,
+            'order.productInformation.name': 1,
+            'order.productInformation.price': 1,
+            'order.productInformation.salePrice': 1,
+            'order.productInformation.category': 1,
+            'order.productInformation.productImage': 1,
+            'userInformation.name': 1,
+            'userInformation._id': 1,
+            'userInformation.email': 1,
+            'userInformation.userProfileImage': 1,
          },
       },
    ]);
-*/
+
+   if (userOrder) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         userOrder,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
+});
 
 module.exports = {
    getTrandingProducts,
@@ -716,4 +854,6 @@ module.exports = {
    deleteUserAddress,
    getUserSingleAddress,
    updateUserAddress,
+   getUserAllOrders,
+   getUserSingleOrderDetails,
 };

@@ -75,7 +75,7 @@ function CartContactInfromation() {
             <div className="group_inputs input_div mt-3">
                <div className="d-flex align-items-center justify-content-between mt-3">
                   <Link to={'/cart'}>
-                     <span className="mb-0">
+                     <span className="mb-0 flex items-center">
                         <IoIosArrowBack />
                         Back to cart
                      </span>

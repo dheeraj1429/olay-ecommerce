@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import backendConfigData from '../../backendConfig';
 import { RiUser6Line } from '@react-icons/all-files/ri/RiUser6Line';
 import { GoLocation } from '@react-icons/all-files/go/GoLocation';
-import { CgShoppingCart } from '@react-icons/all-files/cg/CgShoppingCart';
 import { AiOutlineTag } from '@react-icons/all-files/ai/AiOutlineTag';
 import { AiOutlineSetting } from '@react-icons/all-files/ai/AiOutlineSetting';
 import { VscLinkExternal } from '@react-icons/all-files/vsc/VscLinkExternal';
@@ -14,13 +13,15 @@ import { GetUrlValue } from '../../helpers/helper';
 import { AiOutlineLogout } from '@react-icons/all-files/ai/AiOutlineLogout';
 import { useCookies } from 'react-cookie';
 import { logout } from '../../Redux/Actions/authAppAction';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
+import { AiOutlineShoppingCart } from '@react-icons/all-files/ai/AiOutlineShoppingCart';
+import { RiArrowDropRightLine } from '@react-icons/all-files/ri/RiArrowDropRightLine';
 
 const Options = [
    { icon: <RiUser6Line />, text: 'My details', cl: 'mt-1' },
    { icon: <VscLinkExternal />, text: 'My account' },
    { icon: <GoLocation />, text: 'My address book' },
-   { icon: <CgShoppingCart />, text: 'My orders' },
+   { icon: <AiOutlineShoppingCart />, text: 'My orders' },
    { icon: <AiOutlineTag />, text: 'My newsletters' },
    { icon: <AiOutlineLogout />, text: 'Log out', event: 'logout' },
    { icon: <AiOutlineSetting />, text: 'Account setting', cl: 'mb-1' },
@@ -40,7 +41,6 @@ function UserProfileOptionComponent({ show, styles, hideProfile, hideOptions }) 
       removeCookie('user');
       removeCookie('user-address');
       dispatch(logout(null));
-      navigation('/');
    };
 
    useEffect(() => {
@@ -64,15 +64,12 @@ function UserProfileOptionComponent({ show, styles, hideProfile, hideOptions }) 
                   </div>
                )}
 
-               <div className="options ">
+               <div className="options">
                   {Options.map((el) => (
                      <Link to={el.text.toLowerCase() === 'my account' ? '/my-account' : el.event ? location.pathname : `/my-account/${el.text.toLowerCase().replaceAll(' ', '-')}`}>
                         {!!hideOptions && hideOptions.includes(el.text) ? null : (
-                           <div
-                              onClick={() => (el.event ? TargetEventHandler(el.event) : null)}
-                              key={el.text}
-                              className={`optionsRow ${el.cl ? el.cl : ''}  d-flex align-items-center ${ActiveTab === el.text ? 'activeTab' : ''}`}
-                           >
+                           <div onClick={() => (el.event ? TargetEventHandler(el.event) : null)} key={el.text} className={`optionsRow ${el.cl ? el.cl : ''}  d-flex align-items-center`}>
+                              {ActiveTab === el.text ? <RiArrowDropRightLine /> : null}
                               <div className="options_icon">{el.icon}</div>
                               <div className="options_content">
                                  <p className="mb-0">{el.text}</p>

@@ -29,10 +29,10 @@ function UserDashboardPage() {
                </div>
             </div>
             <div className="row side_padding_one pb-5">
-               <div className="col-12 col-sm-12 col-md-3">
-                  <UserProfileOptionComponent hideProfile={true} show={true} styles={{ position: 'relative', boxShadow: 'none' }} hideOptions={['My account']} />
+               <div className="col-12 col-sm-12 col-md-2">
+                  <UserProfileOptionComponent hideProfile={true} show={true} styles={{ width: '100%', position: 'relative', boxShadow: 'none' }} hideOptions={['My account']} />
                </div>
-               <div className="col-12 col-sm-12 col-md-9 mt-5 mt-md-0">
+               <div className="col-12 col-sm-12 col-md-10 mt-5 mt-md-0">
                   <div className="renderDiv">
                      <Outlet />
                   </div>

@@ -75,12 +75,12 @@ function MyDetailsComponent() {
    return (
       <styled.div>
          <h1>My Details</h1>
-         <p className="mt-4 mb-0">Personal Information</p>
+         <p className="mt-4 mb-3">Personal Information</p>
          <hr />
-         <div className="information_div">
+         <div className="information_div mt-3">
             <div className="container">
                <div className="row">
-                  <div className="col-12 col-sm-12 col-md-5">
+                  <div className="col-12 col-sm-12 col-md-5 mt-3">
                      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.</p>
                   </div>
                   <div className="col-12 col-sm-12 col-md-7">

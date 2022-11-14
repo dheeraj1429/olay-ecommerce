@@ -5,6 +5,7 @@ const JWT_TOKEN = process.env.JWT_TOKEN;
 const fs = require('fs');
 const fetch = require('node-fetch');
 const productModel = require('../model/schema/productSchema');
+const orderModel = require('../model/schema/ordersSchema');
 
 const imageCompress = async function (imagePath, imageQulity, folder, originalname) {
    /**

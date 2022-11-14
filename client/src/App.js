@@ -61,11 +61,13 @@ const CartPage = lazy(() => import('./Pages/CartPage/CartPage'));
 const CheckOutPage = lazy(() => import('./Pages/CheckOutPage/CheckOutPage'));
 const CartContactInfromation = lazy(() => import('./Components/CartContactInfromation/CartContactInfromation'));
 const ShippingMethodComponent = lazy(() => import('./Components/ShippingMethodComponent/ShippingMethodComponent'));
+const SingleOrder = lazy(() => import('./Pages/SingleOrder/SingleOrder'));
 
 // user dashboard components
 const MyDetailsComponent = lazy(() => import('./UserDashboardComponent/MyDetailsComponent/MyDetailsComponent'));
 const AddressBookComponent = lazy(() => import('./UserDashboardComponent/AddressBookComponent/AddressBookComponent'));
 const UserAddressTableViewComponent = lazy(() => import('./UserDashboardComponent/UserAddressTableViewComponent/UserAddressTableViewComponent'));
+const MyOrdersComponent = lazy(() => import('./UserDashboardComponent/MyOrdersComponent/MyOrdersComponent'));
 
 // dashboard pages
 const Dashboard = lazy(() => import('./DashboardPages/Dashboard/Dashboard'));
@@ -107,7 +109,9 @@ function App() {
                   <Route path="my-address-book" element={<UserAddressTableViewComponent />} />
                   <Route path="my-address-book/create" element={<AddressBookComponent />} />
                   <Route path="my-address-book/edit/:id" element={<AddressBookComponent />} />
+                  <Route path="my-orders" element={<MyOrdersComponent />} />
                </Route>
+               <Route path="my-orders/:id" element={<SingleOrder />} />
 
                {/* user auth pages routes */}
                <Route path="auth" element={<SignInAndLoginPage />}>

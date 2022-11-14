@@ -37,7 +37,7 @@ export const div = styled.div`
 
 export const mainDiv = styled.div`
    width: 90%;
-   height: 70%;
+   height: 90%;
    background-color: var(--main-cl);
    border-radius: 10px;
    transition: all 0.3s ease;
@@ -57,8 +57,6 @@ export const mainDiv = styled.div`
    }
 
    .product_listing {
-      padding: 1rem;
-
       .product_image_div {
          width: 50px;
          height: 50px;

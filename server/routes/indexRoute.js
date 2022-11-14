@@ -27,10 +27,12 @@ route.get('/get-login-user-address-info/:token/:address', checkIsTokenExists, in
 route.get('/get-user-data/:token', checkIsTokenExists, indexController.getUserData);
 route.get('/get-user-address/:token', checkIsTokenExists, indexController.getUserAddress);
 route.get('/get-user-address/:token/:id', checkIsTokenExists, indexController.getUserSingleAddress);
+route.get('/get-user-order-info/:token', checkIsTokenExists, indexController.getUserAllOrders);
+route.get('/get-user-single-order-info/:token/:id', checkIsTokenExists, indexController.getUserSingleOrderDetails);
 
 // API => POST
 route.post('/add-to-cart-product/:token', checkIsTokenExists, indexController.productAddToCart);
-route.post('/add-to-wish-list', checkIsTokenExists, indexController.addToWishListProducts);
+route.post('/add-to-wish-list/:token', checkIsTokenExists, indexController.addToWishListProducts);
 route.post('/news-letter/:token', checkIsTokenExists, indexController.subcsriptionHandler);
 route.post('/user-shipping-infomation/:token', checkIsTokenExists, indexController.storeUserShippingInformation);
 route.post('/place-user-cash-on-delivery/:token', checkIsTokenExists, indexController.orderPlaceByCashOnDelivery);

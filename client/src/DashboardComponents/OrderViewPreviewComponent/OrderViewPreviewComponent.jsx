@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUserOrderAllInfo } from '../../Redux/Actions/adminAction';
 import { showOrderPrev } from '../../Redux/Actions/adminAppAction';
 import backendConfigData from '../../backendConfig';
+import dayjs from 'dayjs';
 
 const StateAr = [{ name: 'Subtotal' }, { name: 'Shipping' }, { name: 'Total' }];
 
@@ -37,15 +38,30 @@ function OrderViewPreviewComponent() {
                </div>
             ) : !!orderFullInfo && orderFullInfo.success && orderFullInfo?.order && !orderFullInfoLoading ? (
                <div>
-                  <h1>Order Information</h1>
-                  <p className={`${orderFullInfo.order[0]._id.orderStatus} mb-0 ms-2 bag`}>{orderFullInfo.order[0]._id.orderStatus}</p>
-                  <hr className="border-top" />
-                  <h5>Products</h5>
                   <div className="container-fluid p-0 ">
                      <div className="row">
                         <div className="col-12 col-sm-12 col-md-8">
                            <div className="product_listing mt-1">
                               <div className="col-12">
+                                 <h1>Order Information</h1>
+                                 <p className={`${orderFullInfo.order[0]._id.orderStatus} mb-2 bag`}>{orderFullInfo.order[0]._id.orderStatus}</p>
+                                 <p className="mb-1">
+                                    <strong className="me-2">Order Date </strong>
+                                    {dayjs(orderFullInfo.order[0]._id.orderCreateAt).format('DD/MM/YY d:h:s-A')}
+                                 </p>
+                                 <p className="mb-1">
+                                    <strong className="me-2">Payment method</strong>
+                                    {orderFullInfo.order[0]._id.paymentMethod}
+                                 </p>
+                                 <p className="mb-1">
+                                    <strong className="me-2">Payment status</strong>
+                                    {orderFullInfo.order[0]._id.paymentStatus}
+                                 </p>
+                                 <p className="mb-1">
+                                    <strong className="me-2">Order Status</strong>
+                                    {orderFullInfo.order[0]._id.orderStatus}
+                                 </p>
+                                 <h5 className="mt-4">Products</h5>
                                  {orderFullInfo?.order[0].orderItems && orderFullInfo?.order[0].orderItems.length
                                     ? orderFullInfo.order[0].orderItems.map((el) => (
                                          <div className="product_sm_div d-flex align-items-center mt-4">

@@ -29,14 +29,10 @@ function ProductAddToCartSideNoficationComponent() {
          {!!addToCartInfo && addToCartInfo?.success && !!cartProductAddedImage ? (
             <>
                <div className="imagePrev">
-                  <img
-                     src={`${backendConfigData.URL}productImagesCompress/${cartProductAddedImage}`}
-                     crossOrigin="anonymous"
-                     alt=""
-                  />
+                  <img src={`${backendConfigData.URL}productImagesCompress/${cartProductAddedImage}`} crossOrigin="anonymous" alt="" />
                </div>
                <div className="content_div">
-                  <p>
+                  <p className="flex items-center">
                      {addToCartInfo.message} <FcApproval />
                   </p>
                </div>

@@ -42,16 +42,17 @@ function SignInAndLoginComponent() {
          password: User.password,
       };
 
-      setError('');
-      dispatch(userLoginLoadingHandler(true));
-
       if (location.pathname === '/auth/login') {
          dispatch(userLoginIn(userInfo));
+         setError('');
+         dispatch(userLoginLoadingHandler(true));
       } else {
          if (User.password !== User.confirmPassword) {
             return setError('Password or confrim password is not the same*');
          }
          dispatch(signInUsers(userInfo));
+         setError('');
+         dispatch(userLoginLoadingHandler(true));
       }
    };
 

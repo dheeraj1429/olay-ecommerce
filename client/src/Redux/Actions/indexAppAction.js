@@ -131,3 +131,24 @@ export const removeShippingInfo = function (data) {
       payload: data,
    };
 };
+
+export const userOrdersFetchLoading = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.GET_USER_ALL_ORDERS_LOADING,
+      payload: data,
+   };
+};
+
+export const userOrderLoadingHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.GET_SINGLE_ORDER_DETAILS_LOADING,
+      payload: data,
+   };
+};
+
+export const removeSingleOrder = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.REMOVE_SINGLE_ORDER_ITEM,
+      payload: data,
+   };
+};

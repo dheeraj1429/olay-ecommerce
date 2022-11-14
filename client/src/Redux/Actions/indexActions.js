@@ -107,7 +107,7 @@ export const addToWishList = function (id, token) {
          id,
          token,
       };
-      const wishListResponse = await axios.post('/index/add-to-wish-list', data, headers);
+      const wishListResponse = await axios.post(`/index/add-to-wish-list/${token}`, data, headers);
 
       if (wishListResponse && wishListResponse?.data && wishListResponse?.data.success) {
          dispatch({
@@ -356,6 +356,39 @@ export const updateUserAddress = function (data, token) {
             dispatch({
                type: INDEX_ACTION_TYPE.UPDATE_USER_SINGLE_ADDRESS,
                payload: updateResponse && updateResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getUserAllOrders = function (token) {
+   return async function (dispatch) {
+      try {
+         const orderResponse = await axios.get(`/index/get-user-order-info/${token}`);
+
+         if (orderResponse && orderResponse?.data && orderResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_USER_ALL_ORDERS,
+               payload: orderResponse && orderResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getUserSingleOrderDetails = function (token, id) {
+   return async function (dispatch) {
+      try {
+         const orderResponse = await axios.get(`/index/get-user-single-order-info/${token}/${id}`, headers);
+         if (orderResponse && orderResponse?.data && orderResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_SINGLE_ORDER_DETAILS,
+               payload: orderResponse && orderResponse?.data,
             });
          }
       } catch (err) {

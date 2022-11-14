@@ -101,7 +101,7 @@ function ShippingMethodComponent() {
 
             <div className="d-flex align-items-center justify-content-between mt-3">
                <Link to={'/checkout'}>
-                  <span className="mb-0">
+                  <span className="mb-0 flex items-center">
                      <IoIosArrowBack />
                      Back to cart
                   </span>

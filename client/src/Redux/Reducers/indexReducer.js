@@ -21,6 +21,8 @@ const INITAL_STATE = {
    newsLetterMailLoading: false,
    singleProduct: null,
    singleProductLoading: false,
+   singleProductSubVariation: null,
+   singleProductSubVariationLoading: false,
    randomProducts: null,
    randomProductsLoading: false,
    shippingInfo: null,
@@ -229,6 +231,19 @@ const shopReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             singleProductLoading: action.payload,
+         };
+
+      case INDEX_ACTION_TYPE.GET_PRODUCT_VARIATION_DATA:
+         return {
+            ...state,
+            singleProductSubVariation: action.payload,
+            singleProductSubVariationLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.GET_PRODUCT_VARIATION_DATA_LOADING:
+         return {
+            ...state,
+            singleProductSubVariationLoading: action.payload,
          };
 
       case INDEX_ACTION_TYPE.QTY_PRICE_HANDLER:

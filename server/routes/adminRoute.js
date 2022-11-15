@@ -9,7 +9,7 @@ const adminBlogController = require('../controllers/adminBlogControllers');
 const storage = multer.diskStorage({
    destination: function (req, file, cb) {
       if (file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
-         if (file.fieldname === 'productImage' || file.fieldname === 'variationImage') {
+         if (file.fieldname === 'productImage') {
             cb(null, './upload/productImages');
          } else if (file.fieldname === 'CategoryImage') {
             cb(null, './upload/categoryImages');

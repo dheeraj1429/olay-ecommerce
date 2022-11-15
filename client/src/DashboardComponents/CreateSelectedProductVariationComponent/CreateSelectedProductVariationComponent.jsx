@@ -32,11 +32,11 @@ function CreateSelectedProductVariationComponent() {
    const [VariationInfo, setVariationInfo] = useState({
       name: '',
       sku: '',
-      regularPrice: '',
+      price: '',
       salePrice: '',
       stokeStatus: '',
-      description: '',
-      variationImage: '',
+      discription: '',
+      productImage: '',
       colorSwatches: '',
       weight: '',
       length: '',
@@ -74,7 +74,7 @@ function CreateSelectedProductVariationComponent() {
 
    const ImageGrabHandler = function (e) {
       const data = e.target.files[0];
-      setVariationInfo({ ...VariationInfo, variationImage: data });
+      setVariationInfo({ ...VariationInfo, productImage: data });
    };
 
    const createFormData = function (id = undefined, parentTargetProduct = undefined) {
@@ -82,11 +82,11 @@ function CreateSelectedProductVariationComponent() {
       formData.append('selectedProductId', params.id);
       formData.append('variationName', VariationInfo.name);
       formData.append('sku', VariationInfo.sku);
-      formData.append('regularPrice', VariationInfo.regularPrice);
+      formData.append('price', VariationInfo.price);
       formData.append('salePrice', VariationInfo.salePrice);
       formData.append('stokeStatus', VariationInfo.stokeStatus);
-      formData.append('description', VariationInfo.description);
-      formData.append('variationImage', VariationInfo.variationImage);
+      formData.append('description', VariationInfo.discription);
+      formData.append('productImage', VariationInfo.productImage);
       formData.append('colorSwatches', VariationInfo.colorSwatches);
       formData.append('weight', VariationInfo.weight);
       formData.append('length', VariationInfo.length);
@@ -177,15 +177,16 @@ function CreateSelectedProductVariationComponent() {
    useEffect(() => {
       if (!!fetchSingleSubVarition && fetchSingleSubVarition?.success && fetchSingleSubVarition?.subVariation) {
          let subVariation = fetchSingleSubVarition.subVariation?.variations[0];
+         console.log(subVariation);
 
          setVariationInfo({
-            name: subVariation.variationName,
+            name: subVariation.name,
             sku: subVariation.sku,
-            regularPrice: !!subVariation.regularPrice ? subVariation.regularPrice : '',
+            price: !!subVariation.price ? subVariation.price : '',
             salePrice: !!subVariation?.salePrice ? subVariation.salePrice : '',
             stokeStatus: subVariation?.stokeStatus,
-            description: subVariation?.description,
-            variationImage: subVariation.variationImage,
+            description: subVariation?.discription,
+            productImage: subVariation.productImage,
             colorSwatches: subVariation?.colorSwatches?._id,
             weight: subVariation?.weight ? subVariation.weight : '',
             length: subVariation?.length ? subVariation.length : '',
@@ -246,7 +247,7 @@ function CreateSelectedProductVariationComponent() {
                      <TextField id="outlined-basic" label="SKU" variant="outlined" type={'text'} name="sku" value={VariationInfo.sku} onChange={changeHandler} />
                      <variation.flex>
                         <div className="half-width">
-                           <TextField id="outlined-basic" label="Regular Price" variant="outlined" type={'number'} name="regularPrice" value={VariationInfo.regularPrice} onChange={changeHandler} />
+                           <TextField id="outlined-basic" label="Regular Price" variant="outlined" type={'number'} name="price" value={VariationInfo.price} onChange={changeHandler} />
                         </div>
                         <div className="half-width">
                            <TextField id="outlined-basic" label="Sale Price" variant="outlined" type={'number'} name="salePrice" value={VariationInfo.salePrice} onChange={changeHandler} />
@@ -319,7 +320,7 @@ function CreateSelectedProductVariationComponent() {
                      <TextField id="outlined-multiline-static" label="Description" multiline rows={4} defaultValue="" name="description" value={VariationInfo.description} onChange={changeHandler} />
                      <HeadingComponent cl="sm_heading" Heading={'Product variations image'} />
                      <ProductUploadImageComponent
-                        selectedPrevImage={!!VariationInfo?.variationImage ? VariationInfo?.variationImage : null}
+                        selectedPrevImage={!!VariationInfo?.productImage ? VariationInfo?.productImage : null}
                         filde="productImages"
                         onChange={ImageGrabHandler}
                         name="variationImage"

@@ -1294,7 +1294,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
 
       const findProductSubVaitionIsExist = await productModel.findOne({
          _id: selectedProductId,
-         'variations.variationName': req.body.name,
+         'variations.name': req.body.name,
       });
 
       if (!!findProductSubVaitionIsExist?.variations.length) {
@@ -1304,12 +1304,12 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
          });
       } else {
          const updatedFildes = {
-            variationName: req.body.variationName,
+            name: req.body.variationName,
             sku: req.body.sku,
-            regularPrice: !!req.body.regularPrice ? req.body.regularPrice : findParentProduct.price,
+            price: !!req.body.regularPrice ? req.body.regularPrice : findParentProduct.price,
             salePrice: req.body.salePrice,
             stokeStatus: !!req.body.stokeStatus ? req.body.stokeStatus : 'draft',
-            description: req.body.description,
+            discription: req.body.description,
             colorSwatches: req.body.colorSwatches,
             size: req.body.size,
             weight: !!req.body.weight ? !!req.body.weight : findParentProduct.weight || '',
@@ -1322,7 +1322,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
             const file = req.files[0];
             const originalname = file.originalname;
             const imagePath = file.path;
-            updatedFildes.variationImage = originalname;
+            updatedFildes.productImage = originalname;
 
             /**
              * compress the uploaded file into the another folder. when the user requret for the small size image then send back the compress version of image ( for the load time ).
@@ -1336,7 +1336,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
             /**
              * if the product image is not posted then use the parnet image path to fecth the parent image with sub vaitions.
              */
-            updatedFildes.variationImage = productModel.productImage;
+            // updatedFildes.productImage = productModel.productImage;
 
             insertNewSubProductVariation = await productModel.updateOne({ _id: selectedProductId }, { $push: { variations: updatedFildes } });
 
@@ -1427,13 +1427,12 @@ const updateSingleSubVariation = catchAsync(async function (req, res, next) {
    const { subVaritionId, parentProductId } = req.body;
 
    const updateObject = {
-      'variations.$.variationName': req.body.variationName,
+      'variations.$.name': req.body.variationName,
       'variations.$.sku': req.body.sku,
-      'variations.$.regularPrice': req.body.regularPrice,
+      'variations.$.price': req.body.regularPrice,
       'variations.$.salePrice': req.body.salePrice,
       'variations.$.stokeStatus': req.body.stokeStatus,
-      'variations.$.description': req.body.description,
-      'variations.$.variationImage': req.body.variationImage,
+      'variations.$.discription': req.body.discription,
       'variations.$.colorSwatches': req.body.colorSwatches,
       // 'variations.$.size': req.body.size,
       'variations.$.weight': req.body.weight,
@@ -1449,10 +1448,11 @@ const updateSingleSubVariation = catchAsync(async function (req, res, next) {
    if (!!file.length) {
       const imagePath = file[0].path;
       const originalname = file[0].originalname;
+      console.log(originalname);
 
       await imageCompress(imagePath, 400, 'productImagesCompress', originalname);
 
-      updateObject['variations.$.variationImage'] = originalname;
+      updateObject['variations.$.productImage'] = originalname;
       await updateSubVaritionFunction(parentProductId, subVaritionId, updateObject, res);
    } else {
       await updateSubVaritionFunction(parentProductId, subVaritionId, updateObject, res);

@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import * as styled from './SingleProductPage.style';
 import NavbarComponent from '../../Components/NavbarComponent/NavbarComponent';
-import CategorieTagShowComponent from '../../Components/CategorieTagShowComponent/CategorieTagShowComponent';
 import { useParams } from 'react-router';
-import ProductSocialShareComponent from '../../Components/ProductSocialShareComponent/ProductSocialShareComponent';
 import SingleProductContentComponent from '../../Components/SingleProductContentComponent/SingleProductContentComponent';
 import { getSingleProduct } from '../../Redux/Actions/indexActions';
 import { useDispatch } from 'react-redux';

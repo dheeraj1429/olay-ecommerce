@@ -318,9 +318,9 @@ const getSingleProduct = catchAsync(async function (req, res, next) {
             metaContent: 1,
             createdAt: 1,
             'variations._id': 1,
-            'variations.regularPrice': 1,
+            'variations.price': 1,
             'variations.salePrice': 1,
-            'variations.variationImage': 1,
+            'variations.productImage': 1,
          }
       )
       .populate('brand', { name: 1, brandIcon: 1 })
@@ -859,7 +859,17 @@ const getUserSingleOrderDetails = catchAsync(async function (req, res, next) {
 const getProductSubVariation = catchAsync(async function (req, res, next) {
    const { variationId, collectionId } = req.params;
    const findSubVariation = await productModel.findOne({ _id: collectionId, variations: { $elemMatch: { _id: variationId } } }, { 'variations.$': 1 });
-   console.log(findSubVariation);
+   if (findSubVariation) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         productVariationData: findSubVariation,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
 });
 
 module.exports = {

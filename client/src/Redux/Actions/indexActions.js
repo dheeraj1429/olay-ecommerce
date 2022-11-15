@@ -401,7 +401,12 @@ export const getProductSubVariation = function (variationId, collectionId) {
    return async function (dispatch) {
       try {
          const getProductVariationResponse = await axios.get(`/index/get-product-sub-variation/${variationId}/${collectionId}`);
-         console.log(getProductVariationResponse);
+         if (getProductVariationResponse && !!getProductVariationResponse?.data && getProductVariationResponse?.data.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_PRODUCT_VARIATION_DATA,
+               payload: getProductVariationResponse && getProductVariationResponse?.data,
+            });
+         }
       } catch (err) {
          console.log(err);
       }

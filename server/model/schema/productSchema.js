@@ -21,16 +21,16 @@ const productSchema = new mongoose.Schema({
    metaContent: { type: String },
    variations: [
       {
-         variationName: {
+         name: {
             type: String,
             required: [true, 'product sub variation name is reuqired'],
          },
          sku: { type: String },
-         regularPrice: { type: Number },
+         price: { type: Number },
          salePrice: { type: Number },
-         stokeStatus: { type: String, default: 'draft' },
-         description: { type: String },
-         variationImage: { type: String },
+         stockStatus: { type: String, default: 'draft' },
+         discription: { type: String },
+         productImage: { type: String },
          colorSwatches: { type: mongoose.Types.ObjectId, ref: 'swatches' },
          // size: { type: mongoose.Types.ObjectId, ref: 'sizeVariation' },
          weight: { type: Number },

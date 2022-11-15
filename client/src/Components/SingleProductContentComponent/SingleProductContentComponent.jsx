@@ -113,10 +113,10 @@ function SingleProductContentComponent() {
                               {singleProduct.product?.variations && singleProduct.product.variations.length
                                  ? singleProduct.product.variations.map((el) => (
                                       <div className="variatio_sub_div p-2 rounded-lg shadow flex items-center" key={el._id} onClick={() => fetchVariationHandler(el._id, singleProduct.product?._id)}>
-                                         <img crossOrigin="anonymous" src={`${backendConfigData.URL}/productImages/${el?.variationImage}`} />
+                                         <img crossOrigin="anonymous" src={`${backendConfigData.URL}/productImages/${el?.productImage}`} />
                                          <p className="mb-0 ms-2">
                                             {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
-                                            {el?.salePrice && !!el.salePrice ? el.salePrice : el?.regularPrice}
+                                            {el?.salePrice && !!el.salePrice ? el.salePrice : el?.price}
                                          </p>
                                       </div>
                                    ))

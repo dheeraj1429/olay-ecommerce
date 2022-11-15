@@ -27,7 +27,9 @@ function MyOrdersTableComponent() {
                         </div>
                      </td>
                      <td className="productname_section pe-2">
-                        <p className="text-gray-800 mb-0">{el.productInformation.name}</p>
+                        <Link to={`/products/${el.productInformation.name.split(' ').join('-')}/${el.productInformation._id}`}>
+                           <p className="text-gray-800 mb-0 hover:text-blue-800 cursor-pointer transition-all">{el.productInformation.name}</p>
+                        </Link>
                      </td>
                      <td>
                         <p className=" text-gray-800 mb-0">{el.qty}</p>

@@ -6,7 +6,7 @@ import AllProductTableInnerComponent from '../AllProductTableInnerComponent/AllP
 import TableFooterComponent from '../TableFooterComponent/TableFooterComponent';
 import { fetchLoadingProducts } from '../../Redux/Actions/adminAppAction';
 
-const subVatiaions = 1;
+const subVatiaions = true;
 
 function AllProductTableViewComponent() {
    const dispatch = useDispatch();

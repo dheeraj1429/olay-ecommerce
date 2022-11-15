@@ -11,18 +11,22 @@ import ProductViewComponent from '../../Components/ProductViewComponent/ProductV
 import ProductAddToCartSideNoficationComponent from '../../Components/ProductAddToCartSideNoficationComponent/ProductAddToCartSideNoficationComponent';
 import ShopHeadingComponent from '../../Components/ShopHeadingComponent/ShopHeadingComponent';
 import { useNavigate } from 'react-router';
+import { getCartItemsLoadingHandler, getRandomProductsLoadingHandler } from '../../Redux/Actions/indexAppAction';
+import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerComponent';
 
 function CartPage() {
    const dispatch = useDispatch();
    const navigation = useNavigate();
 
    const { auth } = useSelector((state) => state.auth);
-   const { randomProducts, showProductPrev } = useSelector((state) => state.index);
+   const { randomProducts, showProductPrev, randomProductsLoading } = useSelector((state) => state.index);
 
    useEffect(() => {
       if (!!auth && auth?.userObject && auth?.userObject?.token) {
          dispatch(getRandomProducts());
          dispatch(getUserCartProducts(auth.userObject.token));
+         dispatch(getRandomProductsLoadingHandler(true));
+         dispatch(getCartItemsLoadingHandler(true));
       } else {
          navigation('/auth/signin');
       }
@@ -43,7 +47,11 @@ function CartPage() {
          <ShopHeadingComponent heading={'You may also like'} subHeading={'Mirum est notare quam littera gothica quam nunc putamus parum claram!'} />
 
          <div className="side_padding_one">
-            {!!randomProducts && randomProducts.success && randomProducts?.product ? (
+            {!!randomProductsLoading ? (
+               <div className="w-full flex items-center justify-center">
+                  <SpnnerComponent blackSpenner={true} />
+               </div>
+            ) : !!randomProducts && randomProducts.success && randomProducts?.product ? (
                <Slider {...settings}>
                   {randomProducts.product.map((el) => (
                      <ProductCardComponent key={el._id} data={el} />

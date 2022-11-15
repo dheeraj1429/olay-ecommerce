@@ -152,3 +152,24 @@ export const removeSingleOrder = function (data) {
       payload: data,
    };
 };
+
+export const getCartItemsLoadingHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.GET_CART_ITEMS_LOADING,
+      payload: data,
+   };
+};
+
+export const getRandomProductsLoadingHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.GET_RANDOM_PRODUCTS_LOADING,
+      payload: data,
+   };
+};
+
+export const singlePageProductLoadingHandler = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.GET_SINGLE_PRODUCT_LOADING,
+      payload: data,
+   };
+};

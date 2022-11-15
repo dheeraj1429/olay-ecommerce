@@ -2,13 +2,12 @@ import styled from 'styled-components';
 
 export const div = styled.div`
    .image_prev_div {
-      width: 40%;
       padding: 1rem;
-
+      /* 
       img {
          width: auto;
          height: 400px;
-      }
+      } */
    }
 
    .salePrice {
@@ -21,7 +20,6 @@ export const div = styled.div`
    }
 
    .product_content_div {
-      width: 60%;
       padding: 0 1rem;
 
       h1 {
@@ -70,6 +68,18 @@ export const div = styled.div`
 
    .content {
       outline: none;
+   }
+
+   .variatio_sub_div {
+      width: 150px;
+      height: 60px;
+      border-width: 1px;
+      cursor: pointer;
+
+      img {
+         width: auto;
+         height: 100%;
+      }
    }
 `;
 

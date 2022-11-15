@@ -560,8 +560,7 @@ const uploadNewProduct = catchAsync(async function (req, res, next) {
  * @fetchUploadProducts return products documents
  */
 const fetchUploadProducts = catchAsync(async function (req, res, next) {
-   const page = req.query.page;
-   // const subVatiaions = req.query.subVatiaions;
+   const { page, subVatiaions } = req.query;
 
    if (!page) {
       return res.status(httpStatusCodes.OK).json({
@@ -574,12 +573,15 @@ const fetchUploadProducts = catchAsync(async function (req, res, next) {
     * @DOCUMENT_LIMIT how to document we want the send back to the client
     */
    const DOCUMENT_LIMIT = 10;
-
-   await fetchLimitDocument(productModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, 'products', {
+   const queryProjectinObject = {
       metaContent: 0,
-      variations: 0,
       tags: 0,
-   });
+   };
+   if (!subVatiaions) {
+      queryProjectinObject.variations = 0;
+   }
+
+   await fetchLimitDocument(productModel, page, res, httpStatusCodes, DOCUMENT_LIMIT, 'products', queryProjectinObject);
 });
 
 const deleteAllProducts = catchAsync(async function (req, res, next) {
@@ -1358,10 +1360,7 @@ const getSingelSubProductVariation = catchAsync(async function (req, res, next) 
       next(new AppError('sub variation id is required'));
    }
 
-   const findSubVaition = await productModel
-      .findOne({ _id: parentProductId, 'variations._id': { $eq: subVariation } }, { 'variations.$': 1 })
-      .populate('variations.size')
-      .populate('variations.colorSwatches');
+   const findSubVaition = await productModel.findOne({ _id: parentProductId, 'variations._id': { $eq: subVariation } }, { 'variations.$': 1 }).populate('variations.colorSwatches');
 
    if (findSubVaition) {
       return res.status(httpStatusCodes.OK).json({
@@ -1396,6 +1395,8 @@ const updateSubVaritionFunction = async function (parentProductId, subVaritionId
       }
    );
 
+   console.log(findSubVariationAndUpdate);
+
    if (!!findSubVariationAndUpdate.modifiedCount && findSubVariationAndUpdate.acknowledged) {
       res.status(httpStatusCodes.OK).json({
          success: true,
@@ -1426,7 +1427,7 @@ const updateSingleSubVariation = catchAsync(async function (req, res, next) {
    const { subVaritionId, parentProductId } = req.body;
 
    const updateObject = {
-      'variations.$.variationName': req.body.name,
+      'variations.$.variationName': req.body.variationName,
       'variations.$.sku': req.body.sku,
       'variations.$.regularPrice': req.body.regularPrice,
       'variations.$.salePrice': req.body.salePrice,
@@ -1434,8 +1435,7 @@ const updateSingleSubVariation = catchAsync(async function (req, res, next) {
       'variations.$.description': req.body.description,
       'variations.$.variationImage': req.body.variationImage,
       'variations.$.colorSwatches': req.body.colorSwatches,
-      'variations.$.colorSwatches': req.body.colorSwatches,
-      'variations.$.size': req.body.size,
+      // 'variations.$.size': req.body.size,
       'variations.$.weight': req.body.weight,
       'variations.$.length': req.body.length,
       'variations.$.wide': req.body.wide,

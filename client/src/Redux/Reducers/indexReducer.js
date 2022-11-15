@@ -13,13 +13,16 @@ const INITAL_STATE = {
    addToCartLoading: false,
    cartProductAddedImage: null,
    cartItems: null,
+   cartItemLoading: false,
    wishListInfo: null,
    wishListItemAr: [],
    removeCartItemLoading: null,
    newsLetterMailInfo: null,
    newsLetterMailLoading: false,
    singleProduct: null,
+   singleProductLoading: false,
    randomProducts: null,
+   randomProductsLoading: false,
    shippingInfo: null,
    shippingInsertInfoLoading: false,
    userAddressInformation: null,
@@ -150,6 +153,13 @@ const shopReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             cartItems: action.payload,
+            cartItemLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.GET_CART_ITEMS_LOADING:
+         return {
+            ...state,
+            cartItemLoading: action.payload,
          };
 
       case INDEX_ACTION_TYPE.REMOVER_CART_ITEMS:
@@ -212,6 +222,13 @@ const shopReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             singleProduct: action.payload,
+            singleProductLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.GET_SINGLE_PRODUCT_LOADING:
+         return {
+            ...state,
+            singleProductLoading: action.payload,
          };
 
       case INDEX_ACTION_TYPE.QTY_PRICE_HANDLER:
@@ -227,6 +244,13 @@ const shopReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             randomProducts: action.payload,
+            randomProductsLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.GET_RANDOM_PRODUCTS_LOADING:
+         return {
+            ...state,
+            randomProductsLoading: action.payload,
          };
 
       case INDEX_ACTION_TYPE.STORE_USER_SHIPPING_INFORMATION:

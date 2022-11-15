@@ -7,7 +7,7 @@ import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { setLoginUser } from './Redux/Actions/authAppAction';
 import { getTrandingProducts, getUserCartProducts, getUserWishListProducts } from './Redux/Actions/indexActions';
-import { trandingProductsLoading } from './Redux/Actions/indexAppAction';
+import { getRandomProductsLoadingHandler, trandingProductsLoading } from './Redux/Actions/indexAppAction';
 import { getShopInfromation } from './Redux/Actions/adminAction';
 
 // site pages
@@ -81,6 +81,7 @@ function App() {
    useEffect(() => {
       dispatch(getTrandingProducts());
       dispatch(trandingProductsLoading(true));
+      dispatch(getRandomProductsLoadingHandler(true));
       dispatch(getShopInfromation());
 
       if (cookie && cookie.user) {

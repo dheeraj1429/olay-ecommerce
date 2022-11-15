@@ -238,10 +238,10 @@ export const uplodNewProduct = function (data) {
    };
 };
 
-export const fetchUploadProducts = function (page, docItems) {
+export const fetchUploadProducts = function (page, subVatiaions) {
    return async function (dispatch) {
       try {
-         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}&subVatiaions=${docItems}`, headers);
+         const fetchProducts = await axios.get(`/admin/get-upload-products?page=${page}&subVatiaions=${subVatiaions}`, headers);
 
          if (fetchProducts && fetchProducts?.data) {
             dispatch({

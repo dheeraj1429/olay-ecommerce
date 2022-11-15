@@ -301,7 +301,30 @@ const getSingleProduct = catchAsync(async function (req, res, next) {
    if (!id) {
       next(new AppError('product id is required'));
    }
-   const findProduct = await productModel.findOne({ _id: id }).populate('brand', { name: 1, brandIcon: 1 }).populate('category', { categoryImage: 1, name: 1 });
+   const findProduct = await productModel
+      .findOne(
+         { _id: id },
+         {
+            _id: 1,
+            name: 1,
+            price: 1,
+            salePrice: 1,
+            category: 1,
+            stockStatus: 1,
+            productImage: 1,
+            suggestedAge: 1,
+            productStatusInfo: 1,
+            productType: 1,
+            metaContent: 1,
+            createdAt: 1,
+            'variations._id': 1,
+            'variations.regularPrice': 1,
+            'variations.salePrice': 1,
+            'variations.variationImage': 1,
+         }
+      )
+      .populate('brand', { name: 1, brandIcon: 1 })
+      .populate('category', { categoryImage: 1, name: 1 });
    if (findProduct) {
       return res.status(httpStatusCodes.OK).json({
          success: true,
@@ -833,6 +856,12 @@ const getUserSingleOrderDetails = catchAsync(async function (req, res, next) {
    }
 });
 
+const getProductSubVariation = catchAsync(async function (req, res, next) {
+   const { variationId, collectionId } = req.params;
+   const findSubVariation = await productModel.findOne({ _id: collectionId, variations: { $elemMatch: { _id: variationId } } }, { 'variations.$': 1 });
+   console.log(findSubVariation);
+});
+
 module.exports = {
    getTrandingProducts,
    getSelectedPrevProduct,
@@ -856,4 +885,5 @@ module.exports = {
    updateUserAddress,
    getUserAllOrders,
    getUserSingleOrderDetails,
+   getProductSubVariation,
 };

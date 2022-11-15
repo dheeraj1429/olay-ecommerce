@@ -29,6 +29,7 @@ route.get('/get-user-address/:token', checkIsTokenExists, indexController.getUse
 route.get('/get-user-address/:token/:id', checkIsTokenExists, indexController.getUserSingleAddress);
 route.get('/get-user-order-info/:token', checkIsTokenExists, indexController.getUserAllOrders);
 route.get('/get-user-single-order-info/:token/:id', checkIsTokenExists, indexController.getUserSingleOrderDetails);
+route.get('/get-product-sub-variation/:variationId/:collectionId', indexController.getProductSubVariation);
 
 // API => POST
 route.post('/add-to-cart-product/:token', checkIsTokenExists, indexController.productAddToCart);

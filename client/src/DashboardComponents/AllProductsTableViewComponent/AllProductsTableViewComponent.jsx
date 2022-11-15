@@ -44,12 +44,7 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
                   </Link>
                </inner.td>
                <inner.td>
-                  <Popconfirm
-                     title="Are you sure to delete this product?"
-                     onConfirm={() => confirm(el._id, el?.category?._id, el?.brand?._id)}
-                     okText="Yes"
-                     cancelText="No"
-                  >
+                  <Popconfirm title="Are you sure to delete this product?" onConfirm={() => confirm(el._id, el?.category?._id, el?.brand?._id)} okText="Yes" cancelText="No">
                      <VscClose />
                   </Popconfirm>
                </inner.td>
@@ -87,36 +82,16 @@ function AllProductsTableViewComponent({ variation, el, id, subVaition }) {
             >
                <inner.td>
                   <div className={variation ? 'produvt-variation-image-div' : 'product_image_prv'}>
-                     <img
-                        crossOrigin="anonymous"
-                        src={`${backendConfigData.URL}productImagesCompress/${
-                           el?.productImage ? el.productImage : el?.variationImage ? el?.variationImage : null
-                        }`}
-                        alt=""
-                     />
+                     <img crossOrigin="anonymous" src={`${backendConfigData.URL}productImagesCompress/${el?.productImage ? el.productImage : el?.variationImage ? el?.variationImage : null}`} alt="" />
                   </div>
                </inner.td>
             </Link>
          }
-         <inner.td>
-            {el?.name ? el.name.slice(0, 40) : el?.variationName ? el.variationName.slice(0, 40) : null}
-         </inner.td>
+         <inner.td>{el?.name ? el.name.slice(0, 40) : el?.variationName ? el.variationName.slice(0, 40) : null}</inner.td>
          <inner.td>{el?.price ? el.price : el?.regularPrice ? el?.regularPrice : null}</inner.td>
-         <inner.td>
-            {el?.salePrice && !!el.salePrice ? (
-               <div className="Sale">{el.salePrice}</div>
-            ) : (
-               <div className="no_sale">No Sale</div>
-            )}
-         </inner.td>
+         <inner.td>{el?.salePrice && !!el.salePrice ? <div className="Sale">{el.salePrice}</div> : <div className="no_sale">No Sale</div>}</inner.td>
          <inner.td></inner.td>
-         <inner.td>
-            {el?.stockStatus && el.stockStatus ? (
-               <div className={el.stockStatus.toLowerCase().split(' ').join('-')}>{el.stockStatus}</div>
-            ) : (
-               '-'
-            )}
-         </inner.td>
+         <inner.td>{el?.stockStatus && el.stockStatus ? <div className={el.stockStatus.toLowerCase().split(' ').join('-')}>{el.stockStatus}</div> : '-'}</inner.td>
          <inner.td>{el?.weight ? el.weight : '-'}</inner.td>
          <inner.td>{el?.length ? el.length : '-'}</inner.td>
          <inner.td>{el?.wide ? el.wide : '-'}</inner.td>

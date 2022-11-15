@@ -396,3 +396,14 @@ export const getUserSingleOrderDetails = function (token, id) {
       }
    };
 };
+
+export const getProductSubVariation = function (variationId, collectionId) {
+   return async function (dispatch) {
+      try {
+         const getProductVariationResponse = await axios.get(`/index/get-product-sub-variation/${variationId}/${collectionId}`);
+         console.log(getProductVariationResponse);
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

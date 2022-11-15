@@ -107,12 +107,12 @@ function CreateSelectedProductVariationComponent() {
 
    const SaveVariationHandler = function () {
       if (VariationInfo.name && params.id) {
-         if (VariationInfo.size && VariationInfo.colorSwatches) {
+         if (VariationInfo.colorSwatches) {
             const formData = createFormData();
             dispatch(insertProductSubVariation(formData));
             dispatch(insertNewSubVationLoading(true));
          } else {
-            info('Product also required color and size varition.');
+            info('Product also required color varition.');
          }
       } else {
          info('Product variation name is required!');
@@ -262,8 +262,7 @@ function CreateSelectedProductVariationComponent() {
                               ))}
                            </TextField>
                         </div>
-
-                        <div className="half-width">
+                        {/* <div className="half-width">
                            <TextField id="outlined-select-currency" select label="Select" helperText="Product size variation" name="size" value={VariationInfo.size} onChange={changeHandler}>
                               {!!allSizeVariations && allSizeVariations.success && allSizeVariations?.sizeVariations
                                  ? allSizeVariations.sizeVariations.map((option) => (
@@ -273,8 +272,7 @@ function CreateSelectedProductVariationComponent() {
                                    ))
                                  : null}
                            </TextField>
-                        </div>
-
+                        </div> */}
                         <div className="half-width">
                            <TextField
                               id="outlined-select-currency"
@@ -302,7 +300,6 @@ function CreateSelectedProductVariationComponent() {
                            </TextField>
                         </div>
                      </variation.flex>
-
                      <variation.flex>
                         <div className="half-width">
                            <TextField id="outlined-basic" label="Product weight" variant="outlined" type={'number'} name="weight" value={VariationInfo.weight} onChange={changeHandler} />
@@ -319,7 +316,6 @@ function CreateSelectedProductVariationComponent() {
                            <TextField id="outlined-basic" label="Product height" variant="outlined" type={'number'} name="height" value={VariationInfo.height} onChange={changeHandler} />
                         </div>
                      </variation.flex>
-
                      <TextField id="outlined-multiline-static" label="Description" multiline rows={4} defaultValue="" name="description" value={VariationInfo.description} onChange={changeHandler} />
                      <HeadingComponent cl="sm_heading" Heading={'Product variations image'} />
                      <ProductUploadImageComponent

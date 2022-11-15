@@ -17,8 +17,8 @@ function TrandingProductsComponent() {
          <ProductViewComponent show={showProductPrev} />
          <ProductAddToCartSideNoficationComponent />
          <div className="side_padding_one">
-            {!!trandingProducts && trandingProductsLoading ? (
-               <div className="center_div">
+            {!trandingProducts && trandingProductsLoading ? (
+               <div className="center_div p-4">
                   <SpnnerComponent blackSpenner={true} />
                </div>
             ) : null}

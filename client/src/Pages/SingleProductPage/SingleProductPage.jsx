@@ -7,6 +7,7 @@ import ProductSocialShareComponent from '../../Components/ProductSocialShareComp
 import SingleProductContentComponent from '../../Components/SingleProductContentComponent/SingleProductContentComponent';
 import { getSingleProduct } from '../../Redux/Actions/indexActions';
 import { useDispatch } from 'react-redux';
+import { singlePageProductLoadingHandler } from '../../Redux/Actions/indexAppAction';
 
 function SingleProductPage() {
    const params = useParams();
@@ -15,14 +16,13 @@ function SingleProductPage() {
    useEffect(() => {
       if (params.id) {
          dispatch(getSingleProduct(params.id));
+         dispatch(singlePageProductLoadingHandler(true));
       }
    }, [params]);
 
    return (
       <styled.div>
          <NavbarComponent />
-         <CategorieTagShowComponent heading={'home'} name={params.productName.replaceAll('-', ' ')} />
-         {/* <ProductSocialShareComponent name={params.productName.replaceAll('-', ' ')} /> */}
          <SingleProductContentComponent />
       </styled.div>
    );

@@ -3,6 +3,7 @@ import * as styled from './ProductCartPayComponent.style';
 import CartItemsComponent from '../CartItemsComponent/CartItemsComponent';
 import { useSelector } from 'react-redux';
 import ProductCartTotalWithCouponComponent from '../ProductCartTotalWithCouponComponent/ProductCartTotalWithCouponComponent';
+import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerComponent';
 
 const row = [
    { value: 'Image', label: 'Product Image' },
@@ -14,11 +15,15 @@ const row = [
 ];
 
 function ProductCartPayComponent() {
-   const { cartItems } = useSelector((state) => state.index);
+   const { cartItems, cartItemLoading } = useSelector((state) => state.index);
 
    return (
       <styled.div className="d-flex mt-5">
-         {!!cartItems && cartItems.success && cartItems.cartItems.length ? (
+         {!!cartItemLoading ? (
+            <div className="w-full flex items-center justify-center">
+               <SpnnerComponent blackSpenner={true} />
+            </div>
+         ) : !!cartItems && cartItems.success && cartItems.cartItems.length ? (
             <>
                <div className="cart_items">
                   <table>

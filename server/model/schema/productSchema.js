@@ -32,7 +32,7 @@ const productSchema = new mongoose.Schema({
          description: { type: String },
          variationImage: { type: String },
          colorSwatches: { type: mongoose.Types.ObjectId, ref: 'swatches' },
-         size: { type: mongoose.Types.ObjectId, ref: 'sizeVariation' },
+         // size: { type: mongoose.Types.ObjectId, ref: 'sizeVariation' },
          weight: { type: Number },
          length: { type: Number },
          wide: { type: Number },

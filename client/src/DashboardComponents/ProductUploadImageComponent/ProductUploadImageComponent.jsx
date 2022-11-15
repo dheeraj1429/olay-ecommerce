@@ -31,7 +31,7 @@ function ProductUploadImageComponent({ Heading, name, value, onChange, Clear, se
          <h4>{Heading}</h4>
          <prImage.flex>
             <prImage.div onClick={ClickHandler} className={size ? 'big-image' : null}>
-               <div className="image_div">
+               <div className="image_div flex items-center justify-center">
                   <AiOutlineFileImage />
                   <input
                      type="file"
@@ -43,11 +43,7 @@ function ProductUploadImageComponent({ Heading, name, value, onChange, Clear, se
                      }}
                      ref={(el) => (image.current = el)}
                   />
-                  {!!Src ? (
-                     <img src={Src} />
-                  ) : !!selectedPrevImage ? (
-                     <img crossorigin="anonymous" src={`${backendConfigData.URL}${filde}/${selectedPrevImage}`} />
-                  ) : null}
+                  {!!Src ? <img src={Src} /> : !!selectedPrevImage ? <img crossorigin="anonymous" src={`${backendConfigData.URL}${filde}/${selectedPrevImage}`} /> : null}
                </div>
             </prImage.div>
          </prImage.flex>

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { getRandomProducts, getUserSingleOrderDetails } from '../../Redux/Actions/indexActions';
 import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerComponent';
-import { removeSingleOrder, userOrderLoadingHandler } from '../../Redux/Actions/indexAppAction';
+import { getRandomProductsLoadingHandler, removeSingleOrder, userOrderLoadingHandler } from '../../Redux/Actions/indexAppAction';
 import backendConfigData from '../../backendConfig';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
@@ -13,18 +13,20 @@ import Slider from 'react-slick';
 import settings from '../../slickConfig';
 import ProductCardComponent from '../../Components/ProductCardComponent/ProductCardComponent';
 import ProductViewComponent from '../../Components/ProductViewComponent/ProductViewComponent';
+import ShopHeadingComponent from '../../Components/ShopHeadingComponent/ShopHeadingComponent';
 
 function SingleOrder() {
    const dispatch = useDispatch();
    const params = useParams();
 
    const { auth } = useSelector((state) => state.auth);
-   const { userSingleOrderLoading, userSingleOrder, randomProducts, showProductPrev } = useSelector((state) => state.index);
+   const { userSingleOrderLoading, userSingleOrder, randomProducts, showProductPrev, randomProductsLoading } = useSelector((state) => state.index);
 
    useEffect(() => {
       if (auth && auth?.userObject && auth?.userObject?.token && params.id) {
          dispatch(getUserSingleOrderDetails(auth.userObject.token, params.id));
          dispatch(userOrderLoadingHandler(true));
+         dispatch(getRandomProductsLoadingHandler(true));
          dispatch(getRandomProducts());
       }
 
@@ -84,16 +86,24 @@ function SingleOrder() {
                </div>
             ) : null}
          </div>
-
-         <div className="side_padding_one mt-5">
-            {!!randomProducts && randomProducts.success && randomProducts?.product ? (
-               <Slider {...settings}>
-                  {randomProducts.product.map((el) => (
-                     <ProductCardComponent key={el._id} data={el} />
-                  ))}
-               </Slider>
-            ) : null}
+         <div className="mt-5">
+            <ShopHeadingComponent heading={'Deals Of The Day'} subHeading={'Mirum est notare quam littera gothica quam nunc putamus parum claram!'} />
          </div>
+         {!!randomProductsLoading ? (
+            <div className="w-full flex items-center justify-center">
+               <SpnnerComponent blackSpenner={true} />
+            </div>
+         ) : (
+            <div className="side_padding_one mt-5">
+               {!!randomProducts && randomProducts.success && randomProducts?.product ? (
+                  <Slider {...settings}>
+                     {randomProducts.product.map((el) => (
+                        <ProductCardComponent key={el._id} data={el} />
+                     ))}
+                  </Slider>
+               ) : null}
+            </div>
+         )}
       </styled.div>
    );
 }

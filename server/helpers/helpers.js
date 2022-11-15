@@ -5,7 +5,6 @@ const JWT_TOKEN = process.env.JWT_TOKEN;
 const fs = require('fs');
 const fetch = require('node-fetch');
 const productModel = require('../model/schema/productSchema');
-const orderModel = require('../model/schema/ordersSchema');
 
 const imageCompress = async function (imagePath, imageQulity, folder, originalname) {
    /**
@@ -36,7 +35,7 @@ const fetchLimitDocument = async function (collection, page, res, httpStatusCode
    /**
     * @collection which mongodb collections db we want to update and get back the infomations.
     * @page numbers of the documents. for making the pagination effect.
-    * @param { Object} res
+    * @param { Object } res
     * @httpStatusCodes http status codes.
     * @DOCUMENT_LIMIT how much documents we want to send back to the client.
     * @filed send back object filed name.

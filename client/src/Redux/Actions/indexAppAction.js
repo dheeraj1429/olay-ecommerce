@@ -173,3 +173,10 @@ export const singlePageProductLoadingHandler = function (data) {
       payload: data,
    };
 };
+
+export const productVariationLoading = function (data) {
+   return {
+      type: INDEX_ACTION_TYPE.GET_PRODUCT_VARIATION_DATA_LOADING,
+      payload: data,
+   };
+};

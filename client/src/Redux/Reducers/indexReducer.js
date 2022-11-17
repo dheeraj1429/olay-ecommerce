@@ -21,7 +21,6 @@ const INITAL_STATE = {
    newsLetterMailLoading: false,
    singleProduct: null,
    singleProductLoading: false,
-   singleProductSubVariation: null,
    singleProductSubVariationLoading: false,
    randomProducts: null,
    randomProductsLoading: false,
@@ -106,17 +105,31 @@ const shopReducer = function (state = INITAL_STATE, action) {
 
       case INDEX_ACTION_TYPE.ADD_TO_CART:
          const checkProductIsExistsInCart = function () {
-            const exist = state.cartItems.cartItems.find((el) => el.cartItem._id === action.payload.insertedProduct._id);
+            const exist = state.cartItems.cartItems[0].cartItems.find((el) => el.cartItem._id === action.payload.insertedProduct._id);
+
+            console.log(exist);
 
             if (exist) {
-               return state.cartItems.cartItems.map((el) => (el.cartItem._id === action.payload.insertedProduct._id ? { ...el, qty: el.qty + action.payload.insertProductQuntity } : el));
+               return [
+                  {
+                     ...state.cartItems.cartItems[0],
+                     cartItems: state.cartItems.cartItems[0].cartItems.map((el) =>
+                        el.cartItem._id === action.payload.insertedProduct._id ? { ...el, qty: el.qty + action.payload.insertProductQuntity } : el
+                     ),
+                  },
+               ];
             } else {
-               return state.cartItems.cartItems.concat(
-                  Object.assign({
-                     cartItem: action.payload.insertedProduct,
-                     qty: action.payload.insertProductQuntity,
-                  })
-               );
+               return [
+                  {
+                     ...state.cartItems.cartItems[0],
+                     cartItems: state.cartItems.cartItems[0].cartItems.concat(
+                        Object.assign({
+                           cartItem: action.payload.insertedProduct,
+                           qty: action.payload.insertProductQuntity,
+                        })
+                     ),
+                  },
+               ];
             }
          };
 
@@ -169,7 +182,12 @@ const shopReducer = function (state = INITAL_STATE, action) {
             ...state,
             cartItems: {
                ...state.cartItems,
-               cartItems: state.cartItems.cartItems.filter((el) => el.cartItem._id !== action.payload.removeProductId),
+               cartItems: [
+                  {
+                     ...state.cartItems.cartItems[0],
+                     cartItems: state.cartItems.cartItems[0].cartItems.filter((el) => el.cartItem._id !== action.payload.removeProductId),
+                  },
+               ],
             },
             removeCartItemLoading: {
                loading: false,
@@ -236,7 +254,42 @@ const shopReducer = function (state = INITAL_STATE, action) {
       case INDEX_ACTION_TYPE.GET_PRODUCT_VARIATION_DATA:
          return {
             ...state,
-            singleProductSubVariation: action.payload,
+            singleProduct: {
+               ...state.singleProduct,
+               product: {
+                  ...state.singleProduct.product,
+                  name: action.payload.productVariationData.variations[0].name,
+                  subVariationProductImage: action.payload.productVariationData.variations[0].productImage,
+                  discription: action.payload.productVariationData.variations[0].discription,
+                  subVariationPrice: action.payload.productVariationData.variations[0].price,
+                  subVariationSalePrice: action.payload.productVariationData.variations[0].salePrice,
+                  stockStatus: action.payload.productVariationData.variations[0].stockStatus,
+                  createdAt: action.payload.productVariationData.variations[0].createdAt,
+                  subVariation: action.payload.productVariationData.variations[0].subVariation,
+                  subVariationId: action.payload.productVariationData.variations[0]._id,
+               },
+            },
+            singleProductSubVariationLoading: false,
+         };
+
+      case INDEX_ACTION_TYPE.GET_PRODUCT_COLLECTION_PARENT_DATA:
+         return {
+            ...state,
+            singleProduct: {
+               ...state.singleProduct,
+               product: {
+                  ...state.singleProduct.product,
+                  name: action.payload.productData.name,
+                  price: action.payload.productData.price,
+                  subVariationPrice: null,
+                  salePrice: action.payload.productData.salePrice,
+                  subVariationSalePrice: null,
+                  productImage: action.payload.productData.productImage,
+                  subVariationProductImage: null,
+                  subVariationId: null,
+                  subVariation: false,
+               },
+            },
             singleProductSubVariationLoading: false,
          };
 

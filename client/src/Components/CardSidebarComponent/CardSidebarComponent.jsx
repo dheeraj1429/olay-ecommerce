@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import * as styled from './CardSidebarComponent.style';
 import ReactDOM from 'react-dom';
 import { useSelector } from 'react-redux';
@@ -12,8 +12,6 @@ import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerCompon
 import { useNavigate } from 'react-router';
 
 function CardSidebarComponent() {
-   const [CartPrice, setCartPrice] = useState(0);
-
    const dispatch = useDispatch();
    const navigation = useNavigate();
 
@@ -33,17 +31,6 @@ function CardSidebarComponent() {
       }
    };
 
-   useEffect(() => {
-      if (!!cartItems && cartItems.cartItems.length) {
-         const priceAr = cartItems.cartItems
-            .map((el) => (el.cartItem?.salePrice ? el.cartItem.salePrice * el.qty : el.cartItem.price * el.qty))
-            .reduce((acc, crv) => {
-               return acc + crv;
-            }, 0);
-         setCartPrice(priceAr.toFixed(2));
-      }
-   }, [cartItems]);
-
    return ReactDOM.createPortal(
       <styled.div show={showCardSideBar}>
          <div className="mainDiv">
@@ -56,8 +43,8 @@ function CardSidebarComponent() {
                </div>
             </div>
             <div className="cart_items_div">
-               {!!cartItems && cartItems?.success && cartItems.cartItems.length ? (
-                  cartItems.cartItems.map((el) => (
+               {!!cartItems && cartItems?.success && cartItems?.cartItems[0].cartItems?.length ? (
+                  cartItems.cartItems[0].cartItems.map((el) => (
                      <div className="productInCart" key={el._id}>
                         <div className="remove_cart_items" onClick={() => RemoveCartItems(el.cartItem._id)}>
                            {!!removeCartItemLoading && removeCartItemLoading.loading && removeCartItemLoading.cartId === el.cartItem._id ? <SpnnerComponent blackSpenner={true} /> : <VscClose />}
@@ -85,7 +72,9 @@ function CardSidebarComponent() {
                   <h5>Subtotal</h5>
                   <p>
                      {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
-                     {CartPrice}
+                     {!!cartItems && cartItems.cartItems[0].cartItems.length
+                        ? cartItems.cartItems[0].cartItems.map((el) => (el.cartItem?.salePrice ? el.cartItem.salePrice * el.qty : el.cartItem.price * el.qty)).reduce((acc, crv) => acc + crv)
+                        : null}
                   </p>
                </div>
 

@@ -9,8 +9,8 @@ function ShowUserCartProductDetailsComponent() {
 
    return (
       <styled.div className="border-start p-5">
-         {!!cartItems && cartItems?.success && cartItems?.cartItems.length
-            ? cartItems.cartItems.map((el) => (
+         {!!cartItems && cartItems?.success && cartItems?.cartItems[0]?.cartItems.length
+            ? cartItems.cartItems[0].cartItems.map((el) => (
                  <>
                     <div className="d-flex align-items-center justify-content-between mb-4">
                        <div className="image_with_content_div d-flex align-items-center">
@@ -31,10 +31,10 @@ function ShowUserCartProductDetailsComponent() {
          <div className="border-top py-4 sub">
             <div className="d-flex align-items-center justify-content-between">
                <p>Subtotal</p>
-               {!!cartItems && cartItems?.success && cartItems?.cartItems.length ? (
+               {!!cartItems && cartItems?.success && cartItems?.cartItems[0].cartItems.length ? (
                   <strong>
                      {!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}
-                     {cartItems.cartItems
+                     {cartItems.cartItems[0]?.cartItems
                         .map((elm) => (elm.cartItem?.salePrice && !!elm.cartItem.salePrice ? elm.cartItem.salePrice * elm.qty : elm.cartItem.price * elm.qty))
                         .reduce((acc, crv) => acc + crv, 0)}
                   </strong>
@@ -54,7 +54,7 @@ function ShowUserCartProductDetailsComponent() {
                <span>{!!shopInformation && shopInformation.success && shopInformation?.shop ? shopInformation.shop[0].currencySymbol : '$'}</span>
                {!!cartItems && cartItems?.success && cartItems?.cartItems.length ? (
                   <strong>
-                     {cartItems.cartItems
+                     {cartItems.cartItems[0]?.cartItems
                         .map((elm) => (elm.cartItem?.salePrice && !!elm.cartItem.salePrice ? elm.cartItem.salePrice * elm.qty : elm.cartItem.price * elm.qty))
                         .reduce((acc, crv) => acc + crv, 0)}
                   </strong>

@@ -8,6 +8,8 @@ const orderSchema = new mongoose.Schema({
          price: { type: Number },
          salePrice: { type: Number },
          qty: { type: Number },
+         parentProductId: { type: mongoose.Types.ObjectId, ref: 'product' },
+         subVariation: { type: Boolean, default: false },
       },
    ],
    paymentMethod: { type: String, required: [true, 'payment method is required'] },

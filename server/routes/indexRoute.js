@@ -30,6 +30,7 @@ route.get('/get-user-address/:token/:id', checkIsTokenExists, indexController.ge
 route.get('/get-user-order-info/:token', checkIsTokenExists, indexController.getUserAllOrders);
 route.get('/get-user-single-order-info/:token/:id', checkIsTokenExists, indexController.getUserSingleOrderDetails);
 route.get('/get-product-sub-variation/:variationId/:collectionId', indexController.getProductSubVariation);
+route.get('/get-product-collection-data/:collectionId', indexController.getProductCollectionData);
 
 // API => POST
 route.post('/add-to-cart-product/:token', checkIsTokenExists, indexController.productAddToCart);

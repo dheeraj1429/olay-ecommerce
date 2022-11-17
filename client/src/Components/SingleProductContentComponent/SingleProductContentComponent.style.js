@@ -73,13 +73,42 @@ export const div = styled.div`
    .variatio_sub_div {
       width: 150px;
       height: 60px;
-      border-width: 1px;
       cursor: pointer;
+      transition: all 0.2s ease;
 
       img {
          width: auto;
          height: 100%;
       }
+   }
+
+   .variatio_sub_div_active {
+      border-width: 1px;
+   }
+
+   .loadingtextCl {
+      color: var(--spec-icon-inactive) !important;
+      cursor: not-allowed;
+   }
+
+   .imageLoading {
+      cursor: not-allowed;
+      position: relative;
+
+      &::before {
+         content: '';
+         position: absolute;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: var(--spec-themed-overlay-background);
+         z-index: 1;
+      }
+   }
+
+   .ant-skeleton-content .ant-skeleton-title {
+      width: 60% !important;
+      height: 50px;
    }
 `;
 

@@ -40,12 +40,14 @@ function ShippingMethodComponent() {
          const token = auth.userObject.token;
          let orderProducts = [];
 
-         for (let i = 0; i < cartItems.cartItems.length; i++) {
+         for (let i = 0; i < cartItems.cartItems[0].cartItems.length; i++) {
             orderProducts.push({
-               productId: cartItems.cartItems[i].cartItem._id,
-               price: cartItems.cartItems[i].cartItem.price,
-               salePrice: cartItems.cartItems[i].cartItem.salePrice,
-               qty: cartItems.cartItems[i].qty,
+               productId: cartItems.cartItems[0].cartItems[i].cartItem._id,
+               price: cartItems.cartItems[0].cartItems[i].cartItem.price,
+               salePrice: cartItems.cartItems[0].cartItems[i].cartItem.salePrice,
+               qty: cartItems.cartItems[0].cartItems[i].qty,
+               subVariation: cartItems.cartItems[0].cartItems[i].subVariationProduct,
+               parentProductId: cartItems.cartItems[0].cartItems[i].parentProductId,
             });
          }
 

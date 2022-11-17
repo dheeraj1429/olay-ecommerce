@@ -85,7 +85,7 @@ function CreateSelectedProductVariationComponent() {
       formData.append('price', VariationInfo.price);
       formData.append('salePrice', VariationInfo.salePrice);
       formData.append('stokeStatus', VariationInfo.stokeStatus);
-      formData.append('description', VariationInfo.discription);
+      formData.append('discription', VariationInfo.discription);
       formData.append('productImage', VariationInfo.productImage);
       formData.append('colorSwatches', VariationInfo.colorSwatches);
       formData.append('weight', VariationInfo.weight);
@@ -185,7 +185,7 @@ function CreateSelectedProductVariationComponent() {
             price: !!subVariation.price ? subVariation.price : '',
             salePrice: !!subVariation?.salePrice ? subVariation.salePrice : '',
             stokeStatus: subVariation?.stokeStatus,
-            description: subVariation?.discription,
+            discription: subVariation?.discription,
             productImage: subVariation.productImage,
             colorSwatches: subVariation?.colorSwatches?._id,
             weight: subVariation?.weight ? subVariation.weight : '',
@@ -317,7 +317,7 @@ function CreateSelectedProductVariationComponent() {
                            <TextField id="outlined-basic" label="Product height" variant="outlined" type={'number'} name="height" value={VariationInfo.height} onChange={changeHandler} />
                         </div>
                      </variation.flex>
-                     <TextField id="outlined-multiline-static" label="Description" multiline rows={4} defaultValue="" name="description" value={VariationInfo.description} onChange={changeHandler} />
+                     <TextField id="outlined-multiline-static" label="Description" multiline rows={4} defaultValue="" name="discription" value={VariationInfo.discription} onChange={changeHandler} />
                      <HeadingComponent cl="sm_heading" Heading={'Product variations image'} />
                      <ProductUploadImageComponent
                         selectedPrevImage={!!VariationInfo?.productImage ? VariationInfo?.productImage : null}

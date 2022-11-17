@@ -1291,7 +1291,6 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
       /**
        * fiest we need to find the varitions is exists or not. if the product varitions is exits then send back the response to client. otherwise insert the new product sub vaitions.
        */
-
       const findProductSubVaitionIsExist = await productModel.findOne({
          _id: selectedProductId,
          'variations.name': req.body.name,
@@ -1309,7 +1308,7 @@ const insertSelectedProductVariation = catchAsync(async function (req, res, next
             price: !!req.body.regularPrice ? req.body.regularPrice : findParentProduct.price,
             salePrice: req.body.salePrice,
             stokeStatus: !!req.body.stokeStatus ? req.body.stokeStatus : 'draft',
-            discription: req.body.description,
+            discription: req.body.discription,
             colorSwatches: req.body.colorSwatches,
             size: req.body.size,
             weight: !!req.body.weight ? !!req.body.weight : findParentProduct.weight || '',

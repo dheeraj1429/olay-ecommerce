@@ -47,9 +47,12 @@ export const getSelectedPrevProduct = function (id) {
 
 // product add to cart function
 export const productAddToCart = function (data, img) {
+   console.log(data);
+
    return async function (dispatch) {
       try {
          const addToCartResponse = await axios.post(`/index/add-to-cart-product/${data.token}`, data, headers);
+         console.log(addToCartResponse);
 
          if (addToCartResponse && addToCartResponse?.data && addToCartResponse?.data?.success) {
             dispatch({
@@ -220,7 +223,10 @@ export const getUserAddressDetails = function (token, addressInfo) {
 export const orderPlaceByCashOnDelivery = function (data, token) {
    return async function (dispatch) {
       try {
+         console.log(data);
+
          const orderResponse = await axios.post(`/index/place-user-cash-on-delivery/${token}`, data, headers);
+
          if (orderResponse && orderResponse?.data && orderResponse?.data.success) {
             dispatch({
                type: INDEX_ACTION_TYPE.PLACE_USER_ORDER,
@@ -401,10 +407,27 @@ export const getProductSubVariation = function (variationId, collectionId) {
    return async function (dispatch) {
       try {
          const getProductVariationResponse = await axios.get(`/index/get-product-sub-variation/${variationId}/${collectionId}`);
+
          if (getProductVariationResponse && !!getProductVariationResponse?.data && getProductVariationResponse?.data.success) {
             dispatch({
                type: INDEX_ACTION_TYPE.GET_PRODUCT_VARIATION_DATA,
                payload: getProductVariationResponse && getProductVariationResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};
+
+export const getProductCollectionData = function (collectionId) {
+   return async function (dispatch) {
+      try {
+         const productResponse = await axios.get(`/index/get-product-collection-data/${collectionId}`, headers);
+         if (productResponse && !!productResponse?.data && productResponse?.data?.success) {
+            dispatch({
+               type: INDEX_ACTION_TYPE.GET_PRODUCT_COLLECTION_PARENT_DATA,
+               payload: productResponse && productResponse?.data,
             });
          }
       } catch (err) {

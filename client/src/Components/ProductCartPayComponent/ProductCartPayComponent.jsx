@@ -17,13 +17,15 @@ const row = [
 function ProductCartPayComponent() {
    const { cartItems, cartItemLoading } = useSelector((state) => state.index);
 
+   console.log(cartItems);
+
    return (
       <styled.div className="d-flex mt-5">
          {!!cartItemLoading ? (
             <div className="w-full flex items-center justify-center">
                <SpnnerComponent blackSpenner={true} />
             </div>
-         ) : !!cartItems && cartItems.success && cartItems.cartItems.length ? (
+         ) : !!cartItems && cartItems.success && cartItems?.cartItems && cartItems?.cartItems[0]?.cartItems.length ? (
             <>
                <div className="cart_items">
                   <table>
@@ -33,7 +35,7 @@ function ProductCartPayComponent() {
                         ))}
                      </tr>
 
-                     {cartItems.cartItems.map((el) => (
+                     {cartItems?.cartItems[0]?.cartItems.map((el) => (
                         <CartItemsComponent key={el._id} data={el} />
                      ))}
                   </table>

@@ -23,7 +23,7 @@ function ProductCartTotalWithCouponComponent() {
       if (!!cartItems && cartItems.cartItems.length) {
          console.log(cartItems.cartItems);
 
-         const priceAr = cartItems.cartItems
+         const priceAr = cartItems.cartItems[0].cartItems
             .map((el) => (el.cartItem?.salePrice && !!el.cartItem.salePrice ? el.cartItem.salePrice * el.qty : el.cartItem.price * el.qty))
             .reduce((acc, crv) => {
                return acc + crv;

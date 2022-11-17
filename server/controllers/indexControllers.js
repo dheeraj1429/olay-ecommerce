@@ -61,6 +61,54 @@ const getSelectedPrevProduct = catchAsync(async function (req, res, next) {
    }
 });
 
+const updateUserCart = async function (res, _id, insertObject, qty, data) {
+   /**
+    * @param { res } Object
+    * @param { _id } userModel user id to check which user is request for the add to cart product.
+    * @param { insertObject } Object cantaines the insert details into the user cart document.
+    * @param { qty } Number product quntity number.
+    * @param { data } Object find product formation data.
+    */
+
+   // find the products is exists into the user cart.
+   const findDocumentIsExists = await userModel.findOne({ _id, cart: { $elemMatch: { cartItem: insertObject.cartItem } } }, { 'cart.$': 1 });
+
+   if (!!findDocumentIsExists && findDocumentIsExists?.cart) {
+      // if the product is exists into the user cart then only inc the product quntity.
+      const updateUserCart = await userModel.updateOne({ _id, cart: { $elemMatch: { cartItem: insertObject.cartItem } } }, { $inc: { 'cart.$.qty': qty } });
+
+      if (!!updateUserCart.modifiedCount) {
+         return res.status(httpStatusCodes.OK).json({
+            success: true,
+            message: 'Product added',
+            insertedProduct: data,
+            insertProductQuntity: qty,
+         });
+      }
+   } else {
+      // else insert the products into the user cart.
+      userModel
+         .updateOne(
+            { _id },
+            {
+               $push: {
+                  cart: insertObject,
+               },
+            }
+         )
+         .then((response) => {
+            if (!!response.modifiedCount) {
+               return res.status(httpStatusCodes.CREATED).json({
+                  success: true,
+                  message: 'Product added into the cart',
+                  insertedProduct: data,
+                  insertProductQuntity: qty,
+               });
+            }
+         });
+   }
+};
+
 const productAddToCart = catchAsync(async function (req, res, next) {
    const { productId, token, qty } = req.body;
 
@@ -78,59 +126,138 @@ const productAddToCart = catchAsync(async function (req, res, next) {
 
    const { _id } = await tokenVarifyFunction(undefined, token);
 
-   // check the products is exists into the datbase. find the products using id.
-   productModel.findOne({ _id: productId }, { name: 1, price: 1, salePrice: 1, productImage: 1 }).then(async (data) => {
-      if (data) {
-         // find the products is exists into the user cart.
-         const findDocumentIsExists = await userModel.findOne({ _id, cart: { $elemMatch: { cartItem: data._id } } }, { 'cart.$': 1 });
-
-         if (!!findDocumentIsExists && findDocumentIsExists?.cart) {
-            // if the product is exists into the user cart then only inc the product quntity.
-            const updateUserCart = await userModel.updateOne({ _id, cart: { $elemMatch: { cartItem: data._id } } }, { $inc: { 'cart.$.qty': qty } });
-
-            if (!!updateUserCart.modifiedCount) {
-               return res.status(httpStatusCodes.OK).json({
-                  success: true,
-                  message: 'Product added',
-                  insertedProduct: data,
-                  insertProductQuntity: qty,
-               });
-            }
-         } else {
-            // else insert the products into the user cart.
-            userModel
-               .updateOne(
-                  { _id },
-                  {
-                     $push: {
-                        cart: { cartItem: data._id, qty },
-                     },
-                  }
-               )
-               .then((response) => {
-                  if (!!response.modifiedCount) {
-                     return res.status(httpStatusCodes.CREATED).json({
-                        success: true,
-                        message: 'Product added into the cart',
-                        insertedProduct: data,
-                        insertProductQuntity: qty,
-                     });
-                  }
-               });
+   // also check the product variation which product variation user buy.
+   // if the user buy the parent product. we don't need the add to cart the sub vairation products.
+   // if the user buy the sub product variation then only add to cart the sub variation product not the parent product.
+   if (req?.body?.subVariationId && !!req.body.subVariationId) {
+      productModel.findOne({ _id: productId, variations: { $elemMatch: { _id: req.body.subVariationId } } }, { 'variations.$': 1 }).then(async (response) => {
+         if (response) {
+            const data = {
+               _id: response.variations[0]._id,
+               name: response.variations[0].name,
+               price: response.variations[0].price,
+               salePrice: response.variations[0].salePrice,
+            };
+            const insertObject = { cartItem: data._id, qty, subVariationProduct: true, parentProductId: productId };
+            updateUserCart(res, _id, insertObject, qty, data);
          }
-      }
-   });
+      });
+   } else {
+      // check the products is exists into the datbase. find the products using id.
+      productModel.findOne({ _id: productId }, { name: 1, price: 1, salePrice: 1, productImage: 1 }).then(async (data) => {
+         if (data) {
+            console.log(data);
+            const insertObject = { cartItem: data._id, qty, parentProductId: productId };
+            updateUserCart(res, _id, insertObject, qty, data);
+         }
+      });
+   }
 });
 
 // get the user cart pproducts from the database. always check the user token to varify the user is valid or not.
 const getUserCartProducts = catchAsync(async function (req, res, next) {
    const { token } = req.params;
    const { _id } = await tokenVarifyFunction(undefined, token);
-   const findUserCartItems = await userModel.findOne({ _id }).populate('cart.cartItem', { name: 1, price: 1, productImage: 1, salePrice: 1 });
-   if (findUserCartItems) {
+
+   // find the user which user is request for the cart items.
+   // check the user buy the subvariation product or not.
+
+   const userSubVariationCartItems = await userModel.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(_id) } },
+      { $unwind: '$cart' },
+      {
+         $lookup: {
+            from: 'products',
+            localField: 'cart.parentProductId',
+            foreignField: '_id',
+            as: 'cart.productInformation',
+         },
+      },
+      {
+         $project: {
+            'cart.cartItem': 1,
+            'cart.qty': 1,
+            'cart.subVariationProduct': 1,
+            'cart.parentProductId': 1,
+            'cart._id': 1,
+            'cart.productInformation': {
+               $arrayElemAt: ['$cart.productInformation', 0],
+            },
+         },
+      },
+      {
+         $project: {
+            'cart.cartItem': 1,
+            'cart.qty': 1,
+            'cart.subVariationProduct': 1,
+            'cart.parentProductId': 1,
+            'cart._id': 1,
+            'cart.items': {
+               $cond: {
+                  if: { $eq: ['$cart.subVariationProduct', true] },
+                  then: {
+                     $arrayElemAt: [
+                        '$cart.productInformation.variations',
+                        {
+                           $indexOfArray: ['$cart.productInformation.variations._id', '$cart.cartItem'],
+                        },
+                     ],
+                  },
+                  else: '$cart.productInformation',
+               },
+            },
+         },
+      },
+      {
+         $group: {
+            _id: {
+               _id: '$_id',
+            },
+            cartItems: {
+               $push: {
+                  cartItem: '$cart.items',
+                  qty: '$cart.qty',
+                  subVariationProduct: '$cart.subVariationProduct',
+                  _id: '$cart._id',
+                  parentProductId: '$cart.parentProductId',
+               },
+            },
+         },
+      },
+      {
+         $project: {
+            '_id._id': 1,
+            'cartItems.cartItem.name': 1,
+            'cartItems.cartItem._id': 1,
+            'cartItems.cartItem.price': 1,
+            'cartItems.cartItem.salePrice': 1,
+            'cartItems.cartItem.productImage': 1,
+            'cartItems.qty': 1,
+            'cartItems.subVariationProduct': 1,
+            'cartItems.parentProductId': 1,
+            'cartItems._id': 1,
+         },
+      },
+   ]);
+
+   if (userSubVariationCartItems) {
       return res.status(httpStatusCodes.OK).json({
          success: true,
-         cartItems: findUserCartItems.cart,
+         cartItems: !!userSubVariationCartItems.length
+            ? userSubVariationCartItems
+            : [
+                 {
+                    _id: {
+                       _id: _id,
+                    },
+                    cartItems: [],
+                 },
+              ],
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: false,
+         message: 'Internal server error',
       });
    }
 });
@@ -678,12 +805,12 @@ const getUserAllOrders = catchAsync(async function (req, res, next) {
    // varify the user token.
    const { _id } = await tokenVarifyFunction(undefined, token);
    const userOrderDocument = await orderModel.aggregate([
-      { $match: { $expr: { $eq: ['$userId', { $toObjectId: _id }] } } },
+      { $match: { userId: mongoose.Types.ObjectId(_id) } },
       { $unwind: '$orderItems' },
       {
          $lookup: {
             from: 'products',
-            localField: 'orderItems.productId',
+            localField: 'orderItems.parentProductId',
             foreignField: '_id',
             as: 'orderItems.productInformation',
          },
@@ -699,6 +826,44 @@ const getUserAllOrders = catchAsync(async function (req, res, next) {
       },
       { $unwind: '$userInformation' },
       {
+         $project: {
+            _id: 1,
+            userId: 1,
+            'orderItems.productId': 1,
+            'orderItems.price': 1,
+            'orderItems.salePrice': 1,
+            'orderItems.price': 1,
+            'orderItems.parentProductId': 1,
+            'orderItems.subVariation': 1,
+            'orderItems.qty': 1,
+            'orderItems._id': 1,
+            paymentMethod: 1,
+            deliveryAddress: 1,
+            currencyName: 1,
+            currencySymbol: 1,
+            countryCode: 1,
+            orderStatus: 1,
+            paymentStatus: 1,
+            orderCreateAt: 1,
+            userInformation: 1,
+            'orderItems.productInformation': 1,
+            'orderItems.cartProduct': {
+               $cond: {
+                  if: { $eq: ['$orderItems.subVariation', true] },
+                  then: {
+                     $arrayElemAt: [
+                        '$orderItems.productInformation.variations',
+                        {
+                           $indexOfArray: ['$orderItems.productInformation.variations._id', '$orderItems.productId'],
+                        },
+                     ],
+                  },
+                  else: '$orderItems.productInformation',
+               },
+            },
+         },
+      },
+      {
          $group: {
             _id: {
                userId: '$userId',
@@ -709,15 +874,19 @@ const getUserAllOrders = catchAsync(async function (req, res, next) {
             },
             orderItems: {
                $push: {
-                  productInformation: '$orderItems.productInformation',
                   orderPlaceDate: '$orderCreateAt',
-                  paymentMethod: '$paymentMethod',
                   paymentStatus: '$paymentStatus',
                   price: '$orderItems.price',
                   salePrice: '$orderItems.salePrice',
                   qty: '$orderItems.qty',
-                  orderStatus: '$orderStatus',
-                  deliveryAddress: '$deliveryAddress',
+                  countryCode: '$countryCode',
+                  subVariation: '$orderItems.subVariation',
+                  parentProductId: '$orderItems.parentProductId',
+                  productInformation: {
+                     _id: '$orderItems.cartProduct._id',
+                     name: '$orderItems.cartProduct.name',
+                     productImage: '$orderItems.cartProduct.productImage',
+                  },
                },
             },
          },
@@ -731,15 +900,7 @@ const getUserAllOrders = catchAsync(async function (req, res, next) {
             '_id.userInformation.name': 1,
             '_id.userInformation.email': 1,
             '_id.userInformation.userProfileImage': 1,
-            'orderItems.productInformation._id': 1,
-            'orderItems.productInformation.name': 1,
-            'orderItems.productInformation.productImage': 1,
-            'orderItems.orderPlaceDate': 1,
-            'orderItems.paymentStatus': 1,
-            'orderitems.orderStatus': 1,
-            'orderItems.price': 1,
-            'orderItems.salePrice': 1,
-            'orderItems.qty': 1,
+            orderItems: 1,
          },
       },
    ]);
@@ -872,6 +1033,22 @@ const getProductSubVariation = catchAsync(async function (req, res, next) {
    }
 });
 
+const getProductCollectionData = catchAsync(async function (req, res, next) {
+   const { collectionId } = req.params;
+   const findProduct = await productModel.findOne({ _id: collectionId }, { variations: 0, metaContent: 0, tags: 0, category: 0 });
+   if (findProduct) {
+      return res.status(httpStatusCodes.OK).json({
+         success: true,
+         productData: findProduct,
+      });
+   } else {
+      return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+         success: true,
+         message: 'Internal server error',
+      });
+   }
+});
+
 module.exports = {
    getTrandingProducts,
    getSelectedPrevProduct,
@@ -896,4 +1073,5 @@ module.exports = {
    getUserAllOrders,
    getUserSingleOrderDetails,
    getProductSubVariation,
+   getProductCollectionData,
 };

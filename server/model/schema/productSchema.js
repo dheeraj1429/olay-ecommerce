@@ -21,10 +21,7 @@ const productSchema = new mongoose.Schema({
    metaContent: { type: String },
    variations: [
       {
-         name: {
-            type: String,
-            required: [true, 'product sub variation name is reuqired'],
-         },
+         name: { type: String, required: [true, 'product sub variation name is reuqired'] },
          sku: { type: String },
          price: { type: Number },
          salePrice: { type: Number },
@@ -38,6 +35,7 @@ const productSchema = new mongoose.Schema({
          wide: { type: Number },
          height: { type: Number },
          createdAt: { type: Date, default: Date.now },
+         subVariation: { type: Boolean, default: true },
       },
    ],
 });

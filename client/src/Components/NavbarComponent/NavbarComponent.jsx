@@ -64,7 +64,7 @@ function NavbarComponent() {
                      <p>Search</p>
                   </div>
                   <div className="flex_div ms-1">
-                     <Badge badgeContent={!!cartItems && cartItems.cartItems.length ? cartItems.cartItems.length : 0} color="primary">
+                     <Badge badgeContent={!!cartItems && cartItems?.cartItems?.length ? cartItems.cartItems[0].cartItems.length : 0} color="primary">
                         <AiOutlineShoppingCart onClick={() => navigation('/cart')} />
                      </Badge>
                      <p>Cart</p>

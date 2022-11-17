@@ -21,7 +21,14 @@ const userSchema = new mongoose.Schema({
          exportProducts: { type: Number },
       },
    ],
-   cart: [{ cartItem: { type: mongoose.Types.ObjectId, ref: 'product' }, qty: { type: Number } }],
+   cart: [
+      {
+         cartItem: { type: mongoose.Types.ObjectId, ref: 'product' },
+         qty: { type: Number },
+         subVariationProduct: { type: Boolean, default: false },
+         parentProductId: { type: mongoose.Types.ObjectId, ref: 'product' },
+      },
+   ],
    wishLists: [{ ItemId: { type: mongoose.Types.ObjectId, ref: 'product' } }],
    myAddress: [
       {

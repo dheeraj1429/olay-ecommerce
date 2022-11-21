@@ -19,6 +19,7 @@ const ejs = require('ejs');
 const path = require('path');
 const html_to_pdf = require('html-pdf-node');
 const fs = require('fs');
+const { default: mongoose } = require('mongoose');
 
 const insertCategoryInfo = async function (data, res) {
    const newCategoryInsert = await categoryModel(data);
@@ -1836,20 +1837,16 @@ const getProductGenralReport = catchAsync(async function (req, res, next) {
 const getAllOrders = catchAsync(async function (req, res, next) {
    // get the all orders with user infomation and the address details.
    const allOrders = await orderModel.aggregate([
-      // unwind the array to get the object collections fileds.
       { $unwind: '$orderItems' },
-      // joining the products and the order collection.
       {
          $lookup: {
             from: 'products',
-            localField: 'orderItems.productId',
+            localField: 'orderItems.parentProductId',
             foreignField: '_id',
             as: 'orderItems.productInformation',
          },
       },
-      // unwind the product information array.
       { $unwind: '$orderItems.productInformation' },
-      // join the user and the order collections.
       {
          $lookup: {
             from: 'users',
@@ -1858,9 +1855,38 @@ const getAllOrders = catchAsync(async function (req, res, next) {
             as: 'userInformation',
          },
       },
-      // unwind the user information fileds
       { $unwind: '$userInformation' },
-      // group all the document
+      {
+         $project: {
+            _id: 1,
+            userId: 1,
+            paymentMethod: 1,
+            deliveryAddress: 1,
+            currencyName: 1,
+            countryCode: 1,
+            currencySymbol: 1,
+            orderStatus: 1,
+            paymentStatus: 1,
+            orderCreateAt: 1,
+            'userInformation.name': 1,
+            'userInformation.email': 1,
+            'userInformation.userProfileImage': 1,
+            'orderItems.productId': 1,
+            'orderItems.price': 1,
+            'orderItems.salePrice': 1,
+            'orderItems.qty': 1,
+            'orderItems.parentProductId': 1,
+            'orderItems.subVariation': 1,
+            'orderItems._id': 1,
+            'orderItems.productInformation': {
+               $cond: {
+                  if: { $eq: ['$orderItems.subVariation', true] },
+                  then: { $arrayElemAt: ['$orderItems.productInformation.variations', 0] },
+                  else: '$orderItems.productInformation',
+               },
+            },
+         },
+      },
       {
          $group: {
             _id: {
@@ -1878,7 +1904,6 @@ const getAllOrders = catchAsync(async function (req, res, next) {
             orderItems: { $push: '$orderItems' },
          },
       },
-      // send back the project.
       {
          $project: {
             '_id._id': 1,
@@ -1899,11 +1924,13 @@ const getAllOrders = catchAsync(async function (req, res, next) {
             'orderItems.qty': 1,
             'orderItems.deliveryAddress': 1,
             'orderItems.productInformation._id': 1,
-            'orderItems.productInformation.name': 1,
+            'orderItems.parentProductId': 1,
+            'orderItems.subVariation': 1,
             'orderItems.productInformation.price': 1,
             'orderItems.productInformation.salePrice': 1,
-            'orderItems.productInformation.productStatusInfo': 1,
-            'orderItems.productInformation.productImage': 1,
+            // 'orderItems.productInformation.name': 1,
+            // 'orderItems.productInformation.productStatusInfo': 1,
+            // 'orderItems.productInformation.productImage': 1,
          },
       },
       { $sort: { '_id.orderCreateAt': -1 } },
@@ -1922,6 +1949,114 @@ const getAllOrders = catchAsync(async function (req, res, next) {
       });
    }
 });
+
+// find order document with id.
+const getSingleOrderInformation = async function (id) {
+   const findUserOrderDocument = await orderModel.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(id) } },
+      { $unwind: '$orderItems' },
+      {
+         $lookup: {
+            from: 'products',
+            localField: 'orderItems.parentProductId',
+            foreignField: '_id',
+            as: 'orderItems.productInformation',
+         },
+      },
+      { $unwind: '$orderItems.productInformation' },
+      {
+         $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'userInformation',
+         },
+      },
+      { $unwind: '$userInformation' },
+      {
+         $project: {
+            _id: 1,
+            userId: 1,
+            paymentMethod: 1,
+            deliveryAddress: 1,
+            currencyName: 1,
+            countryCode: 1,
+            currencySymbol: 1,
+            orderStatus: 1,
+            paymentStatus: 1,
+            orderCreateAt: 1,
+            deliveryAddress: 1,
+            'userInformation.name': 1,
+            'userInformation.email': 1,
+            'userInformation.userProfileImage': 1,
+            'orderItems.productId': 1,
+            'orderItems.price': 1,
+            'orderItems.salePrice': 1,
+            'orderItems.qty': 1,
+            'orderItems.parentProductId': 1,
+            'orderItems.subVariation': 1,
+            'orderItems._id': 1,
+            'orderItems.productInformation': {
+               $cond: {
+                  if: { $eq: ['$orderItems.subVariation', true] },
+                  then: { $arrayElemAt: ['$orderItems.productInformation.variations', 0] },
+                  else: '$orderItems.productInformation',
+               },
+            },
+         },
+      },
+      {
+         $group: {
+            _id: {
+               _id: '$_id',
+               userId: '$userId',
+               currencySymbol: '$currencySymbol',
+               currencyName: '$currencyName',
+               paymentMethod: '$paymentMethod',
+               paymentStatus: '$paymentStatus',
+               orderStatus: '$orderStatus',
+               countryCode: '$countryCode',
+               orderCreateAt: '$orderCreateAt',
+               userInformation: '$userInformation',
+               deliveryAddress: '$deliveryAddress',
+            },
+            orderItems: { $push: '$orderItems' },
+         },
+      },
+      {
+         $project: {
+            '_id._id': 1,
+            '_id.userId': 1,
+            '_id.userInformation.name': 1,
+            '_id.userInformation.email': 1,
+            '_id.userInformation.userProfileImage': 1,
+            '_id.currencyName': 1,
+            '_id.countryCode': 1,
+            '_id.currencySymbol': 1,
+            '_id.orderCreateAt': 1,
+            '_id.paymentMethod': 1,
+            '_id.orderStatus': 1,
+            '_id.paymentStatus': 1,
+            '_id.deliveryAddress': 1,
+            'orderItems.productId': 1,
+            'orderItems.price': 1,
+            'orderItems.salePrice': 1,
+            'orderItems.qty': 1,
+            'orderItems.deliveryAddress': 1,
+            'orderItems.productInformation._id': 1,
+            'orderItems.parentProductId': 1,
+            'orderItems.subVariation': 1,
+            'orderItems.productInformation.price': 1,
+            'orderItems.productInformation.salePrice': 1,
+            'orderItems.productInformation.name': 1,
+            'orderItems.productInformation.productStatusInfo': 1,
+            'orderItems.productInformation.productImage': 1,
+         },
+      },
+   ]);
+
+   return findUserOrderDocument;
+};
 
 const downloadOrderInvoice = catchAsync(async function (req, res, next) {
    const { orderId } = req.body;
@@ -2014,82 +2149,7 @@ const getUserOrderAllInfo = catchAsync(async function (req, res, next) {
       next(new AppError('Order id is reuqired!'));
    }
 
-   const OrderDocument = await orderModel.aggregate([
-      // find the order document.
-      { $match: { $expr: { $eq: [`$_id`, { $toObjectId: id }] } } },
-      // unwind the array to get the object collections fileds.
-      { $unwind: '$orderItems' },
-      // joining the products and the order collection.
-      {
-         $lookup: {
-            from: 'products',
-            localField: 'orderItems.productId',
-            foreignField: '_id',
-            as: 'orderItems.productInformation',
-         },
-      },
-      // unwind the product information array.
-      { $unwind: '$orderItems.productInformation' },
-      // join the user and the order collections.
-      {
-         $lookup: {
-            from: 'users',
-            localField: 'userId',
-            foreignField: '_id',
-            as: 'userInformation',
-         },
-      },
-      // unwind the user information fileds
-      { $unwind: '$userInformation' },
-      // group all the document
-      {
-         $group: {
-            _id: {
-               _id: '$_id',
-               userId: '$userId',
-               currencySymbol: '$currencySymbol',
-               currencyName: '$currencyName',
-               paymentMethod: '$paymentMethod',
-               paymentStatus: '$paymentStatus',
-               orderStatus: '$orderStatus',
-               countryCode: '$countryCode',
-               deliveryAddress: '$deliveryAddress',
-               orderCreateAt: '$orderCreateAt',
-               userInformation: '$userInformation',
-            },
-            orderItems: { $push: '$orderItems' },
-         },
-      },
-      // send back the project.
-      {
-         $project: {
-            '_id._id': 1,
-            '_id.userId': 1,
-            '_id.userInformation.name': 1,
-            '_id.userInformation.email': 1,
-            '_id.userInformation.userProfileImage': 1,
-            '_id.currencyName': 1,
-            '_id.countryCode': 1,
-            '_id.currencySymbol': 1,
-            '_id.orderCreateAt': 1,
-            '_id.paymentMethod': 1,
-            '_id.orderStatus': 1,
-            '_id.paymentStatus': 1,
-            '_id.deliveryAddress': 1,
-            'orderItems.productId': 1,
-            'orderItems.price': 1,
-            'orderItems.salePrice': 1,
-            'orderItems.qty': 1,
-            'orderItems.deliveryAddress': 1,
-            'orderItems.productInformation._id': 1,
-            'orderItems.productInformation.name': 1,
-            'orderItems.productInformation.price': 1,
-            'orderItems.productInformation.salePrice': 1,
-            'orderItems.productInformation.productStatusInfo': 1,
-            'orderItems.productInformation.productImage': 1,
-         },
-      },
-   ]);
+   const OrderDocument = await getSingleOrderInformation(id);
 
    if (OrderDocument) {
       return res.status(httpStatusCodes.OK).json({

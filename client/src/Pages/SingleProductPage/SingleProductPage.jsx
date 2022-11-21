@@ -6,6 +6,7 @@ import SingleProductContentComponent from '../../Components/SingleProductContent
 import { getSingleProduct } from '../../Redux/Actions/indexActions';
 import { useDispatch } from 'react-redux';
 import { singlePageProductLoadingHandler } from '../../Redux/Actions/indexAppAction';
+import ProductAddToCartSideNoficationComponent from '../../Components/ProductAddToCartSideNoficationComponent/ProductAddToCartSideNoficationComponent';
 
 function SingleProductPage() {
    const params = useParams();
@@ -21,6 +22,7 @@ function SingleProductPage() {
    return (
       <styled.div>
          <NavbarComponent />
+         <ProductAddToCartSideNoficationComponent />
          <SingleProductContentComponent />
       </styled.div>
    );

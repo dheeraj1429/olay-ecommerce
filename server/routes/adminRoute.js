@@ -54,7 +54,7 @@ route.get('/get-blogs-posts', adminBlogController.getBlogPosts);
 route.get('/get-single-post/:id', adminBlogController.getSingleBlogPost);
 route.get('/get-blog-categories', adminBlogController.getBlogCategories);
 route.get('/get-all-orders', adminController.getAllOrders);
-route.get('/get-user-info/:id', adminController.getUserOrderAllInfo);
+route.get('/get-user-order-info/:id', adminController.getUserOrderAllInfo);
 // ---------------------------------------------------------------------------------------
 
 // Apis => POST

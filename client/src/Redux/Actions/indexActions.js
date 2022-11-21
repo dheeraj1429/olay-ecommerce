@@ -47,8 +47,6 @@ export const getSelectedPrevProduct = function (id) {
 
 // product add to cart function
 export const productAddToCart = function (data, img) {
-   console.log(data);
-
    return async function (dispatch) {
       try {
          const addToCartResponse = await axios.post(`/index/add-to-cart-product/${data.token}`, data, headers);

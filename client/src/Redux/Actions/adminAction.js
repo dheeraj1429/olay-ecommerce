@@ -1503,7 +1503,7 @@ export const deleteUserOrder = function (id) {
 
 export const getUserOrderAllInfo = function (id) {
    return async function (dispatch) {
-      const orderInfo = await axios.get(`/admin/get-user-info/${id}`, headers);
+      const orderInfo = await axios.get(`/admin/get-user-order-info/${id}`, headers);
 
       if (!!orderInfo && orderInfo?.data && orderInfo?.data.success) {
          dispatch({

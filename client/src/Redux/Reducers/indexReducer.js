@@ -106,9 +106,6 @@ const shopReducer = function (state = INITAL_STATE, action) {
       case INDEX_ACTION_TYPE.ADD_TO_CART:
          const checkProductIsExistsInCart = function () {
             const exist = state.cartItems.cartItems[0].cartItems.find((el) => el.cartItem._id === action.payload.insertedProduct._id);
-
-            console.log(exist);
-
             if (exist) {
                return [
                   {
@@ -124,7 +121,7 @@ const shopReducer = function (state = INITAL_STATE, action) {
                      ...state.cartItems.cartItems[0],
                      cartItems: state.cartItems.cartItems[0].cartItems.concat(
                         Object.assign({
-                           cartItem: action.payload.insertedProduct,
+                           cartItem: Object.assign(action.payload.insertedProduct, { productImage: action.img }),
                            qty: action.payload.insertProductQuntity,
                         })
                      ),

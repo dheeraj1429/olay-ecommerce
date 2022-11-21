@@ -921,17 +921,18 @@ const getUserAllOrders = catchAsync(async function (req, res, next) {
 
 // get user single order.
 const getUserSingleOrderDetails = catchAsync(async function (req, res, next) {
-   const { token, id } = req.params;
-   if (!id) {
-      next(new AppError('Order Id is required!'));
-   }
+   const { token } = req.params;
    // varify the user token.
    const { _id } = await tokenVarifyFunction(undefined, token);
-
+   /**
+    * @param { variationId } productModel collection product variation id.
+    * @param { productId }  productModel product collection document id.
+    */
+   const { variationId, productId } = req.query;
    const userOrder = await orderModel.aggregate([
       {
          $match: {
-            $and: [{ userId: mongoose.Types.ObjectId(_id) }, { 'orderItems.productId': mongoose.Types.ObjectId(id) }],
+            $and: [{ userId: mongoose.Types.ObjectId(_id) }, { 'orderItems.parentProductId': mongoose.Types.ObjectId(productId) }],
          },
       },
       {
@@ -950,7 +951,7 @@ const getUserSingleOrderDetails = catchAsync(async function (req, res, next) {
                $arrayElemAt: [
                   '$orderItems',
                   {
-                     $indexOfArray: ['$orderItems.productId', mongoose.Types.ObjectId(id)],
+                     $indexOfArray: ['$orderItems.parentProductId', mongoose.Types.ObjectId(productId)],
                   },
                ],
             },
@@ -967,13 +968,45 @@ const getUserSingleOrderDetails = catchAsync(async function (req, res, next) {
       {
          $lookup: {
             from: 'products',
-            localField: 'order.productId',
+            localField: 'order.parentProductId',
             foreignField: '_id',
             as: 'order.productInformation',
          },
       },
       { $unwind: '$order.productInformation' },
       { $unwind: '$userInformation' },
+      {
+         $project: {
+            _id: 1,
+            userId: 1,
+            paymentMethod: 1,
+            deliveryAddress: 1,
+            currencyName: 1,
+            countryCode: 1,
+            currencySymbol: 1,
+            orderStatus: 1,
+            paymentStatus: 1,
+            orderCreateAt: 1,
+            'order.productId': 1,
+            'order.price': 1,
+            'order.salePrice': 1,
+            'order.qty': 1,
+            'order.productInformation': {
+               $cond: {
+                  if: { $eq: ['$order.subVariation', true] },
+                  then: {
+                     $arrayElemAt: [
+                        '$order.productInformation.variations',
+                        {
+                           $indexOfArray: ['$order.productInformation.variations._id', '$order.productId'],
+                        },
+                     ],
+                  },
+                  else: '$order.productInformation',
+               },
+            },
+         },
+      },
       {
          $project: {
             _id: 1,

@@ -2,29 +2,32 @@ import React, { useEffect } from 'react';
 import * as styled from './SingleOrder.style';
 import NavbarComponent from '../../Components/NavbarComponent/NavbarComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 import { getRandomProducts, getUserSingleOrderDetails } from '../../Redux/Actions/indexActions';
 import SpnnerComponent from '../../HelperComponents/SpnnerComponent/SpnnerComponent';
 import { getRandomProductsLoadingHandler, removeSingleOrder, userOrderLoadingHandler } from '../../Redux/Actions/indexAppAction';
 import backendConfigData from '../../backendConfig';
 import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import settings from '../../slickConfig';
 import ProductCardComponent from '../../Components/ProductCardComponent/ProductCardComponent';
 import ProductViewComponent from '../../Components/ProductViewComponent/ProductViewComponent';
 import ShopHeadingComponent from '../../Components/ShopHeadingComponent/ShopHeadingComponent';
+import { useLocation } from 'react-router';
 
 function SingleOrder() {
    const dispatch = useDispatch();
-   const params = useParams();
+   const search = useLocation().search;
+   const variationProductId = new URLSearchParams(search).get('variationId');
+   const productId = new URLSearchParams(search).get('productId');
+
+   console.log(variationProductId, productId);
 
    const { auth } = useSelector((state) => state.auth);
    const { userSingleOrderLoading, userSingleOrder, randomProducts, showProductPrev, randomProductsLoading } = useSelector((state) => state.index);
 
    useEffect(() => {
-      if (auth && auth?.userObject && auth?.userObject?.token && params.id) {
-         dispatch(getUserSingleOrderDetails(auth.userObject.token, params.id));
+      if (auth && auth?.userObject && auth?.userObject?.token && !!variationProductId && !!productId) {
+         dispatch(getUserSingleOrderDetails(auth.userObject.token, { variationProductId, productId }));
          dispatch(userOrderLoadingHandler(true));
          dispatch(getRandomProductsLoadingHandler(true));
          dispatch(getRandomProducts());
@@ -59,9 +62,7 @@ function SingleOrder() {
                            </div>
                         </div>
                         <div className="ms-3">
-                           <Link to={`/products/${userSingleOrder.userOrder[0].order.productInformation.name.split(' ').join('-')}/${userSingleOrder.userOrder[0].order.productInformation._id}`}>
-                              <h5 className="font-extralight mb-3 text hover_text">{userSingleOrder.userOrder[0].order.productInformation.name}</h5>
-                           </Link>
+                           <h5 className="font-extralight mb-3 text ">{userSingleOrder.userOrder[0].order.productInformation.name}</h5>
                            <span className=" text-gray-500">Qty: {userSingleOrder.userOrder[0].order.qty}</span>
                            <span className=" text-gray-500 ms-4">
                               Price: {userSingleOrder.userOrder[0].currencySymbol}

@@ -28,7 +28,7 @@ route.get('/get-user-data/:token', checkIsTokenExists, indexController.getUserDa
 route.get('/get-user-address/:token', checkIsTokenExists, indexController.getUserAddress);
 route.get('/get-user-address/:token/:id', checkIsTokenExists, indexController.getUserSingleAddress);
 route.get('/get-user-order-info/:token', checkIsTokenExists, indexController.getUserAllOrders);
-route.get('/get-user-single-order-info/:token/:id', checkIsTokenExists, indexController.getUserSingleOrderDetails);
+route.get('/get-user-single-order-info/:token', checkIsTokenExists, indexController.getUserSingleOrderDetails);
 route.get('/get-product-sub-variation/:variationId/:collectionId', indexController.getProductSubVariation);
 route.get('/get-product-collection-data/:collectionId', indexController.getProductCollectionData);
 

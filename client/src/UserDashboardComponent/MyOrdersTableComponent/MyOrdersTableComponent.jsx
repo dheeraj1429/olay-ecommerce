@@ -10,6 +10,8 @@ const ROW = [{ name: 'Image' }, { name: 'Product Name' }, { name: 'Quntity' }, {
 function MyOrdersTableComponent() {
    const { userOrders } = useSelector((state) => state.index);
 
+   console.log(userOrders);
+
    return (
       <styled.div className="mt-3">
          {!!userOrders && userOrders.success && userOrders.order.length ? (
@@ -57,7 +59,7 @@ function MyOrdersTableComponent() {
                            <div className="hover_div px-3 py-1 bg-slate-900 flex items-center justify-center rounded-sm">
                               <p className="text-white mb-0">View</p>
                            </div>
-                           <Link to={`/my-orders/${el.productInformation._id}`}>
+                           <Link to={`/my-orders/single-product-info?variationId=${el.productInformation._id}&productId=${el.parentProductId}`}>
                               <IoMdInformationCircle className=" fill-slate-900 cursor-pointer" />
                            </Link>
                         </div>

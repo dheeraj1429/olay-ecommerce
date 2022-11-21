@@ -112,7 +112,7 @@ function App() {
                   <Route path="my-address-book/edit/:id" element={<AddressBookComponent />} />
                   <Route path="my-orders" element={<MyOrdersComponent />} />
                </Route>
-               <Route path="my-orders/:id" element={<SingleOrder />} />
+               <Route path="my-orders/single-product-info" element={<SingleOrder />} />
 
                {/* user auth pages routes */}
                <Route path="auth" element={<SignInAndLoginPage />}>

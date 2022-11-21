@@ -385,10 +385,10 @@ export const getUserAllOrders = function (token) {
    };
 };
 
-export const getUserSingleOrderDetails = function (token, id) {
+export const getUserSingleOrderDetails = function (token, data) {
    return async function (dispatch) {
       try {
-         const orderResponse = await axios.get(`/index/get-user-single-order-info/${token}/${id}`, headers);
+         const orderResponse = await axios.get(`/index/get-user-single-order-info/${token}?variationId=${data.variationProductId}&productId=${data.productId}`, headers);
          if (orderResponse && orderResponse?.data && orderResponse?.data.success) {
             dispatch({
                type: INDEX_ACTION_TYPE.GET_SINGLE_ORDER_DETAILS,

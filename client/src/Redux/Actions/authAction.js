@@ -35,3 +35,20 @@ export const signInUsers = function (data) {
       }
    };
 };
+
+export const changeUserPassword = function (token, data) {
+   return async function (dispatch) {
+      try {
+         const changePwsResponse = await axios.patch(`/auth/change-password/${token}`, data, headers);
+
+         if (changePwsResponse && changePwsResponse?.data) {
+            dispatch({
+               type: AUTH_ACTION_TYPE.CHANGE_USER_PASSWORD,
+               payload: changePwsResponse && changePwsResponse?.data,
+            });
+         }
+      } catch (err) {
+         console.log(err);
+      }
+   };
+};

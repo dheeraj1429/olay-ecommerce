@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import backendConfigData from '../../backendConfig';
 import { RiUser6Line } from '@react-icons/all-files/ri/RiUser6Line';
 import { GoLocation } from '@react-icons/all-files/go/GoLocation';
-import { AiOutlineTag } from '@react-icons/all-files/ai/AiOutlineTag';
 import { AiOutlineSetting } from '@react-icons/all-files/ai/AiOutlineSetting';
 import { VscLinkExternal } from '@react-icons/all-files/vsc/VscLinkExternal';
 import { Link } from 'react-router-dom';
@@ -13,7 +12,6 @@ import { GetUrlValue } from '../../helpers/helper';
 import { AiOutlineLogout } from '@react-icons/all-files/ai/AiOutlineLogout';
 import { useCookies } from 'react-cookie';
 import { logout } from '../../Redux/Actions/authAppAction';
-import { useNavigate, Navigate } from 'react-router-dom';
 import { AiOutlineShoppingCart } from '@react-icons/all-files/ai/AiOutlineShoppingCart';
 import { RiArrowDropRightLine } from '@react-icons/all-files/ri/RiArrowDropRightLine';
 
@@ -22,7 +20,6 @@ const Options = [
    { icon: <VscLinkExternal />, text: 'My account' },
    { icon: <GoLocation />, text: 'My address book' },
    { icon: <AiOutlineShoppingCart />, text: 'My orders' },
-   { icon: <AiOutlineTag />, text: 'My newsletters' },
    { icon: <AiOutlineLogout />, text: 'Log out', event: 'logout' },
    { icon: <AiOutlineSetting />, text: 'Account setting', cl: 'mb-1' },
 ];
@@ -31,7 +28,6 @@ function UserProfileOptionComponent({ show, styles, hideProfile, hideOptions }) 
    const [ActiveTab, setActiveTab] = useState('');
    const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
-   const navigation = useNavigate();
    const location = useLocation();
    const dispatch = useDispatch();
 

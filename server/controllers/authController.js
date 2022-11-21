@@ -1,6 +1,6 @@
 const userModel = require('../model/schema/authSchema');
 const bcryptjs = require('bcryptjs');
-const { catchAsync } = require('../helpers/helpers');
+const { catchAsync, tokenVarifyFunction } = require('../helpers/helpers');
 const httpStatusCodes = require('../helpers/httpStatusCodes');
 
 const signInUser = catchAsync(async function (req, res, next) {
@@ -102,7 +102,50 @@ const logInUser = catchAsync(async function (req, res, next) {
    }
 });
 
+const changeUserPassword = catchAsync(async function (req, res, next) {
+   const { oldPassword, newPassword } = req.body;
+   const { token } = req.params;
+   // varify the user us valid or not.
+   const { _id } = await tokenVarifyFunction(undefined, token);
+   // find the user
+   const findUser = await userModel.findOne({ _id });
+   // check the user old password is match or not.
+   const varifyPassword = await bcryptjs.compare(oldPassword, findUser.password);
+
+   if (varifyPassword) {
+      // old password and new password is not the same.
+      if (newPassword === oldPassword) {
+         return res.status(httpStatusCodes.OK).json({
+            success: false,
+            message: "Old password and new password is't the same",
+         });
+      } else {
+         // hash the new password
+         const hashPassword = await bcryptjs.hash(newPassword, 11);
+         // sotre the hash passowrd inside the database.
+         const pwdRes = await userModel.updateOne({ _id }, { $set: { password: hashPassword } });
+         if (!!pwdRes.modifiedCount) {
+            return res.status(httpStatusCodes.CREATED).json({
+               success: true,
+               message: 'Password changed',
+            });
+         } else {
+            return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+               success: false,
+               message: 'internal server error',
+            });
+         }
+      }
+   } else {
+      return res.status(httpStatusCodes.OK).json({
+         success: false,
+         message: 'Old password is not match',
+      });
+   }
+});
+
 module.exports = {
    signInUser,
    logInUser,
+   changeUserPassword,
 };

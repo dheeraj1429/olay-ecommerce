@@ -1,20 +1,7 @@
 const express = require('express');
 const route = express.Router();
 const indexController = require('../controllers/indexControllers');
-
-const checkIsTokenExists = function (req, res, next) {
-   const { token } = req.params;
-
-   if (!token) {
-      return res.status(500).json({
-         message: 'user token is not found!',
-         error: true,
-         success: false,
-      });
-   } else {
-      next();
-   }
-};
+const { checkIsTokenExists } = require('../helpers/helpers');
 
 // API => GET
 route.get('/get-tranding-products', indexController.getTrandingProducts);

@@ -4,6 +4,8 @@ const INITAL_STATE = {
    auth: null,
    isLoading: false,
    userRoll: null,
+   passwordChange: null,
+   passwordChangeLoading: false,
 };
 
 const authReducer = function (state = INITAL_STATE, action) {
@@ -69,6 +71,20 @@ const authReducer = function (state = INITAL_STATE, action) {
          return {
             ...state,
             auth: action.payload,
+         };
+
+      case AUTH_ACTION_TYPE.CHANGE_USER_PASSWORD:
+         return {
+            ...state,
+            passwordChange: action.payload,
+            passwordChangeLoading: false,
+         };
+
+      case AUTH_ACTION_TYPE.CHANGE_USER_PASSWORD_LOADING:
+         return {
+            ...state,
+            passwordChangeLoading: action.payload,
+            passwordChange: null,
          };
 
       default:

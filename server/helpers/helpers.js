@@ -194,6 +194,23 @@ const convertFormateDate = function (date) {
    return splitDateAr;
 };
 
+const checkIsTokenExists = function (req, res, next) {
+   /**
+    * @param { token }  user valid token to access the api
+    */
+   const { token } = req.params;
+
+   if (!token) {
+      return res.status(500).json({
+         message: 'user token is not found!',
+         error: true,
+         success: false,
+      });
+   } else {
+      next();
+   }
+};
+
 module.exports = {
    imageCompress,
    catchAsync,
@@ -205,4 +222,5 @@ module.exports = {
    numberConvert,
    convertFormateDate,
    dataConvertor,
+   checkIsTokenExists,
 };

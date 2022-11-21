@@ -41,3 +41,10 @@ export const removeUserRoll = function (data) {
       payload: data,
    };
 };
+
+export const userPasswordChangeLoadingHandler = function (data) {
+   return {
+      type: AUTH_ACTION_TYPE.CHANGE_USER_PASSWORD_LOADING,
+      payload: data,
+   };
+};

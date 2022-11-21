@@ -1999,7 +1999,7 @@ const getSingleOrderInformation = async function (id) {
             'orderItems.productInformation': {
                $cond: {
                   if: { $eq: ['$orderItems.subVariation', true] },
-                  then: { $arrayElemAt: ['$orderItems.productInformation.variations', 0] },
+                  then: { $arrayElemAt: ['$orderItems.productInformation.variations', { $indexOfArray: ['$orderItems.productInformation.variations', '$orderitems.productId'] }] },
                   else: '$orderItems.productInformation',
                },
             },

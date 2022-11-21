@@ -68,6 +68,7 @@ const MyDetailsComponent = lazy(() => import('./UserDashboardComponent/MyDetails
 const AddressBookComponent = lazy(() => import('./UserDashboardComponent/AddressBookComponent/AddressBookComponent'));
 const UserAddressTableViewComponent = lazy(() => import('./UserDashboardComponent/UserAddressTableViewComponent/UserAddressTableViewComponent'));
 const MyOrdersComponent = lazy(() => import('./UserDashboardComponent/MyOrdersComponent/MyOrdersComponent'));
+const AccountSettingComponent = lazy(() => import('./UserDashboardComponent/AccountSettingComponent/AccountSettingComponent'));
 
 // dashboard pages
 const Dashboard = lazy(() => import('./DashboardPages/Dashboard/Dashboard'));
@@ -111,6 +112,7 @@ function App() {
                   <Route path="my-address-book/create" element={<AddressBookComponent />} />
                   <Route path="my-address-book/edit/:id" element={<AddressBookComponent />} />
                   <Route path="my-orders" element={<MyOrdersComponent />} />
+                  <Route path="account-setting" element={<AccountSettingComponent />} />
                </Route>
                <Route path="my-orders/single-product-info" element={<SingleOrder />} />
 
